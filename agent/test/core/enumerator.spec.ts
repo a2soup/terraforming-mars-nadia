@@ -37,25 +37,43 @@ describe('enumerate (legal-action dispatch)', () => {
     expect(() => input.process(response)).to.not.throw();
   });
 
-  it('throws NotYetImplementedDecisionError for an in-scope type with no enumerator yet', () => {
-    // 'or' belongs to sub-task D (composite.ts), still unbuilt as of sub-task C (payment.ts) -
-    // see the dispatch-table doc comment (enumerator/index.ts) for which module owns which type.
-    expect(() => enumerate(fakeDecision('or'), rng)).to.throw(NotYetImplementedDecisionError);
+  it('NotYetImplementedDecisionError carries the offending decision and names its type in the message', () => {
+    // As of sub-task D (composite.ts), every in-scope §3.3 type has a registered enumerator (see
+    // the next test), so this error is no longer reachable through `enumerate` for any real
+    // decision type - it remains live only as a defensive fallback should the §3.3 scope ever
+    // grow a type before its enumerator is built. Unit-test the error class directly rather than
+    // trying to force it through a real (now nonexistent) unbuilt-in-scope-type path.
+    const decision = fakeDecision('or');
+    const error = new NotYetImplementedDecisionError(decision);
+    expect(error.decision).to.equal(decision);
+    expect(error.message).to.include('or');
   });
 
   it('throws OutOfScopeDecisionError for an out-of-scope expansion type', () => {
     expect(() => enumerate(fakeDecision('party'), rng)).to.throw(OutOfScopeDecisionError);
   });
 
-  it('classifies every §3.3 in-scope type not yet built as not-yet-implemented', () => {
-    // Sub-task B (simple.ts) filled in 'space', 'player', 'resource', 'amount', and 'card';
-    // sub-task C (payment.ts) filled in 'payment' and 'projectCard'. What remains here are the
-    // sub-task D (composite.ts) types, per the dispatch-table doc comment (enumerator/index.ts).
-    const inScopeUnbuilt: ReadonlyArray<PlayerInputModel['type']> = [
-      'and', 'or', 'initialCards', 'productionToLose', 'resources',
+  it('after sub-task D, every §3.3 in-scope type is registered (never falls back to NotYetImplementedDecisionError)', () => {
+    // Sub-task B (simple.ts) filled in 'space', 'player', 'resource', 'amount', 'card'; sub-task C
+    // (payment.ts) filled in 'payment', 'projectCard'; sub-task D (composite.ts) filled in the
+    // rest - 'and', 'or', 'initialCards', 'productionToLose', 'resources' - completing the
+    // dispatch table (enumerator/index.ts). 'option' (prompt A) is covered by the first test in
+    // this file. No in-scope type remains unbuilt, so this file's job is now to confirm dispatch
+    // *coverage* is complete, not to find a not-yet-built example.
+    //
+    // `fakeDecision`'s stub `raw`/`player` are enough to prove routing (the dispatch only reads
+    // `model.type` before delegating) but not enough for every enumerator to run to completion -
+    // several construct real objects from `raw` and will throw *some* error against a stub. That
+    // is fine here: we only assert the dispatch didn't fall back to NotYetImplementedDecisionError
+    // (i.e. the type is registered), which is the one thing this file - as opposed to
+    // simple.spec.ts / payment.spec.ts / composite.spec.ts, which cover full per-type behavior
+    // against real Engine inputs - is responsible for checking.
+    const inScope: ReadonlyArray<PlayerInputModel['type']> = [
+      'and', 'or', 'initialCards', 'projectCard', 'card', 'payment',
+      'space', 'player', 'amount', 'productionToLose', 'resource', 'resources',
     ];
-    for (const type of inScopeUnbuilt) {
-      expect(() => enumerate(fakeDecision(type), rng), type).to.throw(NotYetImplementedDecisionError);
+    for (const type of inScope) {
+      expect(() => enumerate(fakeDecision(type), rng), type).to.not.throw(NotYetImplementedDecisionError);
     }
   });
 

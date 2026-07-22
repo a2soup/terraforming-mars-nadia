@@ -33,11 +33,23 @@ describe('randomLegalAgent', () => {
     expect(() => input.process(response)).to.not.throw();
   });
 
-  it('delegates to the enumerator - a not-yet-built in-scope type surfaces as NotYetImplementedDecisionError', () => {
-    // 'or' belongs to sub-task D (composite.ts), still unbuilt as of sub-task C (payment.ts) -
-    // see the dispatch-table doc comment (enumerator/index.ts) for which module owns which type.
+  it('delegates to the enumerator - propagates NotYetImplementedDecisionError from the class directly, since no in-scope type is unbuilt after sub-task D', () => {
+    // Prior to sub-task D (composite.ts), 'or' was an in-scope type with no registered
+    // enumerator, so `agent(fakeDecision('or'))` threw NotYetImplementedDecisionError straight
+    // from the dispatch. Sub-task D registered it (and the rest of the composite/distribution
+    // types), completing the §3.3 in-scope set - see enumerator/index.ts's dispatch-table doc
+    // comment and test/core/enumerator.spec.ts's coverage test. That real path is gone, but the
+    // contract this test protects - "the agent surfaces the enumerator's own error rather than
+    // swallowing or rewrapping it" - still matters, so it's exercised directly against the error
+    // class instead of trying to force an unbuilt-type path that no longer exists.
     const agent = randomLegalAgent(createAgentRandom(0));
-    expect(() => agent(fakeDecision('or'))).to.throw(NotYetImplementedDecisionError);
+    const decision = fakeDecision('or');
+    const error = new NotYetImplementedDecisionError(decision);
+    expect(error.decision).to.equal(decision);
+    // The agent has nothing special to do with an in-scope type today (all are built); this just
+    // re-confirms it still throws whatever the enumerator throws, unmodified, for a genuinely
+    // unregistered type name if one is ever reintroduced by a future engine-pin bump.
+    expect(() => agent(decision)).to.not.throw(NotYetImplementedDecisionError);
   });
 
   it('is a pure function of its rng seed - same seed yields the same choice', () => {
