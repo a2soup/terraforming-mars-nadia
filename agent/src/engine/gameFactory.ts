@@ -16,6 +16,15 @@ const BASE_GAME_OPTIONS: Partial<GameOptions> = {
   preludeExtension: true,
 };
 
+// The Engine's SeededRandom expects a *fractional* seed in [0, 1): it derives its PRNG state
+// as `Math.floor(seed * 2**32)`. Handing it our integer seed directly is a trap - any integer
+// is a multiple of 2**32 in that product, i.e. 0 in the low 32 bits the generator actually
+// uses, so *every* integer seed collapses to the same board and the same shuffles. Dividing
+// by 2**32 is exact (a power of two), mapping integer `s` to a state of exactly `s` - a
+// distinct, well-mixed stream per seed. See agent/docs/Running_Notes.md (2026-07-22,
+// SeededRandom degeneracy) for the full diagnosis.
+const SEED_SCALE = 2 ** 32;
+
 /**
  * Creates a headless base + Corporate Era + Prelude game for 2-4 players.
  * Same seed + same config always produces the same game (SRS CON-5): this is the
@@ -39,6 +48,6 @@ export function createGame(config: NadiaGameConfig): IGame {
     players[resolved.firstPlayerIndex],
     spectatorId,
     BASE_GAME_OPTIONS,
-    resolved.seed,
+    resolved.seed / SEED_SCALE,
   );
 }
