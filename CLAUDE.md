@@ -2,6 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **This fork also hosts the Nadia AI agent** — an expert-level Terraforming Mars bot built *on top
+> of* this engine (the engine is reused as ground truth, not modified). Agent code and context live
+> in [`agent/`](agent/); start with [`agent/CLAUDE.md`](agent/CLAUDE.md). The notes below document
+> the Engine itself.
+
 ## Build & Development Commands
 
 ```bash
