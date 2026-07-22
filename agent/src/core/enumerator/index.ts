@@ -1,6 +1,7 @@
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {DecisionEnumerator, EnumerateFn, NotYetImplementedDecisionError, OutOfScopeDecisionError} from './types';
 import {enumerateAmount, enumerateCard, enumerateOption, enumeratePlayer, enumerateResource, enumerateSpace} from './simple';
+import {enumeratePayment, enumerateProjectCard} from './payment';
 
 export {NotYetImplementedDecisionError, OutOfScopeDecisionError} from './types';
 export type {DecisionEnumerator, EnumerateFn} from './types';
@@ -57,6 +58,8 @@ const ENUMERATORS: Partial<Record<ModelType, DecisionEnumerator>> = {
   resource: enumerateResource,
   amount: enumerateAmount,
   card: enumerateCard,
+  payment: enumeratePayment,
+  projectCard: enumerateProjectCard,
 };
 
 /**
