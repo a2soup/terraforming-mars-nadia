@@ -2,6 +2,7 @@ import {expect} from 'chai';
 import {createGame} from '../../src/engine/gameFactory';
 import {BoardName} from '../../../src/common/boards/BoardName';
 import {CardName} from '../../../src/common/cards/CardName';
+import {stableState} from '../testUtils/stableState';
 
 describe('createGame', () => {
   it('creates games for 2, 3, and 4 players', () => {
@@ -52,17 +53,6 @@ describe('createGame', () => {
     const game = createGame({players: 3, seed: 1, firstPlayerIndex: 2});
     expect(game.first.id).to.eq(game.players[2].id);
   });
-
-  // `name` (UnseededRandom-generated), `createdTimeMs`, per-player `timer`, and
-  // `gameLog[].timestamp` are all wall-clock, not RNG-driven; strip them before
-  // comparing so this checks reproducibility of actual (seeded) game state.
-  function stableState(game: ReturnType<typeof createGame>) {
-    const serialized = game.serialize() as unknown as Record<string, unknown>;
-    const {name: _name, createdTimeMs: _createdTimeMs, gameLog, players, ...rest} = serialized;
-    const stableGameLog = (gameLog as Array<Record<string, unknown>>).map(({timestamp: _timestamp, ...entry}) => entry);
-    const stablePlayers = (players as Array<Record<string, unknown>>).map(({timer: _timer, ...player}) => player);
-    return JSON.stringify({...rest, gameLog: stableGameLog, players: stablePlayers});
-  }
 
   it('is reproducible under a fixed seed, and differs across seeds', () => {
     const gameA = createGame({players: 3, seed: 42});
