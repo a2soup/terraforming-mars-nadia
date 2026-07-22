@@ -215,3 +215,132 @@ It therefore should never be active in an in-scope game, so the enumerator does 
 model the Reds tax in its payment reduction. If a Reds-taxed decision somehow arises, it is handled by
 the generic out-of-scope path: graceful legal fallback + a loud log (per the FR-9 safety net), same as
 any other out-of-scope decision type — not a silent workaround, so it surfaces as a coverage finding.
+
+## 2026-07-22 — Random-legal agent finished + Tier-1 batch: two real driver bugs, both fixed (Milestone 1, bullet 3 / sub-task E)
+
+Finished `agent/src/core/randomLegalAgent.ts` (per-decision logging, FR-11/NFR-6, off by default;
+loud logging + unmodified propagation of `OutOfScopeDecisionError`), retired `stubResponder`
+(deleted; `agent/test/driver/embeddedDriver.spec.ts` now drives real decisions with
+`randomLegalAgent` instead), and — the actual substance of this entry — drove real games all the
+way to `Phase.END` for the first time (`agent/test/core/randomLegalAgent.integration.spec.ts`,
+new). That last step is what surfaced two genuine bugs neither of which was visible from reading
+the code or from any test shallower than a full game; both are now fixed in `embeddedDriver.ts`
+(driver-layer, not the Engine, and not the B/C/D enumerator files, which remain untouched per this
+sub-task's own constraint).
+
+**Bug 1 (found first, more fundamental): the driver's own unconditional
+`deferredActions.runAll()` double-drains the queue and silently loses a decision.** The existing
+drive step (Prompt 2, confirmed by testing back then) was `player.process(input)` then
+unconditionally `game.deferredActions.runAll(() => {})`. That pattern turns out to be *unsafe*:
+`Player.process()`'s own callback chain (`waitingForCb`, wired up via `Player.takeAction()` /
+`Player.runWhenEmpty()` — see `src/server/Player.ts`) already drains `game.deferredActions` itself
+whenever the decision it just resolved routes back into that machinery, which is most of them (the
+main action-phase loop, prelude selection, …). When it does, `player.getWaitingFor()` is already
+set to the *next* real decision by the time `process()` returns — and `DeferredActionsQueue.run()`
+does **not** check whether its target player already has a pending `waitingFor` before running an
+action for them (verified by reading `src/server/deferredActions/DeferredActionsQueue.ts`), so the
+driver's own *second*, redundant `runAll()` call can pop and execute an unrelated action still
+queued for the same player (e.g. a second prelude's own tile placement, queued moments earlier but
+not yet reached by the internal chain) — silently overwriting the fresh decision the internal chain
+just set (`Player.setWaitingFor`'s own "Overwriting waitingFor X with Y" warning — that log line,
+previously assumed to only matter for a hypothetical Philares/Final-Greenery edge case, was the
+actual smoking gun here) and permanently losing whatever continuation the overwritten decision was
+guarding. Confirmed by monkey-patching `DeferredActionsQueue.prototype.run` to log every popped
+action: two `PlaceOceanTile` deferred actions for the same player, both queued from processing one
+`'card'` prelude-selection decision, both got `run()` within the *same* `applyDecision` call — the
+internal chain correctly paused on the first (setting `waitingFor` to `'space'`), then the driver's
+own redundant `runAll()` popped and ran the second, overwriting it. Left uncaught this manifests
+several decisions later as `StuckGameError` (`Game g-nadia-N has no player with a pending input, but
+phase is 'preludes'/'action', not 'end'`) — a genuine hang, not something the FR-9 fallback (which
+only fires on a rejected/thrown decision, not a lost continuation) could ever have caught.
+
+**The fix:** only call the driver's own `runAll()` when the player has **no** pending input after
+`process()` returns (`applyDecision`, `embeddedDriver.ts`) — i.e. only when the decision just
+resolved did *not* route through the Engine's own self-draining machinery (e.g. the simultaneous
+`initialCards` setup at game start, whose completion callback doesn't set `waitingFor` on the
+just-processed player at all, and something still needs to kick off the first real decision).
+Verified directly: with the guard, the same seed that previously hung at decision 6 (3-player,
+seed 107) instead drives cleanly for 15+ decisions before hitting the *other* bug below (item 2),
+and the whole Tier-1 batch (20 games) completes with zero hangs.
+
+**Bug 2 (the crux prompt anticipated one form of this; the batch found a second, related form):
+the `'projectCard'` decision-model type is genuinely ambiguous between two different Engine input
+classes.** `SelectProjectCardToPlay` (play a card from hand) and `SelectStandardProjectToPlay`
+(play a standard project — Power Plant, Asteroid, Aquifer, Greenery, City, …) both report `type:
+'projectCard'` in their model (`SelectCardToPlay`, their shared base class,
+`src/server/inputs/SelectCardToPlay.ts`) and expose the identical `cards`/`enabled` shape, but use
+*different* cost/eligibility logic (`card.canAct(player)` / `card.getAdjustedCost(player)` /
+`card.canPayWith(player)` for standard projects, vs. `player.affordOptionsForCard(card)` /
+`player.canAfford(...)` / `player.paymentOptionsForCard(card)` for hand cards). Sub-task C's
+`enumerateProjectCard` (`agent/src/core/enumerator/payment.ts`, deliberately left untouched by
+this sub-task) does an unchecked `raw as SelectProjectCardToPlay` cast and was built/tested only
+against real `SelectProjectCardToPlay` decisions — fed a `SelectStandardProjectToPlay` instead, it
+fails two different ways depending on state, both actually observed in the Tier-1 batch:
+- **No candidate at all**: if every standard project happens to be currently unaffordable, its
+  `canAfford` filter finds nothing and it throws (`enumerateProjectCard: no enabled, affordable
+  card among N offered`) — the responder never produces a move.
+- **A candidate that "looks" affordable but isn't, once payment is computed correctly**: if one
+  project happens to pass the (wrong) `canAfford` check, `enumerateProjectCard` still computes its
+  payment using the project-*card* payment-options model, which `SelectStandardProjectToPlay`'s
+  own `validate()` override then rejects at submission (`InputError: Did not spend enough to pay
+  for standard project`) — a *rejected* `player.process()` call, not a thrown enumerator.
+
+Both are the same root cause (the model-type overlap), but they surface at different points in the
+pipeline (before vs. after a response is produced), and — this is the part worth recording — a
+fallback that only retries *within* the broken `SelectStandardProjectToPlay` branch cannot recover
+from either: it's the branch itself that's broken, regardless of which standard project or payment
+is tried. **The general FR-9 fallback (`embeddedDriver.ts`) had to be widened accordingly**, beyond
+what the sub-task E prompt's single anticipated coupling (the `initialCards` project-card budget
+check) called for:
+- `applyDecision` now catches a thrown *or* a rejected response from the responder alike (the
+  `try` wraps both `responder(decisionPoint)` and `player.process(input)`), excluding
+  `OutOfScopeDecisionError`/`NotYetImplementedDecisionError`, which are dispatch-level and would
+  fail identically on retry.
+- The fallback itself (`buildConservativeResponse` + `resubmitConservatively`) had to become
+  submit-and-verify, not just construct-and-hope: for an `'or'` decision it now tries every
+  eligible (non-`Undo`) branch **in order**, actually calling `player.process()` for each one, and
+  stops at the first that's *accepted* — not just the first that *constructs* without throwing.
+  This is what lets it route around a `SelectStandardProjectToPlay` branch regardless of which of
+  the two failure shapes above it hits: every real action-phase `OrOptions` includes a "pass"
+  branch, which is always both constructible and accepted, so the retry always terminates
+  successfully once it reaches that branch (`or`/`and`/`initialCards`' own children, elsewhere in
+  the tree, still get the simpler "first eligible" / recurse-into-every-child treatment via
+  `buildConservativeResponse` — a bounded gap: no in-scope `and`/`initialCards` composite nests an
+  `'or'` today, so this hasn't needed to go further).
+- `UnrecoverableIllegalMoveError` (both attempts genuinely failed) is thrown only if *every*
+  eligible branch of the top-level `'or'` fails, or if a non-`'or'` decision's single conservative
+  attempt itself gets rejected — neither observed in the Tier-1 batch.
+
+**Deliberately not fixed here:** `enumerateProjectCard` itself, in `payment.ts`, still only
+handles `SelectProjectCardToPlay` correctly — sub-task C's file is out of this sub-task's scope
+("keep the B/C/D enumerators untouched"), and the driver-level fallback above fully absorbs the
+fallout for Milestone 1's purposes (zero crashes, fallbacks logged and counted). Properly fixing
+this — routing on `raw instanceof SelectStandardProjectToPlay` vs `SelectProjectCardToPlay` and
+using the standard-project cost/payment model for the former — is real follow-up work,
+flagged separately.
+
+**Fallback frequency observed** (Tier-1 batch, 20 games, seeds 9001–9207, 2p/3p/4p): 203 total
+fallbacks, roughly 10 per game (range 1–27), across both couplings combined (the batch doesn't
+distinguish which coupling fired per event, only that the driver recovered) — clearly non-trivial
+at random-legal skill, not a rare edge case. This is expected to fall sharply once M3's heuristic
+stops the agent from blindly maximizing project-card counts / wandering into unaffordable branches,
+but for now it's a real, measured cost of "legal-but-not-smart" play worth keeping an eye on if the
+fallback rate ever climbs enough to distort self-play statistics.
+
+**The async-tail / game-over-timing question (open since Prompt 2) is resolved: no, nothing async
+is needed.** The entire drive — `runGame` looping `applyDecision` — is synchronous throughout, for
+every one of the 20 Tier-1 games and the two dedicated determinism games (all driven to a genuine
+`Phase.END`). `computeResult(game)` was called immediately after `runGame` returned in every case,
+with no intervening tick, `setTimeout`, promise resolution, or event-loop yield of any kind, and it
+read correct, complete final state every time (VP totals, winners, generation). Nothing in the
+Engine's own `takeAction`/`runWhenEmpty`/`deferredActions` chain, nor in game-end detection
+(`playerIsDoneWithGame` → `Phase.END`), turned out to require an awaited step. Milestone 1's open
+question from the embedded-driver sub-task is closed: the driver contract is (and can remain)
+fully synchronous.
+
+**Determinism, verified with the real agent+driver combined for the first time on completed
+games** (not just up to an `UnsupportedDecisionError` stopping point, as in Prompt 2): same engine
+seed + same agent seed ⇒ byte-identical `GameResult` and `stableState()` output, confirmed across
+two independently-constructed same-seed games driven fully to `Phase.END`. The two seeds are
+independent of each other in both directions (varying only the agent seed changes the game;
+varying only the engine seed changes the game; see `randomLegalAgent.integration.spec.ts`).
