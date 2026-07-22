@@ -138,3 +138,80 @@ Full end-to-end completion to `Phase.END` via the driver remains blocked on the 
 (Milestone 1's next bullet) — see the scope note above. Once that responder exists, it's worth adding a
 true full-game determinism/completion test exercising `computeResult` against a real finished game
 rather than a fake one.
+
+## 2026-07-22 — DEFERRED: payment reduction returns a single canonical move (revisit in M3)
+
+**Deliberate M1 simplification, flagged for M3 — do not lose this.** The legal-action enumerator
+(Milestone 1, bullet 3) reduces every `payment` / `projectCard`-with-payment decision to a **single**
+canonical cheapest-legal payment (spend the fewest / cheapest resources that still satisfy the engine's
+`canSpend ∧ payingAmount ≥ amount` predicate, MC last). This satisfies FR-ACT-3's "never overpay" for
+M1's random-legal agent, which only needs *one* legal payment per decision, and keeps FR-ACT-4
+enumeration finite.
+
+**Why this is not good enough for strong play, and must be revisited (M3, heuristic evaluation).** The
+cheapest-legal payment is frequently *not* the strategically correct one. The reduction needs to expose
+a small set of strategically-meaningful payment variants (e.g. "spend all steel" vs. "hold back one
+steel" vs. "pay MC") for the evaluator to choose among, not collapse to one. Concrete cases the single
+canonical move gets wrong:
+
+- **Holding back a resource for a conversion action.** Electro Catapult can be *paid for* with steel,
+  but its own action converts 1 steel → 7 M€. Once it's in play it is usually correct to pay for a card
+  with all steel *except one*, keeping that steel for the far more valuable conversion. A pure
+  cheapest-legal allocator will happily spend the last steel and destroy that value.
+- **Placement bonuses interacting with payment timing.** Steel and titanium gained from tile-placement
+  bonuses change what's optimal to spend *now* vs. *keep*: the value of holding a unit of steel/titanium
+  depends on what the player expects to place and play next generation, not just this card's cost. This
+  requires look-ahead / evaluation the M1 reduction deliberately does not have.
+
+The same factored payment representation is also the **structured/hierarchical action head** for a
+learned policy (SRS FR-ACT-4, Implementation Plan Milestone 6), so getting the variant set right pays
+off twice. Action item for M3: replace "single canonical payment" with "canonical payment + a bounded
+set of strategic deviations," scored by the evaluator.
+
+## 2026-07-22 — GOTCHA: `SeededRandom(integerSeed)` is degenerate — all integer seeds share one stream
+
+Found while building the Agent's RNG (`agent/src/core/rng.ts`, Milestone 1 bullet 3). The Engine's
+`SeededRandom` (src/common/utils/Random.ts) is a mulberry32 whose one-arg constructor sets
+`currentSeed = Math.floor(seed * 2**32)`. For **any integer seed** that value is a multiple of 2^32,
+which is `0` in the low 32 bits the generator's `Math.imul`/`>>>` core actually uses — so
+`new SeededRandom(1)`, `new SeededRandom(42)`, `new SeededRandom(99)` all emit the **identical**
+stream. Empirically confirmed: the first three draws are byte-identical across those seeds. The
+constructor's implicit contract is that `seed` is a **fraction in [0, 1)** (hence the `* 2**32`);
+integer seeds violate it silently.
+
+**Agent fix (done):** `createAgentRandom(seed)` seeds the state directly, `new SeededRandom(seed, seed)`,
+bypassing the `* 2**32`. The `rng.spec.ts` "different seeds → different streams" test guards it.
+
+**Latent Engine-harness bug this exposed (NOW FIXED).**
+`agent/src/engine/gameFactory.ts::createGame({seed})` took an **integer** seed and passed it straight
+to `Game.newInstance(..., seed)`, which does `new SeededRandom(seed)`. By the above, **every integer
+seed produced the same board, the same deck orders, and the same dealt cards.** Confirmed directly:
+serialized RNG-driven content (board, dealer/decks, dealt corp/project/prelude cards) was identical for
+seeds 42, 43, and 99. This undermined the Milestone-1 premise that the random-legal agent plays
+*varied* games across seeds — only the Agent's own move RNG would have varied; every game would have
+started from one fixed shuffle.
+
+Why the existing `gameFactory.spec.ts` "is reproducible under a fixed seed, and differs across seeds"
+test passed anyway (i.e. why this wasn't caught): `stableState()` (agent/test/testUtils/stableState.ts)
+stripped wall-clock fields but **not** `id`, and `createGame` builds `gameId = g-nadia-${seed}`. So the
+"differs across seeds" assertion passed on the differing id *string* alone, not on any RNG-driven
+content — a false positive.
+
+**The fix (applied):**
+- `createGame` now passes `resolved.seed / 2**32` to `Game.newInstance` instead of the raw integer.
+  Division by 2**32 is exact (power of two), so the Engine's `Math.floor(seed * 2**32)` recovers a PRNG
+  state of exactly `resolved.seed` — a distinct, well-mixed stream per seed. `SEED_SCALE` constant +
+  comment at the change site. The gameId still shows the human-readable integer seed.
+- `stableState` now also strips `id`, so cross-seed comparison exercises RNG-driven content rather than
+  the seed-derived id string. Re-verified: seeds 42/43/99 now produce **different** board+deck content,
+  and same-seed runs remain byte-identical. Full agent suite green (35 passing).
+
+## 2026-07-22 — Reds policy (Turmoil) is out of scope — graceful-fallback only, no special handling
+
+Noted during planning of the payment reduction: the Reds ruling policy adds a terraform-rating **tax**
+to the affordability math (`Player.canAffordInternal` computes a `redsCost` via `TurmoilHandler`). Reds
+is part of **Turmoil**, which is out of scope for v1 (base + Corporate Era + Prelude only; CLAUDE.md §1).
+It therefore should never be active in an in-scope game, so the enumerator does **no** extra work to
+model the Reds tax in its payment reduction. If a Reds-taxed decision somehow arises, it is handled by
+the generic out-of-scope path: graceful legal fallback + a loud log (per the FR-9 safety net), same as
+any other out-of-scope decision type — not a silent workaround, so it surfaces as a coverage finding.
