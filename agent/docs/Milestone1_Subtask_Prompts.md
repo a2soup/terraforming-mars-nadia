@@ -186,29 +186,61 @@ the real inputs on a `createGame` player and validate against `process`, coverin
 
 ## Sub-task E — finish the random-legal agent + Tier-1 integration
 
-**Depends on B, C, D.** **Owns:** `agent/src/core/randomLegalAgent.ts` (A left a shell) and
-`agent/test/core/randomLegalAgent.integration.spec.ts` (new); may retire `stubResponder` from the
-drive path.
+**Depends on B, C, D (all merged).** **Owns:** `agent/src/core/randomLegalAgent.ts` (A left a shell),
+a new integration spec (e.g. `agent/test/core/randomLegalAgent.integration.spec.ts`); may modify the
+drive path (`agent/src/driver/embeddedDriver.ts`) for the FR-9 fallback below, retire `stubResponder`,
+and clean up the vestigial test noted in item 5.
 
-1. **Finish the agent.** Add per-decision logging (SRS FR-11 / NFR-6) at configurable verbosity —
-   log the decision type, and the chosen move; keep it off by default. Add FR-9 handling of an
-   unexpected decision: catch `OutOfScopeDecisionError` from `enumerate`, log loudly (these should not
-   arise in base + Corporate Era + Prelude), and surface a clear diagnostic. All in-scope types are now
-   handled by B/C/D, so the "fall back to a safe legal move" clause applies only to the (not-expected)
-   out-of-scope case — a clear error with the decision context is acceptable there; document the choice.
-2. **Retire `stubResponder` from the drive path.** `runGame` can now be driven by `randomLegalAgent`.
-   Decide whether to delete `agent/src/driver/stubResponder.ts` (and its spec) or keep it for the
-   existing driver unit test — keep the driver tests green either way.
-3. **Tier-1 integration (the CI batch).** Add a seed-pinned batch: ~15–20 full games across 2p/3p/4p
-   over a fixed seed list, each driven by `randomLegalAgent` via `runGame` **to `Phase.END`**, asserting
-   zero `IllegalMoveError` and zero crashes. Now that the seed fix (Running_Notes 2026-07-22) makes
-   distinct seeds produce distinct games, use distinct seeds. Keep the batch under ~1 minute so it stays
-   an ordinary test. This is also the first time a real game is driven all the way to `Phase.END`, so it
-   finally exercises `computeResult` against a genuinely finished game (bullet-2 deferred this — see its
-   Running_Notes entry and the async-tail / game-over-timing open question; record what you find).
-4. **Determinism.** Same Engine seed + same agent seed ⇒ identical `GameResult` and identical
-   `stableState`; verify agent seed and Engine seed are independent (vary one, hold the other).
+1. **Finish the agent.** Add per-decision logging (SRS FR-11 / NFR-6) at configurable verbosity — log
+   the decision type and the chosen move; **off by default**. Add FR-9 handling of an `OutOfScopeDecisionError`
+   from `enumerate`: log loudly (these should not arise in base + Corporate Era + Prelude) and surface a
+   clear diagnostic with the decision context.
 
-When done, append a `Running_Notes.md` entry (findings, any engine quirks, the async-tail resolution)
-and update `agent/CLAUDE.md` §6 status to reflect Milestone 1 bullet 3 complete. Note: the full
-1,000-game AC-1 run and the simulator-speed spike are **separate** Milestone-1 items, not part of E.
+2. **The affordability coupling — the crux of E; get this right.** There is exactly one in-scope
+   decision whose legal set the pure enumerator *cannot* see from its model: the initial **project-card
+   buy**. `SelectCard.process` checks only count/membership, but `SelectInitialCards.completed()` rejects
+   the whole composite if the selected project cards' research cost exceeds the chosen corporation's
+   starting M€. So the random `card` enumerator (sub-task B) can over-select and produce a move the
+   Engine rejects — which would crash the integration batch. Handle it with a **general FR-9 safety net**,
+   not by putting budget logic into the enumerator (keep B/C/D untouched):
+   - Implement a **conservative fallback** that yields a guaranteed-legal move for any decision: for
+     `card`, select exactly `min`; for `or`/`and`/`initialCards`, recurse producing the conservative
+     response per child; other types' random move is already always legal. Make it **deterministic**
+     (no rng) so it doesn't reintroduce nondeterminism.
+   - Wire the drive path so that when a submitted move is rejected, the agent **falls back to the
+     conservative move and resubmits**, logging the fallback loudly (and ideally counting them, so we
+     learn how often the coupling fires). The Engine leaves `waitingFor` intact on rejection (bullet-2
+     Running_Notes / `IllegalMoveError` comment), so a corrected resubmit is supported.
+   - Why the conservative move is always legal here: within `initialCards`, the corp/prelude/CEO
+     sub-inputs have `min === max` (forced counts), so the only free choice is the project-card count —
+     and selecting `min` (0) project cards is affordable under any corporation. Selecting `min` for
+     every `card` sub-input therefore makes the whole composite legal by construction.
+   - **Test it:** add a case that reproduces the coupling (e.g. force the initial `card` selections
+     toward `max` under a low-starting-M€ corporation, or otherwise construct an over-budget selection)
+     and assert the agent recovers and the game proceeds — the fallback path must be genuinely exercised,
+     not just present.
+
+3. **Retire `stubResponder` from the drive path.** `runGame` is now driven by `randomLegalAgent`.
+   Delete `agent/src/driver/stubResponder.ts` (and its spec) or keep it only if a driver unit test still
+   needs it — keep all driver tests green either way.
+
+4. **Tier-1 integration batch.** A seed-pinned batch: ~15–20 full games across 2p/3p/4p over a fixed
+   seed list, each driven by `randomLegalAgent` via `runGame` **to `Phase.END`**, asserting zero
+   *unrecovered* illegal moves and zero crashes (fallbacks per item 2 are allowed and should be logged,
+   not failures). Use distinct seeds (the seed fix now makes them distinct games). Keep it under ~1
+   minute. This is the **first time a real game is driven all the way to `Phase.END`**, so it finally
+   exercises `computeResult` on a genuinely finished game — resolve and document the async-tail /
+   game-over-timing open question bullet-2 left (does reaching `Phase.END` need an awaited tick?).
+
+5. **Determinism + test cleanup.** Same Engine seed + same agent seed ⇒ identical `GameResult` and
+   identical `stableState`; verify the two seeds are independent (vary one, hold the other). Also fix the
+   now-**vestigial** test in `agent/test/core/randomLegalAgent.spec.ts` (the "delegates … not-yet-built
+   type" case that sub-task D hollowed out): repoint it to exercise real error *propagation* through the
+   still-reachable `party` → `OutOfScopeDecisionError` path, so it tests the agent surfacing the
+   enumerator's error rather than asserting a stub doesn't throw.
+
+**Definition of done:** the integration spec + full suite green (`npx mocha … "test/**/*.spec.ts"`),
+`tsc -p agent/tsconfig.json --noEmit` clean. Append a `Running_Notes.md` entry (fallback frequency
+observed, async-tail resolution, any engine quirks) and update `agent/CLAUDE.md` §6 status to mark
+Milestone 1 bullet 3 complete and note bullet 4 (snapshot/restore) + the simulator-speed spike as next.
+The full 1,000-game AC-1 run and the spike are **separate** Milestone-1 items, not part of E.
