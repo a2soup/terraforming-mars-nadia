@@ -38,17 +38,21 @@ describe('enumerate (legal-action dispatch)', () => {
   });
 
   it('throws NotYetImplementedDecisionError for an in-scope type with no enumerator yet', () => {
-    expect(() => enumerate(fakeDecision('amount'), rng)).to.throw(NotYetImplementedDecisionError);
+    // 'payment' belongs to sub-task C, still unbuilt as of sub-task B (simple.ts) - see the
+    // dispatch-table doc comment (enumerator/index.ts) for which module owns which type.
+    expect(() => enumerate(fakeDecision('payment'), rng)).to.throw(NotYetImplementedDecisionError);
   });
 
   it('throws OutOfScopeDecisionError for an out-of-scope expansion type', () => {
     expect(() => enumerate(fakeDecision('party'), rng)).to.throw(OutOfScopeDecisionError);
   });
 
-  it('classifies every §3.3 in-scope type (other than the built option) as not-yet-implemented', () => {
+  it('classifies every §3.3 in-scope type not yet built as not-yet-implemented', () => {
+    // Sub-task B (simple.ts) has since filled in 'space', 'player', 'resource', 'amount',
+    // and 'card' - what remains here are the sub-task C (payment.ts) and D (composite.ts)
+    // types, per the dispatch-table doc comment (enumerator/index.ts).
     const inScopeUnbuilt: ReadonlyArray<PlayerInputModel['type']> = [
-      'and', 'or', 'initialCards', 'projectCard', 'card', 'payment',
-      'space', 'player', 'amount', 'productionToLose', 'resource', 'resources',
+      'and', 'or', 'initialCards', 'projectCard', 'payment', 'productionToLose', 'resources',
     ];
     for (const type of inScopeUnbuilt) {
       expect(() => enumerate(fakeDecision(type), rng), type).to.throw(NotYetImplementedDecisionError);

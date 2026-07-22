@@ -34,8 +34,10 @@ describe('randomLegalAgent', () => {
   });
 
   it('delegates to the enumerator - a not-yet-built in-scope type surfaces as NotYetImplementedDecisionError', () => {
+    // 'payment' belongs to sub-task C, still unbuilt as of sub-task B (simple.ts) - see the
+    // dispatch-table doc comment (enumerator/index.ts) for which module owns which type.
     const agent = randomLegalAgent(createAgentRandom(0));
-    expect(() => agent(fakeDecision('space'))).to.throw(NotYetImplementedDecisionError);
+    expect(() => agent(fakeDecision('payment'))).to.throw(NotYetImplementedDecisionError);
   });
 
   it('is a pure function of its rng seed - same seed yields the same choice', () => {
