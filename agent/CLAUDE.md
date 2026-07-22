@@ -8,6 +8,11 @@ from the two source-of-truth documents and should be kept consistent with them:
 
 If anything here conflicts with those documents, **the documents win** — update this file to match.
 
+Also check [docs/Running_Notes.md](docs/Running_Notes.md) — a dated engineering log (not a
+source of truth) of findings, gotchas, and decisions discovered while building the Agent, e.g.
+engine quirks hit only by actually running code, not by reading it. Read it for prior-art before
+re-investigating something; append a dated entry when you hit a similar finding.
+
 The root [../CLAUDE.md](../CLAUDE.md) documents the *Engine* (the terraforming-mars codebase this
 fork is built from): build/test commands, the card system, and engine architecture. Read it when
 you need to understand how the game itself works. This file covers the *Agent* built on top of it.

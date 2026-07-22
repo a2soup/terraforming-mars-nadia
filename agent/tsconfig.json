@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "outDir": "../build/agent",
+        "rootDir": "..",
+        "types": ["node", "mocha", "chai"]
+    },
+    "extends": "../tsconfig.json",
+    "include": [
+        "**/*.ts"
+    ]
+}
