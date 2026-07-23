@@ -344,3 +344,32 @@ seed + same agent seed ⇒ byte-identical `GameResult` and `stableState()` outpu
 two independently-constructed same-seed games driven fully to `Phase.END`. The two seeds are
 independent of each other in both directions (varying only the agent seed changes the game;
 varying only the engine seed changes the game; see `randomLegalAgent.integration.spec.ts`).
+
+## 2026-07-22 — Standard-project `projectCard` gap fixed (bullet-3 completion)
+
+Fixes the follow-up flagged in the sub-task E entry above. `enumerateProjectCard` (`payment.ts`) now
+routes on the concrete input: `raw instanceof SelectStandardProjectToPlay` → a new
+`enumerateStandardProject` branch; otherwise the original `enumerateHandCard` path. The
+standard-project branch mirrors `SelectStandardProjectToPlay.validate()` (the source of truth) —
+eligibility is `card.canAct(player)` (skipped when a discount `overriddenCost` applies), cost is
+`overriddenCost ?? card.getAdjustedCost(player)`, and the payable resources come from
+`card.canPayWith(player)` combined with the player's heat/Luna-titanium flags and Aurorai/Spire/Kuiper
+tableau — all read from Engine methods, none hardcoded — then paid via the same `cheapestLegalPayment`
+reduction C already had. An empty candidate set still throws (the standard-projects menu is offered as
+an `OrOptions` branch even when nothing in it is actable/affordable; the driver's FR-9 fallback then
+tries another branch — correct, not a bug).
+
+**Effect, measured** (same 36-game batch, 2p/3p/4p, seeds 500–511): the agent now actually enumerates
+and plays standard projects (verified end-to-end: e.g. `Greenery` paid with exactly 23 M€), and the
+fallback rate dropped from ~9.0/game to ~6.2/game. Categorizing the *residual* fallbacks confirmed no
+other hidden enumerator gap: 221 were `or :: no actable, affordable standard project` (a broke agent
+picking the standard-projects branch — legitimate; the FR-9 fallback retries another branch) and 2
+were the anticipated `initialCards :: Too many cards selected` affordability coupling. The
+driver-level FR-9 fallback from sub-task E is kept — it remains the safety net for the initialCards
+coupling and for a broke agent wandering into an unaffordable action branch.
+
+Note for later (not a bug): a uniform-random `enumerateOr` still picks the standard-projects (or
+play-a-card) branch even when nothing in it is doable, then falls back. That biases the action
+distribution toward whatever the first eligible branch is. Fine for a random-legal baseline / the
+speed spike; a smarter branch filter (skip branches with no legal completion) is a natural M3+
+refinement, noted here so it isn't rediscovered.

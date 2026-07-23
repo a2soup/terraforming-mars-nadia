@@ -1,9 +1,12 @@
+import {CardName} from '@/common/cards/CardName';
 import {Payment, PaymentOptions} from '@/common/inputs/Payment';
 import {SPENDABLE_RESOURCES, SpendableResource} from '@/common/inputs/Spendable';
 import {Units} from '@/common/Units';
 import {IPlayer} from '@/server/IPlayer';
+import {IStandardProjectCard} from '@/server/cards/IStandardProjectCard';
 import {SelectPayment} from '@/server/inputs/SelectPayment';
 import {SelectProjectCardToPlay} from '@/server/inputs/SelectProjectCardToPlay';
+import {SelectStandardProjectToPlay} from '@/server/inputs/SelectStandardProjectToPlay';
 import {DecisionEnumerator} from './types';
 
 /**
@@ -71,27 +74,44 @@ export const enumeratePayment: DecisionEnumerator = (decision) => {
 };
 
 /**
- * `projectCard` (SelectProjectCardToPlay, src/server/inputs/SelectProjectCardToPlay.ts): choose a
- * project card to play and a payment covering its cost. Factored per FR-ACT-4:
+ * `projectCard` (the `type` of `SelectCardToPlay`, src/server/inputs/SelectCardToPlay.ts): choose a
+ * card to play and a payment covering its cost. **This one model type is produced by two different
+ * Engine inputs** - both `SelectCardToPlay` subclasses, both reporting `type: 'projectCard'` and
+ * exposing the same `cards`/`enabled` shape, but with different cost/eligibility/payment models:
  *
- * 1. **Choose a card.** Keep only cards that are enabled (a `config.enabled[i] === false` slot
- *    marks a card the Engine offered greyed-out) and affordable
- *    (`player.canAfford(player.affordOptionsForCard(card))` - the same check
- *    `Player.canPlay`/`getPlayableCards` uses), then pick one uniformly. (The default card list is
- *    already `getPlayableCards()`, i.e. affordable; re-checking makes the enumerator correct for
- *    the config-supplied card lists some actions pass too.)
- * 2. **Pay for it** with the same {@link cheapestLegalPayment} reduction, driven by
- *    `affordOptionsForCard(card)` - whose `cost`, embedded `PaymentOptions` flags, and
- *    `reserveUnits` are exactly what the Engine's `checkPaymentAndPlayCard` uses to validate.
+ * - `SelectProjectCardToPlay` - play a project card from hand. Cost/options/reserve come from
+ *   `player.affordOptionsForCard(card)`; eligibility is affordability.
+ * - `SelectStandardProjectToPlay` - play a standard project (power plant, asteroid, city, ...).
+ *   Cost is `card.getAdjustedCost(player)` (or a discount override), the payable resources are
+ *   `card.canPayWith(player)` plus the player's own heat/Luna flags, and eligibility additionally
+ *   requires `card.canAct(player)` - see `SelectStandardProjectToPlay.validate()`.
+ *
+ * They must be factored separately (dispatching on the concrete `raw` input); feeding a standard
+ * project through the hand-card path computes the wrong cost/options and gets rejected at
+ * submission. Both are factored per FR-ACT-4: choose an eligible+affordable card, then compute one
+ * canonical {@link cheapestLegalPayment} for it.
  */
 export const enumerateProjectCard: DecisionEnumerator = (decision, rng) => {
   const {model, player, raw} = decision;
   if (model.type !== 'projectCard') {
     throw new Error(`enumerateProjectCard called for a '${model.type}' decision - dispatch should guarantee this never happens`);
   }
-  const input = raw as SelectProjectCardToPlay;
-  const enabled = input.enabled;
+  return raw instanceof SelectStandardProjectToPlay ?
+    enumerateStandardProject(player, raw, rng) :
+    enumerateHandCard(player, raw as SelectProjectCardToPlay, rng);
+};
 
+/**
+ * The `SelectProjectCardToPlay` (play-from-hand) case. Keep only cards that are enabled (a
+ * `config.enabled[i] === false` slot marks a card the Engine offered greyed-out) and affordable
+ * (`player.canAfford(player.affordOptionsForCard(card))` - the same check
+ * `Player.canPlay`/`getPlayableCards` uses), pick one uniformly, and pay via
+ * {@link cheapestLegalPayment} driven by `affordOptionsForCard(card)` - whose `cost`, embedded
+ * `PaymentOptions` flags, and `reserveUnits` are exactly what the Engine's `checkPaymentAndPlayCard`
+ * validates against.
+ */
+function enumerateHandCard(player: IPlayer, input: SelectProjectCardToPlay, rng: Parameters<DecisionEnumerator>[1]) {
+  const enabled = input.enabled;
   const candidates = input.cards.filter((card, i) => {
     if (enabled !== undefined && enabled[i] === false) {
       return false;
@@ -99,7 +119,7 @@ export const enumerateProjectCard: DecisionEnumerator = (decision, rng) => {
     return player.canAfford(player.affordOptionsForCard(card));
   });
   if (candidates.length === 0) {
-    // A `projectCard` decision is only reached when at least one card is playable (it is normally
+    // A play-a-card decision is only reached when at least one card is playable (it is normally
     // one branch of an OrOptions whose sibling is "pass"), so an empty candidate set means the
     // model and the live affordability check disagree - surface it loudly rather than guess.
     throw new Error(`enumerateProjectCard: no enabled, affordable card among ${input.cards.length} offered to player ${player.id}`);
@@ -112,8 +132,76 @@ export const enumerateProjectCard: DecisionEnumerator = (decision, rng) => {
     paymentOptions: affordOptions,
     reserveUnits: affordOptions.reserveUnits ?? Units.EMPTY,
   });
-  return {type: 'projectCard', card: card.name, payment};
-};
+  return {type: 'projectCard', card: card.name, payment} as const;
+}
+
+/**
+ * The `SelectStandardProjectToPlay` case. Keep only projects that are **actable** and affordable,
+ * pick one uniformly, and pay for it with {@link cheapestLegalPayment} against the standard-project
+ * cost/options/reserve ({@link standardProjectTarget}). Eligibility mirrors
+ * `SelectStandardProjectToPlay.validate()`: skip a greyed-out (`enabled[i] === false`) project, and
+ * require `card.canAct(player)` unless a discount override (`overriddenCost`) is in play - the
+ * Engine's `validate()` skips the `canAct` re-check in exactly that discounted case.
+ *
+ * Throwing on an empty candidate set is correct here: the standard-projects menu is offered as one
+ * branch of the action-phase `OrOptions` even when nothing in it is actable/affordable, so "picked
+ * this branch but can do nothing in it" is a real (if suboptimal) situation the random agent can
+ * reach - the driver's FR-9 fallback (embeddedDriver.ts) then retries another branch, which is the
+ * intended recovery, not a bug to paper over here.
+ */
+function enumerateStandardProject(player: IPlayer, input: SelectStandardProjectToPlay, rng: Parameters<DecisionEnumerator>[1]) {
+  const enabled = input.enabled;
+  const candidates = input.cards.filter((card, i) => {
+    if (enabled !== undefined && enabled[i] === false) {
+      return false;
+    }
+    const details = input.extras.get(card.name);
+    if (details?.overriddenCost === undefined && !card.canAct(player)) {
+      return false;
+    }
+    const target = standardProjectTarget(player, card, details?.overriddenCost, details?.reserveUnits);
+    return maxPayableValue(player, target.reserveUnits, target.paymentOptions) >= target.cost;
+  });
+  if (candidates.length === 0) {
+    throw new Error(`enumerateProjectCard: no actable, affordable standard project among ${input.cards.length} offered to player ${player.id}`);
+  }
+
+  const card = rng.pick(candidates);
+  const details = input.extras.get(card.name);
+  const target = standardProjectTarget(player, card, details?.overriddenCost, details?.reserveUnits);
+  const payment = cheapestLegalPayment(player, target);
+  return {type: 'projectCard', card: card.name, payment} as const;
+}
+
+/**
+ * The {@link PaymentTarget} for a standard project, mirroring `SelectStandardProjectToPlay.validate()`
+ * (the source of truth): cost is the discount override if present else `card.getAdjustedCost(player)`,
+ * and the payable resources are `card.canPayWith(player)` combined with the player's own
+ * heat/Luna-titanium capability flags and expansion-corp tableau (Aurorai/Spire/Kuiper). All of it
+ * is read from Engine methods rather than hardcoded, so it tracks the Engine's own rules.
+ */
+function standardProjectTarget(player: IPlayer, card: IStandardProjectCard, overriddenCost: number | undefined, reserveUnits: Units | undefined): PaymentTarget {
+  const canPayWith = card.canPayWith(player);
+  return {
+    cost: overriddenCost ?? card.getAdjustedCost(player),
+    paymentOptions: {
+      heat: player.canUseHeatAsMegaCredits,
+      steel: canPayWith.steel,
+      titanium: canPayWith.titanium,
+      lunaTradeFederationTitanium: player.canUseTitaniumAsMegacredits,
+      seeds: canPayWith.seeds,
+      auroraiData: player.tableau.has(CardName.AURORAI),
+      spireScience: player.tableau.has(CardName.SPIRE),
+      kuiperAsteroids: canPayWith.kuiperAsteroids ? player.tableau.has(CardName.KUIPER_COOPERATIVE) : false,
+    },
+    reserveUnits: reserveUnits ?? Units.EMPTY,
+  };
+}
+
+/** The megacredit value of spending everything spendable (net of `reserve`) under `options`. */
+function maxPayableValue(player: IPlayer, reserve: Units, options: Partial<PaymentOptions>): number {
+  return player.payingAmount(spendableCounts(player, reserve) as Payment, options);
+}
 
 /**
  * The shared FR-ACT-4 payment factor: build one canonical cheapest-legal `Payment` covering

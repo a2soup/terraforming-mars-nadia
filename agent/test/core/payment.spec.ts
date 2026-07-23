@@ -12,6 +12,7 @@ import {CardName} from '../../../src/common/cards/CardName';
 import {Resource} from '../../../src/common/Resource';
 import {CarbonateProcessing} from '../../../src/server/cards/base/CarbonateProcessing';
 import {Asteroid} from '../../../src/server/cards/base/Asteroid';
+import {isIStandardProjectCard} from '../../../src/server/cards/IStandardProjectCard';
 
 /**
  * Sub-task C: the payment-bearing decision types - `payment` (SelectPayment) and `projectCard`
@@ -325,6 +326,75 @@ describe('payment enumerators (payment, projectCard)', () => {
         // End-to-end: the real Engine input accepts (and plays) the move.
         expect(() => input.process(response), `seed ${seed}`).to.not.throw();
       }
+    });
+  });
+
+  // ---------------------------------------------------------------------------------------------
+  // projectCard (SelectStandardProjectToPlay) - standard projects share the 'projectCard' model
+  // type with SelectProjectCardToPlay (both extend SelectCardToPlay) but use a different
+  // cost/eligibility/payment model (card.canAct / getAdjustedCost / canPayWith, not
+  // affordOptionsForCard). enumerateProjectCard dispatches on the concrete input; these cover the
+  // standard-project branch. (This gap - feeding a standard project through the hand-card path -
+  // was found by sub-task E's Tier-1 batch; see agent/docs/Running_Notes.md.)
+  // ---------------------------------------------------------------------------------------------
+
+  describe('projectCard (SelectStandardProjectToPlay - standard projects)', () => {
+    it('chooses an actable, affordable standard project and the real input plays it end-to-end', () => {
+      const player = freshPlayer(40);
+      setStock(player, {megacredits: 100});
+      const input = player.getStandardProjectOption();
+
+      for (let seed = 0; seed < 20; seed++) {
+        const decision = toDecisionPoint(player, player.getStandardProjectOption());
+        const response = enumerate(decision, createAgentRandom(seed));
+        if (response.type !== 'projectCard') {
+          throw new Error(`expected a 'projectCard' response, got '${response.type}'`);
+        }
+        const card = input.cards.find((c) => c.name === response.card)!;
+        expect(isIStandardProjectCard(card), 'must choose a standard project').to.be.true;
+        expect(card.canAct(player), 'must choose an actable project').to.be.true;
+        // MC-only payment for a base standard project (no steel/titanium/heat available here):
+        // minimal means exactly the adjusted cost, nothing more, nothing in another resource.
+        expect(response.payment.megacredits).to.equal(card.getAdjustedCost(player));
+        expect(response.payment.steel + response.payment.titanium + response.payment.heat).to.equal(0);
+      }
+
+      // Actually play one, proving the real Engine input accepts it (state-mutating, so once).
+      const playDecision = toDecisionPoint(player, input);
+      const playResponse = enumerate(playDecision, createAgentRandom(1));
+      expect(() => input.process(playResponse)).to.not.throw();
+    });
+
+    it('pays a standard project entirely with heat when heat is the only money (Helion-style)', () => {
+      const player = freshPlayer(41);
+      setStock(player, {megacredits: 0, heat: 40});
+      player.canUseHeatAsMegaCredits = true;
+      const input = player.getStandardProjectOption();
+      const decision = toDecisionPoint(player, input);
+
+      const response = enumerate(decision, createAgentRandom(2));
+      if (response.type !== 'projectCard') {
+        throw new Error(`expected a 'projectCard' response, got '${response.type}'`);
+      }
+      const card = input.cards.find((c) => c.name === response.card)!;
+      const cost = card.getAdjustedCost(player);
+      // No real M€, so the whole cost is covered by heat (heat is worth 1 M€ for Helion).
+      expect(response.payment.megacredits).to.equal(0);
+      expect(response.payment.heat).to.equal(cost);
+      expect(() => input.process(response)).to.not.throw();
+    });
+
+    it('throws (triggering the driver FR-9 fallback) when no standard project is actable/affordable', () => {
+      const player = freshPlayer(42);
+      setStock(player, {megacredits: 0, heat: 0});
+      player.cardsInHand = []; // so Sell Patents (cost 0) is not actable either
+      const input = player.getStandardProjectOption();
+      const decision = toDecisionPoint(player, input);
+
+      // A broke player who picked the standard-projects OR-branch can do nothing in it; the
+      // enumerator surfaces that as a throw, which the driver recovers from by trying another
+      // branch (embeddedDriver.ts). This is correct behavior, not a defect - assert it holds.
+      expect(() => enumerate(decision, createAgentRandom(3))).to.throw(/no actable, affordable standard project/);
     });
   });
 });
