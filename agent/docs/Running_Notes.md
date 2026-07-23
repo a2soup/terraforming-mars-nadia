@@ -373,3 +373,124 @@ play-a-card) branch even when nothing in it is doable, then falls back. That bia
 distribution toward whatever the first eligible branch is. Fine for a random-legal baseline / the
 speed spike; a smarter branch filter (skip branches with no legal completion) is a natural M3+
 refinement, noted here so it isn't rediscovered.
+
+## 2026-07-22 — Snapshot/restore fidelity is *not* universal, and 25% of the failures are silent (bullet-4 planning spike)
+
+Findings from a throwaway probe run while planning Milestone 1 bullet 4 (snapshot/restore, SRS
+CON-3), *before* any of it was implemented — recorded here because the numbers reshape the bullet's
+design and the underlying Engine facts are exactly the kind that reading the code alone gets wrong.
+The probe drove one 2p game (engine seed 4242, agent seed 5, `randomLegalAgent` via `applyDecision`)
+all the way to `Phase.END` — **294 decision points** — and at each one deep-copied
+`game.serialize()`, `Game.deserialize()`d it, then compared the clone to the original two ways:
+`stableState()` (the serialized-state comparison we already had) **and** a *pending-decision
+signature* (which players have a `waitingFor`, in `playersInGenerationOrder`, and of what type).
+Both probes were run twice, end to end, with byte-identical results.
+
+**The headline: 75 of 294 decision points (25.5%) do not round-trip, and all 29 of the action-phase
+failures are invisible to a state-only check.**
+
+| phase | bad / total | how it fails |
+| --- | --- | --- |
+| research | 46 / 48 | serialized state diverges — restore **re-draws** cards |
+| action | 29 / 241 | `stableState` matches **byte for byte**; the pending decision is silently replaced |
+| preludes | 0 / 4 | — |
+| production | 0 / 1 | — |
+
+**Root cause: the Engine deliberately does not serialize the pending decision, and regenerates one
+from the phase instead.** `Player.waitingFor` / `waitingForCb` (`src/server/Player.ts`) are not in
+`SerializedPlayer` at all, and `Game.serialize()` hardcodes `deferredActions: []`
+(`src/server/Game.ts:480` — the field exists in `SerializedGame`, it is simply always written
+empty). `Game.deserialize` compensates with a phase dispatch at the end of the function
+(`src/server/Game.ts`, the `if (game.generation === 1 && …) … else if (phase === DRAFTING) …` chain
+ending in `game.activePlayer.takeAction(/* saveBeforeTakingAction */ false)`), which *re-derives* a
+decision rather than restoring the one that was pending. That re-derivation is correct for a
+**top-of-turn** decision — `Player.takeAction()` regenerates prelude selection, pending initial
+corporation actions, and the main `getActions()` `OrOptions` faithfully — and that is why 212 of 241
+action-phase points and all 4 prelude points round-trip perfectly.
+
+It is *not* correct for a **mid-action sub-decision**. When the pending input is something queued
+behind an action already in flight (probe example: `#54 phase=action pending=[p-red:space]` — an
+ocean-tile placement), restore throws that decision away, along with any continuation it was
+guarding, and hands the player a fresh top-of-turn action instead. **Nothing in the serialized state
+changes**, because the discarded decision was never in the serialized state to begin with. A
+round-trip check that compares only `stableState()` reports success on every one of these. This is
+the same class of bug as the driver's double-drain from the sub-task E entry above (a silently lost
+continuation), reached by a different route, and it is the reason bullet 4's snapshot API captures
+and verifies the pending signature rather than trusting state equality.
+
+**Research fails differently and more loudly.** `Player.runResearchPhase()` calls
+`newStandardDraft(this.game).draw(this)` unconditionally whenever the draft variant is off (which is
+our config), so a restore into `Phase.RESEARCH` pops *fresh* cards off the project deck — different
+cards, a mutated deck, `draftedCards` overwritten. Worth recording the Engine's own intent here,
+because it points at the fix: `Game.gotoResearchPhase()` calls `this.save()` **before** the draw
+loop, so the Engine's blessed snapshot point for research is *pre-draw*, not at the decision. A
+research-phase fork is therefore reachable via the save history, never via a snapshot taken at the
+decision point itself.
+
+**`serialize()` aliases live objects — a deep copy is required on *both* sides.** `serialize()`
+returns `gameLog: this.gameLog` and `gameOptions: this.gameOptions` (`src/server/Game.ts:490-491`) —
+the actual live arrays/objects, not copies. `Game.deserialize` then both *mutates* its argument
+(`gameOptions.boardName = normalizeBoardName(gameOptions.boardName)`, first line of the function)
+and *re-aliases* it (`game.gameLog = d.gameLog`). So `Game.deserialize(game.serialize())` with no
+copy in between produces a "clone" that shares the original's game log — appending to one appends to
+the other — and mutates the original's `gameOptions` on the way. The `Game` constructor's
+`this.gameOptions = {...gameOptions}` (`src/server/Game.ts:206`) is only a shallow copy and does not
+save you (nested `expansions` stays shared). Copy at capture **and** again per restore: `deserialize`
+consumes the object it is handed, so one snapshot restored N times needs N copies. Verified: with
+copies on both sides, one snapshot restored 3 times gave 3 independent games and the snapshot object
+itself was unchanged afterward.
+
+**What *does* work, confirmed end-to-end.** From a quiescent mid-game fork (decision 90, action
+phase, empty deferred queue), `Game.deserialize(deepCopy(game.serialize()))` produced a clone that
+drove to a **byte-identical outcome**: same `GameResult` (gen 26, p-red 99 / p-green 45, same
+winner) and same final `stableState()` when original and clone were driven by separately-constructed
+agents on the same seed. Negative controls also pass: different agent seeds from the same snapshot
+diverge, and the original is untouched by anything done to the clone. Note that `stableState()`
+needed **no new field stripping** for this — the existing exclusion set (`id`, `name`,
+`createdTimeMs`, log timestamps, player timers) is already exactly right for clone comparison, which
+is a small piece of luck worth knowing rather than re-deriving.
+
+**Cost preview** (this workstation, ~decision 200 of a 2p game, two runs; the gating simulator-speed
+spike owns the real numbers, this is only the shape):
+
+| op | ms |
+| --- | --- |
+| `serialize()` | 0.03 |
+| JSON round-trip deep copy | 0.47–0.51 |
+| `structuredClone` | 0.60–0.66 — **slower than JSON**, don't reach for it reflexively |
+| `Game.deserialize` (full log) | 1.44–1.63 |
+| `Game.deserialize` (log stripped) | 0.88–0.97 |
+| **full clone** (serialize + copy + deserialize) | **~1.5** → ~660–690 clones/s, single-threaded |
+
+Two things the spike should carry forward: **deserialize dominates** (~3× the copy, ~50× the
+serialize), so the access pattern that matters is snapshot-once/restore-many — which is exactly what
+search does when it forks N simulations from one node; and **`gameLog` is 74% of the serialized
+bytes** (47.7KB of 64.8KB, 354 entries at that point, and it only grows), so dropping it from
+search-only snapshots cuts restore cost ~40% for free. Log-stripping is an option, not the default,
+and needs a batch run proving rules-neutrality before it's trusted.
+
+**Implication for Milestone 4, recorded now so it isn't rediscovered:** search cannot fork at an
+arbitrary decision node. The 29 silent action-phase points are not fixable by being careful with
+`serialize()` — the information was never captured. The natural strategy is **fork at the nearest
+quiescent ancestor and replay the intervening sub-decisions**, which the driver can already do
+deterministically. Bullet 4 does not build that; it builds the snapshot primitive plus the guard
+that makes an unsafe fork loud instead of silent.
+
+**Smaller items, all recorded rather than fixed:**
+- **`Cache.mark()` leak + log noise on END-phase restore.** `Game.deserialize` ends with
+  `if (game.phase === Phase.END) GameLoader.getInstance().mark(game.id)`, and `Cache.mark`
+  (`src/server/database/Cache.ts`) does a `console.log('Marking …')` and adds a Map entry keyed by
+  game id. Harmless at M1 volumes; a genuine unbounded map plus stdout spam at self-play scale,
+  where clones share one game id and terminal states get restored constantly.
+- **Clones share the original's `game.id`.** Fine mechanically (nothing registers the clone with
+  `GameLoader`), but it makes logs ambiguous. `stableState()` already strips `id`, so overriding it
+  per clone is free if we ever want to.
+- **We deliberately do not use the Engine's own `Cloner`** (`src/server/database/Cloner.ts`). It is
+  built for cross-*game* cloning: it rewrites every player id, sets `clonedGamedId`, and resets
+  `createdTimeMs`. All three are wrong for a search fork (which wants the same ids) and the id
+  rewrite is a full recursive walk of the serialized graph — pure added cost.
+- **Fields that are not serialized at all** and would silently vanish from a clone:
+  `monsInsuranceOwner` (Mons Insurance, promo), `inDoubleDown` / `doubleDownPrelude` (Double Down,
+  prelude2), `discardedColonies` (colonies). All out of scope for v1 (base + Corporate Era +
+  Prelude), so none can arise today — but they are a real hazard the moment scope widens, which is
+  the only reason they're listed.
