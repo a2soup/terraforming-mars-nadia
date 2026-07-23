@@ -494,3 +494,106 @@ that makes an unsafe fork loud instead of silent.
   prelude2), `discardedColonies` (colonies). All out of scope for v1 (base + Corporate Era +
   Prelude), so none can arise today — but they are a real hazard the moment scope widens, which is
   the only reason they're listed.
+
+## 2026-07-23 — Fidelity audit: the guard holds across 2p/3p/4p, but `preludes` is not the clean phase the probe suggested (bullet 4, sub-task B)
+
+`agent/test/engine/snapshotFidelity.spec.ts` — the audit that turns sub-task A's guard from a
+plausible claim into a measured one. Drives 6 full games (2p seeds 4242/9001, 3p 9101/9102, 4p
+9201/9202, agent seed `engineSeed * 13 + 97`) to `Phase.END` and classifies **every** decision point
+with A's safety machinery deliberately switched off (`snapshot(game, {unsafe: true})` +
+`restore(snap, {verify: 'none'})`, compared by hand) — because classifying with the defaults would
+make the tool throw on precisely the rows being counted, degrading the audit into "assert that the
+safe points are safe" while staying green. **1,809 decision points, 485 bad (26.8%)** — the planning
+probe's 25.5% on one 2p game, held up across player counts:
+
+| phase | bad / total | silent | state diverged | rejected by phase guard | bad rows caught *only* by the pending check |
+| --- | --- | --- | --- | --- | --- |
+| action | 170 / 1434 | 170 | 0 | 5 | 165 |
+| preludes | 7 / 43 | 4 | 3 | 2 | 5 |
+| production | 0 / 6 | 0 | 0 | 0 | 0 |
+| research | 308 / 326 | 0 | 308 | 326 | 0 |
+
+**The union invariant holds** (`safe && pendingOk ⇒ stateOk`, zero exceptions over all 1,809 rows), so
+no fourth failure mode surfaced in the phases the probe under-sampled. The two guards remain
+non-redundant in the strongest possible way: the phase guard catches 100% of research and 0% of
+action; the pending-signature check catches 165 of the 170 action failures the phase guard waves
+through. Action failures are still **100% silent** — every one round-trips `stableState` byte for
+byte — which is the whole case for capturing `pendingSignature` at all.
+
+**The new finding: `preludes` is a mixed phase, and the probe's `0/4` was a small-sample artifact.**
+7 of 43 prelude points fail, and — the part that matters — **3 of them diverge in serialized state
+while `assertSnapshotSafe` happily accepts them** (`safe=true`, empty deferred queue, `Phase.PRELUDES`
+is not in the unsafe-phase list). All 7 are live `space` decisions: a tile placement queued behind a
+prelude already in flight. Restore discards the continuation and regenerates something else —
+`p-red:space` → `p-red:card` (back to prelude selection; state unchanged, the silent case) or
+`p-yellow:space` → `p-yellow:or` (a top-of-turn action; state *does* diverge). So preludes is the
+mirror image of research: a state-divergent failure that only the **pending** check catches, where
+research is a state-divergent failure that only the **phase guard** catches. A§3's "do not drop
+either mechanism as redundant" is now load-bearing in both directions, measured, not argued.
+
+Deliberately *not* fixed by widening `assertSnapshotSafe` to reject `Phase.PRELUDES` wholesale: 36 of
+43 prelude points round-trip fine, the pending check already catches all 7 that don't, and the guard
+is meant to be a cheap phase-level filter, not a second implementation of the fidelity check.
+
+**Log-stripping is rules-neutral — proven, so `stripLog` has earned its place as a spike/search
+option.** At a quiescent mid-game point in 2p, 3p and 4p games, a `stripLog: true` restore and an
+unstripped restore of the *same* point, driven to `Phase.END` by separately-constructed same-seed
+agents, produce identical `GameResult` **and** identical `stableStateOf(…, {ignoreLog: true})` — i.e.
+the two finished games are identical in every respect other than the log itself, not merely tied on
+victory points. (`gameAge` is an independent counter, not `gameLog.length`, so it survives stripping
+— worth knowing before assuming the comparison is trivially true.)
+
+Runtime: the whole audit is ~4 s (~1,809 clone round trips plus 6 full drives), so it runs in the
+normal suite rather than being spike-only, as intended. Numbers above are reproducible from the seed
+list in the spec alone; two consecutive runs gave an identical table.
+
+## 2026-07-23 — Sub-task D scheduling: deferred to M4, not M1 (bullet 4 wrap-up)
+
+Discussed while wrapping up bullet 4: given the fidelity audit's numbers (26.8% of decision points
+don't round-trip, all action-phase failures silent), should sub-task D (in-memory save history,
+`headlessEngine.ts`) be pulled into M1 immediately after the simulator-speed spike, rather than left
+as M4's problem? Recorded here because the reasoning — and one imprecision in how the finding was
+first described — is worth having on hand before D is actually built.
+
+**Clarification worth stating plainly: none of this affects real play.** The audit's failures only
+occur when a game is serialized and `Game.deserialize`d into a *new* game object — an operation that
+happens nowhere in normal play (`runGame`/`applyDecision`/`player.process` never serialize anything;
+`Game.save()` fires during play but goes to the no-op database and never touches the live game
+object). Every game the driver plays — the bullet-3 Tier-1 batch, the audit's own 6 games, any future
+1,000-game AC-1 run — is authentic: legal, complete, and untouched by any of this. The defect is
+specific to *cloning* a state, which nothing exercises today except the search/self-play primitives
+bullet 4 itself builds. It becomes real the day something forks a state, which is M4, not M1.
+
+**Recommendation: defer D itself to M4; do one small verification now.** Two reasons, not one cost
+argument:
+
+1. **D has no consumer yet, so its design questions have no answer yet.** Ring size, whether to key
+   the ring per game object or per game id (clones share the original's `game.id` — noted above,
+   2026-07-22 entry — so an id-keyed ring would corrupt across clones at self-play scale), what
+   `restoreLastSave` should return, and how to handle `Game.deserialize`'s own re-entrant `save()`
+   call when restoring a research-phase save — all depend on how M4's replay-from-quiescent-ancestor
+   mechanism actually forks. Building D now means guessing at all four against requirements that
+   don't exist yet; the standard failure mode for infrastructure built ahead of its consumer.
+2. **The spike itself can still change D's shape.** If clone cost comes back far higher than the
+   ~1.5ms/clone planning estimate, M4's search design — and therefore how heavily it leans on Engine
+   save points vs our own decision-point snapshots — could look quite different. Building D before
+   that number is in means building it twice if the number surprises us.
+
+**What *is* worth doing now, cheaply, while the context is fresh:** verify the one factual claim M4's
+research-fork strategy depends on — that `Game.gotoResearchPhase()`'s `save()` call really does land
+*before* the draw, so restoring from it deals the same cards rather than re-drawing. This was reasoned
+through (`src/server/Game.ts`, `gotoResearchPhase` calls `this.save()` then `this.players.forEach(p =>
+p.runResearchPhase())`) but not empirically tested — the distinction matters, since everything else in
+this bullet was learned by running code, not by reading it. A small throwaway probe (measure
+`Game.save()` call density on live games) confirmed saves happen at a useful cadence for M4's
+replay-from-ancestor strategy generally — about 1 per 2.4 decision points across 2p/3p/4p (102/258,
+172/375, 129/308) — which is worth recording independent of D's own scheduling: whatever M4's replay
+mechanism turns out to be, quiescent Engine-blessed fork points are not sparse.
+
+**What would pull D forward:** if M6 self-play wants save-history resume for a reason unrelated to
+search, or if the spike shows clone cost high enough that Engine save points become the *primary*
+fork mechanism rather than a research-phase special case — either would give D a real consumer inside
+M1/M2's timeframe rather than M4's, and it should move up then.
+
+**Bullet 4 status:** A, B, C done (this repo's commits); D deferred to M4 per the above, to be
+designed alongside the replay-from-quiescent-ancestor mechanism it feeds, not before.
