@@ -156,8 +156,21 @@ attempted only on a foundation that already works.
 | 6 | Reinforcement learning via self-play (Python+PyTorch, optional expert warm-start) | Learned agent beats M5 with significance; monotonic improvement |
 | 7 | Evaluation, tuning, acceptance | Primary AC (AC-1, AC-4, AC-6) met and documented |
 
-**Current status: Milestone 0 / orientation.** `.nvmrc` pinned to Node 22, Engine commit pinned,
-this file written. **Milestone 1 has not been started.**
+**Current status: Milestone 1, bullet 3 complete.** `.nvmrc` pinned to Node 22, Engine commit
+pinned. Bullet 1 (headless base + Corporate Era + Prelude game creation,
+`agent/src/engine/gameFactory.ts`), bullet 2 (embedded driver, `agent/src/driver/`), and bullet 3
+(legal-action enumerator, `agent/src/core/enumerator/`, + the random-legal agent,
+`agent/src/core/randomLegalAgent.ts`) are done. The random-legal agent, driven by the embedded
+driver, now completes full 2p/3p/4p games end to end (`Phase.END`), including an FR-9 conservative
+fallback that recovers the one known composite-level affordability coupling plus a genuine
+`SelectStandardProjectToPlay`/`SelectProjectCardToPlay` model-type overlap the Tier-1 batch
+surfaced — see `agent/docs/Running_Notes.md` (2026-07-22 entry) for both findings and the driver
+fix (an unconditional `deferredActions.runAll()` double-drain bug) that the batch also caught.
+**Next up:** bullet 4 (snapshot/restore for search/self-play, SRS CON-3) and the **simulator-speed
+spike** (full-game runtime, clone round-trip time, clones/second at the pin — the single biggest
+Milestone 4/6 feasibility risk, see item 3 below) — followed by the full 1,000-game AC-1
+determinism/legality run, which is a separate Milestone-1 item from the Tier-1 (~20-game) batch
+already exercised.
 
 **The gating first task (Plan §9, Milestone 1) — do this before any strategy work:**
 1. Confirm a headless base + Corporate Era + Prelude game can be created and stepped through
