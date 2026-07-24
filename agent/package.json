@@ -6,6 +6,9 @@
   "scripts": {
     "create-game": "tsx src/runner/createGameCli.ts",
     "bench": "tsx src/runner/speedSpikeCli.ts",
+    "determinism": "tsx src/runner/determinismCli.ts",
+    "determinism:sweep": "tsx src/determinism/sweep.ts",
+    "determinism:cross-process": "tsx src/determinism/childReplay.ts",
     "test": "mocha --import=tsx --require ../tests/testing/setup.ts \"test/**/*.spec.ts\""
   }
 }

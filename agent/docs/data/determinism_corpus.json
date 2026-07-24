@@ -1,0 +1,3913 @@
+{
+  "header": {
+    "engineCommit": "868714d72a434ab68fe08e5570ebc6863859ae15",
+    "agentCommit": "aa74501ac09fa10a44f29b7f52fff5805e1ac5bf",
+    "nodeVersion": "v22.23.1",
+    "agentVersion": "0.0.1",
+    "seedDerivationVersion": 1,
+    "env": {},
+    "createdAt": "2026-07-24T13:40:34.495Z"
+  },
+  "fingerprints": [
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 500000,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "d08331ce0958b2a78e3e5f63657cfbd95414de4c172622df6770654b8203fc41",
+      "stableStateHash": "27479d8172295db462ca6cd98099fd38baefa1aca74189ed51dc0ef1dc64c498",
+      "resultHash": "6964146cb76ac2b83c8cda2a0bf1605d749e380347f68d6e640da7b885bb24dc",
+      "decisions": 321,
+      "fallbacks": 8,
+      "generation": 23
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 500000,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "e271be80204276d27e28c220aabca21f692b198d4c3716d68518f719015db721",
+      "stableStateHash": "57ffeb124e87700bf360dcadf6905d85db136bd99411744a3cf54f371b4dd802",
+      "resultHash": "a0cb748adedc0a1cc59fe66d865a4c712546c622faa553e782a313161825bcdf",
+      "decisions": 267,
+      "fallbacks": 2,
+      "generation": 23
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 500977,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "f2972538677c01edaa974a0d31f7868e3c84ae7fee5fd07de89efa59d1d07684",
+      "stableStateHash": "29d94abf51276e8e3c4a5fa4d773977a59f79a5c9f0d79a9e7f752c3aea327aa",
+      "resultHash": "afd130bc7739e6cecb6b705f0a6a5479f28452789ea8b5d897551be4ea23d67a",
+      "decisions": 403,
+      "fallbacks": 8,
+      "generation": 28
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 500977,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "5a8efcb4ac9a42f87d7d3822c940a02264e5a1dfb02ffbc1a1906d80553f8e22",
+      "stableStateHash": "815c54d3759e2aff760e44e07e5053f26a8443d4bc9cf104dffa1daf93711a4b",
+      "resultHash": "d9bc3147f2730e4f3d430464f28c7866ae761e1c49cbaad6a0f1e5c87990f21c",
+      "decisions": 373,
+      "fallbacks": 4,
+      "generation": 27
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 501954,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "ba2481c29461a50c1f6b579573afd6740f638df01ac778cc0c575f2adf5e47d5",
+      "stableStateHash": "ab50a8fa767b4c99674f4ec6e66f36af7fa73ed7963fdd7d5a7df1a2e9ab2174",
+      "resultHash": "e3eb076e348cfe78f6fa6864179ef757a8a2e6310f641837cbf81cc47112bc88",
+      "decisions": 318,
+      "fallbacks": 2,
+      "generation": 27
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 501954,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "51aa101a95e72484ad51efd8fb752c469cd6909479c6744136fffae2312df178",
+      "stableStateHash": "c144553264e3ce5a8cda2e741424a167a3cc064ea308c3a06f29e4adc22bced9",
+      "resultHash": "ac6f0d5925dd1144f11fc4daabdcccff22837b3797f063a8be4e0b6c274d2d59",
+      "decisions": 237,
+      "fallbacks": 9,
+      "generation": 21
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 502931,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "f799265d2d79d0994b50908955ce98321b6a1c755bf503f861bf5061d991549d",
+      "stableStateHash": "b038f06d22c21abdaf71c6cedd99c0dfdfebe2f7f27669d647a95dfe35081554",
+      "resultHash": "5658d0a4c1826d1a6eda3a8812a356aeafa8d5aab988fdbc5031c91363774f6b",
+      "decisions": 323,
+      "fallbacks": 0,
+      "generation": 26
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 502931,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "d045d3ed45b820b2bef22a90e1eb2158b0dfe055370cc032039453e079f23dc1",
+      "stableStateHash": "dc376f03d3df74c77f1acbec171ad8a2ee499a956060dfca830c94fe10669495",
+      "resultHash": "cabb816a772bc43b41ad6c1d7b569e7004ba23714a5dc6f5042a48ff41fb29bc",
+      "decisions": 344,
+      "fallbacks": 10,
+      "generation": 30
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 503908,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "574322680e4640b0b293c0946fb0673380553738edbb8001e43a69561442b640",
+      "stableStateHash": "3c753096029ebd6979ab43f9c06d1c324f12302515d50dbe99c2f35c1fc09eca",
+      "resultHash": "e5b40fbe5446af77582b483c23cab8d6190e3dc40d4da16df5d4626b528c4a2c",
+      "decisions": 389,
+      "fallbacks": 3,
+      "generation": 29
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 503908,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "f12c24c039fa1d76d88b34f4d9afd0a8f98441d5aef7356b7d4becfc3c076c25",
+      "stableStateHash": "409e3fd4620f17cffab9f18a8283f71d93220e9cfebc96905a7f31afa30eb9c2",
+      "resultHash": "12ca12e26082c0b35df7aed15607f9aec5b035924061289de20427d8779e0720",
+      "decisions": 233,
+      "fallbacks": 10,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 504885,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "4f8f8849af9fc1c9416521850e763d378e53e6b2834c2eeaedeb30f4a39a79db",
+      "stableStateHash": "4bc916ae7840ba59473ed6b216aa53f36b982e656b991c60f229be20ac50370f",
+      "resultHash": "b0844e22ee92a31569a76da355d7604fe0e27f1dc1b54558459e012dd3aa14e7",
+      "decisions": 383,
+      "fallbacks": 4,
+      "generation": 29
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 504885,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "7b5469857af6387a8afc8b30897c46bd7acd735bd7377539eec5226dca1ac7d6",
+      "stableStateHash": "87fb13b05e1fc1ae05ef8608b045b9796a1808ca566ee9159a975a06dacdd980",
+      "resultHash": "cc4511852655f9ab4c7ad6335d252fb9f9300eeece684bc102745abd673a6bb5",
+      "decisions": 349,
+      "fallbacks": 6,
+      "generation": 30
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 505862,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "856799765756007a0dedda0c383caf6d4bc3b0980fa3da28b11fb2febb7f34d7",
+      "stableStateHash": "569d101b15cd88dd3ae1c7f9b803c5252bd878d9a70357f96c9bf39ae43af4d4",
+      "resultHash": "c28ad70251d17b601c448b4048df4e517fa020ffb1850d1149f03f06a35e771e",
+      "decisions": 303,
+      "fallbacks": 1,
+      "generation": 24
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 505862,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "86af13626bd88817135ac634ee1c7ab7022828e5f9363cd817ae31538b3f2552",
+      "stableStateHash": "b194d6355eeb1aee2b7724a5fcd61c087ba136caab3cfafab2f76f3a222c2021",
+      "resultHash": "6f6214e13749403fb8a86f9768833a9551a5a59b1c5526b16c4ded2c1dce643b",
+      "decisions": 323,
+      "fallbacks": 1,
+      "generation": 27
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 506839,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "5cc710d44ccd4acea7eb7d348c730060cb393ea1b32fcfc961cb114a96d17243",
+      "stableStateHash": "fb3da6acbdcc7d51d8c575424f34fb6e92e4a03dcffb8d999819cd253aa55401",
+      "resultHash": "99d002d2b3388e37dfeb34f8826274d539a5ac0469c5ff6f5906532876baa64d",
+      "decisions": 203,
+      "fallbacks": 3,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 506839,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "8741a1a4f38c5816ede027952eb5541902c91dc616bff6f4aae004f63a62f0ce",
+      "stableStateHash": "995ef7744c55aeccdd80bd2cea1a210e441c00dec1fc67293e813e2c5626d96d",
+      "resultHash": "c0b200ab31d0ef49583488c14737725b9696d1e2e2400e0a3350adcc0e90651f",
+      "decisions": 212,
+      "fallbacks": 4,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 507816,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "1539b6f54bc02e537bcc7afb43e5c8626d3f96175f00fcf11fbbe67494290628",
+      "stableStateHash": "6a99a6496f4dfced023cc4fe9670987a3c787c4fc7bfd21846ee1c9b6ef8311a",
+      "resultHash": "fa852761c1d37783935d3af2372570667665773ed18bb3b21a14b8eaa4166c97",
+      "decisions": 278,
+      "fallbacks": 4,
+      "generation": 26
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 507816,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "0328b893996eaaacfa1b6ee15bb4fe2bdcf472005f69edb8fbea0783e0d4ebfb",
+      "stableStateHash": "36b4561f4bfa5fa9c32eb44112f2e2fd8aef86f3ad1943dd32f68d8f904de77d",
+      "resultHash": "777715747d3becd6245e1b1f1fa9d6f525be9509bb123058fe9d0219a20604ca",
+      "decisions": 200,
+      "fallbacks": 15,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 508793,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "f7920d5c2e2ad4c2a551ded2afc001542b8c36befe2ca10c2890fd9a80dab67c",
+      "stableStateHash": "6d656e1e1f688d8c4375f1e3fbc19ca20d7ca5575703c259ec6323835fca5590",
+      "resultHash": "8c40d49bb0e49d72bb19cd35fc0379bb1c16231de2d22174eaf33266eb0e2181",
+      "decisions": 311,
+      "fallbacks": 6,
+      "generation": 22
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 508793,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "8fea4ba9d05aba0724437579e95541e8ad8517f873db355c45b6334633a9bf28",
+      "stableStateHash": "e2a87a37968cd38fcd4e93adf61079ae89933f3d96711e29dcf74fb3e2e04306",
+      "resultHash": "b965094d9f2a555637352581009c5366ef6699dbbc84f0bc0d89b4106db451f7",
+      "decisions": 211,
+      "fallbacks": 6,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 509770,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "a020b21edd2044ebaa5b551b8ea80121bc6c1b323078f9320544c5650382ca1e",
+      "stableStateHash": "852f1db11b477c788db2624a0b4a50b5a663b9e645550641c309b324a9dac965",
+      "resultHash": "d580f9dcb4fa721d03f98905c6798f9b00e5d1233c0a02fef3791af558114565",
+      "decisions": 229,
+      "fallbacks": 6,
+      "generation": 21
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 509770,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "b16e645f38e460ecefb97ac42debe03b836676a40c6d340d68f3f8ecc009d490",
+      "stableStateHash": "8bbe170e2647cad2ea1aba6f8e0f839b9cbf81612a884f69b2807e6611406103",
+      "resultHash": "47e928cf40713e4d6828f92ad5f778662301e65f189504484182f7fb781ca413",
+      "decisions": 264,
+      "fallbacks": 11,
+      "generation": 23
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 510747,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "90c101677c791150f33cd4dbe09a6072653a36fdff7906f4bbe9decd8527a817",
+      "stableStateHash": "7d181688f2bd988f8cdeef7871368d94754644ca83a379677ad7aef0b79c45e9",
+      "resultHash": "23cbcf4c6c3ee46af57ce2fe8a20f03a25185e68ad95450d26f93e765a851029",
+      "decisions": 332,
+      "fallbacks": 4,
+      "generation": 25
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 510747,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "6d0e634015e7460780bb7e8f3979cf4c021785c2e3541e99a1e53396746f6381",
+      "stableStateHash": "b0cce9c7e4cdf66633106e77676d018ce8a6bfb7c5d8bbbec642a12b70cb768b",
+      "resultHash": "103c342eb2a6cbc17dd06796ad4c57b3899d6e3d732153a349cd78d4de744ca0",
+      "decisions": 272,
+      "fallbacks": 2,
+      "generation": 21
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 511724,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "8d058cc2b8111d611e34244733372f89945116d2f53aff0a1b79ef78e6551f1f",
+      "stableStateHash": "79339874167e6dfeb248a00659655b95454d11cb7fa1aa3c7442daeee58374d7",
+      "resultHash": "b6551e7eafeb8bd7e6e8a65357d2c6b83a1dd85dbfc5a3ed21c179a680afc601",
+      "decisions": 303,
+      "fallbacks": 1,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 511724,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "f4af75d6fd1c29f73c8018153bd1959639a285ddc7a277eb55bed39cb4720168",
+      "stableStateHash": "22c24624d6330539831486e4bc121a5bd987d2e81aec701cea75e98119cf3602",
+      "resultHash": "5c9efbc54b931dcf6b40a60e44d028af602ae82f7b54988c670428f11590854d",
+      "decisions": 329,
+      "fallbacks": 4,
+      "generation": 26
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 512701,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "d6e4c272d875880ea3c4e02c64ba59b5466fd63a01ebddb063a1af3fec96683e",
+      "stableStateHash": "8832c74de22984008ea8e0039e8977c2dcf4ef4a7f4f66d1d6ea83006412cf79",
+      "resultHash": "37da2c892360a0dabd2354f988eba0bb0828318bfe167a164518f71db7fcbc5f",
+      "decisions": 244,
+      "fallbacks": 5,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 512701,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "3cd4c27341558f5ef5797383b539fa90cc53cc3db8a53ca58aec8dcdc45a04ab",
+      "stableStateHash": "bb9a7d4ce94b4c125fa309722b02cab8f576726e4193c9d18ddf7eea798784cb",
+      "resultHash": "9c6f9ea98a4cd040ee4be186c0e7198a97a58c98232e2e81acbff783a0e20289",
+      "decisions": 189,
+      "fallbacks": 6,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 513678,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "56538857e559cdaae4490c1863d10ae4fc16be974921f1ae8937c7e29b128acc",
+      "stableStateHash": "8c70e01d8305c6c8878582248f673aeda5f9b533d5b304025732365636f51d7a",
+      "resultHash": "12f882da6b598dac6ffbaca884b8b445cf0be564c5eb878009771096a7e29a51",
+      "decisions": 292,
+      "fallbacks": 4,
+      "generation": 22
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 513678,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "d6a3eaa370b284a46789217ac2b72c90a32693847705b9fbfcfa22335024a45f",
+      "stableStateHash": "28a3548c54d84e853b8fbb3993b722f95f8e0618fdba4879fb4805aaa27bcd9f",
+      "resultHash": "907b8459fa14d3aeca166f2786437d6687a40a7b81d183a68a7fee9657eaf059",
+      "decisions": 247,
+      "fallbacks": 3,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 514655,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "9477e1140e2d39f591eea64d018379bb83b47d995b97154eeb5a5d47aa25ae78",
+      "stableStateHash": "ffe54cdab41618e1c8f85c587c2c3c12de744f4f5d5ba4a89d11cde293b80adf",
+      "resultHash": "2cccb2b4681d83c03f5378a460cc3f38ff3a04125cbd10c221762d5e1a5f8606",
+      "decisions": 234,
+      "fallbacks": 3,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 514655,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "0ef766568b06e84ec30062147eae4b241454404e5cfbb3a1d067107f9c4ce013",
+      "stableStateHash": "0033af008b68f3579d7291e84f84a346adb87af42111c02a4a9fda2b3e6a19a2",
+      "resultHash": "1e90ee36ab1a60388efdcc6ac5477edeff6728997111a28b1852b1a366f589c8",
+      "decisions": 242,
+      "fallbacks": 7,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 515632,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "f595ae22413977cff393606ad7730f2689cc86977b74cc2ea9fe64549892b535",
+      "stableStateHash": "0fbeb48ddd0b4c27ed9572cccb627b1e13695752af57d4d97433bed69298908a",
+      "resultHash": "d28ad13cc29b83add5efdb691bf37d81703a2fcd78e924fd63c111cc3e3aa40b",
+      "decisions": 239,
+      "fallbacks": 1,
+      "generation": 22
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 515632,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "9bf8644430bdc89bfa4d73090d3b36e23e08a53b07c05b0b8c6b1c43060357b4",
+      "stableStateHash": "e5d50e3cbdb0ec9962aa08a6d203fec6bea42338bd74267a1ddc698fd6c5a63e",
+      "resultHash": "1ca9bcd8a4075d8f6dee3f09cf326e6ce90084d97ba0ac2ae47f6fecb8059613",
+      "decisions": 191,
+      "fallbacks": 6,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 516609,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "0eebfb19739a0c38fbdb796f2f36dd488b17de7e988af700bda660652160a3d5",
+      "stableStateHash": "795aaaaef8e5596d87adc47333fd26df6dc761b128b8fb6edf4a1e40e4e078e9",
+      "resultHash": "72442c692335dfe6fa5585f885ff45a189a51f31f946d1add1e1c864b98a8473",
+      "decisions": 294,
+      "fallbacks": 3,
+      "generation": 27
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 516609,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "5565d7b8fb8841a931de44a83da7a93dd75e7861b666661cdada960970840336",
+      "stableStateHash": "348001d0cb37cb7375ee9fb04d5fe469d9a55bdfd07e738cd3d7906137ccbf92",
+      "resultHash": "3eb1b82ca321586497b43f1c8eda357103428980c188b10b298594ba633625da",
+      "decisions": 231,
+      "fallbacks": 12,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 517586,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "f6e51c893ca3e692c23aa56e1b8e731b1c40f01d70e74d05cd8a3173e81e1f1b",
+      "stableStateHash": "f012ab5907922cc65a7125e64c2b965758c67d52bc3613389dc73ec568938ec2",
+      "resultHash": "bd71bf78b99567093eb5a23ccb9a330b5a03e41ee2c08115f3f5e2bf5cbdc009",
+      "decisions": 281,
+      "fallbacks": 4,
+      "generation": 25
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 517586,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "94848ab55a29d1f753ca31e835493c514fb35f319504c070f08cd16b979a2b02",
+      "stableStateHash": "701c29d6da16c9ca63e1a0fbc9654adc9f608acc6493caced4174f4b3ff48fd5",
+      "resultHash": "64eca3342d236ab9ef33459eecf942dd28e8f6884263d7c986f377434e9e1d97",
+      "decisions": 381,
+      "fallbacks": 6,
+      "generation": 29
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 518563,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "8930abf21f4887928e310ea78f128a661d1eef49301e41365a638562e11ec4e9",
+      "stableStateHash": "eee359f6629b221c269ab7004745134717d9961f29627668b3f1da45058147f4",
+      "resultHash": "11543d9a17f585b1150ac7d35eb284ce176b0fe57e93cfcd7888e404dae765a6",
+      "decisions": 294,
+      "fallbacks": 5,
+      "generation": 24
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 518563,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "503ed791399ac9b229f985cca44997155e700e40c4c3dfdd04362b15f056732a",
+      "stableStateHash": "7a1c4f8eb3b19880463e347a27b99b30640cef38c64fcb122e0dfeac28b95082",
+      "resultHash": "3bcffceeb7e6660bfab7cf1b092070c3e556e7422316f3e5e533adb8448bdb79",
+      "decisions": 255,
+      "fallbacks": 7,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 519540,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "d2203ae8de81dc21da19f94f693b46486cc907ac5e0b5e3a0779a2bcab047726",
+      "stableStateHash": "93591155bf2e34b9098435c01a66d52d58c2afe8f97682de2b6a4ea68cee1023",
+      "resultHash": "e3dc3783d9743e086b2ad9a70e84a3d3f62c248ce446c1e0ca7171e5561afa3a",
+      "decisions": 349,
+      "fallbacks": 3,
+      "generation": 28
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 519540,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "fbbc37de419753d11eb91e3455a17ac4d6215f0f89f7987a6d5e20c397f5abed",
+      "stableStateHash": "4a61514f836d1b716a6df98dc21c702d269175032b59674f4590beca420abc22",
+      "resultHash": "fc9655c17e57cd8e7b1861a926dd9b25cf9c0c2522993cd39c501d6e642e62c7",
+      "decisions": 182,
+      "fallbacks": 7,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 520517,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "4bef7d43e3a06c81208dee19dbc73fa2226909ec8b471ca6f8d83e27008fd96e",
+      "stableStateHash": "18fe706c8383d42b972cc67d5d961ab2d0d5d7a74d4712954b0c621d59071bd7",
+      "resultHash": "fcc2aa6d6c7b5c9529cfbd79d3c78d0880356b5bc5d367e8090cc5ac55f20408",
+      "decisions": 343,
+      "fallbacks": 4,
+      "generation": 25
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 520517,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "79289316b7155853967a8e058d33d134fd4da37b4d247d5d9238f53ebc9e2e45",
+      "stableStateHash": "9d8e624def96948da243a42ef825f1d51f69e66ff0d845c522e856f1f5c6f782",
+      "resultHash": "c3a0c92ce552ca78d361ffbc9a8cd9e4d1cd49777e0b4eab2faa661588a97efd",
+      "decisions": 247,
+      "fallbacks": 4,
+      "generation": 21
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 521494,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "76f1bb03c67cfc89d7107dcb49254b53e8226840f785cf0a7baaafac9583f12e",
+      "stableStateHash": "86e0ee170df93f819472b5a33e5494d48e68bc30ff39fce24af67fff1ba422fc",
+      "resultHash": "72ddcc72771fa10b0a0a1e96b4607f21e7fd9e5b6f5418423c1a3662d2e481d4",
+      "decisions": 348,
+      "fallbacks": 1,
+      "generation": 29
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 521494,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "c47c05dd01931356df2b87f39dca68b47c2742060da09f04010106d2c2c8e95c",
+      "stableStateHash": "008b10aa51f63865fba65f1c6e8272431fe7d1f94a5e6043e7620149b2697120",
+      "resultHash": "57ea01b171740eae8e91521744050d564c6bebf70750826c92b2bb0756ec0ac2",
+      "decisions": 187,
+      "fallbacks": 4,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 522471,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "a00442c8f6ee3cb777478dea4a47f39a6eba67ee2958fe4e50fd53adc8edafd6",
+      "stableStateHash": "3a9a732299760bc4bd78dfc48e1229c9c4a61b942953da3156f3ba38a9a09d87",
+      "resultHash": "dc9b2b579133e5a12f4a5e1e7418864b299315d60bbfafbb7f72572095db6963",
+      "decisions": 223,
+      "fallbacks": 7,
+      "generation": 21
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 522471,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "407ac0a619e404d8ac06fb755eb89575cd2575bc3a5c1529451dfc8e0cc2b641",
+      "stableStateHash": "2b16022169bc2f3fd5c7b0e9f6ce2c5cb855d5513125504f49073cbc28866b8d",
+      "resultHash": "3e2e5515b5aee613a0b2334fde7e585f48add695179d488a11dcb560df8b2d81",
+      "decisions": 225,
+      "fallbacks": 1,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 523448,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "a8d6d824dfb5cda1a55dc48951c7c808307b576a34d5acf4e2056bc90383e380",
+      "stableStateHash": "35f696d5f49ca9512ade6e7513cfd20cd66f0996d2c1f0d4dd99087b7ff5a1fd",
+      "resultHash": "db8334797ee99bc95e8e5fd613d90b2f5436cee8438444db9bf416bf7bda8e38",
+      "decisions": 259,
+      "fallbacks": 3,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 523448,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "4038408932aeef7c6eaa80c242b4a09095c21fd600040652feb9297288e4ed6c",
+      "stableStateHash": "086e812abb30253b113e1fa97c691fa7a25c6607bc8f91f7eb01a95fecbb9a4d",
+      "resultHash": "4873f3c7b4a679cb8f9c18e312bea4162e4a5f6d3f85a2ef52593002aa8247e0",
+      "decisions": 253,
+      "fallbacks": 10,
+      "generation": 22
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 524425,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "416c08d3019b5b3fa87534bac396671efe3019703e842537a38dda2b7c4099af",
+      "stableStateHash": "d3f986524a76aa954b5b8a49360a15b90420e4eeee535eeb86c310b4356c1cc0",
+      "resultHash": "a11de2a0849965443a3c41dfbdd5a17410db92d9a0fb039e9208adf7b6511c50",
+      "decisions": 248,
+      "fallbacks": 5,
+      "generation": 21
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 524425,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "3e12cb75394eced27679fd6757001305d61f45d6e287fda11a114760dd448326",
+      "stableStateHash": "f84ec225cefa0c5e52a9785a0828b84db51adcc79f13aaa3f3687ace1e129b50",
+      "resultHash": "114182c8d0da6b261b6d2785cc8687becbaae5eb0b5a1eb610d155b321c9201e",
+      "decisions": 356,
+      "fallbacks": 5,
+      "generation": 30
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 525402,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "02bf2d634e2169beb4aada9d276784d3b64048f5db081071552af6557e8a3a0d",
+      "stableStateHash": "cbcf5a32c5364bb5721c27486bfa6e32db72ae8fee5268e11ec3f38ac2dc37ad",
+      "resultHash": "a28743f6cdca8b0afbb1725a32f1ba9f0ee4e4934723606bc028fbf9ba3ab296",
+      "decisions": 267,
+      "fallbacks": 1,
+      "generation": 21
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 525402,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "ab9ce765743a6735fefc932766b183fc3dc5568cd835677b1b0d5e354067e917",
+      "stableStateHash": "22b100bdf51c8be4c806b1e53bb14efe00e1e8b1faa70c57651acea9b8c73914",
+      "resultHash": "d1840812801724170906389ae4e38f463f09c682629ba184eeb05b3b52e69572",
+      "decisions": 197,
+      "fallbacks": 10,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 526379,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "415d09b31af07991dd8a2f9b3130648c33323dd8a6f99b485b2bee13b852a3c0",
+      "stableStateHash": "2d6975df6b2229cc0cb88a30355150401e5a7eaea3b2e4dba7ef7654f718e706",
+      "resultHash": "b56a9f1b155e9e07399b11a2c617ed7674e08d747d3cc09490ddbe4a52152c79",
+      "decisions": 199,
+      "fallbacks": 7,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 526379,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "d78aeebe84fb445e3812f2407ea82ebfd9514933adbe7b1875bd60b50669cf8c",
+      "stableStateHash": "ddfcef478218f2393ed44b176fd2cc73d755c9250cb08553698e7c9b6575a636",
+      "resultHash": "cbaa7944d1f09f07a601a86900f25729dd30233d28cabd45a9aaff64b10ed405",
+      "decisions": 276,
+      "fallbacks": 6,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 527356,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "35d938087445d605be41475c80f7094909854b7e9f442dcec6ca5b34843ad107",
+      "stableStateHash": "5d33d1d377be684cbaae629f163bb118a414977a4b919f3c0e6c3bb4592863a7",
+      "resultHash": "bbc6c23f27d47b74a8673101b31c921e86017f8fdec6c96c877891214a5d4939",
+      "decisions": 314,
+      "fallbacks": 1,
+      "generation": 24
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 527356,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "3d2f43ac8ce5dbb16ad3a030be3466bd4887c6c64b031f335047c95369cbb073",
+      "stableStateHash": "002ed3c52bfabd424eb8a18a09e2a48fa6fa7e19a792f37cf4e23f7c44244f04",
+      "resultHash": "d5953f879b9f3a5ef5089141446ba9023567e35407fb57b29e772692f7c97de4",
+      "decisions": 267,
+      "fallbacks": 5,
+      "generation": 21
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 528333,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "12d5cae4db31006773575174d182c22190cbaa2f28c8bcf2de9406a323e7bace",
+      "stableStateHash": "495522872a7e600e910c00fb6c4fa1fba30af44657bb307302fcf76b7ab50a5b",
+      "resultHash": "a0c5ab7b956f7321b5be056dfd2175eae18b925616dd09f233a2d55412b0d33d",
+      "decisions": 363,
+      "fallbacks": 3,
+      "generation": 26
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 528333,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "f978595b3a73c6f1d4708fdb8aba112c105a5e0323ee116dfe69f10572495360",
+      "stableStateHash": "882668ac9ee4728028f26f389660b13a5d87604898de7a7ca41b51b179f3088c",
+      "resultHash": "dc3998a24edc36167114163d3f34be39959a86a4819b36274134a2cb8141a5ee",
+      "decisions": 252,
+      "fallbacks": 5,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 529310,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "273d214d29be3eed4f4ebd38c1cbaa2923a344ad2e14896b7daaffefb2c72764",
+      "stableStateHash": "491125c451932af0d5cc94e95a9beaa3c509a319aee0300ce8a838f0ccbe27f5",
+      "resultHash": "f6e40f639c04e5c359297771c598e52a6fcbb1b2b81457314afc5497a567312d",
+      "decisions": 267,
+      "fallbacks": 5,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 529310,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "20d5be016fb7de24e4b38de431158667bb238488b9555130e346ad9de73b3e97",
+      "stableStateHash": "1fc8216b5815a1e3f0cbde9d74ae6a66554f9677c3319be569bd15bd10eee372",
+      "resultHash": "906c6bf25d350992ba7eae7b886b05c788a9cf8b8bb69cf870f9c8f316490e25",
+      "decisions": 321,
+      "fallbacks": 6,
+      "generation": 25
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 530287,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "3697474e97e07ff18fb4fcf314d2384f9026c6f4abb4eab8415a6a1583a96de0",
+      "stableStateHash": "3b9d4d53a473f54e16eeb08486f8fda52f1a1baab9f9175c008cc61ab825b63e",
+      "resultHash": "25561713f49d93e0033dead272b3c996640e2c8d2cb05981b9b2ed93e759f876",
+      "decisions": 212,
+      "fallbacks": 1,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 530287,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "8c52eae5b7a29ab51e422bc1dcb7d307f2cc7153672abad4559575941e108e8b",
+      "stableStateHash": "7f6f1316dbe1734713cb055fbd250fea851d3b4a7094eb5ad613a7cb15a677ba",
+      "resultHash": "fc7487c5760fa3daf95efe134aae18e63e99e9ea33786a3a28a5c06bcbe5ffed",
+      "decisions": 321,
+      "fallbacks": 5,
+      "generation": 25
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 531264,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "a5c4e9c9dcfe6d40c6b0d6c8a6add3406c0e28abe0c74b123228cc62564655a4",
+      "stableStateHash": "a5dc75b45b65487d31102e76d8fee95dd9fef6365f689b771ff4b1ff3711a85a",
+      "resultHash": "e52d8d3050c322de0dc4daff7cb59cc03974b2d71ea5b4742b2917094809aaeb",
+      "decisions": 291,
+      "fallbacks": 5,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 531264,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "36f755095c32818c54958f342f88b37d5f27145b972b033cad12bc910a0c5216",
+      "stableStateHash": "923960da5b3b19338c05159becf8bc463236792ebc9d792ffc68dd113e24043d",
+      "resultHash": "b18ae59293e70c00320373932dd6adc9dcde052f3efecc743f1f294bd9698eaa",
+      "decisions": 257,
+      "fallbacks": 15,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 532241,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "65241c6bd680ed9f405874b0203b9d11345a07c23240ec0536e4fe503315c838",
+      "stableStateHash": "46f69c20c519219e8b759af1a16fcbe2f2e2cfe4bc33a5fd6ed3ab19b095b659",
+      "resultHash": "b87258574c9d0a18fc0750ce8324bfc86accbdb17c9afbb3abb6c1d8c813815e",
+      "decisions": 352,
+      "fallbacks": 0,
+      "generation": 28
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 532241,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "7464aa1234bff61975dc4fac2b02e16129265088c23564170ddc0100c34e4362",
+      "stableStateHash": "feb95962d2b8920b88b78659cd67afe1f5aa758b7b25254e3b574c90a07a812a",
+      "resultHash": "b823cf03c43e5d502792937aa41eee324a7761b8d8f5a84ae10e367e5f08d5fa",
+      "decisions": 244,
+      "fallbacks": 4,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 533218,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "69d58bdfcde510eca63f2041a51ecc17ce64dc43504e4ed9b742ca61c42e458c",
+      "stableStateHash": "1ff1895d53fb628cbe12488a6cab15cab894ed10946574422689fd12e1fa3dd3",
+      "resultHash": "a3867b4d134a782bb1217334fcc4d4dccb9b34e6af17d4d39289febc9166b737",
+      "decisions": 319,
+      "fallbacks": 3,
+      "generation": 28
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 533218,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "6cebba0b6a65363fbd6b02e4c1dda05bf28165366ebf09e9810c1ad4fa279653",
+      "stableStateHash": "8999d3386757745457bfb2c4a6d95ed82c33dc76e81142ea35514e878399814d",
+      "resultHash": "eb80724693c9e8ac76db855d9491cccd44678610dadff7aadf832ce0136b0a0e",
+      "decisions": 223,
+      "fallbacks": 6,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 534195,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "06de8d503049a28dc28dda671a54182243faf8216a7a6af7635b585b0ea33424",
+      "stableStateHash": "4719e88543dcbff5149663f54f1a4ad4de87f2a38c3ed3b9d3e71a1d7f14eecc",
+      "resultHash": "e82b0a81f83f0eb5d0b65f7b3bb0b1a0cd247453895af798171bd22e42f95710",
+      "decisions": 331,
+      "fallbacks": 2,
+      "generation": 25
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 534195,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "5a42222c7487b224af6c54b953cd2ed355429654eeac83a22d6a6af148f1bbdf",
+      "stableStateHash": "a8fc735ea5e1bf724dd3333050c931cafd367ce07f2fbedfe821b470530deab3",
+      "resultHash": "aa29ec6058ade7154d14367be3481c3497ff0e55950fb6fdadfafbff96ef4929",
+      "decisions": 318,
+      "fallbacks": 9,
+      "generation": 26
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 535172,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "ebde04a33b25bd9092154c8386004c1bb3a0294374b40b403c6d7383a4465060",
+      "stableStateHash": "d7726345d8f1381cb52e0ada054fb25dd70cea9702a710b208dc16587982bca6",
+      "resultHash": "f86569b080b817f7cc5d505eb321801aed01ba08d9ad08c14ebf0a91220db59a",
+      "decisions": 332,
+      "fallbacks": 4,
+      "generation": 27
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 535172,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "d47712cfc76418624e7ba22b282ff9fe9da416ad39203cc78b51d80d220a6df5",
+      "stableStateHash": "3671219501d21d1e447662ffe5f7cb63b4aedab7e57b2d2768b094e37ec30e5a",
+      "resultHash": "4fd0994907115082e854cf7b42d5cce1854347ed52500e9702ac59da8d22779f",
+      "decisions": 349,
+      "fallbacks": 3,
+      "generation": 28
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 536149,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "f10f2416a906396e46ed931efb55b58f02eb38eada31fd56aae3cfad3df90384",
+      "stableStateHash": "4a7c089173d5d1e5b263823623f305b543b74f2eac62cda463f5bcaf4eabc51e",
+      "resultHash": "b2b468e2abd49b8da9a5aacff8ffd1c9c247065349819ff3c3de81868773ef1d",
+      "decisions": 304,
+      "fallbacks": 5,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 536149,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "ca92e3c6116fdb27af8baf4871b247635f4e78c0b25b5c6c68d32f4c5b8adab7",
+      "stableStateHash": "d0d909ecb36981546ec93e05bb8a8fe1322abb9f0e8604586b3835984e57c22f",
+      "resultHash": "e4929f75ba5612afdcc9567a48cde89464dc3425f1a4081a8af551a1e022c40c",
+      "decisions": 223,
+      "fallbacks": 7,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 537126,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "cc1e6df13912d5e9b3ee37d3a1678a7b6709cff746dc34d3ed3c240f25510afe",
+      "stableStateHash": "e2e7f722149145d4f6cb6ee590dfb49e4b5dc32e43df429ce61389e2d31165ff",
+      "resultHash": "29f297c6fd75bb9cda55d731a60394fa3c68fccd48acabaaf598de4e7379ce83",
+      "decisions": 227,
+      "fallbacks": 7,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 537126,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "275007e774099557abb473cdbbe616cac5b437df1a0ac6d4dc916e56dbfc2bcd",
+      "stableStateHash": "d5394cb98f7d8ebac64921e647952de9858b6eda055386fb4c319f9adcfbf63e",
+      "resultHash": "b536df4f627a649d989d4eeff3ec1ee5feb5a13ea80e262e3ce69436fae6abbc",
+      "decisions": 359,
+      "fallbacks": 6,
+      "generation": 25
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 538103,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "60fb3a063e08b263f48e2f8207cb9acf34dc534d58209289aa57be1baf5e3ef9",
+      "stableStateHash": "953629f014ccb2b515c3aa6e9b9a157b359413f59ba20b7635adcfad42120e1b",
+      "resultHash": "4c54ef57291f6d3204aa650c730d1d5d551970972a587c22af5c6e4b716a4b9d",
+      "decisions": 290,
+      "fallbacks": 2,
+      "generation": 26
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 538103,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "8f2e5cd12a2d2320a57f11ad9f2c90939ba851e481829cb17c316f58cbcccd06",
+      "stableStateHash": "05634b1db0ec01896ca035405b63ce4ef800009d5364b2175d8c3862daf3f855",
+      "resultHash": "e0dc2755c0323f756324fe40f38003e81546c809308b615cb3234bbab6f0abc4",
+      "decisions": 303,
+      "fallbacks": 7,
+      "generation": 27
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 539080,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "504cbe7b0c4014b6a72756540d6d9ba57734ece04fbe1a37181b80cd5a94a4f7",
+      "stableStateHash": "2fec5205fe37c7580123f1ab1ea69869cca7ebdd5821f8c1e7bddebf1b389090",
+      "resultHash": "2d2a9d62253c002684aa8bd59b09b6553b1924efcb7553a4e89a5e617f2c471b",
+      "decisions": 221,
+      "fallbacks": 2,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 539080,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "6d76f4c7ddaf5a8d6869f1593f679f6429aa92caf7daf92a0382c78edf578948",
+      "stableStateHash": "640da1e3ce386eb245e75de4ceb171c5fb919911612f71c1648fc932e11e62c2",
+      "resultHash": "dc9c50e6452b36d9a08f11f60f8a4d7b52a4bedec2cb210814dfbba90cc0263d",
+      "decisions": 277,
+      "fallbacks": 2,
+      "generation": 24
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 540057,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "40835ab9cdcca01c7af55e1a90ce7ce5de1d1ed2b06a7bcb1f3d7e6cce3d3fbb",
+      "stableStateHash": "b3987025f714d5abaf6276444dba8210b8510cee6981a6b0c83f17e902f9386a",
+      "resultHash": "5c9e5810fa2b32c449d8cbae409194b99a940f5108c408b7ad82dc84f14d100f",
+      "decisions": 300,
+      "fallbacks": 5,
+      "generation": 26
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 540057,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "abf4fcc2b2982362e7be7a6507fac2346c9d11fbcd8b57db003d6f983923c4ad",
+      "stableStateHash": "a57b10c72a76d4c64f025b7caa2c4f710ea202e7188b299df3e0084f00d7caf4",
+      "resultHash": "67102444795b33c06ef6bd169b49f15af3e3cffbb1c03b7c6a6d7d8c28561820",
+      "decisions": 223,
+      "fallbacks": 4,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 541034,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "4f6e4892cae05bd191c83daad2a1be52f9ce7489197519a9aa4f7b9917bdfef7",
+      "stableStateHash": "d6fd8aadee672d80276e3d781f3ba73bd78745826ac58da2bb242b5c77c4e769",
+      "resultHash": "5daad2e498fd20ef561c5d3b4974683d7aeacc36007735a7e9eecbbf3000f1c9",
+      "decisions": 307,
+      "fallbacks": 3,
+      "generation": 24
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 541034,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "a1cbcea261edf02107c52da62e110c852032a2c94d1583143d6d59e7880d2bac",
+      "stableStateHash": "9d6e0bbbb979da42e2177bd88f51388660507cc9ebc6cada2309b3e25beeffa2",
+      "resultHash": "0df8918415a406d0b65ffbc3cb94cdc183c8f74792285678a47c2a556a174834",
+      "decisions": 231,
+      "fallbacks": 5,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 542011,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "b4c1eb1f6ae1d56b3a43d5a97b6cdfbfc6dafa28c4e2fc86c74f928afcf0d61f",
+      "stableStateHash": "6019af07b18d757960803356bf3837cbe14a2b9e16f1c0067c7d2cb18dd8a289",
+      "resultHash": "a95a2149482e6abd57f84c5d3abdce5cf7366acaf49d70d639db9e96119d4a45",
+      "decisions": 230,
+      "fallbacks": 9,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 542011,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "174dcca80bfa1fa6eedc03dc5618e7509b9eddf66bd1882d2dc3e251ee58bfe9",
+      "stableStateHash": "6a7ab5ec3d48fac316a3f82c50783f530ff9edea2496a072652ccc033b22368f",
+      "resultHash": "17eb0691ca5c4fe633d0c10b5a42dff3699e85e8cc058d64beda28f889618de3",
+      "decisions": 261,
+      "fallbacks": 4,
+      "generation": 21
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 542988,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "7c76cf62c926805ee0ab9af727201997f6d57ff11a18081a9f4a27f556ea4c59",
+      "stableStateHash": "d5b81b3f2b6f8d0adb168ae0e62de5f6af985edfb6f63b9055e3055e6e9fddd6",
+      "resultHash": "fafeabbf89e4e9393d1fd07f91fdf0bbf7e3cb7ebf2297ccd365f4ae8fbd3af2",
+      "decisions": 257,
+      "fallbacks": 6,
+      "generation": 22
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 542988,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "d26849953014b7715bcb83c8ac347e30d9ccdbb4f7a3de1cf5294708bd40125d",
+      "stableStateHash": "922360b36e088a7c15e59b2d45ec8b6bd4851fce204641ecd7ab64292e993db8",
+      "resultHash": "fcf052a8abe4485626bcfc040f63f1cb190a7c26ffed0b6327bf715b8160d98d",
+      "decisions": 289,
+      "fallbacks": 3,
+      "generation": 27
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 543965,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "7d8a3b09bbf4078e6d2cbc948393c5f51842f03972485623c788cc793cd0a4be",
+      "stableStateHash": "1d7327804ba173a09e33dff97c5e5662a98903723a8a60fb57822a785added56",
+      "resultHash": "c1e04d21b21a9c88158efa3f6600e8c025641149166a67e41329a26cec44e3bb",
+      "decisions": 224,
+      "fallbacks": 9,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 543965,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "c6461058714322497c1925d7bd3db779f2ce32a5124269ea7728de702df82ef8",
+      "stableStateHash": "dfea5e2ac4e70f4cfa9ee4c8e0e7473ea6672328c18767e2498b134db9de2a1d",
+      "resultHash": "8580451f76ce4110302a5d5f3a511db73ce634943311b306e19317440348ba31",
+      "decisions": 361,
+      "fallbacks": 5,
+      "generation": 35
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 544942,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "8a82c5f59dbe1b1ba01e9188952fbbea6e9ad311f0cd0851a11b1a2c1bc50914",
+      "stableStateHash": "9bfc28c3822c07614a0d1c6b50c6c954b5a16f10532fce53b1545715d4306d86",
+      "resultHash": "624da6f53b50fcb73cb3dbadb37f0f0a8fe6687b07c2c4e831f3a225231f575e",
+      "decisions": 328,
+      "fallbacks": 3,
+      "generation": 25
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 544942,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "802a702e2a6d971ef6c8faa6d51502f84c156466e57f3ddf47911a75c612eee6",
+      "stableStateHash": "131474b5c8ba2a7cfed7e46d0b529b0d9846673ba74f6a4b67076d1daf6b3afb",
+      "resultHash": "19f616cb461db619c04d9667ccaa8b7fe6d72b5e2651c8618416496e20eb478a",
+      "decisions": 255,
+      "fallbacks": 6,
+      "generation": 23
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 545919,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "59e0f18038ed17c926764020f09ca4ab5393215006546ded089507917f55d3b7",
+      "stableStateHash": "11fec7946d2de25da67e51db19f37c2f01b3d3403456a0f3514048c45db29d03",
+      "resultHash": "bae309ff2a0471ac23e96661dbdb5e74baf5e9bf388560857e42d0886b5e2028",
+      "decisions": 234,
+      "fallbacks": 3,
+      "generation": 21
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 545919,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "2d665574cc273bd6ecc67f4034173555c2844e324243f230bbd5625e4ea27319",
+      "stableStateHash": "25cc1411e030c5e151b50a4312ebcbfdf4daec28f195f7160537c914f038174d",
+      "resultHash": "29b97194cf6e864b4f2d5780f8764e00048f20faae2108a893af104cca38965f",
+      "decisions": 256,
+      "fallbacks": 7,
+      "generation": 26
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 546896,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "95b1a494348cdfe28a573ef78819fb4986008b7830066cbf5f5e2c570159b6ea",
+      "stableStateHash": "ca5b8fe9eafe5dfafa78b41a81e04fda32384a5facd705a020cc88a97dfcda91",
+      "resultHash": "e589c6b570dfdd8461b30bf689dc33958fa0dd14fe15f9b57653579d259930bc",
+      "decisions": 260,
+      "fallbacks": 7,
+      "generation": 23
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 546896,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "ad08fe1c65d968639c6b0e6b9d0a6e70081a1cc76327a29e6a7e8b50d6466189",
+      "stableStateHash": "e90acf4a89b2e7769890532790a14966516de27d87cc76166847d41af7c5844a",
+      "resultHash": "4f0e52ffa140fc6a58a68fe312a915b69c2dd8accf5b08d730daabc28493e697",
+      "decisions": 217,
+      "fallbacks": 4,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 547873,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "d7f4e720bab1c5058270a67823be37a9c12e632cd07427471870736fd35434d0",
+      "stableStateHash": "a1af000a90096af6d7373e3249c859216c7d0494e59791e115b1f63562906e01",
+      "resultHash": "dbdf0e06dcdc0d85c4fb3cee6a825dd41d23662cbd4fb72c637e6bd6ce8f7e7c",
+      "decisions": 354,
+      "fallbacks": 2,
+      "generation": 26
+    },
+    {
+      "config": {
+        "players": 2,
+        "engineSeed": 547873,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "898c10962866d0e5dd9fae36b68b9f235b3af85fc4313d456ba365ab90f7d483",
+      "stableStateHash": "d23921d69dc32da9f4231ec84885f3b1ec4e08fc8e779fabdcb51d724db46324",
+      "resultHash": "0c0c1e01cc99207ef54b55bf0f09eced9efc694112f26b6abb450e903ebacdf1",
+      "decisions": 291,
+      "fallbacks": 10,
+      "generation": 25
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 500000,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "6e2967dea28c922c29ad3f6a890ea277cd6547bdf383532c58fef0b721084506",
+      "stableStateHash": "3bc7a4c65fff90eac7a0e5ade005cdb4ce65944b96cf714b6319a0d3a092c5d4",
+      "resultHash": "fd81fc027ba790442f8358d1365207664925c115da55c5022326e5d37639babe",
+      "decisions": 329,
+      "fallbacks": 2,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 500000,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "1e6610e0ec71f1682ee49c76c54e97c1da4e933b91fde7b1ae791804ed349390",
+      "stableStateHash": "ca07c9b9f1803d63ee4a62d150a70a6d588cd434af3c094608e178b4e93d3518",
+      "resultHash": "ed9f97bd07b499cb580f481ce05183d2b24ba01b2cbc86760b12cf032101b3fb",
+      "decisions": 342,
+      "fallbacks": 3,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 500977,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "8c39efdeb324b4f691562c06ac4c158c505e75d5ae1f7644eca2cead139cfd72",
+      "stableStateHash": "5f932d1e1cfcd921b2d164862b917155a5af527d39845653afb02192168c4095",
+      "resultHash": "db1825f242c449307e1c87939bb774d5038bd5c44396331eaee05f491f3d7641",
+      "decisions": 326,
+      "fallbacks": 11,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 500977,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "1c48070f7e0c1a1b0d0e4c9ebe2e5b04814d278678e4c553c614582a750ca29c",
+      "stableStateHash": "d92d8e281ea9f5e859cfd14288f6007a1ff8544ce512ddf17649ca259a37d433",
+      "resultHash": "7a6ff80dcdfd3c85042115b4e8315b53b22c78463ba5c6f7828602fe6a04deba",
+      "decisions": 341,
+      "fallbacks": 12,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 501954,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "86c4499a18ef317c941b0a31218ae49e54b95d847cf109cf12cbd03bab23c53e",
+      "stableStateHash": "87d2abce2150639c37b3c73a75d3db989ac9aeb5bfc716a59aa9b1d397b12dc1",
+      "resultHash": "5639462f510dbafe3d093c506fd6eb76d69b7be2e49d9f9d4f61f1d101b19b7b",
+      "decisions": 239,
+      "fallbacks": 3,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 501954,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "fce886feb65df0121ce7d93a52d9cc43fe3549ecd6d357ec3dfc413e51030f6d",
+      "stableStateHash": "67a10a708c8b88f3d44881c5b032046d85265b59c3ee0f2cbd16548ec7bb2221",
+      "resultHash": "6d1109275fac91d4a1ce594c72c31d4a5d367f20b478b957b10eab08521ebaa3",
+      "decisions": 253,
+      "fallbacks": 7,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 502931,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "97dba6bfaa084aba3fc0633a8bca4127ee075091eaa637acc4278da0955f1e7e",
+      "stableStateHash": "9a83a12ef31dddd96822d91971e11dc0c99d5060e0a19438fb04d591ad14c141",
+      "resultHash": "e8199007ea2cac50f37589c51d26f5c106407501c34f9557bf7c53163638729f",
+      "decisions": 302,
+      "fallbacks": 3,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 502931,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "9133ceb6a430913724731cf67762bf88b417e8609487d0d5ddada20c7d770d3f",
+      "stableStateHash": "84ebca81715dd451a10f6c3c9db027d93563a724f9ff9c095d75f1f7e929a28a",
+      "resultHash": "2c5b79a0ee6b78679f7981d27d2b4fabd288b355e9ff2c8bc7545871a8c55f0a",
+      "decisions": 261,
+      "fallbacks": 9,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 503908,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "2d1f33db80af1aa816e68ca488353a63a15892c95f5ea8ed94be410f2af6f769",
+      "stableStateHash": "dab0816fe668280320e677f22e21ab354defb85d3cecf328e31f9575e153f808",
+      "resultHash": "b7fca58a2964e916fb16a728fd5ff4f72faa25e77d84fdc8c5378eb4fde19426",
+      "decisions": 351,
+      "fallbacks": 4,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 503908,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "4769960a69024da3e6ebc69fbf5eddda5c1764bfed771f5c5433b6bfda95c632",
+      "stableStateHash": "a479d758e4c466e86b84339c9b91a58c1ee91c0be2691f232d48e29127580ed5",
+      "resultHash": "c6795404ec7b8b1d320c7e67579079f10ebe5c49adb092cc740efd37e56223ad",
+      "decisions": 312,
+      "fallbacks": 6,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 504885,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "43e807d879b56d6f31e4fab746cdbd29d32af66104371174aaba542cffe6a2a0",
+      "stableStateHash": "62bf1d5cf127a0f45fed4d0217f8932a478f15e6fbac4ce8803d17cf8e70102e",
+      "resultHash": "93b434e87e97b8c56993d9c9a2ce9a8a7f1d731aa3e5c45c8db434c62b560dc5",
+      "decisions": 359,
+      "fallbacks": 20,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 504885,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "6e555e60299d5352e36d73e604c4d9db928ed0dfb17d7c8b0fc9a6d486dc745c",
+      "stableStateHash": "1603bcbcb7c7e57475e458a0151ee7dbd9253220aed235355e8ea613439398a4",
+      "resultHash": "c375c3d788c81796504a2f941d8bf7ab5399c05062f59fedaeac09238bc1c50a",
+      "decisions": 348,
+      "fallbacks": 9,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 505862,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "ec1f307ed4fbe1a7e1c88d00e89d7c75cf86a45b00dd3bf72fb2967242080ecc",
+      "stableStateHash": "181fb86bade3032fc3cfae6e4712722aaf9f697e66e0529f10ce2e50a30a94cf",
+      "resultHash": "bcaeeeb83039beb714b9989e5a40add4fff3591c2a061b8d83d40ac36f5fe3ea",
+      "decisions": 277,
+      "fallbacks": 5,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 505862,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "77ec615791d15c8a42bc759821b754c4e575c148c77a9f81486a52e1e48a6477",
+      "stableStateHash": "505920bb494ae86ff86214ec3bc48acd5a2193969f36d83edd8d62ce010bf873",
+      "resultHash": "48ca1934beb416043c1d29a77befba49c9b64aa2d6dd01c1f3ec2eb30628c576",
+      "decisions": 295,
+      "fallbacks": 8,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 506839,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "75a557cca014e995c61f818386d6fc7a84e94f9886a7f1852a3d76bc30b733d9",
+      "stableStateHash": "52a2069112e4848e9a348af3a5c8ed5f7ededd2b7e6489c35f55b0e0dab7604d",
+      "resultHash": "f82454d0e3310037a2ac99dbb1644261fab9a0c349756dbfffd170b4c567519a",
+      "decisions": 252,
+      "fallbacks": 3,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 506839,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "1e472e889add54983046b052e92f5175b2fb0ae76cf1d9cccf9bfdb736855b75",
+      "stableStateHash": "06b3041881dec3bc94915c0e042150d8ab0a50a0a137b3184310bd1054ef8798",
+      "resultHash": "cce3da8306f7b762467bb224d6debef190b089a40d9c58a5dc2f853f5b073e64",
+      "decisions": 265,
+      "fallbacks": 13,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 507816,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "782cd4cf8d8222b45171550ae9efaa7c0ad44f125474fcc43ebb19830ef8cf3b",
+      "stableStateHash": "e06ea726dcf98691d9ba2cf5a6c9ef42b95399efaeff435425e988ff899dfa67",
+      "resultHash": "5e6d53e030158c8baadece630c23feede5d040789bf45d7f4cba75632d00f620",
+      "decisions": 270,
+      "fallbacks": 8,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 507816,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "68ab20fbb2fe08a4a49a817fd038b7bd53fefd21a2467a0de412abc9572ce535",
+      "stableStateHash": "43f0830f7574c0b210f6d631afebfa43f737317b7bbbf9c9a97162cb394adff9",
+      "resultHash": "a9024131cd271cab35ec7e06fd14d704fbec4c0670d8838a50f4a9d9db03f767",
+      "decisions": 257,
+      "fallbacks": 8,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 508793,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "b591bda42452623524dce8ab720dbdf5c104121d0e81bee56378974294098333",
+      "stableStateHash": "b98e82a843d633c1326148900b6d7dfdc5cc8050afa6141ddec14960ee88e13b",
+      "resultHash": "a565e210102dd40d64c6bf15551011bb4f047315cff4a373076e458c0cef1123",
+      "decisions": 280,
+      "fallbacks": 6,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 508793,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "5292272e39b10d8d3a37c4b70479dfe1e6c037588fc75b645486340e99531f5a",
+      "stableStateHash": "04ec1137fd23d3b482b118e611ed9a471d753c46fdd4af1698b0fffa44b25719",
+      "resultHash": "8d3003a417f5bf42b772da7205f060c9811041166f09d94d38f69497506e3281",
+      "decisions": 280,
+      "fallbacks": 10,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 509770,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "5f20cb727ea4785a649e3e7d821caadf7a5a0d8759721aeefd6b6f9a90f0a943",
+      "stableStateHash": "8dc67e40d7bcbee050763d5a21fa8ddf9d1af435219caab4d1ebb7ef6cc22cee",
+      "resultHash": "674fd430fc35c38d6f0b152dcde6de4adf544362e00c8ee467e30787f41c6181",
+      "decisions": 369,
+      "fallbacks": 12,
+      "generation": 22
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 509770,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "34c51d83d849c7262e7b2a5ac235688a7a7577de24c48b87be806c24119ccf50",
+      "stableStateHash": "5ff104f2ff857d5edb8e3c01945bc64c35fd6ab8a128ec2296769b5394dbbbb4",
+      "resultHash": "6ac212ff7f6d1f7684e00cd55e5daaf78a29ed0fe5d91aaa72924bb123e8a544",
+      "decisions": 290,
+      "fallbacks": 7,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 510747,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "ffeff3e146d6b0fea1b6ff24f843f858351d5c505e491718d43d596ec7986eef",
+      "stableStateHash": "5803035e476b4da7abf45b2753817ac1a20d6677d268cbdff66c5e7573fbab04",
+      "resultHash": "b6a37f93879f4c1931625ed0afe1cd592f77cdeb77723ad187d8b619aa671ba1",
+      "decisions": 283,
+      "fallbacks": 6,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 510747,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "913f2515e666cb65a55d37cb0c76403228bd8caa358cab692e95513c2c7a2314",
+      "stableStateHash": "53cf8da282ed7b50d2242c03654ec0ce6b6b74a85600020c4df8d50014597bb5",
+      "resultHash": "58f72cf097b616553aad734ea9536cb7fd7c6c833e97c13ceed2bd203056e059",
+      "decisions": 293,
+      "fallbacks": 4,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 511724,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "1117296920fcca34fd5170742bf0bd6cf2606fe46631323ed139fab63b188399",
+      "stableStateHash": "68cce5beb30d6253f1f1d705c3148210ba98a09b5fc3a988b094e0cea0dc66ac",
+      "resultHash": "b83d4147a8ea1dfdc98b08b65a7a3a326b5975f7ebeb0b3ccc32dcb4636c5532",
+      "decisions": 388,
+      "fallbacks": 1,
+      "generation": 21
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 511724,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "c50cb936e12099b91e2cfc831ef0e44a312b32348be7c0d769473b1c7e801a1e",
+      "stableStateHash": "0cf2352423c322b64c827c275d833a7b07f93f8f8958ca0c6b4e0962eaeee035",
+      "resultHash": "33625d0911d3a4f5feceb35a9d552acbc302d10af0bf821d5bc11cd555993b30",
+      "decisions": 287,
+      "fallbacks": 12,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 512701,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "fed068ab990379b7e85d5da71ac871f03cf57386ad15d5d07df5acf19dd3a5ab",
+      "stableStateHash": "0eb93dcea9b425dc7f7b4694de0b538ee5c399c0cc1fa7d3a712d3b9d9b58790",
+      "resultHash": "5f96c6c77b50360dee22d1d4e26cdc3b6704627780e9a5a513299c3bab20d6c2",
+      "decisions": 217,
+      "fallbacks": 8,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 512701,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "4eecc8e4b6152a8107d17168626efe56dbe6adf339fe764d2a63d3aabf13a0fa",
+      "stableStateHash": "0f7634b2e26847b1b0fa0a4458c530049395d0cb5bd9e2b594a11f56bbd30b1a",
+      "resultHash": "e1ca58d93f05b3a060f1f25594d17ba2188eeea87136aa6499829959d5fc736e",
+      "decisions": 334,
+      "fallbacks": 5,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 513678,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "d981c41e6821f8eb67d5a095dcee4cb812c12cc0fe7bc77786abb85747cd38c3",
+      "stableStateHash": "b6ac13b7e4b72816ad93dd9a6856c54b812b6bb63ca143b0ad68be1e2d0cdd3c",
+      "resultHash": "a5f9ce37c82ac5f6b88fd9104ee80391f554a30324ca45003244c13e458e49b9",
+      "decisions": 428,
+      "fallbacks": 4,
+      "generation": 27
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 513678,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "485f74ae9883544dca34e9f89f9bb0848121bdea23abd3632a695c1ca611d037",
+      "stableStateHash": "2fd10da9a13142373ba6511487373d6e512a6056a6399b9b1c7cc134af82d731",
+      "resultHash": "4986861e91aaf5bae83c61210a5f6fbbb7c1004d7315f52e4f3a4b2735b79ae8",
+      "decisions": 280,
+      "fallbacks": 11,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 514655,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "753ad67698608501507fd406c515d308ef75dc678f560285f0cd986ccd06b878",
+      "stableStateHash": "59a91defe09b14cc8a088a3b284d71ef7ae9935917b2a48ffc0d6612f60b9979",
+      "resultHash": "7fa6c3ea7453c84f648b7ee37ba4abccc6c0342ff99bdd52830094ed2a3ead21",
+      "decisions": 339,
+      "fallbacks": 4,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 514655,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "565c678c0154906dd071b05df0617d233d7a48588af51439fd20ae09c9dc9d5e",
+      "stableStateHash": "f61b39e19c15a890270f26d1c057b4c00acefa5372d46ca293b59f4859274406",
+      "resultHash": "0204141ef898dbc10f28fa49c30de1ee7188f4a89e23ac8e90dc047856449311",
+      "decisions": 319,
+      "fallbacks": 7,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 515632,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "51d43ef17867851b7ae52982958ecd23efb08ec93e482a33aaadab7bb7adfaf6",
+      "stableStateHash": "b7adb371efb6eef643222b015caac1edf618b9c16a60c7698933d0b3a4bfbfd3",
+      "resultHash": "106cc3c4186eb1e15feb1eda3cf6fa5fd048b303fae8c1523e462879d4f83491",
+      "decisions": 350,
+      "fallbacks": 4,
+      "generation": 21
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 515632,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "5cfcf1ff4a9c75254570baa94a571edc14d6942f98983ebda45149bf09609104",
+      "stableStateHash": "3a8e158435936d76949b623790480a48a5095e5792ad7e09e241f1d6791dfb6b",
+      "resultHash": "26c2c1684d37d348ca8fba6e8b909007414de3e7f270f46ce3f232b8cbc68f3e",
+      "decisions": 391,
+      "fallbacks": 8,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 516609,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "5f8b8adbcad265dc17d501628c1bd39675bf953a4b560b1530c55f1ce4d4835c",
+      "stableStateHash": "43694ae0cb0fef4c8b5dc37e2e9ed7a6551bc20c5efe5e4130b405ccb58f31ae",
+      "resultHash": "71aac9e346211601d48e142bd1a9cb083ffcc3d014179e4b45d77823084a022b",
+      "decisions": 304,
+      "fallbacks": 2,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 516609,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "9f7889834edaea663af835988f9c559e4dcb952a8ec7540365137265ee2aa406",
+      "stableStateHash": "a2cd13b661be259c37e3b7307b34eca026771669882451a1457560057fff94a1",
+      "resultHash": "6f5c82f9a2d34b47ed47bd6af1de5d8cf87067c4b9d73821ec65f9a18e76d03b",
+      "decisions": 267,
+      "fallbacks": 10,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 517586,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "d0a74b4fce41ccfd5d1e2070ff182d91135e0eee02cd9363800a7a763eb25914",
+      "stableStateHash": "c8e7a58a01af43c11e8a0b81e10beed105cc964498509cdbee44397732be9875",
+      "resultHash": "0efac2ab163ecccf507ccbc44546cd59ec6c0141a62abf7a607ff4e3cc76bace",
+      "decisions": 275,
+      "fallbacks": 4,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 517586,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "e74cb8c07b2affd8a020b2af960a5c355194fc503e90eda01316304b172b091d",
+      "stableStateHash": "0a344f0126f0ea7adcd21479c80de09085387c494491129be4015964654af03d",
+      "resultHash": "cd3c0a90e1a78c3db851843712d9b866af21691d3bb775bee05a7080be4dae17",
+      "decisions": 339,
+      "fallbacks": 13,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 518563,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "99457ab9fdd27fece2814f756db1fb18d734ab6241c532b98e7f5f77d7904fea",
+      "stableStateHash": "21aab7ce1348618fc85eb31f187f226b2ca3835868188aeb0337be9f5ac6d81a",
+      "resultHash": "239c23515219ea37c46ebf7210e3105645afb13a18cbf482d2a1a7d03eff5be3",
+      "decisions": 319,
+      "fallbacks": 3,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 518563,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "dca2704363744a3d8909ffff473e62eaf57fda607464103fe4eb4bf37f9abf0c",
+      "stableStateHash": "601033d2601d766356838ce981ef0466123dc24849a6ee083aeb930259ed7527",
+      "resultHash": "f4cb30e1387fb72789021230758263e60d9eb2fb2ce2369f07fd6e9891c42343",
+      "decisions": 277,
+      "fallbacks": 9,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 519540,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "225ed3c8bbc5867b73c83ca6328485a8d49b94d1114e98c28a9a1a7214e03f94",
+      "stableStateHash": "c1f590cb8e8040b35e261c414dc8af6144c405c417eecc5cf3ed80539f7bc481",
+      "resultHash": "63910d758327c71a998a4ab79988d52a935f62cc9015ce5466d138c036dbfd2f",
+      "decisions": 241,
+      "fallbacks": 8,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 519540,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "6c5d3978b3ab3f50acad7cf97bb3986329fcfec0872169de932a38b8243bbaf9",
+      "stableStateHash": "09ee3693820577db254a10e83347df2474bec525a3c4129aa194d10a75019fd3",
+      "resultHash": "e1e784c4c8bd69454767c751e73734afb659e482e823c096b77383335750b315",
+      "decisions": 249,
+      "fallbacks": 6,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 520517,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "2e81ede95ac7c67c2e216f963a7bba1fc7d8fa315601290f6c819aa9997b5795",
+      "stableStateHash": "1f6d699cf0ed6ab86c852399da44c80014417ea1e6db14fdc9e3e513d61448ab",
+      "resultHash": "2d657e2648f34cdc18270bfdf37673c4f012f0243f132a098774f6c7241fc2f7",
+      "decisions": 449,
+      "fallbacks": 2,
+      "generation": 25
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 520517,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "ee85ff6130bb3c1a58d2b8e7b7284cb0311cca787327cf85c593679508f68dce",
+      "stableStateHash": "0c9a389ae6caf8e9344580cfd80389e0520b41a3aab58974d17c06793af42bd6",
+      "resultHash": "e9c78b88f1e64214b8122d0ceae704fba09b35544bc74b7a889e9777f45219e2",
+      "decisions": 250,
+      "fallbacks": 9,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 521494,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "df78676e693d8dd80ae3e8cefc65285ba427086adf7c2793b1a8751ae86031fa",
+      "stableStateHash": "d7219d614f9bc50c7585df526b26caf3c96eeed6fb4d34bfe4a9da9f3490c914",
+      "resultHash": "5b8d114a2e956c8f7ea97a5bcbfb16c0412d18880b4a92631017b41b0417da67",
+      "decisions": 256,
+      "fallbacks": 8,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 521494,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "90f9437e822a45374ad144e641382ca4e1b5638ed39a97b83413936a9587fc34",
+      "stableStateHash": "efd0bd88d66ff9bffefbe037459758dace297982db19c60a6a28e783aa4524ec",
+      "resultHash": "51a22f71d95e63d0469a1a37f3e663f679f713d2f8e5e617e5a7197f1420a709",
+      "decisions": 256,
+      "fallbacks": 10,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 522471,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "f05d755526223b0a5d4e173c803cdbfc3470afaec9a1dc0238980acd035db980",
+      "stableStateHash": "1f297f8328784525b282256f74a270d2255b11ab4d8533a10a00b8c35ddd8e5b",
+      "resultHash": "59d57dd18f6670dabe03cfba8f0893f0e56467f4f60f2a5d1d6ecc6a33f2c280",
+      "decisions": 219,
+      "fallbacks": 6,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 522471,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "a4f4f1f90801235bf72948d1e64c39d89b4114c7ab8dfe4cf5afcc2000f3fb57",
+      "stableStateHash": "b9c784215ed94ce523b5efa0a61b917c1149bd945d2d06e23275fe7239fee7f5",
+      "resultHash": "4359088ad92c5c3981ddda2c8a4a0dda451e8e807119bcc10d6d5c4165dc9d8c",
+      "decisions": 242,
+      "fallbacks": 14,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 523448,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "82b4fc08d9327f404aeccd7aa6ab59c7b1375d342f2d1ac093f58b94a59d81a2",
+      "stableStateHash": "87a73967971d6b9451988284a9c538df535fa1e4178e22ef5639f7911033084c",
+      "resultHash": "4f09cfed4c08fd3913389814f2fcb63821cbeb0bdb2ba7ba876b385b08711c7f",
+      "decisions": 335,
+      "fallbacks": 7,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 523448,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "381e126ef3f0ed89bc5a0d57416554f035eb7719b950d67aa04f179b8b262292",
+      "stableStateHash": "011ec4f515dc79ecfe17af226dff8194bb829745e3205079dc89f059fe50aa44",
+      "resultHash": "26bf7e244393f31d890a316b44dbb20603c1c269abe71da1818bf7c51679c5fe",
+      "decisions": 311,
+      "fallbacks": 11,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 524425,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "a7b26f821a05a9b18e99b3c17b27a178f7435a2b9fd1e26d8c4716dd61c4ec97",
+      "stableStateHash": "53a9f1d639c7621a7758e03c76743f180f013f253948aacc6ca3b53d6389db9c",
+      "resultHash": "16ee4db574755ea2a477bc87c577ee834c30eb63047eeb34067a9b1ac5420dd4",
+      "decisions": 289,
+      "fallbacks": 8,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 524425,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "bd4709fb36ebcce6ed940b0f8f7d4c129afe5e999496f29882ed4670905b057d",
+      "stableStateHash": "7172dc32c2c689030ec28365168de5fd72d597cc09eb1aacc818207c0f6dfea6",
+      "resultHash": "62c8ea606eeea64abee9acd109424f539bf60f3efa8d23bd75b24c8cc3f2a953",
+      "decisions": 394,
+      "fallbacks": 6,
+      "generation": 24
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 525402,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "9187ffb90bf4ca58424e82a6010fed76905f3eed684e14d5bcde1f964cb30610",
+      "stableStateHash": "91dda85a783b2af3e7d922f133f8809221f6d8787d445bc9489a28f055d476d3",
+      "resultHash": "f7637d743b10e29f0f25ba54d77b0b3e275d3a4d53c1b5b3b2b442946e3a719b",
+      "decisions": 336,
+      "fallbacks": 3,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 525402,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "94e910a851233c2ec596c199c0555c81182c1084ccee6b8e2e72f46c72a565d0",
+      "stableStateHash": "e8ee48fdc176e90d218fdc1166bbf0fe3199f019d7dd70b37deb2b57c49608d3",
+      "resultHash": "495140761f7c3490890c1eabb6bf09301fb11b174af5cd8919bdb24017d744a4",
+      "decisions": 273,
+      "fallbacks": 13,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 526379,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "96280ced8add722b15805b4c097514a476a78c4f39bf6a6230c344a9feaea04d",
+      "stableStateHash": "66ef03a29e057269a0a5ae85acb552b27e29cb18132145310eaefc6a7a0d5ca0",
+      "resultHash": "c882e6f45d5da5cdfe38a6f8e2161fe4f034efa798baad23a15b2331e9d7436e",
+      "decisions": 286,
+      "fallbacks": 3,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 526379,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "5440199d9c250c86dac5dfd98d77974dd981e1f34146a2f166d6adf1006a187c",
+      "stableStateHash": "51fc019a7a1078c57dd964fa463cb4fd0ebedfd56d7368c6ad02b17bca6ded27",
+      "resultHash": "121edae46918f005501b45e8c8cbd22fe6d516946d2b77a666446b13c1c1e1d7",
+      "decisions": 330,
+      "fallbacks": 15,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 527356,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "8cf6dcc26a24e3314754bac3983a12c096cf85a7f7cdeecc12029052e28ebe85",
+      "stableStateHash": "570a35f121dd9993baa8a5f51a359f79d31cc2b33fcac386c78f16a7e9d810c0",
+      "resultHash": "2d9c72cf987dc480714b7910861715272550961921f5f249c431f70297c34c65",
+      "decisions": 275,
+      "fallbacks": 6,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 527356,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "8910949f8dcb444ae43b97c4919af01b50fe23bb374f552bd678145672dcf579",
+      "stableStateHash": "280db8b08975855c08cce00f30c0cdad5a3d15400e3bcf85d9a3647721078fc5",
+      "resultHash": "bd52fe4d14832224a3fbda5dea031574941beda52aeca651dd7bb0902a62a7b9",
+      "decisions": 283,
+      "fallbacks": 9,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 528333,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "85cd76330fa996915d8052288d167511f62a8f6e35a2fdb0957fc178882db93b",
+      "stableStateHash": "449fda4365c992877cb2eb5f7abd0b16eead36bb09c1ee1bde984ec4c01c55d6",
+      "resultHash": "7e671daeb4579ac1779ed3b76e81f6f7887069855d2781d3b1a272411d58dfdf",
+      "decisions": 347,
+      "fallbacks": 3,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 528333,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "0a03cc43a68b1c27171dce999148eb5dcd2943d33323a4ab2196d207570f6afc",
+      "stableStateHash": "9b9b0062e273cae0c9af000ed25f699cdda7d0da3a6eddfc54689126fb9bbea9",
+      "resultHash": "48c4d1d5fafe096a1ffcf75a7da1e3ed8220da33f7131d21bb53356fbad67846",
+      "decisions": 298,
+      "fallbacks": 8,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 529310,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "7ff65d1be639e56440f56862dd5ae0d7f59658b008fb70201cde064c89460792",
+      "stableStateHash": "7cb990f4cad4abf3011b34dc5183572bc585099febe8049d4ad221d4667e9087",
+      "resultHash": "b03654657e32c7aaa6132ed989dc7b4c7f4072e2a77550df4244093a40105789",
+      "decisions": 288,
+      "fallbacks": 7,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 529310,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "0cd691f6684580b7c82466c7b1205aa6ac126a8aaa9e83ac10eb66b3c634ff65",
+      "stableStateHash": "56c4cb0f220bfc0712f33e4c72e1dcf56c3926cf9526fcf6f32d317ab77b5547",
+      "resultHash": "e3618f1240def5ba95c7405cf897da1b8ca2d0ddf82a45b387ed99ad857ffa32",
+      "decisions": 319,
+      "fallbacks": 5,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 530287,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "fc98b3340348734ce42a278035c37b30d7130cabfffa838de99124842d057ced",
+      "stableStateHash": "de0578d4b7ee68f76d7af4ff4aaf609336d8db52c9e252ecccd626bc5b0d2f60",
+      "resultHash": "ecd93e01ae4b91e65851994c7ca15e2d2679745075b57d877b0a66e6c5ac783f",
+      "decisions": 401,
+      "fallbacks": 8,
+      "generation": 23
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 530287,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "262d3a900353a1c5b6b781df23451e26c2a1f7978c97091cc875b9273b196e06",
+      "stableStateHash": "32edf39a11fd0af7dc9ea3b72ee56b2b061f2abee46f48d7050a5e8a1fc58964",
+      "resultHash": "a6fe4451ec6fd613e7df8abe69dec0e4fe4f87fdc0b6afc4c3453e3a7a1feeb6",
+      "decisions": 331,
+      "fallbacks": 12,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 531264,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "36ff34dedafa9650b5c50a4982d15957dde7cad7378caf20fba92d69bbb709d0",
+      "stableStateHash": "9e0d41c9bc51fe89344154eaf9839c81e0b8e5c34041ee908a64160038ff573b",
+      "resultHash": "a18d42d741d1ca9cd42f3a1643a2aba8c5ade317259eb50386884c7b8d02bf21",
+      "decisions": 404,
+      "fallbacks": 3,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 531264,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "1f513b6dd29f83587f40a385bee11d9d185ff77507011ff3fd20cb63143a1484",
+      "stableStateHash": "0dc0a7f7fd4801ded9f0630f83768370cb3bff75a31726eeaeadcd274b3be1c0",
+      "resultHash": "3c1697afb17523868cdedf4b64391c67961ad31c300da87250f3b943f3023eba",
+      "decisions": 435,
+      "fallbacks": 13,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 532241,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "d986516fb353c136ea15382c8eb1fc946b10b947455d02917b8165c72be77139",
+      "stableStateHash": "21aa016b2a0d597f5e26914c23f504f695c96881d15fc0a310e87b4f90366938",
+      "resultHash": "ed3a7efc89ec0d9c524b2920d671b33c0ca0df3f7c4a5b3829cff4afaacb2af8",
+      "decisions": 245,
+      "fallbacks": 8,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 532241,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "fb243ebdc491dbd7a89a39e13e6974c35f6d751e17e123a407e397e45733b432",
+      "stableStateHash": "714c9284ae29fd44d73b19df590b9f150450539cc9b0482d700776fb50e51e23",
+      "resultHash": "74e1075ed10167be879f6784b87104a25d5561f4f0940d90c7c3dfb33a772446",
+      "decisions": 212,
+      "fallbacks": 15,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 533218,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "bda3b0d591d720632eb4c296987bf9fda721e3e0a090eae054b7e3add6d88ea1",
+      "stableStateHash": "af56ac364763a773c8fc52f34c059474a535b1799e302cfc11ee9377aa3aebda",
+      "resultHash": "7257aaaf5cb0a91a76970ae2a073a21bd72a06b1e8d2b0a0485da0203eafaf98",
+      "decisions": 309,
+      "fallbacks": 5,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 533218,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "31e1b9fb6a5d6af07732da503c7de16711dfd1bbcacf3e0fc1d855329b441f4c",
+      "stableStateHash": "05e239810dba1fa9346847b1da1c37153aa565dbaf388acad30c6510006830d2",
+      "resultHash": "da943d7db2f26a00e7af02ea536deeb060a3d609f1a8bec6d9bb24ee055055a8",
+      "decisions": 324,
+      "fallbacks": 13,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 534195,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "7fc74875a47155308767d23b49638f4a0a9cb17abf7a0ee5934413b6905b0afa",
+      "stableStateHash": "3a69f0bba2da54cfc0f4e04e96ef957b00cccddc03efd6e04dbdc2ec9e504f82",
+      "resultHash": "5a95f22db2b2b08959f08246d06c7a3d2ab5d37bb7b6e7c5d79f55cb16711a5e",
+      "decisions": 313,
+      "fallbacks": 2,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 534195,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "480a190b54b6e75044114c43667f778875693da6d2d67f74fd46a84dd854f0ca",
+      "stableStateHash": "8d35cf2d2834665a34cb028dfb3918893fd88529deb9c86a2e02cd839440bc2f",
+      "resultHash": "9d96a60ed174dcfbb4380cd1aa2db9692855bf69b7973f7eaefe2096aff2e0cb",
+      "decisions": 314,
+      "fallbacks": 12,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 535172,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "0d7f547ea1d4bca78e164708d8b136a155977aa5f63267c294f5060620469621",
+      "stableStateHash": "5918356fbd9a18f74f9c80f250f24a3e1edae776cff6a3ccf57d5fc6cc5d5ed3",
+      "resultHash": "4b61e28fd0d5ff8d5f720a392c8a0ea70b04bb73775eb83fce8de811170b0310",
+      "decisions": 290,
+      "fallbacks": 5,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 535172,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "c550ff44479f5571d707316db60615eb70b83ccf298d6564437f03605ecb7793",
+      "stableStateHash": "dc4cbbbf1b60c75e7a766f91075c295d6829eff74ae0e79c8223451d8b643259",
+      "resultHash": "0656ccb95a6bbab242b71515f098b5631063c78012b6c362dc8ecf7f7aa1e672",
+      "decisions": 301,
+      "fallbacks": 12,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 536149,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "79c7c40983972bf2d29f4e5dddab2d159ae37211ec3ea1810b4915c244fb672a",
+      "stableStateHash": "17d13424b3c35a142b3bc87b5f6acdac8e836e92f2389881d544b02372f65c51",
+      "resultHash": "c53902efa2873f23eb814e3d631cda3a3a6c01162be0c9cf14fb261384bf217a",
+      "decisions": 307,
+      "fallbacks": 5,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 536149,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "734ae82a0e9609a05dbc088127e63238a336075e7465913f2ef163479c80ee6c",
+      "stableStateHash": "5cde190e978fc95a8fe2689d70330d090a1078ef93c8f0d455ab66a2dd386061",
+      "resultHash": "3b8672d03ac42e4a45e292490adf863bd67413c8841dcf3a88e31fdb22e6d8e0",
+      "decisions": 265,
+      "fallbacks": 17,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 537126,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "162b44d0522ac8e337f75c870f27de085d9926b4280ad22d600ba214fbf3f7d3",
+      "stableStateHash": "84ea32be710818489db2a57dda6793476b36d96a033b8ea4c051cc08a6735e69",
+      "resultHash": "34faddca2b9e1adef68e0f2ecbd1db472505b2c378ec3f3ff8030bfd3d1694e3",
+      "decisions": 245,
+      "fallbacks": 5,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 537126,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "6108dbc33468f33eec5904fd39737541c5662f7e9139f472567e1d962802e2b8",
+      "stableStateHash": "5e648c2799dec8e436cbed5b9a669d192e11c76e81e7db53c26c7673c1ca3ee6",
+      "resultHash": "e9806d2c2eb274dd1e7e341b497a9f924a717949624642304ff3e59c9b904170",
+      "decisions": 360,
+      "fallbacks": 12,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 538103,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "71e1512c5d8b289b6b9fbdfbd8f4bc76b21b4de82474fec7741987b901a5bf14",
+      "stableStateHash": "e55ac642210e40d694060cdc6f31b71bbe2d59ef2de49023d2d8e5a10e808298",
+      "resultHash": "fcd686831bccfd8627aa93d223c8f3b6a256127905606c31641acfc3edf56425",
+      "decisions": 299,
+      "fallbacks": 8,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 538103,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "ef95a321575437402001be7166330c6d274fdd3a2bb62445a4eeaa9b7c56a99c",
+      "stableStateHash": "441582a3f070b216291e99a670a31588df0046518664d95b3d06a0b6cafa028c",
+      "resultHash": "283a95462640fbd49ffb5d0a8bcc44ff86af321f1bcd47693d122879a66d0a2f",
+      "decisions": 285,
+      "fallbacks": 16,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 539080,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "721b6ef85cc1ca9336b8dc5ce25ebbbd72e4189d280dbe457ad95aec1f41be71",
+      "stableStateHash": "175ada01b806f989a7b30d64647926715455f27040e1c07ed5d3283c1c5ff588",
+      "resultHash": "a12465057c6c5daa17b29f1f394034840d8c2a280f8184de4f67ffaf45b7d61f",
+      "decisions": 288,
+      "fallbacks": 1,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 539080,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "dce41ff0b5d8b1b09d77abae4d6bf343dc6148a1b1666a731134d30a227f2a1f",
+      "stableStateHash": "90e0f6947192f23e636c46f764bb93a191d15984942815293d6d3f3c61bb3471",
+      "resultHash": "cb05bcb6f6573ab0c30fa58b4d1ca01dbf35d21ad677943d093717e7dbfd7b63",
+      "decisions": 419,
+      "fallbacks": 7,
+      "generation": 22
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 540057,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "9d2fdd60c7648ccd2e9978886eef6b1575f81fb2b593a27fc0d7b038ca22119a",
+      "stableStateHash": "83f1fa80fc6ce64a872b2036ddbfb9a6bcd968fc64129f2fbbde3959302e9a6c",
+      "resultHash": "154f3975671a21c1f26a4f7c9de0ff46157ab1fe8e22a59d5d56c626a5a34f2a",
+      "decisions": 302,
+      "fallbacks": 3,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 540057,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "fd7df7bf2a4338c9c9d30da5970c1e269433e2efc0761fea298c0559829791c8",
+      "stableStateHash": "03f41f6d6fa99e36c1f98ebd3dd20cec3fd918fd160f7a6da1b65cc4e6704c66",
+      "resultHash": "83dcad50a1b467eb4efa3f524f818e9eaeef3a3414a30f5acdbbbf146c64ceb4",
+      "decisions": 298,
+      "fallbacks": 13,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 541034,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "036f7deb671134279fcc7c2dc1755d794eaae843d9e4ea494aa4f09a6cc3d033",
+      "stableStateHash": "1ed1d919cf8a148db073b0fcca82a1fc3b6d01790dd851fd76ccd1a1a888ebba",
+      "resultHash": "64edd2a54b3546e2300d0a464a4e457f7bdfd3b8f0b7b82a45061de5389d1082",
+      "decisions": 265,
+      "fallbacks": 3,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 541034,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "b4188bd715987be3bfd00b99eb0fef395c30d2b01c34d46d8ae7ed0bac7345cb",
+      "stableStateHash": "f8d5752d9b7588d3f3ac8e5334b64d6276b45ecf641f3139ece508767e59a65e",
+      "resultHash": "bea891d44f9f8e651c3c5e4e846887b479480ca29f1a84c8f628ce4a8a66a576",
+      "decisions": 300,
+      "fallbacks": 6,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 542011,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "e8b3109d4214233b07870b2f7c24fc7c3284c86ef12bed878469514cace67784",
+      "stableStateHash": "ffac829a725d5d8828d1b6ed1dcabc0d540a57249c4ed6ffe8d5b53c6d4840a4",
+      "resultHash": "bb53be2b310971525aa87148b449e5f82630632d9a2380517c47239fc2ee9e4f",
+      "decisions": 271,
+      "fallbacks": 5,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 542011,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "b7baffe56868e3195ea8a0453bd7af42415ee120461691633487bb3cd9294ee8",
+      "stableStateHash": "5fc648abcc2cd1676b4ca7dd51fb2684f92ebafc64b96456e7b6fc76149003d3",
+      "resultHash": "3d72d3131032664c7a4f869a95c9676cc168a217bbfbd0ec51d92d5e891e5d9b",
+      "decisions": 245,
+      "fallbacks": 10,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 542988,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "c65d0e49291dc8f319134183e7fac4b84bcb1f4898c8783f6e9bcc845fb1e937",
+      "stableStateHash": "a7bc2b274ac478313bbf71960ce9f53ffc99840898a877334382ff58f127800e",
+      "resultHash": "6ae608c0dafc9d4be44a11f238c17db11173aca66afd3ecfcd4a03a6567ed599",
+      "decisions": 264,
+      "fallbacks": 6,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 542988,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "ce8373f6b64cacd00ff5125a63f633049b14f24af3e221e8f93c31a40d13aacd",
+      "stableStateHash": "cec9e0ae3a8ec0f5ef6913a8a59f664f35a8707a23483c9d8f48db10bf6ea196",
+      "resultHash": "e177dd18376c06fc6b2fb563771005efd7ec414850edc76a900f9f8857f37068",
+      "decisions": 284,
+      "fallbacks": 10,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 543965,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "6c61abe90776c0f97fafae80fbe97b3c5dc386f60220d6011da70ab6484df0c9",
+      "stableStateHash": "a7f9f9a084c83bbc2459df0e5a42954c462cd448f4c3362aa40ed62402506602",
+      "resultHash": "ff40b4afa337654c20f11612602489d52a0fb9944ad084196907f4333a7ce2d9",
+      "decisions": 255,
+      "fallbacks": 9,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 543965,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "8f597d3bca21f620d91457ae952b9f2c261aaccb23055a544c3790cf0a57fb4b",
+      "stableStateHash": "8d082089d91db153ff63cf375a7bd4546199b12439c604f5b1773e7d8f29b21e",
+      "resultHash": "93da8cc4ae157b7c5a3eb2d41b7601538fa5fdad35df13ae508dc8217d9dec43",
+      "decisions": 289,
+      "fallbacks": 9,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 544942,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "49499354f2565bd01e696e926428c56e176ec885589b9d298d5d906c0d0b65c6",
+      "stableStateHash": "c55a39cdd77b85dfbaa4e67dd6951114a412e3c5d4f0575cda7ed0b6e4ff7ffd",
+      "resultHash": "35e48bd7115cd3fe69e3474720eedad8f6732d927c0eeb150e3b4554f2808279",
+      "decisions": 259,
+      "fallbacks": 7,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 544942,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "6f4087bde1044e38e9b7a8653062e95f51e9080ef9c4f49136603af1228b93c7",
+      "stableStateHash": "7eaf1ca1c52dc65ca22a28c13d028e53fb7df28433624b67a411f1d25c0624b8",
+      "resultHash": "1422e78668b6c94852aad6feb50b19ee32184f21d2e09b1afe55375ff87b8d6e",
+      "decisions": 246,
+      "fallbacks": 10,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 545919,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "eb1792a1487ea73812d39d2730794609241efdf09452907379fee68b2b355f5b",
+      "stableStateHash": "54c5e5791061ea67236852ff0cbae19525f07ec5cddb1c192be5578acfef34be",
+      "resultHash": "30bd73f4d8cf0bd0c3e5623f2b5694ceada0f1f2e2c5d09357de6db831f46298",
+      "decisions": 346,
+      "fallbacks": 4,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 545919,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "e8c300ef51ef0fc028c89dab319bb96c93dc50c72cb1bc2abdfb5d581c913461",
+      "stableStateHash": "e7d9b48890cf8e56763b44b210243d3f2908b28be2bf5b73fced0a5a203197cd",
+      "resultHash": "abae4f3fd71652eea3e8cc4cac9f907f3ae45d1c622e367ebb0471af6875134e",
+      "decisions": 276,
+      "fallbacks": 7,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 546896,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "7bff2a9ae949179666a08dcb47210373a29591abb2b37399f4ed4aeed4b8d52b",
+      "stableStateHash": "9077d375d21ca4c0373340d71233e7e8b0707ba0ff40ffb4a1afdef5cbe9a56e",
+      "resultHash": "354ee2fa37ffe0c00eda83eced263f7589b6fdcdd3e459c3f9d4b3b9859e4f39",
+      "decisions": 262,
+      "fallbacks": 3,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 546896,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "21d03143a55b1232f50d0fbce431c43708216f778c13aceab0083506057390d0",
+      "stableStateHash": "a6cc54bbe624ec03efe0a844770c8777fab0f8fdbfaa5a31672ebe8c9adda816",
+      "resultHash": "408e2425c707139bebcde37e4993b9b93dee82a1e7fc59dafc1660977dab7902",
+      "decisions": 239,
+      "fallbacks": 21,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 547873,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "8d99c00a225cc69cdb36dc8ea3a5a4cd2ceaf26493cd3b1f98e1e4f3747a5d7e",
+      "stableStateHash": "7c9e95f16cad32270df90ad10732c524b45dcb27815af01f322b4fa121bf0c83",
+      "resultHash": "6dfc216b0c4978ea85118400a27dc981e91ad857933f4d77a26e97415983e1f8",
+      "decisions": 292,
+      "fallbacks": 5,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 3,
+        "engineSeed": 547873,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "068d3c69652def0fb0d287288e5657b58d2e77b79b205322be2a3680b853dd25",
+      "stableStateHash": "9a5e0db176a37d34e46808a9d4471fdf4f8e1ab5c2fe9ebaec9f0068e679de70",
+      "resultHash": "fa5c8111ad19505236abcd016dd9fe44c7166f3e65b96fd9ebd72e5275d2651e",
+      "decisions": 324,
+      "fallbacks": 10,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 500000,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "455dd27d30f1ef9889027f672b85b91d38e74f4010269367609ade0f9b54d355",
+      "stableStateHash": "90545476a54da8a53bfcc6b1dbd16b3eb1cecb2dd3d8168e4453b3669e937802",
+      "resultHash": "cfb9e9a41dd60dd5a90badfc256370b6c286d4099e6e9c6230a9f69fd86f0912",
+      "decisions": 321,
+      "fallbacks": 9,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 500000,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "6fbfa950286b0818e3be11a63a1ff33af9f1063f7a95ac3dc01704df0653e3a6",
+      "stableStateHash": "5824d5eeddbf2f3e3683304961a51f9223ab2f574603deaa0df958d85b29cbe9",
+      "resultHash": "73ca29d7730b27ed16e807f85c651236bc3f6188ec992944304bebe9b677b4e8",
+      "decisions": 334,
+      "fallbacks": 6,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 500977,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "bae49717b7ee6b5fe34328540e1e3c9a62883b88ed0487a813e49f7bea6545ab",
+      "stableStateHash": "4b801b330ee53a4ae17de25344e628879529787f34a328bda9d67d3e2586a981",
+      "resultHash": "a1d083b8d97199ce288d27bf99f92d2331f7d6a9d35f764f030dd9084c250ce4",
+      "decisions": 295,
+      "fallbacks": 7,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 500977,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "e6a22042923cc9268f68c3c608ada1087e60014c8ac3d32e0d2667608290fd00",
+      "stableStateHash": "cb0585d959511e9289d827dafaeccb2a93d24d46a324c01e8b258a2b42cdc4e6",
+      "resultHash": "43c8bc472d8c0dfa3f2fabb2097c0071189f7c0a3806da7b71756379d132b739",
+      "decisions": 371,
+      "fallbacks": 3,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 501954,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "b214e8a58d314ab3ff555dd30aea83356835c7520f7429be893138579307598c",
+      "stableStateHash": "2481c09ed196b254bdf9e3b1ceda6f165b00ffb1219851a4ca4dffc219548695",
+      "resultHash": "bb2d4f483a61afb8ec15722fedddc4ddcac5a1521a4cc7215d4ef3b8e8151de8",
+      "decisions": 252,
+      "fallbacks": 2,
+      "generation": 11
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 501954,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "1ef68985ad413f6d85b5579054b88fa8c438b112e6f0265df9a9a529cce5c301",
+      "stableStateHash": "6324010a28d4868f8de0ea503bb9f65da84df922772e81e51949f5ff9963efc1",
+      "resultHash": "1d47f7c4a7057c68fd8e3a0fcb3402f6a0233d305a259484107035e2b91cac6f",
+      "decisions": 247,
+      "fallbacks": 12,
+      "generation": 11
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 502931,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "92c7c2eeb9bbf96748dd1aef62a857a4aa07be83cb449ea589d4321dcb10c3ca",
+      "stableStateHash": "7f680813a3c9551e33ccdd1a9f1f706974521a3df8ac093e4abc5244fa40e38f",
+      "resultHash": "8afdae39b1d8e5eeba5967a3acd6996a2f8eb1e5b08c3640f36c2d2786105e59",
+      "decisions": 338,
+      "fallbacks": 5,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 502931,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "4693504c6c349b5fc44dfcf98ebf400ccf2c8d9550c65df4bbaa949894291a9c",
+      "stableStateHash": "ee5c98be4006f1fe7c4ba7144b2294bbfa0f23be4ac34c8539bf6d389f3f5800",
+      "resultHash": "9140e8d544aa652c575f9317538b0c58e28da9dc1b7abc56c5e32400c44aa3de",
+      "decisions": 464,
+      "fallbacks": 5,
+      "generation": 20
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 503908,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "3e435f9326192d1628d1ac4bdfa33e890e870eae3264f7fc8da334198ac22a19",
+      "stableStateHash": "03942eae54988546002a4d9bfe673cf1eeebd51285bbda8de57c6fa571381b60",
+      "resultHash": "658eaea062542951d02cafe70c6bd7ed4dc8700d2341d43df819afbd19c0dda0",
+      "decisions": 247,
+      "fallbacks": 5,
+      "generation": 10
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 503908,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "7b4633433c9eaf2bd58f04594f5819985b339cefeea507a3190cade0ba5cfa60",
+      "stableStateHash": "5bc71800d0debff90380b8dfe18c155028df4fe99f23b7ff1838edcc8b91367c",
+      "resultHash": "df68305470543678d61a5d47b062a2cff61df7808ea6974224897cf403cda342",
+      "decisions": 274,
+      "fallbacks": 7,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 504885,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "e1a67a5e5e47b10ec22d3ff8a74c1b26ba280e03ad2e11781873971650bf8423",
+      "stableStateHash": "5a5654a9607c654bd58974b594b9906fd17afe29c612b3f64e142c96530d988b",
+      "resultHash": "3402bbaaf1c82cf595fa9b1ec39fb1fadffcc9766701b529b9c83dbf796b3cca",
+      "decisions": 359,
+      "fallbacks": 15,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 504885,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "9ec09a776feb36dd8307b038ae1911f7cd005557de5b02cdbdc8fbb0d41d4a5a",
+      "stableStateHash": "5b04d768842ba1c0d11e3f4c64c08eec6d347d7f346b7f520c33b87e47bf7c86",
+      "resultHash": "a103c41459307ef075a446be2b7c511d12f420d906a7763ab17aa6416a126760",
+      "decisions": 258,
+      "fallbacks": 6,
+      "generation": 11
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 505862,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "e17b01b03e1631ce3560405cc3ccdd15d69232188b5df7ff9425182df902da12",
+      "stableStateHash": "79ee99035bdb755598f06e8464c66af293b8cb41040ea0239c97bb8be367c02f",
+      "resultHash": "9494354f484abfd16092ec09c620ff614e64a872dfe14500f506679482ac425a",
+      "decisions": 412,
+      "fallbacks": 10,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 505862,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "e751b23801364431c0df0674db14a2a183c32e35d45faf07e58e084938722c1f",
+      "stableStateHash": "a7c5ffcadabdf6211b19e98dbbb39dc569bc0c6b090dc16d497101b4738eeb1c",
+      "resultHash": "8ba66a89024889bbf1f9483c84072078c64d9f760d0239bd118c1a37c752d7d5",
+      "decisions": 334,
+      "fallbacks": 5,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 506839,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "05dd26bcfbae6a2c6266fd2d0e6565b6fdb219790657983c2eb7b50bdc8ebeb2",
+      "stableStateHash": "2ab84b10aa21d87e9e2b802a66f880f69e7994da635273f19fd3fa9c0cd27741",
+      "resultHash": "8c216c6659a4ca144c0fa3d4979fb5eba89ddc714277908dbc29062fe3fbd256",
+      "decisions": 566,
+      "fallbacks": 5,
+      "generation": 22
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 506839,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "1ce028568370c928a38356c0ca020da06e895d41219406e93ac6e873a49cc7f6",
+      "stableStateHash": "757ba40d4d9652cf8ee3c2e677fefb64380bc391f2e723b4e76f0afba6021433",
+      "resultHash": "2ae95c7d17c6c90cf03a0796ac600bf806f21400a7271de663d115a1c6fcd1db",
+      "decisions": 310,
+      "fallbacks": 20,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 507816,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "4c7158195b1c12f47e07e18776e3bd3d6051ccc6dc8d56813e7a4c66fbb80b69",
+      "stableStateHash": "87e278fdbf4022dc3180e521483747249c382b3131f158a3173532d02a411448",
+      "resultHash": "69e3e5e097ec718660150dbe78d78a6d0fcf0c931570220a26cfd1b3b2aa64c5",
+      "decisions": 340,
+      "fallbacks": 1,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 507816,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "cce60b932975fdc26ba3acb1a46dc35dcf00f07eb14e30977ae50e6757ab0731",
+      "stableStateHash": "5808c8ebf1520815a160cde8dbea8ea8e478e6b53c6ec3a4b01554662c4291fb",
+      "resultHash": "fa7841b9221f5cbdb456886cb737478f30db48e89a3397b3af6fa6e709e6ae3d",
+      "decisions": 332,
+      "fallbacks": 14,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 508793,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "7293c02ad711df01625e9089e099a51320b9ba41d2d9e2399ce234f920a837f1",
+      "stableStateHash": "77949f707c1effca61c3af0dd4619d09374bcab7b4d58aff66b725958f7cdd68",
+      "resultHash": "f1f92f2bdf29b603927c81d4192fb26560483fe25424924864a6ebf60b884422",
+      "decisions": 268,
+      "fallbacks": 6,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 508793,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "7772ba0296617a144ded97c1f8a482a01f95a8ac3de586207c207cb67931b4e8",
+      "stableStateHash": "123175a0ce35992dbd798e5315390fd52f31e5aed89f690ab3d7be708ef17623",
+      "resultHash": "094ed649412aeed0e983ba34f48c41a5baf7e840865428854bef703d2fbf24aa",
+      "decisions": 360,
+      "fallbacks": 9,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 509770,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "6d42ff6976f27ec146dcf86f4ce25223968c580eb2f4d1013036d9b7e81f6bf8",
+      "stableStateHash": "99191e1c35754e4d8a6ad9c6cc7fff0e07fa7b8ec802273fc6897132b3dcbb03",
+      "resultHash": "19863c1126d17c635c916568547f3dfba29a05a90ac24837b4a1438f762b4a74",
+      "decisions": 265,
+      "fallbacks": 5,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 509770,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "900c1a687941fb827516fd5c4c3056da632e2c3304090083c25b962d4d4b875f",
+      "stableStateHash": "599a78c92d3fd8e96a2b4107a007b3f322587c1756f9aa042fae8be2ba783cba",
+      "resultHash": "6fa768f3d6081ee63d085019292ecb6e3703187f019943569f5a30e39e06f585",
+      "decisions": 296,
+      "fallbacks": 6,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 510747,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "3b40d4e08d5d58e64dcf5cfcfda186e6076777c0a69116a3c43e90097f833297",
+      "stableStateHash": "a25a8b3c8aac9c714ca8ade023f5009142246b8dfd0c4b007d8ba5ff37a269aa",
+      "resultHash": "2b156cf3aa492f33bcd3dd0a20052d5a419ac751b14da00bee152e2a747265a8",
+      "decisions": 301,
+      "fallbacks": 7,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 510747,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "9b649af50618c5355279b6abf33f3bd6c94fa66356d1098f4cf28af253459aa5",
+      "stableStateHash": "689254107022272cae473c07bcba32d30aaee2db8fcd357f2b518d643ead19ce",
+      "resultHash": "2b43e77840c403a42a01719f3baf26cca37c21e11760dab1ca3176b85067c612",
+      "decisions": 349,
+      "fallbacks": 15,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 511724,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "d156bb89ad03643ca3550e052568efed2063a16ca79c1ea04f4dabad6e941114",
+      "stableStateHash": "45a662568bf965b37d5e6a03378f6eb8834fb33ab43f15aa449faa255eb7250e",
+      "resultHash": "8e9e25a53c96398b8b447cdc86083482f75411eebfad61d61ff1818e16d4220b",
+      "decisions": 283,
+      "fallbacks": 0,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 511724,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "a0fa378ed6da21a9500570ac8baa1e895895b747eb472685472c5cd46e6e0b39",
+      "stableStateHash": "f4c0618f79450903dbd950598b2ce2648b376ffbecacd91fc9186cb52ff8cbb1",
+      "resultHash": "1b1af32957661734cdd716e2dd8464e715dffaf25b550cd964aabc31c92fae99",
+      "decisions": 385,
+      "fallbacks": 4,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 512701,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "592b9a96b16b0944956d44211cde06d94795f59c258bdca42b88e0d079a38a7d",
+      "stableStateHash": "b2d38eff7cdc76fb2dc37dd1be53e1ec7bbcf2172f76531c4793de30b0cd14aa",
+      "resultHash": "14fed9479df9178d05d6d8bd176eb943250804d005916b3ff8e30e56e61abc09",
+      "decisions": 240,
+      "fallbacks": 3,
+      "generation": 11
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 512701,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "8ae41320082e22dad59704d3427ad1f876dc7b203d57d654c8b6dd422da63078",
+      "stableStateHash": "629d0d0d2c2a844462f6cf841c1420daf70986af7e7cab0e2d4eab0ea4f39f39",
+      "resultHash": "33fd478a655326731d7119755feecf390e6fc627746dc2e2cba8dc33b25f04bd",
+      "decisions": 269,
+      "fallbacks": 11,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 513678,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "fb453c20dab6c76224bfe9e5fbaa160cf58e8bb7388dfc819a517f4837c2292b",
+      "stableStateHash": "6fc7568349c7f0bc65beb14589f268cdc2e01f45176f63c63994c7a322c1d0ee",
+      "resultHash": "e346ad41b290213b5a7f5645cd3ab56009991cdecbe8558b54b7efa28273e71f",
+      "decisions": 272,
+      "fallbacks": 13,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 513678,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "95bf18d67c2acb33272833b19aabe325cf925aa3735ca6bd2d7e21ac68ecaec0",
+      "stableStateHash": "0cf3c2f56b5b32c90e7421ba653cd406195a0b698ff7dedbc0d5625c30767b44",
+      "resultHash": "df569b7e8f0216c887be18d2c5c4fa817da646f259cf4bb2a3ea77dc2a6e5f41",
+      "decisions": 330,
+      "fallbacks": 9,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 514655,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "aeb2e468ffda3d0d7c0530837fbace358b845e33ffaab2ebbed8bac15a334e7f",
+      "stableStateHash": "580e42257cc4fb52789fec526b15642eaffeb22cdf055a0aeb30b9c85e91d3b7",
+      "resultHash": "5e54838dfabae96ec915597f3c1718923ba83fc400a5662560863ab4703d62e0",
+      "decisions": 358,
+      "fallbacks": 8,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 514655,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "d961841fdceb0691849b19eaee30f9e50dd224084005ceb63b8ffbfe4e87e08f",
+      "stableStateHash": "feb19afc91749de3162605d6878d813777154323c0d87a208b214e93c9c3f248",
+      "resultHash": "a5b3dfb39328bd925d0f3ce00ecedfac762718fa2d4a906a4f66682c712488e3",
+      "decisions": 358,
+      "fallbacks": 3,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 515632,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "5c9513f809a9b223eab1b71dc862aa46e92a33b149775e5f5312de9aa3891119",
+      "stableStateHash": "3421ae4333d51e862483d3a06676636787d84bbc713489a2178229bc0a499336",
+      "resultHash": "651ca9dcea8f7cb5d03939419da664ccd19efbd3ff36d408fa98c68d20acc25f",
+      "decisions": 385,
+      "fallbacks": 5,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 515632,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "6f930cbc23c8394d175b2bb674418a0e523d659217ce7d00dbd3623201d0e672",
+      "stableStateHash": "eac4e0e27603860067f907f53cef1ad280a2bd786336549de4cf3eef23aac1c3",
+      "resultHash": "dc0ea90de72e3011b3b5550e2b408362eb194ca65f673dbc25c323e85dd5e526",
+      "decisions": 347,
+      "fallbacks": 10,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 516609,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "596930038b3fa9330357e275d298cd9271c5e62bb453755467df52f1848aefe8",
+      "stableStateHash": "6587f239ee09b5edc57af504928825f0b9f89d6126e40228b49a81ba3616a0b5",
+      "resultHash": "91168aefddb31e67475fb4fa263d48671b7b7fe18937d2d549ce3ef538b062af",
+      "decisions": 399,
+      "fallbacks": 4,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 516609,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "54d7a1a8e1dacc0e4224b5ad92dd113aa3a4d2a412b9f81dd1a783555323a5b5",
+      "stableStateHash": "b486fd149bf85d045036d779c2470d59d5f57ec41b946338a7b9054ead4ca0e7",
+      "resultHash": "dd68bbba5e2a040ce752c6ddd1aa9d41b4786295d44e7b4956958b77d2941296",
+      "decisions": 330,
+      "fallbacks": 7,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 517586,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "cddde2e1208a1b3c651449602144a64602a68974854716b0ed882f904c99f55c",
+      "stableStateHash": "218e1db47dc0443318fb4ccdda47d8eaa7ca477937581f6babf49db713d8ae40",
+      "resultHash": "4a94521828122c8336169be7736f9a7bc87bc739747c04d002bd17d00dd4e0da",
+      "decisions": 327,
+      "fallbacks": 9,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 517586,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "e0b594b64fdc3b77d538f5f47520f17b29a983b3fa6f3a6a4ed53b7388f288e9",
+      "stableStateHash": "8ff3b24529a56245e3305bde1ae5d3a173c98eb28bed00c24ad61e294da6f998",
+      "resultHash": "b3848f1de597d9afa44693186bfe19d42386baaccd2998c7da7287d4d3adcaf7",
+      "decisions": 258,
+      "fallbacks": 8,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 518563,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "79061a7dceafffe56d68fd25c48a1aa75a490606efc27fc5c45795d8f18aaa12",
+      "stableStateHash": "78bf200f0eee1014d2f319b2f3169fec23b4cb19185a8370e7d65fd4bf6e842d",
+      "resultHash": "0bbd2a1d262147d8fae98094b32ad622cd4eadb5bd98ccd709e2d7843f32ddc3",
+      "decisions": 331,
+      "fallbacks": 4,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 518563,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "cc90bb522cb39260a6bc6b43ca295a56fd8b03b0fa7c94057aba666061d382f1",
+      "stableStateHash": "f482342c15a89c973aab52865c269b7f93011d96b122d392f498065cf652c15d",
+      "resultHash": "7169bc7e28c9c92f7dfb8eb8858f39ac9e8fac378b8f8fc7196cb5fa9d3d0398",
+      "decisions": 257,
+      "fallbacks": 10,
+      "generation": 11
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 519540,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "3ae05fcd8353568f1d6b48a57db94d65c10f1d290c4a209cb584777d81608878",
+      "stableStateHash": "7ab20ae85e5b38dab0e4da9b0d2af895ef5b3ddfb8310c119c4a2f97a74c4e45",
+      "resultHash": "dcf8f396ad6d53286cdb9975b6332c78a0dadca7b451f47dda100b006187b8b0",
+      "decisions": 311,
+      "fallbacks": 10,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 519540,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "afdbd9279628de94c6c280bd28671485c67ca138d6dd02efc51521442fa09e7b",
+      "stableStateHash": "bea1f4e36763522c461ed69376a752a20bfb951763ac947423908a18d18caa44",
+      "resultHash": "f9cd8304cab0e8165d235b0723c42338c70955f0192398721f7cc84d8d589485",
+      "decisions": 316,
+      "fallbacks": 8,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 520517,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "e3792a6b6dda57d2bd58108259900a43621be2ab03e668a395d18e3323d9d9b2",
+      "stableStateHash": "12baed55b354d17dc8d5e7bda2bd0649690915ff1f3a46ae4d0044c788266305",
+      "resultHash": "0bb548e0116b802b87a56f38630dabde759e75a85298103ae1a0bc8020e80821",
+      "decisions": 331,
+      "fallbacks": 6,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 520517,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "09766583bbcf349218f754f371c3489c1c51927cd7fb95abba5c4a9f101b8e3b",
+      "stableStateHash": "93fbcad3836beb093129117c5440609615e312d25c45980a0c654b1c73fc330a",
+      "resultHash": "7185b7729a1759c41da7693a8fd08062d382c9e6110baa5a274344ef71601068",
+      "decisions": 320,
+      "fallbacks": 15,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 521494,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "670cfdccc9b11c7e175cafd148842606c60731fad63ba49e2ab8d3f0dae52b41",
+      "stableStateHash": "f94735c3558bb8994c05011808d5e1a305c994638d5324b4fd5536e719ecb928",
+      "resultHash": "b33949336d92b71f2f20fbb884c40785dadd5a26bc74301d7d0dc8081da7659f",
+      "decisions": 367,
+      "fallbacks": 8,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 521494,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "0bad633131b9357229822b830cff00a15267681fef6cd05a292f06724c8f0813",
+      "stableStateHash": "f2ef450480dd09b3cb4bdde2cc256cca83c0e3535ae342fceb5a207a93823c54",
+      "resultHash": "ea616dca65ad90445f52393e6cc70749b511fa78686df5aca2546e266f72d2dc",
+      "decisions": 258,
+      "fallbacks": 11,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 522471,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "2b1fbc036f9ba55095eeb88438344ba805568f60676f7969c8facb6eb35b2581",
+      "stableStateHash": "2c40d01a9b663e3bd24d11bd3960b0553daf6c4e7269dea2928a0b584e8fb88e",
+      "resultHash": "7043f16ab71659df87ad10aca1dc82489757d958647a1b61db5fa0e122750661",
+      "decisions": 262,
+      "fallbacks": 10,
+      "generation": 11
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 522471,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "3b06e828e228c95e9ac07d487f13248552f0fcb4b19c428db07f0dbb81111f18",
+      "stableStateHash": "8c58a0d0370f77f988340bc6b84d630723d7e750c652e8fa4ee3b154533e5d50",
+      "resultHash": "4d1d80d85dbeffd84a05d50c67d1f3f5882bfed4fe3f1db37b03c469fa9fad5c",
+      "decisions": 265,
+      "fallbacks": 9,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 523448,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "26fed755ff24e608afc8fd43bbadd4eace6a6fe43810de7585d29cc107593ce6",
+      "stableStateHash": "e328c503ec664d9e76ce46618f4556e66167336bfa82336921e7c07d0017798f",
+      "resultHash": "66c99d1c426dbfec7e4774651764db40faaaace685a506089b67a228cf5763ea",
+      "decisions": 311,
+      "fallbacks": 9,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 523448,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "d48c64b2ff618bb010ded6e92208fdf5e7eb0ec816e7f58f13bde4cb1a5f732d",
+      "stableStateHash": "34bd9eeda2e88f26c29efb1683e9191e41b7e98a2682ab6cc4034e1e042656dc",
+      "resultHash": "6d12668262fa884cd6b8577c4944bb5d791b2ae00c5b6cb68206d44f6eb920b2",
+      "decisions": 233,
+      "fallbacks": 6,
+      "generation": 10
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 524425,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "baf158be40134c69722a30ce7ae616a7ab4364f8c00b583f97f4ee1c4cf63b62",
+      "stableStateHash": "ddf4c6eafefe6e6a33b0cdb53c64d2c8b80683a1ce1d0913442b00389dfa5b09",
+      "resultHash": "98e3e12bd10c9b6bb88412ed8b262a589bed7ab6f660ecf7c2052f274699e3c5",
+      "decisions": 269,
+      "fallbacks": 14,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 524425,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "9196f132b8e7b56e7934663522339d4a7037477feb7d87cd1ea349ae22343e07",
+      "stableStateHash": "3c1672a566fe55542d0b01f86eb0cf7f9992d9cf3aee3b9064ae6fa845630a73",
+      "resultHash": "1a9795a18f1435886bf0bc3e4afb02e0cb27603f7d169783ef46466822ce6144",
+      "decisions": 286,
+      "fallbacks": 11,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 525402,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "a7de1f323b3af723bb4f2514ad1fecff75e1428bafee7db06c8ddf64d27733d5",
+      "stableStateHash": "532f1d726256dd058734e107892c4788d2e41026266ef75f166c84051c81b960",
+      "resultHash": "998c96adfd193b7d41c8b09e364a6bb192c386dad429dee686a40855c6cf90a1",
+      "decisions": 403,
+      "fallbacks": 7,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 525402,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "1cae269a0587cbfb06562bc113034ea932b02554e92c33014c1d28254cd4bc8d",
+      "stableStateHash": "cf9abd67e543f302c50a95fe991dbe133df860be2625ef0cb4464f5a0b0df716",
+      "resultHash": "27af5ca42e5478a7d001dd5220698660bfb7019e471c0bd5f642413119097fe6",
+      "decisions": 263,
+      "fallbacks": 14,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 526379,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "695db8950dc9fecc3fd5729f64de8444724472685478d79edab85776483c1383",
+      "stableStateHash": "bb48930070dbdc44ec5f9a39533da752f7a24d68dae70ec7758b6fe472216d4f",
+      "resultHash": "02ef9dc496d11de09304c890177fbe2d4110e23f71cd1c52fc64071b8b803cca",
+      "decisions": 264,
+      "fallbacks": 5,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 526379,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "c30f976626dd988d3cbe7c9df5710eb0f41f250ab858fe689f285b6584a412f4",
+      "stableStateHash": "4b9e31385238284d1244d51be9faef848d679091be4c7863db09ab99228b3850",
+      "resultHash": "123c4c2707f568e00cd396437bf41e588c5622c1e6cd54d799fe7b50d42c3108",
+      "decisions": 253,
+      "fallbacks": 7,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 527356,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "77d5b1e7b59f093fd4c8f4afa347bb82832ca80b289dfe20ead17407035fe5fd",
+      "stableStateHash": "83280f3f2ee7966108a7a081c77557f1d6e1ce30a34ed7d61eb675818bf78feb",
+      "resultHash": "d2f6ec885807b0eb3112058c38f2ef8468bb8cf3d0eb43fa7a39c6812d5154ff",
+      "decisions": 210,
+      "fallbacks": 2,
+      "generation": 10
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 527356,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "be5979e45ce475d408c1318ed9e7b2ad23303aeb8e1208b995eae4fbce4d99bc",
+      "stableStateHash": "8d21ac9d292d10c5a63253e213332d121bfee931d69b101f8c1b7a7228c64bcd",
+      "resultHash": "efb8f1c70b058623044f12ff31c432a8636d90edf91f0e1847d3ea998767dcbb",
+      "decisions": 306,
+      "fallbacks": 9,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 528333,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "ffc12efd69721fc54cecf785ef02dd4dcd72ccdf2712d655248705128e8806d9",
+      "stableStateHash": "2c32b037a06f7264c4fd7367b6c1eb9273d7a68f0efcd144a31a0b27425fc2fa",
+      "resultHash": "b99725a55423260997b5a4c65ed464d949c9feaffbd27f290cb106ee6b7349c2",
+      "decisions": 334,
+      "fallbacks": 4,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 528333,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "56650bf8fe040f4d7a698dc4b3c58567a4bc8493130c717ac3baa42854ed7d33",
+      "stableStateHash": "09a81c4abbb7dd37f6e3a7a6816c4972e33784b692fcb27aed70e8be92edf01d",
+      "resultHash": "8e5783bbd674f0c589b52a40d4dc6b51614d71e4638683eeb270f864cb278d5c",
+      "decisions": 299,
+      "fallbacks": 1,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 529310,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "25c7234dc326e86acdf85ed3e08ed2deebb8d7dda98cd6a8b4ca89a8943bd817",
+      "stableStateHash": "bac070fe3e71361107c311c7122d69e69a76c873c317da42fea1c6ceb225f06c",
+      "resultHash": "f95c8c3b69deb8cf314ce88b14c693f1fc302f4739138b266f8bef153daa6936",
+      "decisions": 347,
+      "fallbacks": 5,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 529310,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "76c21adc409e0a9cb781c40dd34abe3b7864094b449dd92f8b7ee31bbb961230",
+      "stableStateHash": "30f70ee93d1202624166869c79871fde3b1115a4771c4a19c6a3ab46d94f405d",
+      "resultHash": "3d928f74ff8bec3ecce9de5271423e26d62f582fb39bc5832800f3351dfedc9d",
+      "decisions": 355,
+      "fallbacks": 5,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 530287,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "4ba25023a2f43503b691432c70e3bbbfe29a316c5c32603f2b308689e6017dd7",
+      "stableStateHash": "f3aaaae7b3165a92addea851e01d6d81c2114fcb5bf1a083924307856109b965",
+      "resultHash": "083768f51abff22b94a9f022c88c4b38af5d6a274523c0368b26a4153c423909",
+      "decisions": 275,
+      "fallbacks": 11,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 530287,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "7b682eb68c07eff53f0d1cf2f04119d4b03ec35265861aeb2700afec942f12c1",
+      "stableStateHash": "ba7e8487445f2436ab8ef3fa20e768872e8a60ef38f5258490c64612ec7177e2",
+      "resultHash": "e0c10d160b0871d7596882d29b09558d6a0c99408f2c680471d5cf80f2a3a474",
+      "decisions": 322,
+      "fallbacks": 6,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 531264,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "ab829971f2483be6e333a7354053c11286ff69f35631770a21ec3fe5d42f8227",
+      "stableStateHash": "e8a9242cfebb2d4a3e4e3278a5b47b463c037f8ab02fc12e6f88a6bc01143c74",
+      "resultHash": "c22b57d7a802983f24b6aeb4a90e6ef76289da948d932e01d841068dfc82c5a8",
+      "decisions": 280,
+      "fallbacks": 7,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 531264,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "6c24609ed16e20a7b79f32a7935c38a99ffd250c49daabe76ac4c9be3b8500d4",
+      "stableStateHash": "6db83f4cbab698ca095deeca15c5b5fb999e151ac4ed60bd2ae917321d09f199",
+      "resultHash": "23cbf85042a698baa2f6f19b0316e9f56423a398df04666fcfa7fda2e7717694",
+      "decisions": 340,
+      "fallbacks": 15,
+      "generation": 15
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 532241,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "5739a370a17a3ec8a7c43949fd94d722c0dd153219ea019676b3aad62ff2c012",
+      "stableStateHash": "73e016bd89d185b8d1ec0327b94a089a992120db9d0156c6e39b802de62c7a69",
+      "resultHash": "fdf602ca8db47479620459ef8ea0774ae49ff1b6dd47b866064ac3f693138f4f",
+      "decisions": 367,
+      "fallbacks": 9,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 532241,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "c80e8d8dfdf2b5f2955c4e426e134f70e8086575ea7769d97ae979fdc86173ed",
+      "stableStateHash": "65ce25ff8ec62c98bdc3431490ef336738a1b5adc6f16ec9cafab210c3a56825",
+      "resultHash": "f0e763ffef6c71fe91647d4a83077de1d6b65bde01edf3c7d0589b7769d86530",
+      "decisions": 333,
+      "fallbacks": 8,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 533218,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "7df30da1ebce3c5d7d94cd2b5f5f6df0866183ac4904bdb110c16aa19183b7b5",
+      "stableStateHash": "6388485d3223ac79d1fad8bde2369969e2727d0c9a82949d4823156e02fb81e9",
+      "resultHash": "cd0f85bad72b7544c75cb13a8f4fa1adb4cceebe522b75b0f228455ac3daf711",
+      "decisions": 395,
+      "fallbacks": 10,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 533218,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "c4f94e66855c342b1f5b457ad00d2443ca3a2788e1e47cfc4efadafd29f10941",
+      "stableStateHash": "25e236cf8c899eadb6d6eb97a4ce1a23545ef8ecc906faa1cebdd71d2ad018a9",
+      "resultHash": "7a5ca8685b9e8bd38abca307125ecd9c5da4e87f3cd5c81464886e5055a42d54",
+      "decisions": 340,
+      "fallbacks": 9,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 534195,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "68d8a61cd6f66623da8c294c345a0da8461e2f13c0fffc56143fef119228276c",
+      "stableStateHash": "fa70a388fba203d289aec1a4768c077f4f6d20226f37cf2f3a0497a0ca91c969",
+      "resultHash": "4e479b336187106b61640d592b369b5e1d123917fdc52ce236f3b272c741a20a",
+      "decisions": 265,
+      "fallbacks": 9,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 534195,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "c1cd77025a96f8e1a8b9d2a1d2335999897871ac17332ff42bbb595f75530ca8",
+      "stableStateHash": "f425ba5a47f974926b8ddf806c1ddbf9203a9ac65606d492a5c7e5ae1025b76d",
+      "resultHash": "7013af21d29054d2b76e7da94498624442153e1f61a6cbb7f931ee91024b197d",
+      "decisions": 381,
+      "fallbacks": 4,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 535172,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "39c1d782cbe0df28288c84704ddabb00b8aa44999e342a21e3af1278ef2c9600",
+      "stableStateHash": "9f64fc00def93b787a392f5435064e27be6f2baaeb720c3d5ff857c91f7c02be",
+      "resultHash": "61d7d053966f4ae7940a75cffb87f02cda0a5ffd44d35c953c986363267d246b",
+      "decisions": 399,
+      "fallbacks": 8,
+      "generation": 17
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 535172,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "d08ce516f1d92a04132eaefa294e6fcc23d6bdb13ad8a979556f04231d7ef515",
+      "stableStateHash": "e252f9c21a7537dd9f8c6e01abf1733a3c2d9a1444e247e00c291333a1832611",
+      "resultHash": "afaf45204f5e8fed4bcddaff5960447e9f5008f26bacc215195f05bb47dccb30",
+      "decisions": 320,
+      "fallbacks": 12,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 536149,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "e3b239269b249e8d48d691d34e8094a7b023e34ce68356715bb13afa8dba02db",
+      "stableStateHash": "d6b4c6c3c1bb581212c9acf820752739ac84f6ccfce0220f33823c2b37c42b49",
+      "resultHash": "ec71d7c720ae2e318961683c59d81b1e1b3eb059db6659dd00825c6c92298add",
+      "decisions": 338,
+      "fallbacks": 5,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 536149,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "72b206a1eb824cdfbc88112fb76968c95905c2cf4b864eeef2f93b4b047f5b00",
+      "stableStateHash": "0085424ebaf45419d098c8874c0c27acdd0b5c0eab4b404d7569202bacf26d35",
+      "resultHash": "f8ef458e2f3b0136f9f894b885a7b0d496d13e9aee3d7f5f281a85f5ad2d009d",
+      "decisions": 405,
+      "fallbacks": 2,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 537126,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "7853bb9a2914e885081295e26ffd05df63589225fe86249f8418489ae098352d",
+      "stableStateHash": "c4f21164299bb80c3ff61c55fe5844bb135d8eeec9a06ecaf319d84c21b85a3d",
+      "resultHash": "42ebd4270c2b6db46caeb4f761a986c61b85a9142bb3cb45e510d1dcfe8d833f",
+      "decisions": 288,
+      "fallbacks": 3,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 537126,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "788a565cac043d0408c62a68a5f88ff89f4d38dd43a87f0c01ef453ea264767f",
+      "stableStateHash": "66b66efa145c10944273ed4645597c09b0ff05030c00b5a0ec3338aeb329dbcd",
+      "resultHash": "b54dc80e179183b867844369f8c079b25cfd9573bf845e23c08b988a71215974",
+      "decisions": 443,
+      "fallbacks": 13,
+      "generation": 19
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 538103,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "07f721cc8cdaab87cca1b822f99098f622ae3540f5f942d7afbcb9bf5f2a1377",
+      "stableStateHash": "517e10ba1cff980263602ea357ae1368b89e1c204ed12ac96ee11113d0766723",
+      "resultHash": "496db2adc3ba7357420eef4b27800745d359431ad86f0be1341f44bd8ea2938f",
+      "decisions": 264,
+      "fallbacks": 6,
+      "generation": 11
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 538103,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "7e1b0dea5f80d05e571702fb2060cc126fd4db526c2c395525a79b9ecd16961a",
+      "stableStateHash": "eea60c7c540fc7288ecbd5b4640953d0e1ace2177d57f151acdc9549343fb95c",
+      "resultHash": "c56d47652fcee6fa8ef800f5f0b30fd08b1a2e6ecbc1306802635a5aa1aa072b",
+      "decisions": 263,
+      "fallbacks": 4,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 539080,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "441980d0609a5692809a74d1104941cb87ec6efa94a4920052cb010ab66a0fe5",
+      "stableStateHash": "d8010c7ba94395704a36c4ae6d392396d9a1710846a6cef584d5477866f183be",
+      "resultHash": "f73aa84880c86ff8ddc29af0f59f0248d424ba129cee4e96511e5589323b43e5",
+      "decisions": 357,
+      "fallbacks": 5,
+      "generation": 16
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 539080,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "90af3654042a050b8997b29d9439db6c2cd9daf7906e7e0094fd197f5f1022a6",
+      "stableStateHash": "579aa9bb21bcf0652f9776abd8f41a53012329d5afb205620d81185777c224c8",
+      "resultHash": "0f6c61b155b3d8111c793f9f32200a528cc3565657b07330e57dca1ee9b208a9",
+      "decisions": 321,
+      "fallbacks": 11,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 540057,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "6e643bde11b63f7e5681b043426d9959c694a33616fef90804e8f6c000313330",
+      "stableStateHash": "5fa675facdfd6b068b9f09cce64ecffb05969e02d29f908058a83786f49c7a16",
+      "resultHash": "dca151a0aabb75421b44268d3e822801d710b4dccd6b04362e473da680e11031",
+      "decisions": 277,
+      "fallbacks": 2,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 540057,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "b8b0b6251b82908461456013223a454d05cf1f4110b0b8ae718ab81e7cb25b48",
+      "stableStateHash": "d2aed03dba02ccdea5776374bbb02fa05f35f144afdf5263ae4651cbd114e2ff",
+      "resultHash": "fac39c830175db22a2995e4e609ed474bab47cf6e0fdd72f4c1f7626ac1d7e9d",
+      "decisions": 338,
+      "fallbacks": 7,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 541034,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "9956c5868393903510a26399f63948081d0072ce1fe36e346a9ee4e2f54f29ef",
+      "stableStateHash": "1e68451762e075168b7c94ed3c628feb1e19855cc0d83e43c5ba3d192eff7e9f",
+      "resultHash": "777c426013cfc4066c72bfe58417425b73d6caea3a5436ef83ff836dbe3be9b0",
+      "decisions": 287,
+      "fallbacks": 7,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 541034,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "c8ce0e01239714463bfceeea01572fb2ca454edeff509f3781b9c59273d68f06",
+      "stableStateHash": "2b5508e6969437236333824fdec5f35c126c8f23f32dd10408bf3b6b1fbf5458",
+      "resultHash": "3a1520c355ad61ed3da7e0d6512f049eb9b89e1867ac8430b42cd762ea6a7894",
+      "decisions": 324,
+      "fallbacks": 14,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 542011,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "fea024fa8fdc433ff0a3e71abcbc4cc0f7441bc3d5c4b66d6719d0951df03724",
+      "stableStateHash": "ce51cacad5e5323b4bcd7a08a0078dfb777f52b0ad69e892072ddd27b368f5ce",
+      "resultHash": "fcb8053c334842679ab29fb385a7e46308e236cd30551a807c01b09362d1bc8d",
+      "decisions": 324,
+      "fallbacks": 8,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 542011,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "862afb34ed7ac320c6800d32b74fd4aed2f2cde19dd8ad88c14f0d9890ea93e8",
+      "stableStateHash": "960f8e8b8ac06f0b9910f34b357b9736e0ce275b56003cd781e9b70414494aaf",
+      "resultHash": "8dc5ac5dc798f68ca39c66532c8e8a9a6f690b5d8f3016331abc1253a414c088",
+      "decisions": 309,
+      "fallbacks": 9,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 542988,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "a3f41d712d7a3ee75a5bb2cfb0842079ff691c12127d5db2eb26cfc351241f18",
+      "stableStateHash": "aaca74af40e43d1684ffec34c753ff8445aaab0355508c184ba4252768d62b32",
+      "resultHash": "fbcac99977d7f41d69b175aa1f89646ad1df443c692627cb97251df6cfe553cc",
+      "decisions": 310,
+      "fallbacks": 1,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 542988,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "f26c5c98a5ae17df26094023208df14af2baa34855ba9013808d150ee1a99b22",
+      "stableStateHash": "d0db3317c41297710e0a200fdcad2957c5e513e8327fec33276fb97c679f565a",
+      "resultHash": "43fd2d4155f38faf44e594e7294faf698c20bb0e7fb6e5bc0f4a2cab24ba97a8",
+      "decisions": 294,
+      "fallbacks": 10,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 543965,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "21a98091b6dd61e74588f0f44e4938fc1023dd4e0d66a7b7263b3fae2e02d291",
+      "stableStateHash": "e83b3006f5b14c0286e6c098e29047a32324b4a1fdccbbbff9a6a54f7acb163e",
+      "resultHash": "053e4656b28dea0aa56911a3d2c46a2ee6a666c42fd3c589b60be0d48b884160",
+      "decisions": 301,
+      "fallbacks": 7,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 543965,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "4b52046e207f9d986a9907bbbaf819c7e68472c3173c4e3f548b442e00cb408d",
+      "stableStateHash": "76bcacc98f6b10ef5c408f6ff0a619c3abc4df510769b0f00624fddace8fabbc",
+      "resultHash": "bd16fea9c53cc52a3d6745a8d87ab5604e9666b81447d06127d2af6993245450",
+      "decisions": 289,
+      "fallbacks": 7,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 544942,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "71dee90254d12da1d7b33c1da1d847802ab3ae4ff70778206f196761f4402ae5",
+      "stableStateHash": "c106700761137d6b4c6934db849d8fa645e1ff6d178e2d83722e57936e7dc29a",
+      "resultHash": "eaf3e600f5f06b7329f46f9809409bbe59cc36d3ccf2ef7f1a4385aef8e786f4",
+      "decisions": 297,
+      "fallbacks": 6,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 544942,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "3718d79023853746358cbc426624c2d108b691502942c1944c34928f176fa5db",
+      "stableStateHash": "f2243dda7811c8c0e01cb6ea000f9f6018e575cac9b0a4124f628b0603d42d61",
+      "resultHash": "bc20c42d7ccee8b7e2dda75803c7843f62a620f86c1f7e9f0c73c316a039e94f",
+      "decisions": 317,
+      "fallbacks": 11,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 545919,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "5f0903c69cd87611142e9bddb4bda8601f6b866eac611d75127f6a9ed438a44c",
+      "stableStateHash": "19ae26a68210069c9bed356fd28d6847b5a6bd02f790d7ae6d79796a1179df39",
+      "resultHash": "7a9ab7fa5a40fbf3b7014190f217408837e618e0f8554185889a3d3a3204373b",
+      "decisions": 405,
+      "fallbacks": 5,
+      "generation": 18
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 545919,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "a9852fd6aeaaf313118f8e75344d4bf495e707590cb7ce673da47b918be9211c",
+      "stableStateHash": "97a3dafd855add033360480cbb323f71d5c1402d738c49c27ca48ad88430e46e",
+      "resultHash": "53899b1ba36c68c26d2cbc17f07e142f7f56636745d6bed441a3f664fb56d07a",
+      "decisions": 293,
+      "fallbacks": 14,
+      "generation": 13
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 546896,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "1abea7ab7cea9483546fa5c996203434c13101cce5bb322fb97d02124535937c",
+      "stableStateHash": "9141df3341b29cd82ce9adf1ec5c4f50f6ef4ba3770dfb342faff20a33f46acf",
+      "resultHash": "3f85842454900dec51272a1a62f051917e16d6735c201bb1d99ea01cace1d9a4",
+      "decisions": 208,
+      "fallbacks": 4,
+      "generation": 9
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 546896,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "2757534bc82a7e0171b676247481496f91eb9c168ba1af26ecccf3426fd68f72",
+      "stableStateHash": "79551f4da315eaf15a4183790cdecaa5f85f661534ace96b6e1eaa31c67b9fdb",
+      "resultHash": "459cc939abaef3614a12d422ef81682aa64c90f38d2c0cc86de7df426767ddf9",
+      "decisions": 275,
+      "fallbacks": 9,
+      "generation": 12
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 547873,
+        "agentSeed": 1000003
+      },
+      "moveTraceHash": "03fa5ec88a02ae5b6eba23be62a65a23c08352a4d01c8b7b3226d8f1d39ed631",
+      "stableStateHash": "7ed4846c9b651a7d06411ced6b0180c733eee80f3518ebfb262f6b3b79bb2f5a",
+      "resultHash": "c6b2eaaf07ae857fe856f62a40f7ec47c2a6385170908d6ca97b15700500f17f",
+      "decisions": 293,
+      "fallbacks": 11,
+      "generation": 14
+    },
+    {
+      "config": {
+        "players": 4,
+        "engineSeed": 547873,
+        "agentSeed": 2000133
+      },
+      "moveTraceHash": "f692a358b471d94cd165afd34152aff6e41642ac0c4e235fdd29d4c5bc4a2e87",
+      "stableStateHash": "21d797a732b86891058a29941d9f45f44fa785c492aad99b5c0ea712f4134b68",
+      "resultHash": "cea764887d32fda58f7080a0aa8fc8d1a64655574883e483dac4ab373471c641",
+      "decisions": 261,
+      "fallbacks": 11,
+      "generation": 12
+    }
+  ]
+}

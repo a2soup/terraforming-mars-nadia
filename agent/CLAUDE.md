@@ -156,7 +156,8 @@ attempted only on a foundation that already works.
 | 6 | Reinforcement learning via self-play (Python+PyTorch, optional expert warm-start) | Learned agent beats M5 with significance; monotonic improvement |
 | 7 | Evaluation, tuning, acceptance | Primary AC (AC-1, AC-4, AC-6) met and documented |
 
-**Current status: Milestone 1, bullet 5 complete — the gating spike has PASSED.** `.nvmrc` pinned to
+**Current status: Milestone 1, bullets 1–6 complete — the gating spike PASSED and Engine determinism
+is verified.** `.nvmrc` pinned to
 Node 22, Engine commit pinned. Bullet 1 (headless base + Corporate Era + Prelude game creation,
 `agent/src/engine/gameFactory.ts`), bullet 2 (embedded driver, `agent/src/driver/`), bullet 3
 (legal-action enumerator, `agent/src/core/enumerator/`, + the random-legal agent,
@@ -197,9 +198,36 @@ of length 1; `deserialize` no longer dominates the deep copy (that ratio was a `
 The replay-from-quiescent-ancestor strategy M4 depends on is now **validated, not assumed** — 26,026
 fork experiments, 100% exact reproduction.
 
-**Next up: the full 1,000-game AC-1 determinism/legality run**, a separate Milestone-1 item from the
-Tier-1 (~20-game) batch already exercised — followed by bullet 6 (Engine-determinism verification
-under fixed seeds) and bullet 7 (the card-coverage audit).
+Bullet 6, **Engine-determinism verification, is done and all six pre-committed criteria are met** —
+full results in [docs/Determinism_Verification.md](docs/Determinism_Verification.md), which is the
+deliverable, with the findings summarized in the second 2026-07-24 Running Notes entry. Embedded
+games are reproducible **move-for-move** (a rolling per-decision trace hash, not just end-state
+equality): 300 configs in-process, 24 in a fresh process, 12 after 100 unrelated games in the same
+process and under decision-by-decision interleaving. The Engine and Agent seeds are separately
+seeded, now enforced by a CI-enforceable structural spec rather than by convention. The determinism
+risk (Plan §7.2) drops Medium → Low. The machinery lives in `agent/src/determinism/`
+(`npm run determinism -- --verify docs/data/determinism_corpus.json` re-runs the committed
+300-fingerprint corpus as a standing check).
+
+Four things worth knowing before touching this area:
+- **Two hazards are "unreachable" only because embedded play never calls `GameLoader.add()`** — the
+  shared `g-nadia-${seed}` id (it omits the player count) and an env-gated wall-clock cache sweep
+  that *was* demonstrated to empty a live game's `gameLog` mid-play and crash it. Both are recorded
+  for re-adjudication at Milestone 5, whose live adapter starts making that call.
+  `ensureHeadlessEngine()` now refuses to bootstrap under `GAME_CACHE=sweep=auto`.
+- **`Game.gotoEndGame()` is unawaited async**, so a synchronous batch loop holds every finished game
+  alive (~0.27 MB each) until it yields. The 1,000-game run should yield periodically, and any
+  mid-run read of process-global state must flush the event loop first.
+- **The M4 seed contract is settled** (SRS CON-5, and §3 of the verification doc): independent
+  per-consumer streams addressed by name, derived by hashing `(runSeed, label)` from one run seed.
+  Implementing it is M4 work — do not add a third seed to `rng.ts` now.
+- **A live game cannot be replayed from a seed** — `ApiCreateGame.ts:176` picks it with
+  `Math.random()`. An M5 design constraint, recorded now.
+
+**Next up: the full 1,000-game AC-1 legality run**, a separate Milestone-1 item from the Tier-1
+(~20-game) batch already exercised — then bullet 7 (the card-coverage audit). The determinism half of
+that run's original brief is already covered by bullet 6; what remains is the legality/completion
+evidence (zero illegal moves, zero crashes).
 
 **The gating first task (Plan §9, Milestone 1) — do this before any strategy work:**
 1. Confirm a headless base + Corporate Era + Prelude game can be created and stepped through
@@ -211,9 +239,9 @@ under fixed seeds) and bullet 7 (the card-coverage audit).
    NFR-1 time budget actually buys. **This is the single biggest feasibility risk** (state-clone
    cost). If clone cost is prohibitive, design an incremental apply/undo copy path or rescope search
    depth and RL scale **before** committing Milestones 4/6.
-4. **Verify Engine determinism** under a fixed seed, with the Agent's search/determinization RNG
-   seeded **separately** from the Engine's RNG (SRS CON-5/NFR-5). Record any residual
-   non-determinism as a risk.
+4. **Verify Engine determinism — DONE, all criteria met (24 Jul 2026).** Verified under fixed seeds
+   with the Agent's RNG seeded separately from the Engine's (SRS CON-5/NFR-5); residual
+   non-determinism recorded and isolated. See [docs/Determinism_Verification.md](docs/Determinism_Verification.md).
 5. **Card-coverage audit:** confirm every in-scope base + Corporate Era + Prelude card/corporation
    is implemented and test-covered at the pin; record gaps as known limitations.
 
