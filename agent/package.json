@@ -5,6 +5,7 @@
   "description": "Nadia AI agent, built on the terraforming-mars Engine in this repo.",
   "scripts": {
     "create-game": "tsx src/runner/createGameCli.ts",
+    "bench": "tsx src/runner/speedSpikeCli.ts",
     "test": "mocha --import=tsx --require ../tests/testing/setup.ts \"test/**/*.spec.ts\""
   }
 }
