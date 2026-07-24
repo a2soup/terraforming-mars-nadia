@@ -348,3 +348,38 @@ FR-DATA-1..5, Plan §7.1 / Appendix A).
   bugs; report genuine Engine bugs upstream rather than silently patching rules.
 - Measure everything through the Milestone 2 harness — it is the single source of truth for
   strength. Judge changes by win rate against fixed baselines, not intuition.
+
+### Planning convention: decompose a plan into prompts for cold-start sessions
+
+When planning a substantial piece of work (a Plan bullet, a milestone sub-goal), the house style is
+to write a **plan document that decomposes the work into self-contained prompts**, each intended for
+a session that starts cold — see `docs/Milestone1_Bullet4_Prompts.md`, `…Bullet5…`, `…Bullet6…`,
+`…Bullet7…`. Each such document carries: what is already known (so nothing is re-derived), the
+located hazards, criteria pre-committed *before* any measurement, a file-ownership table so parallel
+work never collides, a shared preamble, and one prompt per unit of work.
+
+Always include, for each unit: a **rough scale estimate** (lines of code, files, cards read, minutes
+of compute) and a **model recommendation with the reason** — the reason is the useful part, because
+it names what would go wrong if the work were run too cheaply.
+
+**Fit the number of units and the parallelism to the work, not to the shape of the last plan.** The
+decomposition is an output of analysing the task; it is not a template to fill. Bullets 5 and 6 both
+landed on `A → (B, C, D in parallel) → E` because both genuinely had a shared harness plus three
+comparable investigations over it. Bullet 3 did not (`A → (B, D) → C → E`), bullet 4 did not (four
+units, no write-up unit), and bullet 7 did not — it split into a measurement pass, a tooling
+question, a large *ranked, batched* review that is most of the effort, and a write-up. Before
+settling a structure, ask:
+
+- **Is the "do this first" unit a real dependency, or just a shared denominator?** A harness other
+  units call is a dependency. A JSON file they could each derive in thirty lines is coordination —
+  worth ordering, not worth a blocking phase.
+- **Are the parallel units actually comparable in size?** If one is 70% of the effort, it is the
+  spine, not a peer. Fan out *inside* it (over items, batches, cards) rather than across concerns.
+- **Does splitting cost a cold start?** Two sessions re-deriving the same Engine internals is a real
+  cost. Merge units that key off the same objects.
+- **What genuinely warrants its own session?** Work that edits the source-of-truth documents (one
+  writer, always), work whose size is unknown until attempted, and work that is pure judgment over
+  other units' output.
+
+The prompt-per-cold-session format is the convention. The count, the ordering and the fan-out are
+findings about the task, and a plan should say why its shape fits the work.
