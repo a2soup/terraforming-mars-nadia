@@ -278,6 +278,19 @@ Four things worth knowing before re-running AC-1 for a future agent:
 decide whether to commit to RL (M6) or ship M5. M6 requires ML expertise / a collaborator / library;
 M5 is a valid stopping point with a strong classical deliverable.
 
+> **Standing caveat for M3–M6 planning: AC-1 is agent-specific and expires on every new agent
+> version.** The AC-1 legality run above (`docs/AC1_Legality_Run.md`) proves the *random-legal*
+> agent's legality — 1,500 games, zero Agent-attributable illegal-move rejections. It says nothing
+> about the M3 heuristic agent, the M4 search agent, the M5 hardened agent, or any M6 promoted
+> network, each of which submits different moves through the same enumerator/driver stack and can
+> reach candidate-move code paths random play never did. This is not hypothetical: the M1 run
+> itself found and fixed a real illegal-move-producing defect (the `initialCards` budget coupling)
+> that had hidden behind the FR-9 fallback since bullet 3, invisible to a 20-game batch and only
+> surfaced at 1,500-game scale. **Re-run the AC-1 legality battery (`agent/src/legality/`,
+> `npm run legality`) against every agent version promoted at the end of M3, M4, M5, and M6**,
+> as a promotion-gate step alongside the FR-15/AC-7 significance test — not once at M1 and assumed
+> forever after. Full detail and the risk-register entry: Implementation Plan §7.2.
+
 ---
 
 ## 7. Acceptance criteria (what "done" means)
