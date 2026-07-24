@@ -162,11 +162,30 @@ function describeRow(row: FidelityRow): string {
  * agent seed derived from each by a fixed transform so the two stay independent (SRS CON-5)
  * while the whole corpus is reproducible from this list alone.
  *
- * 2p/3p/4p, two games each. The planning probe was a *single* 2p game: action and research are
- * ~98% of its points and are well evidenced, but `preludes` was sampled 4 times, `production`
- * once, and 3p/4p not at all - so this corpus is the first proper sample of those, and a fourth
- * failure mode showing up here (assertion 1 failing where the probe never reached) would be the
- * audit doing its job, not a reason to weaken the assertion.
+ * 2p/3p/4p, four games each (widened from two, 2026-07-23 - see below). The planning probe was
+ * a *single* 2p game: action and research are ~98% of its points and are well evidenced, but
+ * `preludes` was sampled 4 times, `production` once, and 3p/4p not at all - so this corpus is
+ * the first proper sample of those, and a fourth failure mode showing up here (assertion 1
+ * failing where the probe never reached) would be the audit doing its job, not a reason to
+ * weaken the assertion.
+ *
+ * **Why this list grew, and why `{players: 3, seed: 20027}` is pinned rather than arbitrary.**
+ * The original 6-config corpus above (the first four seeds below) measured `preludes` at 0/4
+ * bad and, on that evidence, `assertSnapshotSafe` was deliberately left *not* guarding
+ * `Phase.PRELUDES` - reasoned to be safe because the pending-signature check alone appeared to
+ * catch every prelude failure the corpus produced. A independent 120-game sweep (2p/3p/4p,
+ * seeds 20000-20039) done during branch review found that reasoning does not generalize: seed
+ * `{3p, 20027}` reaches a mid-prelude sub-decision where `assertSnapshotSafe` accepted the point,
+ * the restored pending signature *matched* by coincidence (a regenerated top-of-turn `or`
+ * collided with the live prelude `or` under the coarse `player:type` signature), and the
+ * serialized state still diverged (`phase: 'preludes'` restored as `'action'`) - a survivor of
+ * both guards, undetectable through the public API's defaults. `assertSnapshotSafe` now also
+ * rejects `Phase.PRELUDES`/`Phase.CEOS` (`snapshot.ts`) for the same reason it already rejects
+ * `RESEARCH`. `{3p, 20027}` is kept in this corpus specifically as a regression pin for that
+ * exact case - removing it would not break the guard fix, but it is the one config known to have
+ * exercised the gap this corpus exists to catch, so it stays. The other three added seeds
+ * (`20010`/`20020` 2p, `20030` 3p, `20015`/`20035` 4p) are plain corpus-widening: more of the
+ * same distinct-seed sampling, not chosen for any specific finding.
  */
 const AUDIT_CONFIGS: ReadonlyArray<{players: number; seed: number}> = [
   {players: 2, seed: 4242},
@@ -175,6 +194,12 @@ const AUDIT_CONFIGS: ReadonlyArray<{players: number; seed: number}> = [
   {players: 3, seed: 9102},
   {players: 4, seed: 9201},
   {players: 4, seed: 9202},
+  {players: 2, seed: 20010},
+  {players: 2, seed: 20020},
+  {players: 3, seed: 20027}, // regression pin - see doc comment above
+  {players: 3, seed: 20030},
+  {players: 4, seed: 20015},
+  {players: 4, seed: 20035},
 ];
 
 describe('snapshot/restore fidelity audit (Milestone 1, sub-task B)', function() {
@@ -234,6 +259,38 @@ describe('snapshot/restore fidelity audit (Milestone 1, sub-task B)', function()
       expect(
         researchRows.filter((row) => row.safe).map(describeRow),
         'assertSnapshotSafe accepted a research-phase point, where restore re-draws cards',
+      ).to.deep.equal([]);
+    });
+  });
+
+  // -----------------------------------------------------------------------------------------
+  // Assertion 2b: the phase guard covers preludes/CEOs too (2026-07-23 fix - see snapshot.ts's
+  // doc comment and the Running Notes entry for the survivor a 120-game sweep found: a
+  // mid-prelude sub-decision where the *old* guard accepted the point, the pending signature
+  // matched by coincidence, and the state still diverged. Blanket-rejecting the phase, the same
+  // treatment research already gets, is what closes that gap).
+  // -----------------------------------------------------------------------------------------
+
+  describe('the phase guard covers preludes and CEOs', () => {
+    it('rejects every Phase.PRELUDES decision point in the corpus', () => {
+      const preludeRows = rows.filter((row) => row.phase === Phase.PRELUDES);
+      expect(preludeRows, 'the corpus must actually contain prelude decision points for this to mean anything').to.not.be.empty;
+      expect(
+        preludeRows.filter((row) => row.safe).map(describeRow),
+        'assertSnapshotSafe accepted a preludes-phase point - a mid-prelude sub-decision can be silently ' +
+        'replaced by a fresh top-of-turn action on restore, as the 2026-07-23 finding showed',
+      ).to.deep.equal([]);
+    });
+
+    // Not asserted non-empty: CEOs are an out-of-scope expansion for v1 (base + Corporate Era +
+    // Prelude - agent/CLAUDE.md §1) and legitimately never appear in this corpus. The guard
+    // still lists Phase.CEOS defensively (same structural risk as PRELUDES, should the phase
+    // ever arise), so this only checks it doesn't accept one *if* one occurs.
+    it('rejects every Phase.CEOS decision point in the corpus, if any occur', () => {
+      const ceoRows = rows.filter((row) => row.phase === Phase.CEOS);
+      expect(
+        ceoRows.filter((row) => row.safe).map(describeRow),
+        'assertSnapshotSafe accepted a CEOs-phase point',
       ).to.deep.equal([]);
     });
   });

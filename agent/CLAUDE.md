@@ -156,19 +156,34 @@ attempted only on a foundation that already works.
 | 6 | Reinforcement learning via self-play (Python+PyTorch, optional expert warm-start) | Learned agent beats M5 with significance; monotonic improvement |
 | 7 | Evaluation, tuning, acceptance | Primary AC (AC-1, AC-4, AC-6) met and documented |
 
-**Current status: Milestone 1, bullet 3 complete.** `.nvmrc` pinned to Node 22, Engine commit
+**Current status: Milestone 1, bullet 4 complete.** `.nvmrc` pinned to Node 22, Engine commit
 pinned. Bullet 1 (headless base + Corporate Era + Prelude game creation,
-`agent/src/engine/gameFactory.ts`), bullet 2 (embedded driver, `agent/src/driver/`), and bullet 3
+`agent/src/engine/gameFactory.ts`), bullet 2 (embedded driver, `agent/src/driver/`), bullet 3
 (legal-action enumerator, `agent/src/core/enumerator/`, + the random-legal agent,
-`agent/src/core/randomLegalAgent.ts`) are done. The random-legal agent, driven by the embedded
-driver, now completes full 2p/3p/4p games end to end (`Phase.END`), including an FR-9 conservative
-fallback that recovers the one known composite-level affordability coupling plus a genuine
-`SelectStandardProjectToPlay`/`SelectProjectCardToPlay` model-type overlap the Tier-1 batch
-surfaced — see `agent/docs/Running_Notes.md` (2026-07-22 entry) for both findings and the driver
-fix (an unconditional `deferredActions.runAll()` double-drain bug) that the batch also caught.
-**Next up:** bullet 4 (snapshot/restore for search/self-play, SRS CON-3) and the **simulator-speed
-spike** (full-game runtime, clone round-trip time, clones/second at the pin — the single biggest
-Milestone 4/6 feasibility risk, see item 3 below) — followed by the full 1,000-game AC-1
+`agent/src/core/randomLegalAgent.ts`), and bullet 4 (snapshot/restore for search/self-play, SRS
+CON-3, `agent/src/engine/snapshot.ts` + `stableState.ts`) are done. The random-legal agent, driven
+by the embedded driver, now completes full 2p/3p/4p games end to end (`Phase.END`), including an
+FR-9 conservative fallback that recovers the one known composite-level affordability coupling plus
+a genuine `SelectStandardProjectToPlay`/`SelectProjectCardToPlay` model-type overlap the Tier-1
+batch surfaced — see `agent/docs/Running_Notes.md` (2026-07-22 entry) for both findings and the
+driver fix (an unconditional `deferredActions.runAll()` double-drain bug) that the batch also
+caught.
+
+Bullet 4's `snapshot()`/`restore()`/`cloneGame()` clone a live `IGame` via the Engine's own
+serialization, with two safety mechanisms neither of which is individually sufficient:
+`assertSnapshotSafe` rejects known-unfaithful phases (research, drafting, and — after a branch-review
+finding, see the 2026-07-23 Running Notes entries — preludes/CEOs too) and a mid-decision deferred
+queue; `restore`'s default `verify: 'pending'` catches a silently-regenerated pending decision the
+phase guard alone would miss (measured on a 12-game/3,869-point audit corpus: **28.0% of decision
+points don't naively round-trip**, and action-phase failures are **100% silent** — `stableState`
+matches byte-for-byte while the pending decision is quietly replaced). Sub-task D (in-memory save
+history, closing the other half of CON-3) is deliberately deferred to Milestone 4, alongside the
+replay-from-quiescent-ancestor mechanism it would feed — see the Running Notes wrap-up entry for the
+reasoning.
+
+**Next up: the simulator-speed spike** (full-game runtime, clone round-trip time, clones/second at
+the pin — the single biggest Milestone 4/6 feasibility risk, see item 3 below; bullet 4's module is
+the primitive this spike measures, not the measurement itself) — followed by the full 1,000-game AC-1
 determinism/legality run, which is a separate Milestone-1 item from the Tier-1 (~20-game) batch
 already exercised.
 

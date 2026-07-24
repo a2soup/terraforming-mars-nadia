@@ -34,16 +34,28 @@ import {stableStateOf} from './stableState';
  *
  * - The **phase guard** (`assertSnapshotSafe`) catches every research-phase failure (restore
  *   re-draws cards, so the serialized state genuinely diverges) but *not* the action-phase
- *   ones: 27 of 29 measured action-phase failures have an empty deferred queue and sit in
- *   `Phase.ACTION`, so the guard happily accepts them.
+ *   ones: measured action-phase failures overwhelmingly have an empty deferred queue and sit
+ *   in `Phase.ACTION`, so the guard alone happily accepts them.
  * - **Pending-signature verification** (`restore`'s default `verify: 'pending'`) catches
  *   every one of those action-phase failures, plus most of the research ones (a re-drawn
  *   deck usually also changes which decision is pending) - but not the residual research
  *   failures where the *signature* happens to match while the underlying deck and dealt
- *   cards have still changed.
- * - **Together, every measured bad decision point is caught by at least one of the two.**
- *   Dropping either mechanism as "redundant" would silently reopen exactly the class of bug
- *   this module exists to guard against.
+ *   cards have still changed, nor a rare `Phase.PRELUDES` case with the same shape (see
+ *   immediately below).
+ * - **Neither guard is individually complete, and - a correction to an earlier draft of this
+ *   comment - "together" was not either, until `PRELUDES`/`CEOS` were added to the phase
+ *   guard below.** A 120-game sweep across 2p/3p/4p (independent of sub-task B's 6-game
+ *   fidelity-audit corpus) found one point - a mid-prelude `OrOptions` sub-decision - where
+ *   `assertSnapshotSafe` accepted the point (`PRELUDES` wasn't yet in the unsafe-phase list)
+ *   *and* the pending signature matched (`player:or` collides with the fresh top-of-turn
+ *   `or` restore regenerated) *and* the serialized state still diverged (`phase: 'preludes'`
+ *   vs `'action'` - restore silently promoted the player straight to their main action phase).
+ *   That is exactly the failure class this module exists to make loud: both guards passed,
+ *   `restore()` returned normally, and the returned game was a different game. See the
+ *   2026-07-23 Running Notes entry ("the guard holds ... but preludes is not the clean phase
+ *   the probe suggested") for the full account of why sub-task B's audit corpus (0/4 prelude
+ *   points bad) missed this, and why "PRELUDES` is 36/43 fine, the pending check catches the
+ *   other 7" - true on that corpus - turned out not to generalize.
  *
  * **Deliberately not used: the Engine's own `Cloner`** (`src/server/database/Cloner.ts`).
  * It is built for cross-*game* cloning: it rewrites every player id (a full recursive walk
@@ -127,13 +139,27 @@ export function pendingSignature(game: IGame): string {
  * Throws {@link UnsafeSnapshotError} if `game` is in a phase, or holds a mid-action
  * continuation, where a restore is known to be unfaithful (see this module's doc comment
  * for the measured failure modes this catches and does not catch).
+ *
+ * `PRELUDES`/`CEOS` are unsafe for the same reason `RESEARCH` is - a mid-phase sub-decision
+ * (e.g. an ocean-tile placement queued behind a prelude in flight) can be silently discarded
+ * and replaced by a fresh top-of-turn decision on restore - but the failure mode is rarer and
+ * was missed by sub-task B's original 6-game fidelity-audit corpus (0/4 prelude points bad
+ * there). A wider 120-game sweep found a prelude point where the *serialized state* diverged
+ * (`phase: 'preludes'` restored as `'action'`) while the pending-signature check alone did not
+ * catch it - the regenerated action-phase `OrOptions` happened to collide with the live
+ * prelude `OrOptions` under the coarse `player:type` signature. Guarding the phase closes that
+ * gap the same way it already does for research. See the 2026-07-23 Running Notes entry for
+ * the full account.
  */
 export function assertSnapshotSafe(game: IGame): void {
-  const unsafePhases: ReadonlyArray<Phase> = [Phase.RESEARCH, Phase.DRAFTING, Phase.INITIALDRAFTING];
+  const unsafePhases: ReadonlyArray<Phase> = [
+    Phase.RESEARCH, Phase.DRAFTING, Phase.INITIALDRAFTING, Phase.PRELUDES, Phase.CEOS,
+  ];
   if (unsafePhases.includes(game.phase)) {
     throw new UnsafeSnapshotError(
-      `Game ${game.id} is in phase '${game.phase}', which regenerates state on restore (e.g. research ` +
-      `re-draws cards) rather than reproducing it - snapshotting here is known to be unfaithful.`,
+      `Game ${game.id} is in phase '${game.phase}', which can regenerate a different pending decision ` +
+      `on restore (e.g. research re-draws cards, or a mid-prelude sub-decision is silently replaced by a ` +
+      `fresh top-of-turn action) rather than reproducing it - snapshotting here is known to be unfaithful.`,
     );
   }
   if (game.deferredActions.length > 0) {

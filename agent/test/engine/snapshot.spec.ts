@@ -67,6 +67,19 @@ function driveToLaterResearchPhase(game: IGame, agent: EmbeddedResponder): void 
   driveUntil(game, agent, (g) => g.phase === Phase.RESEARCH && g.generation > 1);
 }
 
+/**
+ * The game's prelude phase (reached once every player has picked a corporation and any of
+ * them has a prelude card in hand - `preludeExtension: true`, `gameFactory.ts`, guarantees
+ * this for both players). Added 2026-07-23: a 120-game sweep done during branch review found
+ * a mid-prelude sub-decision (a tile placement queued behind a prelude in flight) where the
+ * *pre-fix* `assertSnapshotSafe` accepted the point, the restored pending signature matched by
+ * coincidence, and the serialized state still diverged - a survivor of both guards. See
+ * snapshot.ts's `assertSnapshotSafe` doc comment and the matching Running Notes entry.
+ */
+function driveToPreludesPhase(game: IGame, agent: EmbeddedResponder): void {
+  driveUntil(game, agent, (g) => g.phase === Phase.PRELUDES);
+}
+
 function newDrivenGame(seed: number, agentSeed: number): {game: IGame; agent: EmbeddedResponder} {
   const game = createGame({players: 2, seed});
   const agent = randomLegalAgent(createAgentRandom(agentSeed));
@@ -102,6 +115,13 @@ describe('assertSnapshotSafe', () => {
 
     expect(game.deferredActions.length).to.equal(0);
     expect(() => assertSnapshotSafe(game)).to.not.throw();
+  });
+
+  it('throws for a game driven into Phase.PRELUDES (2026-07-23 fix: a mid-prelude sub-decision can be silently replaced by a fresh top-of-turn action on restore)', () => {
+    const {game, agent} = newDrivenGame(4242, 5);
+    driveToPreludesPhase(game, agent);
+
+    expect(() => assertSnapshotSafe(game)).to.throw(UnsafeSnapshotError);
   });
 });
 

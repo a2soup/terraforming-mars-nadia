@@ -535,6 +535,14 @@ Deliberately *not* fixed by widening `assertSnapshotSafe` to reject `Phase.PRELU
 43 prelude points round-trip fine, the pending check already catches all 7 that don't, and the guard
 is meant to be a cheap phase-level filter, not a second implementation of the fidelity check.
 
+> **Superseded — see the 2026-07-23 "branch review" entry below.** "The pending check already
+> catches all 7 that don't" was true on *this* corpus but not in general: a wider, independently
+> seeded sweep found a prelude point where the pending check also passed (by signature
+> coincidence) while the state still diverged — a survivor of both guards. `Phase.PRELUDES` (and
+> `Phase.CEOS`) are now in the unsafe-phase list after all. Left in place rather than rewritten,
+> per this file's own convention of recording findings and decisions as they happened; the
+> correction is the entry that follows.
+
 **Log-stripping is rules-neutral — proven, so `stripLog` has earned its place as a spike/search
 option.** At a quiescent mid-game point in 2p, 3p and 4p games, a `stripLog: true` restore and an
 unstripped restore of the *same* point, driven to `Phase.END` by separately-constructed same-seed
@@ -597,3 +605,72 @@ M1/M2's timeframe rather than M4's, and it should move up then.
 
 **Bullet 4 status:** A, B, C done (this repo's commits); D deferred to M4 per the above, to be
 designed alongside the replay-from-quiescent-ancestor mechanism it feeds, not before.
+
+## 2026-07-23 — `assertSnapshotSafe` gap: `Phase.PRELUDES` could survive both guards (branch review, fixed)
+
+Found during a code review of the merged A/B/C branch, before it was relied on. The sub-task B
+entry immediately above measured `preludes` at 7/43 bad and made a *deliberate, documented*
+decision **not** to widen the phase guard to cover `Phase.PRELUDES`, reasoning that "the pending
+check already catches all 7 that don't [round-trip]." That reasoning was corpus-specific and
+turned out not to generalize — recorded here because the failure mode it missed is exactly the
+class this whole bullet exists to prevent: a **silent** corruption reachable through the
+*public, default* API, not merely through `{unsafe: true}` probing.
+
+**The gap, found by a 120-game sweep** (2p/3p/4p, seeds 20000–20039, independent of both the
+planning probe and B's audit corpus) that classified every decision point looking specifically
+for a survivor of *both* guards (`safe && pendingOk && !stateOk`). One turned up:
+`{3p, seed: 20027}`, at a mid-prelude sub-decision (`p-yellow` holding a pending `space` from an
+in-flight prelude's tile placement). At that point:
+
+- `assertSnapshotSafe(game)` **did not throw** — `Phase.PRELUDES` was not in the unsafe-phase
+  list, and the deferred-actions queue was empty.
+- `restore(snap)` with the **default** `verify: 'pending'` **did not throw** — the restored
+  game's pending signature was `p-yellow:or` (a freshly-regenerated top-of-turn action menu),
+  which happens to be the same shape (`player:type`) as a live prelude `OrOptions` sub-choice
+  would have produced had one been pending instead of the `space` decision that actually was.
+- The serialized state **did** diverge: `phase: 'preludes'` (live) vs `'action'` (restored) —
+  confirmed by diffing the two `stableStateOf` outputs top-level-key by key, which showed
+  exactly one differing field, `phase` itself. Nothing else differed; the coincidental
+  signature match was the entire reason both guards passed while handing back a different game.
+
+So through the module's own public API, with every default in place, `snapshot()` +
+`restore()` at that point returns normally and silently hands back a game one full phase away
+from the one that was captured — precisely the "loud, not silent" guarantee this module exists
+to provide, defeated at the one phase B's corpus happened to undersample (0/4 bad on the
+original 6-game corpus vs 7/43 on it, so the state-diverging cases were there but this
+particular *both-guards-pass* combination wasn't hit until a wider, differently-seeded sweep).
+
+**Fix:** `assertSnapshotSafe` (`snapshot.ts`) now also rejects `Phase.PRELUDES` and
+`Phase.CEOS` (the latter defensively — CEOs are out of scope for v1 and never occur in any
+corpus here, but it shares the identical structural risk: a mid-phase sub-decision that can be
+silently replaced by a fresh top-of-turn decision on restore, same as research and preludes).
+This is the same treatment `RESEARCH` already gets, for the same underlying reason, applied to
+the one phase it was missing from.
+
+**Verification, not just reasoning:**
+- The original 120-game sweep, re-run against the fixed guard: **0 survivors** (down from 1),
+  across all three player counts.
+- `agent/test/engine/snapshot.spec.ts` gained a unit test driving a real game into
+  `Phase.PRELUDES` and asserting `assertSnapshotSafe` throws — the same shape as the existing
+  `Phase.RESEARCH` test, now covering the phase that was missing.
+- `agent/test/engine/snapshotFidelity.spec.ts`'s audit corpus widened from 6 games (2 per
+  player count) to 12 (4 per player count), specifically adding `{3p, seed: 20027}` as a
+  **pinned regression case** — the exact config the sweep found — plus three more seeds per
+  player count for general corpus breadth. Two new assertions mirror the existing "the phase
+  guard covers research" check for preludes and CEOs. Re-run numbers, 3,869 decision points
+  across the widened corpus: **preludes now 17/89 bad, 89/89 rejected by the guard** (100% —
+  confirming the fix structurally rather than by the coincidence that let the original survivor
+  through), 10 of those 17 a genuine state divergence (up from B's 3, now on a corpus more than
+  twice the size). Research and action numbers are consistent with B's own findings (research
+  672/708 rejected-by-guard = bad; action 393 silent, still 100% of its bad rows, still only
+  caught by the pending check, still 0 caught by the phase guard). Full suite: **107 passing**
+  (104 + 1 new unit test + 2 new audit assertions), `tsc --noEmit` clean.
+
+**The general lesson, worth stating plainly since it's the second time this bullet has hit it:**
+a small, targeted audit corpus can validate a design decision on the data it happened to sample
+and still be wrong in general — B's own doc comment said as much about the *planning probe*
+relative to *B's* corpus ("a fourth failure mode showing up here would be the audit doing its
+job, not a reason to weaken the assertion"), and that is exactly what happened one level up, on
+review, against B's own corpus. The corpus is now wider, the specific gap is pinned as a
+regression case, and the two new phase-coverage assertions mean either guard's phase list
+regressing would be caught directly rather than requiring another sweep to notice.
