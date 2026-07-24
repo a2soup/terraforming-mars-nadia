@@ -167,6 +167,37 @@ describe('determinism harness (Milestone 1, bullet 6, sub-task A)', () => {
       expect(() => assertHeaderCompatible(mismatched, current)).to.throw(CorpusHeaderMismatchError);
     });
 
+    /*
+     * The regression that motivated these two tests (sub-task E, adjudication): `engineCommit`
+     * originally held `git rev-parse HEAD`, so a corpus stopped verifying on the *next* commit -
+     * `--verify` threw CorpusHeaderMismatchError before comparing a single fingerprint, and the
+     * committed 300-fingerprint corpus was already unverifiable by the time it was merged. The
+     * field must hold the pinned Engine commit, which is what actually determines Engine
+     * behaviour and does not move; agent churn belongs in `agentCommit`, which is provenance and
+     * must never be a rejection reason (see CorpusHeader's doc comment).
+     */
+    it('records the pinned Engine commit, not the repo HEAD, as engineCommit', () => {
+      const header = buildHeader();
+
+      expect(header.engineCommit, 'engineCommit must be the Engine pin from agent/CLAUDE.md section 2').to.equal('868714d72a434ab68fe08e5570ebc6863859ae15');
+      expect(header.agentCommit, 'the repo HEAD belongs in agentCommit, separately').to.not.equal(header.engineCommit);
+    });
+
+    it('accepts a header whose agentCommit, nodeVersion and agentVersion differ', () => {
+      // A changed agent or Node version must surface as a *fingerprint mismatch* (informative:
+      // it names the configs that moved), never as a header rejection (silence). Rejecting here
+      // would make the corpus useless as a regression check the moment anything was committed.
+      const current = buildHeader();
+      const older = {
+        ...current,
+        agentCommit: 'a'.repeat(40),
+        nodeVersion: 'v20.0.0',
+        agentVersion: '0.0.0',
+      };
+
+      expect(() => assertHeaderCompatible(older, current)).to.not.throw();
+    });
+
     it('rejects a header with a different GAME_CACHE environment', () => {
       const current = buildHeader();
       const mismatched = {...current, env: {...current.env, GAME_CACHE: 'auto'}};

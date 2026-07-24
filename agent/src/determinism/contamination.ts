@@ -713,7 +713,12 @@ export type SweepProbeResult = {
  * partway, waits out several sweeps without adding it to the cache, then adds it and waits again.
  */
 async function sweepProbeChild(): Promise<SweepProbeResult> {
-  ensureHeadlessEngine();
+  // The one legitimate `allowAutoSweep` caller: this probe exists to enter the unsafe
+  // configuration deliberately and measure what it does. Sub-task E turned C's recommended
+  // isolation into a real bootstrap guard (headlessEngine.ts's assertSweepIsManual), which would
+  // otherwise refuse to start this child - the guard and the experiment that justifies it have to
+  // coexist. Nothing here is compared against a fingerprint.
+  ensureHeadlessEngine({allowAutoSweep: true});
   const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const game = createGame({players: 2, seed: 77});

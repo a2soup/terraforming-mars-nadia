@@ -4,6 +4,7 @@ import * as os from 'os';
 import * as path from 'path';
 import {ensureHeadlessEngine} from '../engine/headlessEngine';
 import {replay} from './replay';
+import {AGENT_SEEDS, ENGINE_SEEDS} from './sweep';
 import {ReplayConfig, ReplayFingerprint} from './types';
 
 /**
@@ -86,6 +87,16 @@ export function runOneConfigPerChildProcess(
   }));
 }
 
+/**
+ * P2's pre-committed sample: 24 configs (3 player counts x the first 8 committed engine seeds x
+ * the first committed agent seed), drawn from sweep.ts so every one is also a corpus entry. Above
+ * the criterion's ">=20", and sized so a one-fresh-process-per-config run stays around a minute
+ * (child startup dominates - see this module's doc comment).
+ */
+export const P2_CONFIGS: ReadonlyArray<ReplayConfig> = ([2, 3, 4] as const).flatMap((players) =>
+  ENGINE_SEEDS.slice(0, 8).map((engineSeed) => ({players, engineSeed, agentSeed: AGENT_SEEDS[0]})),
+);
+
 export type ProcessIndependenceMismatch = {
   config: ReplayConfig;
   field: string;
@@ -149,14 +160,19 @@ function main(): void {
     return;
   }
 
-  // Standalone orchestrator mode: a small demonstration/smoke run, not the full P2 sweep (that's
-  // driven by sweep.ts / whatever assembles P1+P2+P4 into a report - this file only owns the
-  // cross-process primitive per Milestone1_Bullet6_Prompts.md's file-ownership table).
+  // Standalone orchestrator mode: P2 at its pre-committed sample size.
+  //
+  // This used to be a 2-config smoke run, with the spec covering 1 - so the blocking criterion
+  // ("for >=20 of those configs, a replay in a fresh Node process produces the same three hashes
+  // as the in-process run") had never actually been executed at the scale it was pre-committed
+  // to, even though the machinery below was complete and correctly negative-controlled. Sub-task
+  // E caught that when adjudicating, ran it at 24, and moved the run here so it stays repeatable
+  // instead of living in a scratch file. See Determinism_Verification.md, P2.
+  //
+  // Configs are drawn from sweep.ts's committed seed list, so this is a strict subset of the
+  // committed corpus: P2 verifies corpus entries specifically, not unrelated games.
   ensureHeadlessEngine();
-  const configs: ReadonlyArray<ReplayConfig> = [
-    {players: 2, engineSeed: 500000, agentSeed: 1000003},
-    {players: 3, engineSeed: 500977, agentSeed: 2000133},
-  ];
+  const configs: ReadonlyArray<ReplayConfig> = P2_CONFIGS;
   const inProcess = new Map(configs.map((config) => [`${config.players}|${config.engineSeed}|${config.agentSeed}`, replay(config)]));
   const report = checkProcessIndependence(configs, inProcess);
   console.log(`[childReplay] checked ${report.configsChecked} config(s) cross-process; ${report.mismatches.length} mismatch(es).`);

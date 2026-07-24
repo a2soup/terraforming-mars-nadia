@@ -2,10 +2,11 @@
 
 An Expert-Level AI Agent for Terraforming Mars
 
-**Project:** Terraforming Mars AI **Document:** Software Requirements Specification (SRS) **Version:** 1.3 (Draft) **Date:** 24 July 2026 **Prepared for:** Austin Campbell **Target scope:** Base game + Corporate Era + Prelude; 2-4 players (2p primary; 3-4p competence per AC-5) **Primary interface:** terraforming-mars open-source engine (self-hosted “Heroku app”)
+**Project:** Terraforming Mars AI **Document:** Software Requirements Specification (SRS) **Version:** 1.4 (Draft) **Date:** 24 July 2026 **Prepared for:** Austin Campbell **Target scope:** Base game + Corporate Era + Prelude; 2-4 players (2p primary; 3-4p competence per AC-5) **Primary interface:** terraforming-mars open-source engine (self-hosted “Heroku app”)
 
 **Revision history**
 
+  - **v1.4 (24 Jul 2026):** The Milestone-1 Engine-determinism verification that **CON-5** and **NFR-5** both require has been performed and all six pre-committed criteria met (agent/docs/Determinism_Verification.md); both requirements are annotated with the evidence, the residual non-determinism found, and how each residual is isolated. CON-5's “search/determinization RNG seed” is given a concrete form for Milestone 4 onwards: independent per-consumer streams addressed by name, derived by hashing `(runSeed, label)` from one documented run seed, versioned in every corpus header. No requirement text changed; both annotations are additive.
   - **v1.3 (24 Jul 2026):** Milestone 1's gating simulator-speed spike (agent/docs/Simulator_Speed_Spike.md) measured state-clone cost and **passed** against the pre-committed gate. NFR-2's `X` placeholder is set from that measurement (state-clone cost <= 2 ms per fork on the spike's reference hardware, ~2x headroom over the measured 0.979 ms); the throughput assumption in Section 2.6 is updated from "not yet validated" to "validated, with figures." No other requirement changes.
   - **v1.2 (21 Jul 2026):** Integration of v1.0 and v1.1 following adversarial review. AC-4 restored to an external expert-human benchmark (v1.0 intent); the dataset distribution comparison demoted to a supporting sanity check (new **AC-8**), resolving the FR-DATA-2 / AC-4 conflict. AC-2 reframed as an improvement guardrail; AC-3’s prior-art-MCTS clause removed. Primary bar = AC-1 + AC-4 + AC-6. Player count unified to 2p-primary (3-4p competence/calibration). NFR-4 reconciled with AC-1. Added: belief model (FR-OBS-2), canonical action factorization (FR-ACT-4), live-state reconstruction (FR-INT-6), separated Engine/search seeds (CON-5/NFR-5), and a state-clone-cost requirement + validation (NFR-2). Engine commit to be pinned (`<TBD-PIN>`).
   - **v1.1:** Added the RuneDK93 expert dataset and data guardrails (retained in v1.2, but demoted from the skill definition to a calibration role).
@@ -117,6 +118,8 @@ The Engine is a Node.js / TypeScript application. The Agent’s decision core ma
 **CON-4** Any interaction with third-party platforms (Board Game Arena, Asmodee) must respect those platforms’ Terms of Service. Automated play on such services is out of scope for v1 and must not be enabled without an explicit legal/ToS review.
 
 **CON-5** The build must be reproducible: fixed dependency versions, a pinned Engine commit, and deterministic behaviour under fixed seeds. The Engine’s RNG seed and the Agent’s own search/determinization RNG seed shall be controlled separately, and Engine determinism under a fixed seed shall be verified (not assumed) at Milestone 1.
+
+> **Satisfied at Milestone 1 (24 Jul 2026)** — agent/docs/Determinism_Verification.md. The required verification was performed against six pre-committed criteria and all were met; seed separation is enforced by a CI-enforceable structural check rather than by convention. From Milestone 4 the “search/determinization RNG seed” is realised as **independent per-consumer streams addressed by name** (`"engine"`, `"agent.decision"`, `"agent.determinization"`, …), each derived by hashing `(runSeed, label)` from a single documented run seed so callers still pass one number, with any individual stream pinnable or varyable independently. That derivation is frozen once a corpus exists and is versioned in every corpus header (`seedDerivationVersion`).
 
 ## 2.6 Assumptions and Dependencies
 
@@ -258,6 +261,8 @@ The expert dataset of Section 1.5 is a supporting resource, not part of the game
 ## 5.4 Reproducibility and Testability
 
 **NFR-5** Given fixed seeds (Engine and Agent, controlled separately per CON-5), Engine commit, and Agent version, embedded games shall be reproducible move-for-move. This depends on Engine determinism being verified at Milestone 1, not assumed; any residual Engine non-determinism (e.g., iteration order, timing) is a project risk and shall be recorded and, if found, isolated.
+
+> **Verified at Milestone 1 (24 Jul 2026)** — agent/docs/Determinism_Verification.md. “Move-for-move” is checked literally, not as end-state equality: every replay carries a rolling hash over the decision sequence (decision signature, player, input type, and canonically-serialized response), so a divergence localizes to a decision index. 300 configs (50 engine seeds × 2/3/4 players × 2 agent seeds) reproduce in-process, 24 in a fresh process, and 12 after 100 unrelated games in the same process and under decision-by-decision interleaving. Residual non-determinism found: four wall-clock-derived fields (`name`, `createdTimeMs`, `gameLog[].timestamp`, `players[].timer`), isolated by `stableState()` and re-confirmed complete across 8,193 observations; and an environment-gated wall-clock cache sweep, isolated by a bootstrap guard. Two further hazards are unreachable under embedded play only because it never calls `GameLoader.add()`, and are recorded for re-adjudication at Milestone 5. A committed 300-fingerprint corpus makes the whole check re-runnable.
 
 **NFR-6** The Agent’s decisions shall be inspectable: for any move, a developer shall be able to see the alternatives considered and why the chosen move scored highest.
 

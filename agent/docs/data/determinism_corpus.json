@@ -1,11 +1,12 @@
 {
   "header": {
-    "engineCommit": "e0ea61d459ae14bf3ba77c70a6e1ad6d5485adff",
+    "engineCommit": "868714d72a434ab68fe08e5570ebc6863859ae15",
+    "agentCommit": "aa74501ac09fa10a44f29b7f52fff5805e1ac5bf",
     "nodeVersion": "v22.23.1",
     "agentVersion": "0.0.1",
     "seedDerivationVersion": 1,
     "env": {},
-    "createdAt": "2026-07-24T12:27:51.604Z"
+    "createdAt": "2026-07-24T13:40:34.495Z"
   },
   "fingerprints": [
     {

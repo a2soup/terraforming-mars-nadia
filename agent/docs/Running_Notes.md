@@ -751,3 +751,60 @@ search-only snapshots today.
 open suggestion: the Engine has no undo journal (its undo is `restoreGameAt` from save history —
 the same serialization path), building one would need mutation tracking across ~1,000 card
 implementations in violation of CON-1, and at 0.979 ms/fork there is no problem for it to solve.
+
+## 2026-07-24 — Engine determinism verified; two hazards are "unreachable" only by accident (Milestone 1, bullet 6)
+
+Full adjudication, the residual-risk register and the M4 seed contract live in
+**[Determinism_Verification.md](Determinism_Verification.md)** — that document is the deliverable.
+This entry records only what a future session would otherwise rediscover.
+
+**All six pre-committed criteria met.** 300 configs (50 engine seeds × {2,3,4}p × 2 agent seeds)
+replay identically in-process; 24 reproduce in a fresh process; 12 survive 100 unrelated games of
+interference plus decision-by-decision interleaving. The Plan §7.2 determinism risk drops
+Medium → Low.
+
+**The two findings that matter more than the verdict:**
+
+1. **"Not reachable" is doing a lot of work, and it expires at Milestone 5.** Both the shared-id
+   hazard (`g-nadia-${seed}` omits the player count, so 2p seed 5 and 3p seed 5 share an id) and the
+   wall-clock cache sweep are unreachable for the *same single reason*: `Game.save()` reaches
+   `GameLoader.saveGame()`, which goes **straight to the Database and never populates the cache**.
+   Nothing enforces that. The M5 live-play adapter calls `add()`/`getGame()` and reopens both.
+   The sweep mechanism itself is real and was demonstrated with a positive control: under
+   `GAME_CACHE='sweep=auto;…'` plus one `add()`, a live game's `gameLog` was emptied mid-play, the
+   next `getGame()` set it to `undefined` against the no-op Database, and play died on
+   `Cannot read properties of undefined (reading 'push')`. `ensureHeadlessEngine()` now refuses to
+   bootstrap under `sweep=auto` — that is the NFR-5 isolation, and it is why C's own H2 probe needs
+   an explicit `allowAutoSweep` opt-out.
+
+2. **`Game.gotoEndGame()` is unawaited async, and it distorts any mid-run measurement.** A
+   synchronous batch loop defers every finished game's completion work *and holds each finished
+   `Game` alive through its pending continuation* until the loop yields — ~0.27 MB per queued game.
+   Measured mid-batch: `Cache.mark` had fired **404** times against **504** games actually finished.
+   Anything reading process-global state mid-run must flush the event loop first, or it reads the
+   wrong moment. **The 1,000-game AC-1 run should yield periodically** rather than looping
+   synchronously.
+
+**Two corrections to the bullet's own hazard table, both found by execution, not reading:**
+`BoardName.HOLLANDIA` is in the enum but absent from `MilestoneAwardSelector`'s board `switch`, so
+it falls into the unseeded `default:` branch even with `randomMA=NONE` — the "unreachable" verdict
+there rests on the *board* option as much as on `randomMA`. And the site list was incomplete
+(`ApiCreateGame.ts:114`, `Random.ts:41` were missing).
+
+**Carried forward to M5:** `ApiCreateGame.ts:176` does `const seed = Math.random()`, so a live game
+is created under a seed the Agent never sees and **cannot replay from**. Live-play reproducibility
+needs a different mechanism (recorded move logs, or an adapter-supplied seed).
+
+**A trap that had already fired silently.** `corpus.ts` recorded `engineCommit` as
+`git rev-parse HEAD` and compared it against the current HEAD, so the committed corpus stopped
+verifying on the *next commit* — including a docs-only one. It was already unverifiable when it
+merged; `--verify` threw before comparing a single fingerprint. A corpus that refuses to run looks
+exactly like one nobody ran. `engineCommit` now holds the **Engine pin** (compared) and `agentCommit`
+holds repo HEAD (provenance, never compared). The general rule, now in the type's doc comment: a
+**header rejection** means "this comparison would be meaningless"; a **fingerprint mismatch** means
+"something that matters changed". Node version and agent code belong in the second category — the
+useful outcome is `--verify` naming the configs that moved, not a refusal to look.
+
+**Incidentally re-verified:** the Engine pin `868714d72` is an ancestor of HEAD and
+`git diff <pin>..HEAD -- src/` is **empty**, so "frozen at the pin" is a checked fact, not policy.
+Worth re-running whenever someone doubts it — it is one command.

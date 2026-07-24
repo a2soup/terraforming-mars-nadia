@@ -14,6 +14,20 @@ import {replay} from './replay';
  */
 const SEED_DERIVATION_VERSION = 1;
 
+/**
+ * The pinned Engine commit (agent/CLAUDE.md section 2) - the thing that actually determines Engine
+ * behaviour, and therefore the only commit a fingerprint depends on. Verified at bullet-6
+ * write-up time: this commit is an ancestor of HEAD and `git diff <pin>..HEAD -- src/` is empty,
+ * so "the Engine is frozen at the pin" is a checked fact, not just policy.
+ *
+ * **Do not replace this with the repo's HEAD.** That was the original implementation and it made
+ * every committed corpus unverifiable on the *next* commit, including docs-only ones: the header
+ * recorded the agent commit that happened to produce it, `assertHeaderCompatible` compared it
+ * against the current HEAD, and `--verify` threw `CorpusHeaderMismatchError` before it compared a
+ * single fingerprint. See Determinism_Verification.md, "Defects this write-up fixed".
+ */
+const ENGINE_PIN = '868714d72a434ab68fe08e5570ebc6863859ae15';
+
 export type CorpusEnvironment = {
   GAME_CACHE: string | undefined;
   MAX_GAME_DAYS: string | undefined;
@@ -24,9 +38,23 @@ export type CorpusEnvironment = {
  * an unpinned environment is not a reproducibility contract). `env` only records the two
  * gameplay-reaching env vars the hazard list identifies (`GameLoader`'s sweep mode via
  * `GAME_CACHE`, and `Game.ts`'s `MAX_GAME_DAYS` read) - not the whole environment.
+ *
+ * **Recorded vs. compared.** `assertHeaderCompatible` rejects on only three of these fields:
+ * `engineCommit`, `seedDerivationVersion`, and `env`. The rest (`agentCommit`, `nodeVersion`,
+ * `agentVersion`, `createdAt`) are provenance - written down, never used to reject.
+ *
+ * The distinction is deliberate, and it is the difference between a check that works and one
+ * that hides things. A header rejection means *"this comparison would be meaningless"*; a
+ * fingerprint mismatch means *"something that matters changed"*. Node version and agent code are
+ * in the second category: if a Node upgrade or a change to the enumerator alters a game, the
+ * useful outcome is `--verify` reporting exactly which configs moved, not a blanket refusal to
+ * look. Rejecting on those would convert this bullet's most informative signal into silence.
  */
 export type CorpusHeader = {
+  /** The pinned Engine commit ({@link ENGINE_PIN}) - compared. Not the repo's HEAD; see that constant. */
   engineCommit: string;
+  /** Repo HEAD when the corpus was written. Provenance only - never compared (see the type doc). */
+  agentCommit: string;
   nodeVersion: string;
   agentVersion: string;
   seedDerivationVersion: number;
@@ -69,7 +97,8 @@ export function currentEnvironment(): CorpusEnvironment {
 /** Builds a header describing the environment this process is running in, right now. */
 export function buildHeader(): CorpusHeader {
   return {
-    engineCommit: readGitHead(),
+    engineCommit: ENGINE_PIN,
+    agentCommit: readGitHead(),
     nodeVersion: process.version,
     agentVersion: readAgentVersion(),
     seedDerivationVersion: SEED_DERIVATION_VERSION,
@@ -111,9 +140,15 @@ export class CorpusHeaderMismatchError extends Error {}
  * rejection, not a warning: "a corpus with a mismatched header is rejected rather than silently
  * compared" (sub-task A's negative-control requirement).
  *
- * `engineCommit` is only compared when both sides know it (neither is `'unknown'`) - outside a
- * git checkout there is nothing meaningful to compare, and refusing to *ever* verify in that
- * case would be worse than not checking this one field.
+ * `engineCommit` is the pinned Engine commit, which is a compiled-in constant rather than
+ * something read from the environment, so both sides always know it. It is still compared
+ * defensively (a corpus written before this field's meaning was fixed carries an agent commit
+ * hash here, and must be rejected rather than silently compared): the `'unknown'` escape below
+ * only matters for such legacy corpora and for anything that ever reintroduces a git read here.
+ *
+ * `nodeVersion`, `agentVersion` and `agentCommit` are deliberately *not* compared - see
+ * {@link CorpusHeader} for why a changed agent or Node version must surface as a fingerprint
+ * mismatch rather than a header rejection.
  */
 export function assertHeaderCompatible(header: CorpusHeader, current: CorpusHeader = buildHeader()): void {
   const mismatches: Array<string> = [];
