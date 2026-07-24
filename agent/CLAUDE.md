@@ -156,8 +156,8 @@ attempted only on a foundation that already works.
 | 6 | Reinforcement learning via self-play (Python+PyTorch, optional expert warm-start) | Learned agent beats M5 with significance; monotonic improvement |
 | 7 | Evaluation, tuning, acceptance | Primary AC (AC-1, AC-4, AC-6) met and documented |
 
-**Current status: Milestone 1, bullet 4 complete.** `.nvmrc` pinned to Node 22, Engine commit
-pinned. Bullet 1 (headless base + Corporate Era + Prelude game creation,
+**Current status: Milestone 1, bullet 5 complete — the gating spike has PASSED.** `.nvmrc` pinned to
+Node 22, Engine commit pinned. Bullet 1 (headless base + Corporate Era + Prelude game creation,
 `agent/src/engine/gameFactory.ts`), bullet 2 (embedded driver, `agent/src/driver/`), bullet 3
 (legal-action enumerator, `agent/src/core/enumerator/`, + the random-legal agent,
 `agent/src/core/randomLegalAgent.ts`), and bullet 4 (snapshot/restore for search/self-play, SRS
@@ -181,11 +181,25 @@ history, closing the other half of CON-3) is deliberately deferred to Milestone 
 replay-from-quiescent-ancestor mechanism it would feed — see the Running Notes wrap-up entry for the
 reasoning.
 
-**Next up: the simulator-speed spike** (full-game runtime, clone round-trip time, clones/second at
-the pin — the single biggest Milestone 4/6 feasibility risk, see item 3 below; bullet 4's module is
-the primitive this spike measures, not the measurement itself) — followed by the full 1,000-game AC-1
-determinism/legality run, which is a separate Milestone-1 item from the Tier-1 (~20-game) batch
-already exercised.
+Bullet 5, the **gating simulator-speed spike**, is done and **passed by 3–5×** — full results in
+[docs/Simulator_Speed_Spike.md](docs/Simulator_Speed_Spike.md), which is the deliverable, with the
+surprises summarized in the 2026-07-24 Running Notes entry. Headline: **5,248 simulations per
+decision** at the NFR-1 10-second budget (depth-10 truncated rollouts; 3,442 with a 1 ms leaf eval)
+against a pre-committed ≥1,000-to-proceed threshold, so **M4/M6 proceed with no rescope** and the
+"state-clone cost" risk (Plan §7.2, currently *High*) should be downgraded. The bench suites live in
+`agent/src/bench/` behind `agent/src/runner/speedSpikeCli.ts` (`--list` to enumerate). Four things
+that document overturns, all of which will otherwise be rediscovered: `toModel` is only **7%** of a
+decision (84% is Engine work CON-1 forbids touching, so there is little agent-side fat to cut);
+bullet 4's 28%-unforkable figure costs only **1.6%** because unforkable points come in isolated runs
+of length 1; `deserialize` no longer dominates the deep copy (that ratio was a `tsx` artifact — and
+**`tsx` understates the simulator ~3.5×**, so no timing from a spec is a performance figure); and
+`restore`'s default `verify: 'pending'` is **free** (0.0001 ms), so search should never disable it.
+The replay-from-quiescent-ancestor strategy M4 depends on is now **validated, not assumed** — 26,026
+fork experiments, 100% exact reproduction.
+
+**Next up: the full 1,000-game AC-1 determinism/legality run**, a separate Milestone-1 item from the
+Tier-1 (~20-game) batch already exercised — followed by bullet 6 (Engine-determinism verification
+under fixed seeds) and bullet 7 (the card-coverage audit).
 
 **The gating first task (Plan §9, Milestone 1) — do this before any strategy work:**
 1. Confirm a headless base + Corporate Era + Prelude game can be created and stepped through
