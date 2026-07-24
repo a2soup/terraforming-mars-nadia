@@ -1,12 +1,12 @@
 {
   "header": {
     "engineCommit": "868714d72a434ab68fe08e5570ebc6863859ae15",
-    "agentCommit": "aa74501ac09fa10a44f29b7f52fff5805e1ac5bf",
+    "agentCommit": "76116fdecd9d82e9d2df1d7184a228e95cac7fca",
     "nodeVersion": "v22.23.1",
     "agentVersion": "0.0.1",
     "seedDerivationVersion": 1,
     "env": {},
-    "createdAt": "2026-07-24T13:40:34.495Z"
+    "createdAt": "2026-07-24T17:38:38.226Z"
   },
   "fingerprints": [
     {
@@ -171,12 +171,12 @@
         "engineSeed": 505862,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "856799765756007a0dedda0c383caf6d4bc3b0980fa3da28b11fb2febb7f34d7",
-      "stableStateHash": "569d101b15cd88dd3ae1c7f9b803c5252bd878d9a70357f96c9bf39ae43af4d4",
-      "resultHash": "c28ad70251d17b601c448b4048df4e517fa020ffb1850d1149f03f06a35e771e",
-      "decisions": 303,
-      "fallbacks": 1,
-      "generation": 24
+      "moveTraceHash": "69e14fe61c3b132438ca93ce36877d898e406d86d8f91ee8e80606f450326c1c",
+      "stableStateHash": "33778f95429daa80bcf0ad1991da18a7cd6ea16741058c93157a6028ae615bc6",
+      "resultHash": "79f33fa6afe7c514c7830c57b679f8795b3b619dd21371b598883e0487e2f116",
+      "decisions": 342,
+      "fallbacks": 5,
+      "generation": 28
     },
     {
       "config": {
@@ -249,12 +249,12 @@
         "engineSeed": 508793,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "f7920d5c2e2ad4c2a551ded2afc001542b8c36befe2ca10c2890fd9a80dab67c",
-      "stableStateHash": "6d656e1e1f688d8c4375f1e3fbc19ca20d7ca5575703c259ec6323835fca5590",
-      "resultHash": "8c40d49bb0e49d72bb19cd35fc0379bb1c16231de2d22174eaf33266eb0e2181",
-      "decisions": 311,
-      "fallbacks": 6,
-      "generation": 22
+      "moveTraceHash": "86e6bf4448b691df91d9d9c5af1d2e319a01cf24bd63ba131442b887936cb103",
+      "stableStateHash": "c482fdc4d80e996fe4c3d0f25d049dab6a1bb76e0386a5488415d37361a0de50",
+      "resultHash": "2a3c83b9c54853c1f79677498c1504299a0c36eca0f9967ec5ba9d575aa4982b",
+      "decisions": 242,
+      "fallbacks": 0,
+      "generation": 21
     },
     {
       "config": {
@@ -405,12 +405,12 @@
         "engineSeed": 514655,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "9477e1140e2d39f591eea64d018379bb83b47d995b97154eeb5a5d47aa25ae78",
-      "stableStateHash": "ffe54cdab41618e1c8f85c587c2c3c12de744f4f5d5ba4a89d11cde293b80adf",
-      "resultHash": "2cccb2b4681d83c03f5378a460cc3f38ff3a04125cbd10c221762d5e1a5f8606",
-      "decisions": 234,
-      "fallbacks": 3,
-      "generation": 20
+      "moveTraceHash": "ff437f8426fc9e8eb19c2952f38548fc98d9c3d38ef073e4afac2aa1f854254f",
+      "stableStateHash": "a304e194650ea3e8b5645dc16372dea1a37bc2db90f71e2ff4acf8d8941851f0",
+      "resultHash": "f9e37a7e975030a009c29f4d0c49ea09e3b6cc50b23aa80f4837108c1274f43a",
+      "decisions": 554,
+      "fallbacks": 5,
+      "generation": 41
     },
     {
       "config": {
@@ -418,12 +418,12 @@
         "engineSeed": 514655,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "0ef766568b06e84ec30062147eae4b241454404e5cfbb3a1d067107f9c4ce013",
-      "stableStateHash": "0033af008b68f3579d7291e84f84a346adb87af42111c02a4a9fda2b3e6a19a2",
-      "resultHash": "1e90ee36ab1a60388efdcc6ac5477edeff6728997111a28b1852b1a366f589c8",
-      "decisions": 242,
-      "fallbacks": 7,
-      "generation": 18
+      "moveTraceHash": "ebab67ac67434b7b10c8bc9b09629dd91da156173d37cc244e836d0200449646",
+      "stableStateHash": "b49dbc119f35d6595c0077aa07069aee9fb362c43dee7b98398126ccf79c9a92",
+      "resultHash": "652b97502659d8aac64ff852b7371dce28a7b8f0ab834f2253cdbd74008d7be7",
+      "decisions": 193,
+      "fallbacks": 10,
+      "generation": 15
     },
     {
       "config": {
@@ -483,12 +483,12 @@
         "engineSeed": 517586,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "f6e51c893ca3e692c23aa56e1b8e731b1c40f01d70e74d05cd8a3173e81e1f1b",
-      "stableStateHash": "f012ab5907922cc65a7125e64c2b965758c67d52bc3613389dc73ec568938ec2",
-      "resultHash": "bd71bf78b99567093eb5a23ccb9a330b5a03e41ee2c08115f3f5e2bf5cbdc009",
-      "decisions": 281,
-      "fallbacks": 4,
-      "generation": 25
+      "moveTraceHash": "0430a745b22551101ef714601625ab03ffb526ae147c8451ea362df07a991b80",
+      "stableStateHash": "406b6a5e589805a11c3e2fb8ef05b0ad0a13e68afc3b063c2759e9f1d9c5849c",
+      "resultHash": "6616eb3dae3e7aab87ddd4ac58933ee7ae44e6370dc21777901f835584aadbcb",
+      "decisions": 352,
+      "fallbacks": 7,
+      "generation": 27
     },
     {
       "config": {
@@ -496,12 +496,12 @@
         "engineSeed": 517586,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "94848ab55a29d1f753ca31e835493c514fb35f319504c070f08cd16b979a2b02",
-      "stableStateHash": "701c29d6da16c9ca63e1a0fbc9654adc9f608acc6493caced4174f4b3ff48fd5",
-      "resultHash": "64eca3342d236ab9ef33459eecf942dd28e8f6884263d7c986f377434e9e1d97",
-      "decisions": 381,
-      "fallbacks": 6,
-      "generation": 29
+      "moveTraceHash": "6e6634f26f3b1ea9fcc2699f3f63a4dece0246c5a95c31e1d80fbb5f77bfb23f",
+      "stableStateHash": "2927a2e10e222deb1ed45a4bcc9ffe63fe8155a0fd6bcaf9e180c812c8c24e2f",
+      "resultHash": "72ba043c2f5208438bcccbb0e69034ead473b14da659d74097d6901884484301",
+      "decisions": 349,
+      "fallbacks": 7,
+      "generation": 31
     },
     {
       "config": {
@@ -509,12 +509,12 @@
         "engineSeed": 518563,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "8930abf21f4887928e310ea78f128a661d1eef49301e41365a638562e11ec4e9",
-      "stableStateHash": "eee359f6629b221c269ab7004745134717d9961f29627668b3f1da45058147f4",
-      "resultHash": "11543d9a17f585b1150ac7d35eb284ce176b0fe57e93cfcd7888e404dae765a6",
-      "decisions": 294,
-      "fallbacks": 5,
-      "generation": 24
+      "moveTraceHash": "80ffb53c6209debe0ee78dbe5e8d52f936187ec69637efb52b05b6142b139639",
+      "stableStateHash": "782e023aef066dbf6cb2d0b96526605936240e49304a82eb3fe17191fdd6e802",
+      "resultHash": "81139ed0cc7db7b96c0ab7b3789971cf2a1935b1181872334ce5405c954a6db6",
+      "decisions": 241,
+      "fallbacks": 4,
+      "generation": 22
     },
     {
       "config": {
@@ -535,12 +535,12 @@
         "engineSeed": 519540,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "d2203ae8de81dc21da19f94f693b46486cc907ac5e0b5e3a0779a2bcab047726",
-      "stableStateHash": "93591155bf2e34b9098435c01a66d52d58c2afe8f97682de2b6a4ea68cee1023",
-      "resultHash": "e3dc3783d9743e086b2ad9a70e84a3d3f62c248ce446c1e0ca7171e5561afa3a",
-      "decisions": 349,
-      "fallbacks": 3,
-      "generation": 28
+      "moveTraceHash": "4eb5bb3d99a9244f4515f797cb4ad86d7aed6152ac5d0766931a5c9a7b046189",
+      "stableStateHash": "dea1fd80840cceefa7b571195998ba11ad65ff64e578772935605a0e3b6146ce",
+      "resultHash": "1dee6c2cfbc4d98213db6bb59a3a6b1665426c7c267967bfd3b692eabc482953",
+      "decisions": 198,
+      "fallbacks": 4,
+      "generation": 19
     },
     {
       "config": {
@@ -548,12 +548,12 @@
         "engineSeed": 519540,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "fbbc37de419753d11eb91e3455a17ac4d6215f0f89f7987a6d5e20c397f5abed",
-      "stableStateHash": "4a61514f836d1b716a6df98dc21c702d269175032b59674f4590beca420abc22",
-      "resultHash": "fc9655c17e57cd8e7b1861a926dd9b25cf9c0c2522993cd39c501d6e642e62c7",
-      "decisions": 182,
-      "fallbacks": 7,
-      "generation": 16
+      "moveTraceHash": "fc2f0bbc870f9958b0b484996d265e3166584a9f36c2c2325dc6314979927e66",
+      "stableStateHash": "b452980d8c363c92da5c244940c1ef4e41e9a71091617f30ad304954aa6f9a33",
+      "resultHash": "fb86310b61ebb6f23368834801402e45c4a7a741d4a599bc7d89d4ad0e5ae99b",
+      "decisions": 232,
+      "fallbacks": 9,
+      "generation": 19
     },
     {
       "config": {
@@ -613,11 +613,11 @@
         "engineSeed": 522471,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "a00442c8f6ee3cb777478dea4a47f39a6eba67ee2958fe4e50fd53adc8edafd6",
-      "stableStateHash": "3a9a732299760bc4bd78dfc48e1229c9c4a61b942953da3156f3ba38a9a09d87",
-      "resultHash": "dc9b2b579133e5a12f4a5e1e7418864b299315d60bbfafbb7f72572095db6963",
-      "decisions": 223,
-      "fallbacks": 7,
+      "moveTraceHash": "4b79ecc0c343f77430952e945b752ae847553287006ea410c5495a93369901d3",
+      "stableStateHash": "70382fdedeb73f4ef57e57088a49f126a82d560d44a68300155a6bbb51c9e062",
+      "resultHash": "091177812a8848a0a89bed1956df96cb1014f2f18a7d3e9be649a0421b77f39f",
+      "decisions": 271,
+      "fallbacks": 3,
       "generation": 21
     },
     {
@@ -1471,12 +1471,12 @@
         "engineSeed": 505862,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "ec1f307ed4fbe1a7e1c88d00e89d7c75cf86a45b00dd3bf72fb2967242080ecc",
-      "stableStateHash": "181fb86bade3032fc3cfae6e4712722aaf9f697e66e0529f10ce2e50a30a94cf",
-      "resultHash": "bcaeeeb83039beb714b9989e5a40add4fff3591c2a061b8d83d40ac36f5fe3ea",
-      "decisions": 277,
-      "fallbacks": 5,
-      "generation": 17
+      "moveTraceHash": "56bb447e6a6eef6ac7bbfdb3e2b3e2bdc3f8dc464b375d51d4c32a22d11aaa3d",
+      "stableStateHash": "4b08dafc6169d0b6ead4aa50cdbcdfb189bdc0c98c648e22bd70aef5fc78ada5",
+      "resultHash": "90b8f6d708be81c0a107a743bf88299c8e9aabf76ee9e9b7671c1d0d5b126477",
+      "decisions": 364,
+      "fallbacks": 7,
+      "generation": 21
     },
     {
       "config": {
@@ -1549,12 +1549,12 @@
         "engineSeed": 508793,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "b591bda42452623524dce8ab720dbdf5c104121d0e81bee56378974294098333",
-      "stableStateHash": "b98e82a843d633c1326148900b6d7dfdc5cc8050afa6141ddec14960ee88e13b",
-      "resultHash": "a565e210102dd40d64c6bf15551011bb4f047315cff4a373076e458c0cef1123",
-      "decisions": 280,
-      "fallbacks": 6,
-      "generation": 17
+      "moveTraceHash": "486cc0f185c165cdbadcb6eeb77692cd558055b4f648a9499b8d29038b6ca831",
+      "stableStateHash": "ca39f1f1c2a80726d5c6baeac745e653fc43f7303492cc67d9841ceadbbb4de3",
+      "resultHash": "f7679cf6953f4b20ba6553681548dcfcc7462df32c9bfa300703b8ef98aef8a9",
+      "decisions": 263,
+      "fallbacks": 9,
+      "generation": 14
     },
     {
       "config": {
@@ -1640,12 +1640,12 @@
         "engineSeed": 511724,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "c50cb936e12099b91e2cfc831ef0e44a312b32348be7c0d769473b1c7e801a1e",
-      "stableStateHash": "0cf2352423c322b64c827c275d833a7b07f93f8f8958ca0c6b4e0962eaeee035",
-      "resultHash": "33625d0911d3a4f5feceb35a9d552acbc302d10af0bf821d5bc11cd555993b30",
-      "decisions": 287,
-      "fallbacks": 12,
-      "generation": 16
+      "moveTraceHash": "2a4657c3153c630a83527d527f85812cc7273979e61606b53a2dc2e3f6d27a8c",
+      "stableStateHash": "25e5c3c9b99e574d5bb3b24ac716e717b249b73211e753a1dfea30b52fe990d7",
+      "resultHash": "e4c814b8d10098772d258375f676bf6d4483f7c508f97abef10fd13fc244aee0",
+      "decisions": 331,
+      "fallbacks": 9,
+      "generation": 20
     },
     {
       "config": {
@@ -1705,10 +1705,10 @@
         "engineSeed": 514655,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "753ad67698608501507fd406c515d308ef75dc678f560285f0cd986ccd06b878",
-      "stableStateHash": "59a91defe09b14cc8a088a3b284d71ef7ae9935917b2a48ffc0d6612f60b9979",
-      "resultHash": "7fa6c3ea7453c84f648b7ee37ba4abccc6c0342ff99bdd52830094ed2a3ead21",
-      "decisions": 339,
+      "moveTraceHash": "e69f5e635fc4e64fc7ca86f9676f34c444ffe32e05c9ceeb4777a5a616863a52",
+      "stableStateHash": "e290d19033fb55751a72bee1fb31f42021267cee4231123016ca5c4b3dbfd211",
+      "resultHash": "7e20103524b6493def2d2d5786ffd8ed10f8c7f475ff79fae56909e85dfaea3c",
+      "decisions": 336,
       "fallbacks": 4,
       "generation": 19
     },
@@ -1718,12 +1718,12 @@
         "engineSeed": 514655,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "565c678c0154906dd071b05df0617d233d7a48588af51439fd20ae09c9dc9d5e",
-      "stableStateHash": "f61b39e19c15a890270f26d1c057b4c00acefa5372d46ca293b59f4859274406",
-      "resultHash": "0204141ef898dbc10f28fa49c30de1ee7188f4a89e23ac8e90dc047856449311",
-      "decisions": 319,
-      "fallbacks": 7,
-      "generation": 18
+      "moveTraceHash": "5168bc9fe4d9295c70470e20b15b4bc7cd2538387bc9178f969bdebfa731391d",
+      "stableStateHash": "67a09c5fe7dea20b226125ba207c72d2cb2eccffc562ac279bd3f87b79124382",
+      "resultHash": "11f3cee2e3b2d002d583bf8fa5d6eacf0b73651c5bc283b31be6be213158406d",
+      "decisions": 263,
+      "fallbacks": 12,
+      "generation": 14
     },
     {
       "config": {
@@ -1783,12 +1783,12 @@
         "engineSeed": 517586,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "d0a74b4fce41ccfd5d1e2070ff182d91135e0eee02cd9363800a7a763eb25914",
-      "stableStateHash": "c8e7a58a01af43c11e8a0b81e10beed105cc964498509cdbee44397732be9875",
-      "resultHash": "0efac2ab163ecccf507ccbc44546cd59ec6c0141a62abf7a607ff4e3cc76bace",
-      "decisions": 275,
-      "fallbacks": 4,
-      "generation": 14
+      "moveTraceHash": "66ea46cfe6d44ce88e8b56f2335ffe581395d8c7e17d723e7f0be28efd88a046",
+      "stableStateHash": "a83e8fb64a30fdf12d35855822c55d8362393d62f4b43d0d2d3f9f5fe3601890",
+      "resultHash": "1047b84415b0262d71e304c18bc02be3e0266771867af903531daa80955d4946",
+      "decisions": 347,
+      "fallbacks": 7,
+      "generation": 18
     },
     {
       "config": {
@@ -1796,12 +1796,12 @@
         "engineSeed": 517586,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "e74cb8c07b2affd8a020b2af960a5c355194fc503e90eda01316304b172b091d",
-      "stableStateHash": "0a344f0126f0ea7adcd21479c80de09085387c494491129be4015964654af03d",
-      "resultHash": "cd3c0a90e1a78c3db851843712d9b866af21691d3bb775bee05a7080be4dae17",
-      "decisions": 339,
-      "fallbacks": 13,
-      "generation": 20
+      "moveTraceHash": "8e9695d923e5ee812e3fdcfa8ef0c8ba8233192e91c974a20751a1a97ba4dd27",
+      "stableStateHash": "a535199093042283e1101d4b0319c237bc9e8099f7c20be1d9b1f28e82ed52d8",
+      "resultHash": "afee6792464d6b426b3907da7e0749be6925e0542d40f297f095f26870297e9d",
+      "decisions": 298,
+      "fallbacks": 11,
+      "generation": 18
     },
     {
       "config": {
@@ -1809,12 +1809,12 @@
         "engineSeed": 518563,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "99457ab9fdd27fece2814f756db1fb18d734ab6241c532b98e7f5f77d7904fea",
-      "stableStateHash": "21aab7ce1348618fc85eb31f187f226b2ca3835868188aeb0337be9f5ac6d81a",
-      "resultHash": "239c23515219ea37c46ebf7210e3105645afb13a18cbf482d2a1a7d03eff5be3",
-      "decisions": 319,
-      "fallbacks": 3,
-      "generation": 18
+      "moveTraceHash": "ed697a07cfc378ae9c48ce20775aa36c4d9f8ed9ff0be0cfae5339457f0e5ffd",
+      "stableStateHash": "c1cda23ce669210c497329a9fa90b45e4c5501adb62bd6c144a18fb10c8d7f27",
+      "resultHash": "fdb5bf3bf7c3231a616ab51ab02dbc5055e5dc37d962c22cfd22a3f5eb5378a9",
+      "decisions": 344,
+      "fallbacks": 12,
+      "generation": 20
     },
     {
       "config": {
@@ -1835,11 +1835,11 @@
         "engineSeed": 519540,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "225ed3c8bbc5867b73c83ca6328485a8d49b94d1114e98c28a9a1a7214e03f94",
-      "stableStateHash": "c1f590cb8e8040b35e261c414dc8af6144c405c417eecc5cf3ed80539f7bc481",
-      "resultHash": "63910d758327c71a998a4ab79988d52a935f62cc9015ce5466d138c036dbfd2f",
-      "decisions": 241,
-      "fallbacks": 8,
+      "moveTraceHash": "d7c2f87cdd03c79337994c014f0050743ae9f77eff93c25aa193c4a3b7d84b55",
+      "stableStateHash": "612bfc44364e1085d13f7f996f7c6c53ac176520263ee511a56f1ee58557650c",
+      "resultHash": "28d4f1c6b876bcfa7e60f08bb0189e8a00ec5849d540f42b6d1b0cc4af28364c",
+      "decisions": 233,
+      "fallbacks": 3,
       "generation": 14
     },
     {
@@ -1848,12 +1848,12 @@
         "engineSeed": 519540,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "6c5d3978b3ab3f50acad7cf97bb3986329fcfec0872169de932a38b8243bbaf9",
-      "stableStateHash": "09ee3693820577db254a10e83347df2474bec525a3c4129aa194d10a75019fd3",
-      "resultHash": "e1e784c4c8bd69454767c751e73734afb659e482e823c096b77383335750b315",
-      "decisions": 249,
-      "fallbacks": 6,
-      "generation": 15
+      "moveTraceHash": "9431dbb1cf95285f43f5a9db8cd1d73abee5c9e5af5f6688e6848d3e43c51578",
+      "stableStateHash": "37f0efcc7ce1796960914d615f417354f8cb0cc203f4a14adc5f31ab55af449c",
+      "resultHash": "e69f1e5553eedab9e527b62e7facf90a1d05fa588cc642657d52ec1d62cc1fe5",
+      "decisions": 283,
+      "fallbacks": 5,
+      "generation": 17
     },
     {
       "config": {
@@ -1913,12 +1913,12 @@
         "engineSeed": 522471,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "f05d755526223b0a5d4e173c803cdbfc3470afaec9a1dc0238980acd035db980",
-      "stableStateHash": "1f297f8328784525b282256f74a270d2255b11ab4d8533a10a00b8c35ddd8e5b",
-      "resultHash": "59d57dd18f6670dabe03cfba8f0893f0e56467f4f60f2a5d1d6ecc6a33f2c280",
-      "decisions": 219,
-      "fallbacks": 6,
-      "generation": 14
+      "moveTraceHash": "096a9ee0580db3064ec234e9a5486d78a07a9f205f26de757f09ffc50272029b",
+      "stableStateHash": "1a9905e5aa60622ecbda6974fbf70f226f2df3c1cc53a61bdd827a60048fac2c",
+      "resultHash": "e8a3dbb688fe398eb7a50f9f5da7b2b873502fc4d66163622af64b6a0a8d6486",
+      "decisions": 302,
+      "fallbacks": 7,
+      "generation": 16
     },
     {
       "config": {
@@ -1978,12 +1978,12 @@
         "engineSeed": 524425,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "bd4709fb36ebcce6ed940b0f8f7d4c129afe5e999496f29882ed4670905b057d",
-      "stableStateHash": "7172dc32c2c689030ec28365168de5fd72d597cc09eb1aacc818207c0f6dfea6",
-      "resultHash": "62c8ea606eeea64abee9acd109424f539bf60f3efa8d23bd75b24c8cc3f2a953",
-      "decisions": 394,
-      "fallbacks": 6,
-      "generation": 24
+      "moveTraceHash": "3dcf75c0c26ff50bb224a4b58562888421cbd397fd06b01620c86d3a57175314",
+      "stableStateHash": "bb6e6665ada4d6884fea48f7487a6f48ae9978a7e935cf5878f0c79604611c6f",
+      "resultHash": "735650f53b8c0ed61e8f5f7814f5de1478ee86824d156a4393b60b9f3d19f70b",
+      "decisions": 417,
+      "fallbacks": 10,
+      "generation": 22
     },
     {
       "config": {
@@ -2108,12 +2108,12 @@
         "engineSeed": 529310,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "0cd691f6684580b7c82466c7b1205aa6ac126a8aaa9e83ac10eb66b3c634ff65",
-      "stableStateHash": "56c4cb0f220bfc0712f33e4c72e1dcf56c3926cf9526fcf6f32d317ab77b5547",
-      "resultHash": "e3618f1240def5ba95c7405cf897da1b8ca2d0ddf82a45b387ed99ad857ffa32",
-      "decisions": 319,
-      "fallbacks": 5,
-      "generation": 19
+      "moveTraceHash": "cd7d8bfe97c5b69ee2d70a0f2cff78363a107e7a938264caa0c9956776d36626",
+      "stableStateHash": "59124c4a5c88eda3e34b0919a1efc9fc97e2a0bee4d0b69c66f9d3ea736413f5",
+      "resultHash": "a9bd94dcbbc7c93f45f84724f07f44901da0775b470af3d3eeef01aa0698bc13",
+      "decisions": 407,
+      "fallbacks": 17,
+      "generation": 21
     },
     {
       "config": {
@@ -2186,12 +2186,12 @@
         "engineSeed": 532241,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "fb243ebdc491dbd7a89a39e13e6974c35f6d751e17e123a407e397e45733b432",
-      "stableStateHash": "714c9284ae29fd44d73b19df590b9f150450539cc9b0482d700776fb50e51e23",
-      "resultHash": "74e1075ed10167be879f6784b87104a25d5561f4f0940d90c7c3dfb33a772446",
-      "decisions": 212,
-      "fallbacks": 15,
-      "generation": 12
+      "moveTraceHash": "e6afc83faaa96ca5d6057b1746e1474820fd9faa3e4936cc93e14906403b74ba",
+      "stableStateHash": "b11d6346874feeec708b10f71d0723ad4afa84351917e4a6e5f023054eb61328",
+      "resultHash": "217efa11cf70508c69087323c38e4ae2288c03a36bedfba93ddc80744a522d2e",
+      "decisions": 282,
+      "fallbacks": 14,
+      "generation": 16
     },
     {
       "config": {
@@ -2342,12 +2342,12 @@
         "engineSeed": 538103,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "ef95a321575437402001be7166330c6d274fdd3a2bb62445a4eeaa9b7c56a99c",
-      "stableStateHash": "441582a3f070b216291e99a670a31588df0046518664d95b3d06a0b6cafa028c",
-      "resultHash": "283a95462640fbd49ffb5d0a8bcc44ff86af321f1bcd47693d122879a66d0a2f",
-      "decisions": 285,
-      "fallbacks": 16,
-      "generation": 15
+      "moveTraceHash": "c77cebdfd075e542b0edc67112fbbc64e880aaf5913a728e5a67e6644d013c0a",
+      "stableStateHash": "b95c4bbfeae368769c28959c64aba23a83f40e9dea74e37e2cc86818197a02ab",
+      "resultHash": "80700ac626c191fa986dfea97d51adb07021659bd54faad68765ce8919748da4",
+      "decisions": 320,
+      "fallbacks": 12,
+      "generation": 18
     },
     {
       "config": {
@@ -2472,11 +2472,11 @@
         "engineSeed": 542988,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "ce8373f6b64cacd00ff5125a63f633049b14f24af3e221e8f93c31a40d13aacd",
-      "stableStateHash": "cec9e0ae3a8ec0f5ef6913a8a59f664f35a8707a23483c9d8f48db10bf6ea196",
-      "resultHash": "e177dd18376c06fc6b2fb563771005efd7ec414850edc76a900f9f8857f37068",
-      "decisions": 284,
-      "fallbacks": 10,
+      "moveTraceHash": "9387235b1a033055945ed2f6f1ce62870782c25b51dfb5a5cfabe15a3cd79ad3",
+      "stableStateHash": "ccecaa09d27ecf3f73344595ddce18b542ceaf862912b44b0fc3caa864d15acc",
+      "resultHash": "e6fe472731fe8ac97e61824beedceb27b0fa445ed6194db1e8dab9e796402ab5",
+      "decisions": 306,
+      "fallbacks": 11,
       "generation": 16
     },
     {
@@ -2771,12 +2771,12 @@
         "engineSeed": 505862,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "e17b01b03e1631ce3560405cc3ccdd15d69232188b5df7ff9425182df902da12",
-      "stableStateHash": "79ee99035bdb755598f06e8464c66af293b8cb41040ea0239c97bb8be367c02f",
-      "resultHash": "9494354f484abfd16092ec09c620ff614e64a872dfe14500f506679482ac425a",
-      "decisions": 412,
-      "fallbacks": 10,
-      "generation": 18
+      "moveTraceHash": "ff7bc5c96d177ed7d0054ab83fc941c7ebea0f987c6eb08fd58c51367a3d5f01",
+      "stableStateHash": "5261dbd26caf3fdffc055e01d1c5ad0af4713d7c1b5156d9684ef5ddc137bcec",
+      "resultHash": "5dfa124dc0f2884cbf29ee08a866824ab191725107312be8e53b20f492463105",
+      "decisions": 329,
+      "fallbacks": 5,
+      "generation": 16
     },
     {
       "config": {
@@ -2849,12 +2849,12 @@
         "engineSeed": 508793,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "7293c02ad711df01625e9089e099a51320b9ba41d2d9e2399ce234f920a837f1",
-      "stableStateHash": "77949f707c1effca61c3af0dd4619d09374bcab7b4d58aff66b725958f7cdd68",
-      "resultHash": "f1f92f2bdf29b603927c81d4192fb26560483fe25424924864a6ebf60b884422",
-      "decisions": 268,
-      "fallbacks": 6,
-      "generation": 14
+      "moveTraceHash": "2d0e1eba6e698cb0e3bc4b5b5dfcc085c0aee480aac8d39368748ea87de487af",
+      "stableStateHash": "b02dfa01a794093a8c33a3b0e936ce1f9a484ccdb5a72397eae12e8a5e682783",
+      "resultHash": "2e2d5593a45d888569ee90db303c7fe83e7db083f2bfe8096d31ca63e396981c",
+      "decisions": 316,
+      "fallbacks": 2,
+      "generation": 13
     },
     {
       "config": {
@@ -2940,12 +2940,12 @@
         "engineSeed": 511724,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "a0fa378ed6da21a9500570ac8baa1e895895b747eb472685472c5cd46e6e0b39",
-      "stableStateHash": "f4c0618f79450903dbd950598b2ce2648b376ffbecacd91fc9186cb52ff8cbb1",
-      "resultHash": "1b1af32957661734cdd716e2dd8464e715dffaf25b550cd964aabc31c92fae99",
-      "decisions": 385,
-      "fallbacks": 4,
-      "generation": 16
+      "moveTraceHash": "195371c355e587cabf17a2361ece08abd8dede58ff2f21b9696758d260d7ccd8",
+      "stableStateHash": "db6eb757a18dfc249408b34d81f22598286bd68af3cf3f1b81a44b162890c0b2",
+      "resultHash": "0a518f16f5267bf05f35d974970a70a6aa1a52acfdd9f6c432292d3f042b704e",
+      "decisions": 283,
+      "fallbacks": 11,
+      "generation": 13
     },
     {
       "config": {
@@ -3005,12 +3005,12 @@
         "engineSeed": 514655,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "aeb2e468ffda3d0d7c0530837fbace358b845e33ffaab2ebbed8bac15a334e7f",
-      "stableStateHash": "580e42257cc4fb52789fec526b15642eaffeb22cdf055a0aeb30b9c85e91d3b7",
-      "resultHash": "5e54838dfabae96ec915597f3c1718923ba83fc400a5662560863ab4703d62e0",
-      "decisions": 358,
-      "fallbacks": 8,
-      "generation": 15
+      "moveTraceHash": "920009e88ce6d0fb5abfe1e0d49f39ad14d60762052d3758ea4c3eaff5799fb5",
+      "stableStateHash": "45d1e1951848557210f51837adbabb94a167f7aa9ad48accc047ff015482684d",
+      "resultHash": "6558983c4c2517d3cc979005413518b3ccf9fc3d44ced8b3b5a2ffa971fa37af",
+      "decisions": 264,
+      "fallbacks": 11,
+      "generation": 11
     },
     {
       "config": {
@@ -3018,11 +3018,11 @@
         "engineSeed": 514655,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "d961841fdceb0691849b19eaee30f9e50dd224084005ceb63b8ffbfe4e87e08f",
-      "stableStateHash": "feb19afc91749de3162605d6878d813777154323c0d87a208b214e93c9c3f248",
-      "resultHash": "a5b3dfb39328bd925d0f3ce00ecedfac762718fa2d4a906a4f66682c712488e3",
-      "decisions": 358,
-      "fallbacks": 3,
+      "moveTraceHash": "eff18eaedfa22a6275cbf4309a53700183a29dcf6ed2df9131b1f925c3cdae38",
+      "stableStateHash": "e6e696e48ed442298d7085ea5bd26672c7fb330e346caa49c9a2083291cf374d",
+      "resultHash": "ce2e9ba4aa212efcfd239575801157226784bab0ca956c0e0c7f5c52a8fb4224",
+      "decisions": 360,
+      "fallbacks": 11,
       "generation": 14
     },
     {
@@ -3083,12 +3083,12 @@
         "engineSeed": 517586,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "cddde2e1208a1b3c651449602144a64602a68974854716b0ed882f904c99f55c",
-      "stableStateHash": "218e1db47dc0443318fb4ccdda47d8eaa7ca477937581f6babf49db713d8ae40",
-      "resultHash": "4a94521828122c8336169be7736f9a7bc87bc739747c04d002bd17d00dd4e0da",
-      "decisions": 327,
-      "fallbacks": 9,
-      "generation": 14
+      "moveTraceHash": "98a2a26c3691e61955d46a7189840f63fd98cbced2a00e3c79ac9edef067c4ee",
+      "stableStateHash": "a5d8a5629578f00ff2ead3a532b88034d992695949b694ed4474c84a53e910d3",
+      "resultHash": "67542f05bbabd8a196d78d1f99ec55b0b1e808f914b81c11dc041356f4f1b007",
+      "decisions": 283,
+      "fallbacks": 7,
+      "generation": 13
     },
     {
       "config": {
@@ -3096,11 +3096,11 @@
         "engineSeed": 517586,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "e0b594b64fdc3b77d538f5f47520f17b29a983b3fa6f3a6a4ed53b7388f288e9",
-      "stableStateHash": "8ff3b24529a56245e3305bde1ae5d3a173c98eb28bed00c24ad61e294da6f998",
-      "resultHash": "b3848f1de597d9afa44693186bfe19d42386baaccd2998c7da7287d4d3adcaf7",
-      "decisions": 258,
-      "fallbacks": 8,
+      "moveTraceHash": "245d0c11bbc95ba122ab8a5697d79c9eb58e732cded4da190721688a2f241be3",
+      "stableStateHash": "23674d5db03de7b98d82fe3b47c2dfd24e5c314753d7fc5403fed3194a7f3877",
+      "resultHash": "cfa26cf8414dc1c2eda6b1d2dfbc1cd01ad988c1e8bb14d4fd3988a840e97a15",
+      "decisions": 241,
+      "fallbacks": 12,
       "generation": 12
     },
     {
@@ -3109,12 +3109,12 @@
         "engineSeed": 518563,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "79061a7dceafffe56d68fd25c48a1aa75a490606efc27fc5c45795d8f18aaa12",
-      "stableStateHash": "78bf200f0eee1014d2f319b2f3169fec23b4cb19185a8370e7d65fd4bf6e842d",
-      "resultHash": "0bbd2a1d262147d8fae98094b32ad622cd4eadb5bd98ccd709e2d7843f32ddc3",
-      "decisions": 331,
-      "fallbacks": 4,
-      "generation": 14
+      "moveTraceHash": "10640022cff52b3acb5a8a3de8d80b4f75a3ec4729a6cecdbdb41729bf68c99d",
+      "stableStateHash": "741461a74d24a5beeab834467c47323a9766018b2c9685c85bae5ce5c08b4509",
+      "resultHash": "06dcf448dc7624ac017abac5e505ab9cadd2c3c5cdf7ab2e3d88af7786175a96",
+      "decisions": 305,
+      "fallbacks": 11,
+      "generation": 13
     },
     {
       "config": {
@@ -3135,11 +3135,11 @@
         "engineSeed": 519540,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "3ae05fcd8353568f1d6b48a57db94d65c10f1d290c4a209cb584777d81608878",
-      "stableStateHash": "7ab20ae85e5b38dab0e4da9b0d2af895ef5b3ddfb8310c119c4a2f97a74c4e45",
-      "resultHash": "dcf8f396ad6d53286cdb9975b6332c78a0dadca7b451f47dda100b006187b8b0",
-      "decisions": 311,
-      "fallbacks": 10,
+      "moveTraceHash": "30918a73de785cabfa646ea2e66b903be5ceaa3a4440953d306446ea23a89ab2",
+      "stableStateHash": "658f6e389b0f42d334dd2ff503381872ae83d48aa16aadb572565ff1d6c66857",
+      "resultHash": "681f95027e078fe6430e1a2e2c38f4bb4e5992bf33167b31b9b1e604fa42ba2f",
+      "decisions": 319,
+      "fallbacks": 3,
       "generation": 14
     },
     {
@@ -3148,12 +3148,12 @@
         "engineSeed": 519540,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "afdbd9279628de94c6c280bd28671485c67ca138d6dd02efc51521442fa09e7b",
-      "stableStateHash": "bea1f4e36763522c461ed69376a752a20bfb951763ac947423908a18d18caa44",
-      "resultHash": "f9cd8304cab0e8165d235b0723c42338c70955f0192398721f7cc84d8d589485",
-      "decisions": 316,
-      "fallbacks": 8,
-      "generation": 13
+      "moveTraceHash": "f32abb1e7df7ee1922e1155134da0e5bc1cd4c2f27242512085160666358fd60",
+      "stableStateHash": "84399c71bfc13bda919f731b46797bb7d9ae9daee4c01e62bebd9a0c52f4af43",
+      "resultHash": "d79116b0d80f1b7d94c94be1a8f9f836660194ea2523eaeb76eb17718686ba90",
+      "decisions": 322,
+      "fallbacks": 9,
+      "generation": 14
     },
     {
       "config": {
@@ -3213,12 +3213,12 @@
         "engineSeed": 522471,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "2b1fbc036f9ba55095eeb88438344ba805568f60676f7969c8facb6eb35b2581",
-      "stableStateHash": "2c40d01a9b663e3bd24d11bd3960b0553daf6c4e7269dea2928a0b584e8fb88e",
-      "resultHash": "7043f16ab71659df87ad10aca1dc82489757d958647a1b61db5fa0e122750661",
-      "decisions": 262,
-      "fallbacks": 10,
-      "generation": 11
+      "moveTraceHash": "0795c537ffbe542085756252d6f0a917470d36e02e95b313bc376f9d17606274",
+      "stableStateHash": "76da7f450e174abbeb414c165bc36b45aeaccc2936cf6a2d9fcc108f6af4a323",
+      "resultHash": "e87efdad29a7f84d7b3262bdb3a2258650cd1a21c661a0cad42271618e24ed51",
+      "decisions": 203,
+      "fallbacks": 6,
+      "generation": 9
     },
     {
       "config": {
@@ -3278,12 +3278,12 @@
         "engineSeed": 524425,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "9196f132b8e7b56e7934663522339d4a7037477feb7d87cd1ea349ae22343e07",
-      "stableStateHash": "3c1672a566fe55542d0b01f86eb0cf7f9992d9cf3aee3b9064ae6fa845630a73",
-      "resultHash": "1a9795a18f1435886bf0bc3e4afb02e0cb27603f7d169783ef46466822ce6144",
-      "decisions": 286,
-      "fallbacks": 11,
-      "generation": 14
+      "moveTraceHash": "1837e503151a31da7a5d7533e1197324b56d824d354a5dded686989fc111378d",
+      "stableStateHash": "68d7612bdd6bfa09fa4da7258a36a91d544fc03ef31758a40665c361627c9b1d",
+      "resultHash": "31f0355111d55890df377b5863b71492dbd863c9e45981d1bfb79430102cd610",
+      "decisions": 373,
+      "fallbacks": 12,
+      "generation": 15
     },
     {
       "config": {
@@ -3408,12 +3408,12 @@
         "engineSeed": 529310,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "76c21adc409e0a9cb781c40dd34abe3b7864094b449dd92f8b7ee31bbb961230",
-      "stableStateHash": "30f70ee93d1202624166869c79871fde3b1115a4771c4a19c6a3ab46d94f405d",
-      "resultHash": "3d928f74ff8bec3ecce9de5271423e26d62f582fb39bc5832800f3351dfedc9d",
-      "decisions": 355,
-      "fallbacks": 5,
-      "generation": 16
+      "moveTraceHash": "e87b6b2fa61209af214b46682c3f2aead5dfc7227d441954c5e20d369d8d9ee0",
+      "stableStateHash": "6c3a0ca3b584c3bc8fbf34668ab1a3f02e759be3a57d1192edf76868a0a2e4b6",
+      "resultHash": "1714edae526b65a5b2126f84da2afd792e8dec4e39bf7158f31a5baaca7c3e4b",
+      "decisions": 334,
+      "fallbacks": 8,
+      "generation": 13
     },
     {
       "config": {
@@ -3486,12 +3486,12 @@
         "engineSeed": 532241,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "c80e8d8dfdf2b5f2955c4e426e134f70e8086575ea7769d97ae979fdc86173ed",
-      "stableStateHash": "65ce25ff8ec62c98bdc3431490ef336738a1b5adc6f16ec9cafab210c3a56825",
-      "resultHash": "f0e763ffef6c71fe91647d4a83077de1d6b65bde01edf3c7d0589b7769d86530",
-      "decisions": 333,
-      "fallbacks": 8,
-      "generation": 14
+      "moveTraceHash": "4a2c1b220ae391a41e6d1c0f34ee6fc22962bc8a2b133678984cb307a9c9b153",
+      "stableStateHash": "1aaa0c5f29afae964c9e4f197eed4612d62a6c2536b8f8b3a775dcff1339b5de",
+      "resultHash": "824c92934c10c2b9c2ef6188054b0f4a8224706c3bd387a7caf27234b15aef6f",
+      "decisions": 295,
+      "fallbacks": 10,
+      "generation": 15
     },
     {
       "config": {
@@ -3642,12 +3642,12 @@
         "engineSeed": 538103,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "7e1b0dea5f80d05e571702fb2060cc126fd4db526c2c395525a79b9ecd16961a",
-      "stableStateHash": "eea60c7c540fc7288ecbd5b4640953d0e1ace2177d57f151acdc9549343fb95c",
-      "resultHash": "c56d47652fcee6fa8ef800f5f0b30fd08b1a2e6ecbc1306802635a5aa1aa072b",
-      "decisions": 263,
-      "fallbacks": 4,
-      "generation": 12
+      "moveTraceHash": "3f3980c4917024de47505e7d89a40507636cb6d3b13f5c40fc0959316525885d",
+      "stableStateHash": "24a9b1b212df3e29020464df94749aa4ceff25b5430876a709c9c0c5a08e9925",
+      "resultHash": "3bc777181f820103312d4caaaf06041e31f8cb0ffd0e576fc92aafbd8a7dbcd8",
+      "decisions": 343,
+      "fallbacks": 7,
+      "generation": 14
     },
     {
       "config": {
@@ -3681,11 +3681,11 @@
         "engineSeed": 540057,
         "agentSeed": 1000003
       },
-      "moveTraceHash": "6e643bde11b63f7e5681b043426d9959c694a33616fef90804e8f6c000313330",
-      "stableStateHash": "5fa675facdfd6b068b9f09cce64ecffb05969e02d29f908058a83786f49c7a16",
-      "resultHash": "dca151a0aabb75421b44268d3e822801d710b4dccd6b04362e473da680e11031",
-      "decisions": 277,
-      "fallbacks": 2,
+      "moveTraceHash": "da3eb4c0a494f32ff68d11176e2f0008d7269ff4248e4c67837865115ad00cd4",
+      "stableStateHash": "7adbc2a61ab9e5b7d411f85da92c0d88526fe3d96579dd42457d485436e68cde",
+      "resultHash": "78e133a6a23007b7ab5fdc966c3d049aed2fad62edf6b2c0ddb064da929762fd",
+      "decisions": 296,
+      "fallbacks": 11,
       "generation": 13
     },
     {
@@ -3772,12 +3772,12 @@
         "engineSeed": 542988,
         "agentSeed": 2000133
       },
-      "moveTraceHash": "f26c5c98a5ae17df26094023208df14af2baa34855ba9013808d150ee1a99b22",
-      "stableStateHash": "d0db3317c41297710e0a200fdcad2957c5e513e8327fec33276fb97c679f565a",
-      "resultHash": "43fd2d4155f38faf44e594e7294faf698c20bb0e7fb6e5bc0f4a2cab24ba97a8",
-      "decisions": 294,
-      "fallbacks": 10,
-      "generation": 13
+      "moveTraceHash": "45fb82b07e63b4d6db5a667c5f70e1c304ce2cf065e614ac1eac98929d7bdb11",
+      "stableStateHash": "f8e52b6b0516aabdf739293ae60d0dfa2b7130dd4efc8a1fde57fda5402c249a",
+      "resultHash": "e3a637b61bcfa11ccb99bb02d1c4cb8da71e4d70cb2f47a591e0037f1927b3fa",
+      "decisions": 350,
+      "fallbacks": 12,
+      "generation": 17
     },
     {
       "config": {
