@@ -156,8 +156,9 @@ attempted only on a foundation that already works.
 | 6 | Reinforcement learning via self-play (Python+PyTorch, optional expert warm-start) | Learned agent beats M5 with significance; monotonic improvement |
 | 7 | Evaluation, tuning, acceptance | Primary AC (AC-1, AC-4, AC-6) met and documented |
 
-**Current status: Milestone 1, bullets 1–6 complete — the gating spike PASSED and Engine determinism
-is verified.** `.nvmrc` pinned to
+**Current status: Milestone 1's exit criterion is fully met — the gating spike PASSED, Engine
+determinism is verified, and the 1,000-game AC-1 legality run is done and clean.** Only bullet 7
+(the card-coverage audit) remains outstanding in Milestone 1. `.nvmrc` pinned to
 Node 22, Engine commit pinned. Bullet 1 (headless base + Corporate Era + Prelude game creation,
 `agent/src/engine/gameFactory.ts`), bullet 2 (embedded driver, `agent/src/driver/`), bullet 3
 (legal-action enumerator, `agent/src/core/enumerator/`, + the random-legal agent,
@@ -216,24 +217,52 @@ Four things worth knowing before touching this area:
   for re-adjudication at Milestone 5, whose live adapter starts making that call.
   `ensureHeadlessEngine()` now refuses to bootstrap under `GAME_CACHE=sweep=auto`.
 - **`Game.gotoEndGame()` is unawaited async**, so a synchronous batch loop holds every finished game
-  alive (~0.27 MB each) until it yields. The 1,000-game run should yield periodically, and any
-  mid-run read of process-global state must flush the event loop first.
+  alive (~0.27 MB each) until it yields. The AC-1 run yields between games and its heap is flat
+  (64.6 → 65.8 MB across 1,500 games); any mid-run read of process-global state must flush the event
+  loop first, and any heap sample must also force a collection or it measures V8's laziness.
 - **The M4 seed contract is settled** (SRS CON-5, and §3 of the verification doc): independent
   per-consumer streams addressed by name, derived by hashing `(runSeed, label)` from one run seed.
   Implementing it is M4 work — do not add a third seed to `rng.ts` now.
 - **A live game cannot be replayed from a seed** — `ApiCreateGame.ts:176` picks it with
   `Math.random()`. An M5 design constraint, recorded now.
 
-**Next up: the full 1,000-game AC-1 legality run**, a separate Milestone-1 item from the Tier-1
-(~20-game) batch already exercised — then bullet 7 (the card-coverage audit). The determinism half of
-that run's original brief is already covered by bullet 6; what remains is the legality/completion
-evidence (zero illegal moves, zero crashes).
+**The AC-1 legality run is done and all seven pre-committed criteria are met** — full results in
+[docs/AC1_Legality_Run.md](docs/AC1_Legality_Run.md), which is the deliverable, with the findings
+summarized in the third 2026-07-24 Running Notes entry. **1,500 games (1,000×2p + 250 each 3p/4p) in
+a single process: 1,500 completed, zero crashes, zero unrecovered illegal moves, and zero
+Agent-attributable illegal-move rejections across 444,680 submissions** — so AC-1's legality clause
+and NFR-4 are both met strictly, not by a lenient reading. The machinery lives in
+`agent/src/legality/` behind `agent/src/runner/legalityCli.ts`
+(`npm run legality -- --composition 2:100,3:50,4:50` for a shard; the runner exits non-zero if any
+game fails to complete).
+
+Four things worth knowing before re-running AC-1 for a future agent:
+- **"Zero illegal moves" is a definition, and it carries the whole result.** An illegal move is a
+  move *submitted to the Engine and rejected*. That splits the FR-9 fallbacks into a class that
+  counts (the responder's move was rejected), a class that does not (the responder threw, nothing
+  was submitted — 8,480 of these, all one benign cause), and a third population `onFallback` cannot
+  see at all: the fallback's own rejected `'or'`-branch probes. The run wraps
+  `Player.prototype.process` to observe all three.
+- **The run found and fixed a real defect the ~20-game batch could never have seen**: 59
+  Agent-attributable rejections, all the `initialCards` budget coupling, at ~1 per 25 games.
+  `enumerateInitialCards` now caps the initial project-card count at the chosen corporation's
+  budget. AC-1 must be re-run for every future agent — this one had hidden behind the FR-9 fallback
+  since bullet 3.
+- **`moveTraceHash` has no step for a decision the responder threw on** (`replay()` records after
+  the responder returns), so a divergence confined to fallback-resolved decisions would not move it.
+  The corpus still catches such a divergence via `stableStateHash` and its `fallbacks` count.
+- **The committed determinism corpus must be regenerated after any enumerator change** — the cap
+  changed 43 of its 300 configs, which is that corpus reporting a real behaviour change exactly as
+  bullet 6 designed it to.
+
+**Next up: bullet 7, the card-coverage audit** — the last outstanding Milestone-1 item.
 
 **The gating first task (Plan §9, Milestone 1) — do this before any strategy work:**
 1. Confirm a headless base + Corporate Era + Prelude game can be created and stepped through
    programmatically for 2–4 players.
 2. Implement the embedded driver + the legal-action enumerator (built on the FR-ACT-4 factorization)
-   and a random-legal agent.
+   and a random-legal agent. **The AC-1 legality run over this agent is DONE and clean (24 Jul
+   2026)** — see [docs/AC1_Legality_Run.md](docs/AC1_Legality_Run.md).
 3. **Simulator-speed spike (gating):** measure full-game headless runtime, serialize/deserialize
    (clone) round-trip time, and clones/second at the pin; compute how many search simulations the
    NFR-1 time budget actually buys. **This is the single biggest feasibility risk** (state-clone

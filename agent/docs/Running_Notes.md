@@ -808,3 +808,78 @@ useful outcome is `--verify` naming the configs that moved, not a refusal to loo
 **Incidentally re-verified:** the Engine pin `868714d72` is an ancestor of HEAD and
 `git diff <pin>..HEAD -- src/` is **empty**, so "frozen at the pin" is a checked fact, not policy.
 Worth re-running whenever someone doubts it — it is one command.
+
+## 2026-07-24 — AC-1 legality run: 1,500 games clean, and the one illegal move it found (Milestone 1 exit criterion)
+
+Full adjudication, the strict accounting and the reproduce commands live in
+**[AC1_Legality_Run.md](AC1_Legality_Run.md)** — that document is the deliverable. This entry
+records only what a future session would otherwise rediscover.
+
+**All seven pre-committed criteria met.** 1,500 games (1,000×2p + 250 each 3p/4p), single process,
+**1,500 completed, 0 crashes, 0 unrecovered illegal moves, 0 Agent-attributable illegal-move
+rejections across 444,680 submissions.** Milestone 1's exit criterion is now fully evidenced.
+
+**The finding that matters: "zero illegal moves" is a definition, not a measurement, and the
+definition is where all the work is.** The FR-9 fallback fires ~5.7 times per game, and it was
+never obvious whether that already failed AC-1. It splits into three populations that behave
+completely differently, and only one of them is an illegal move:
+
+- **A — the responder submitted a move and the Engine rejected it.** *This* is an illegal move, and
+  it is the only population NFR-4's "illegal-move **rejections**" wording can mean.
+- **B — the responder threw before producing anything.** Nothing was submitted; no illegal move
+  exists. 8,480 of them, one single cause (below).
+- **The fallback's own `'or'`-branch probes**, which submit candidates and keep the first accepted.
+  Real rejections when they fail, invisible to `onFallback`, which only reports the *accepted*
+  response. 0 in the final run, but a run that didn't look for them couldn't have said so.
+
+`onFallback` alone cannot separate any of this, so the run wraps `Player.prototype.process` and
+counts every submission (`agent/src/legality/submissionMonitor.ts`). The accounting balances
+exactly — 444,680 decisions − 8,480 throws + 8,480 fallback submissions = 444,680 submissions —
+which is how you know the three populations are complete rather than merely plausible.
+
+**One real defect, invisible for two bullets, fixed.** The pre-fix run had **59 class-A rejections**,
+all `initialCards :: Too many cards selected`. `SelectInitialCards` accepts each sub-input on its
+own terms and *then* rejects the whole composite on a budget check — so the constraint lives in a
+**sibling** response and `enumerateCard` structurally cannot see it. This was known since bullet 3
+and deliberately left to the FR-9 fallback; the run is what turned "the fallback handles it" into
+"the Agent submits 59 illegal moves per 1,500 games". `enumerateInitialCards` now truncates the
+selection to `floor(startingMegaCredits / cardCost)`, read off the Engine's own objects. **A
+20-game batch never saw this** (~1 occurrence per 25 games): it needed the scale.
+
+**Three things to know before touching this area:**
+
+1. **The move trace has no step for a decision the responder threw on.** `replay()` records *after*
+   `inner(decision)` returns (`withMoveTrace`), so class-B decisions — and whatever the fallback
+   submitted in their place — are absent from `moveTraceHash` *and* from the corpus's `decisions`
+   count. A divergence confined to fallback-resolved decisions would not move the trace hash. The
+   corpus still catches it via `stableStateHash` and the separately-compared `fallbacks` count, but
+   not by the field anyone would assume. Found because the instrumentation-neutrality check reported
+   ten "mismatches" that were entirely this (3p seed 500,977: 326 vs 337, exactly 11 throws).
+2. **The determinism corpus needed regenerating, and that is it working.** The cap changes games, so
+   `--verify` reported **43 of 300 configs changed (14.3%)** on every comparable field. That is the
+   first real exercise of bullet 6's "a changed agent must surface as a fingerprint mismatch naming
+   the configs that moved, never a header rejection" design, and it behaved as designed.
+3. **The remaining 8,480 class-B events are not a defect and should not be "fixed".** They are all
+   `enumerateProjectCard: no actable, affordable standard project` — a broke random agent picking the
+   standard-projects branch, the enumerator correctly declining to invent a move, the driver retrying
+   another branch. It measures random play, not legality. The branch filter that would remove it is
+   the M3 refinement already noted in the 2026-07-22 entry. But it is **load-bearing today**: if the
+   fallback ever broke, ~5.7 decisions per game would break with it.
+
+**Yielding between games works, and the heap is flat.** Post-collection heap moved **64.6 → 65.8 MB
+across 1,500 games** (RSS +11 MB, ~7 KB/game, allocator drift). The bullet-6 warning about
+`gotoEndGame()`'s unawaited continuations was correct and the mitigation is one `setImmediate`
+between games; sampling must happen *after* both the yield and a forced GC or the curve measures
+V8's laziness instead of the run's retention. This closes the "long-run heap behaviour" gap
+Determinism_Verification.md listed as not verified.
+
+**Incidentally established: cross-runner determinism.** Three fresh processes under the **compiled
+build** produced identical results to each other, and their first 100 2p games match the `tsx`
+headline run exactly (decisions, generation, class-B count, every player's VP). Bullet 6 verified
+cross-*process*; this adds cross-*runner*, which it never tested. Compiled ~46 games/s vs `tsx` ~29
+— consistent with the spike's "tsx understates ~3.5×" caveat, and irrelevant to legality.
+
+**A test was inverted on purpose.** `randomLegalAgent.integration.spec.ts` used to assert the
+over-budget coupling *fired*. It cannot now, so it asserts the cap instead (7 cards under PhoboLog's
+23 M€), and a new test covers the fallback's recovery via a hand-built over-budget response. Testing
+a safety net through a defect it now prevents is how the net silently loses its coverage.

@@ -1,4 +1,14 @@
-# AC-1 legality run — criteria (pre-committed)
+# AC-1 legality run — results and adjudication
+
+> **Verdict: all seven criteria met. AC-1's legality clause and NFR-4 are both met, strictly.**
+> 1,500 consecutive games (1,000 × 2p + 250 each 3p/4p) in a single process, **1,500 completed,
+> zero crashes, zero unrecovered illegal moves, and zero Agent-attributable illegal-move
+> rejections across 444,680 submissions to the Engine.** The last of those was not true when the
+> run started — it took a fix the run itself found. Jump to [Results](#results).
+
+---
+
+# Criteria (pre-committed)
 
 Milestone 1's exit criterion, legality half: *"the random-legal agent plays >= 1,000 full games
 start-to-finish with zero illegal moves and zero crashes (AC-1 mechanics)"* (Implementation Plan
@@ -119,3 +129,233 @@ and Milestone 1's exit criterion is not met:
   a run with instrumentation and one without are compared on the determinism harness's own
   fingerprints to show the wrapper is behaviour-neutral. If it is not, the instrumented numbers are
   worthless and the check is what says so.
+
+---
+
+# Results
+
+## Reference environment
+
+| | |
+| --- | --- |
+| Engine pin | `868714d72a434ab68fe08e5570ebc6863859ae15` — re-verified: an ancestor of HEAD, with `git diff <pin>..HEAD -- src/` **empty**, so "frozen at the pin" stays a checked fact |
+| Node | v22.23.1 (`.nvmrc` → 22) |
+| Platform | darwin arm64 (Apple M2) — the same reference hardware as bullets 5 and 6 |
+| Runner | `tsx` for the headline run; the compiled build (`tsc` + `tsc-alias`) for the cross-runner shards |
+| `GAME_CACHE` / `MAX_GAME_DAYS` | both unset |
+| Agent version | 0.0.1, `seedDerivationVersion` 1 |
+| Artifact | [data/ac1_legality_run.json](data/ac1_legality_run.json) — header, summary, cause tallies, 60 stability samples, and all 1,500 per-game rows |
+
+## Criteria adjudication
+
+| | Criterion | Verdict | Evidence |
+| --- | --- | --- | --- |
+| **L1** | ≥1,000 consecutive 2p games to `Phase.END`, single process | **MET** (blocking) | **1,000 / 1,000** |
+| **L2** | 250 3p + 250 4p to the same standard | **MET** (blocking) | **250 / 250** and **250 / 250** |
+| **L3** | Zero crashes | **MET** (blocking) | **0 errors escaped `runGame`** across 1,500 games / 444,680 decisions |
+| **L4** | Zero unrecovered illegal moves | **MET** (blocking) | **0 `UnrecoverableIllegalMoveError`** |
+| **L5** | Strict rejection accounting | **MET** (recorded), and its pre-committed action was **triggered and carried out** | **0 class-A rejections after the fix**, down from 59; **0 fallback-probe rejections**; 8,480 class-B |
+| **L6** | No unclassified causes | **MET** (recorded) | Exactly **one** distinct cause in the whole final run, named below |
+| **L7** | Long-run stability | **MET** (recorded) | Post-collection heap **64.6 → 65.8 MB** over 1,500 games; per-game runtime flat |
+
+## L1–L4 — completion and crashes
+
+```
+[legality] 1500/1500 games completed in 51.7s (2p 1000/1000, 3p 250/250, 4p 250/250)
+[legality] decisions: 444,680 total, median 289/game (p95 397, max 551)
+[legality] submissions to the Engine: 444,680
+[legality] L4 unrecovered illegal moves: 0
+```
+
+Against NFR-4's stated tolerance — a per-game failure probability of ~5×10⁻⁵, i.e. under 5% chance
+of any failure in 1,000 games — the observed rate is **0 / 1,500**.
+
+**These are real games, not degenerate ones.** The pre-committed falsification list names
+"games that complete but are not real games" as a failure mode, so the distributions are reported
+rather than asserted away:
+
+| | 2p (n=1,000) | 3p (n=250) | 4p (n=250) |
+| --- | --- | --- | --- |
+| Decisions/game, median (min–max) | 276 (170–500) | 308 (219–509) | 316 (211–551) |
+| Generations/game, median (min–max) | 22 (14–41) | 17 (12–32) | 14 (9–22) |
+| Victory points, median (min–max) | 77 (35–143) | 61 (32–107) | 49 (24–94) |
+| Games ending in a VP tie | 13 | 6 | 10 |
+
+Generation counts fall as the player count rises, exactly as real Terraforming Mars does (more
+players terraform faster), and the 2p decision median of 276 matches the bullet-5 spike's
+independently measured 278. Nothing here looks like a game that ended early.
+
+## L5 — the strict accounting, and the defect it found
+
+This is the criterion with teeth, and it did not pass on the first attempt.
+
+**Before the fix** (same 1,500 configs, commit `76116fd`):
+
+| Population | Count | Is it an illegal move? |
+| --- | --- | --- |
+| **A** — responder submitted, Engine rejected | **59** | **yes** |
+| **B** — responder threw, nothing submitted | 8,421 | no |
+| Fallback `'or'`-branch probes rejected | 0 | yes, but deliberate |
+| Unrecoverable | 0 | — |
+
+All 59 class-A rejections had a single cause: `initialCards :: InputError: Too many cards selected`.
+
+**The defect.** `SelectInitialCards` presents the opening choice as one composite — corporation,
+preludes, starting project cards — and each sub-input accepts its own response on its own terms:
+`SelectCard.process` checks count and membership, nothing else. Then `completed()` rejects the
+*whole composite* if `cardsInHand.length * cardCost > corporation.startingMegaCredits`. The budget
+therefore depends on a **sibling** response, and no amount of care inside `enumerateCard` can see
+it — which is precisely why the FR-9 fallback was built to absorb this case back in bullet 3.
+
+Absorbing it is not the same as not doing it. Under NFR-4's wording — "**zero** Agent-attributable
+illegal-move rejections" — a recovered rejection is still a rejection, so the honest reading of the
+pre-fix run is **AC-1 met, NFR-4 not met**. That is the disagreement the criteria section said
+would be reported rather than smoothed over, and it is what L5's pre-committed action existed for:
+one bounded, identifiable cause, so fix it and re-run.
+
+**The fix** ([composite.ts](../src/core/enumerator/composite.ts)): `enumerateInitialCards`
+truncates the sampled project-card selection to the count the chosen corporation can afford,
+reading the cap from the Engine's own objects (`corporation.cardCost ?? player.cardCost`,
+`startingMegaCredits`, and the Beginner Corporation exemption) rather than restating the rule — the
+same discipline `enumerateStandardProject` follows for `SelectStandardProjectToPlay.validate()`.
+Truncation rather than resampling, so the rng draws are unchanged; the distributional cost is that
+the selected count becomes `min(uniform, cap)` rather than uniform over the affordable range, which
+is irrelevant for a random-legal baseline and moot once Milestone 3 chooses this count deliberately.
+
+**After the fix** (the headline run):
+
+| Population | Count | Rate |
+| --- | --- | --- |
+| Submissions to the Engine | 444,680 | — |
+| **A — responder submitted, Engine rejected** | **0** | **0** |
+| Fallback `'or'`-branch probes rejected | **0** | 0 |
+| **B — responder threw, nothing submitted** | 8,480 | 5.65/game; 17.2 / 20.0 / 24.8 per 1,000 decisions at 2p / 3p / 4p |
+| Unrecoverable | 0 | — |
+
+The accounting balances exactly, which is the check that the three populations are complete:
+444,680 decisions − 8,480 responder throws + 8,480 fallback submissions = 444,680 submissions.
+Every fallback was accepted on its first branch.
+
+## L6 — every cause, named
+
+One distinct cause survives in the final run:
+
+| Count | Source | Decision | Cause |
+| --- | --- | --- | --- |
+| 8,480 | responder-throw | `or` | `Error: enumerateProjectCard: no actable, affordable standard project among N offered to player <player>` |
+
+**This is not a defect, and it should not be "fixed".** The action-phase `OrOptions` offers the
+standard-projects menu as a branch whether or not anything in it is actable and affordable; a
+uniformly-random branch choice walks into it while broke, the enumerator correctly declines to
+invent a move, and the driver retries another branch. Nothing is submitted, so nothing illegal
+happens. It is a measurement of *how often a random agent picks a branch it cannot complete*, which
+is a statement about random play, not about legality — and the Running Notes already flagged the
+branch filter that removes it (skip branches with no legal completion) as natural Milestone-3 work.
+
+Worth keeping in view for one reason: at 5.65 per game it is frequent enough that if the fallback
+ever *stopped* working, a great many games would break at once. It is load-bearing today.
+
+## L7 — long-run stability
+
+Sixty samples, one per 25 games, each taken after an event-loop yield **and** a forced collection
+(`--expose-gc`) — without the collection the curve measures V8's laziness rather than the run's
+retention:
+
+| | first 15 samples (games 25–375) | last 15 samples (games 1,125–1,500) |
+| --- | --- | --- |
+| `heapUsed`, mean | 64.6 MB | 65.8 MB |
+| `rss`, mean | 307.1 MB | 318.3 MB |
+
+Heap moves **+1.2 MB across 1,500 games** — flat. RSS drifts +11 MB, roughly 7 KB/game, which is
+allocator behaviour rather than retention: the heap it would have to be retained *in* did not grow.
+Per-game runtime is likewise flat (median 32 ms, p95 49 ms, max 96 ms; games/s drifted 30.3 → 29.0
+over the run, which is the pending-continuation backlog described below, not degradation).
+
+This closes the gap [Determinism_Verification.md](Determinism_Verification.md) explicitly left
+open ("long-run heap behaviour" was in its *what was not verified* list), and it is the payoff for
+yielding between games: `Game.gotoEndGame()` is unawaited async, so a synchronous loop would have
+held every finished game alive through its pending continuation (~0.27 MB each) and produced a
+convincing-looking leak that was really a backlog.
+
+## Cross-runner and cross-process
+
+The headline run is one process under `tsx`. Three further runs of 200 games (100 × 2p, 50 each
+3p/4p), each in a **fresh process** under the **compiled build**, produced identical results to one
+another — same completions, same 1,244 class-B events, zero class-A — and their first 100 2p games
+match the headline run's first 100 **exactly** on decisions, generation, class-B count and every
+player's victory points. So the result is not a property of one process's history or of one
+TypeScript runner, and bullet 6's cross-process determinism finding now also holds across a runner
+change it never tested.
+
+## Instrumentation neutrality
+
+The strict accounting wraps `Player.prototype.process` and the responder. Twelve configs played
+through the uninstrumented determinism harness and through the fully instrumented runner agree on
+decisions resolved, fallbacks fired and generation reached — so the instrumented numbers describe
+the same games an uninstrumented run plays.
+
+That check earned its keep immediately: its first run reported ten mismatches, all of which turned
+out to be a **counting-definition difference rather than a behavioural one**, and one worth
+recording. `replay()` records its trace step *after* the responder returns
+([replay.ts](../src/determinism/replay.ts), `withMoveTrace`), so a decision the responder **threw**
+on never reaches `trace.record`. Consequences:
+
+- The corpus's `decisions` field excludes class-B decisions; the legality runner's includes them.
+  Comparing them like-for-like requires subtracting the throws (3p engine seed 500,977: 326 vs 337,
+  and exactly 11 throws in that game).
+- More usefully: **`moveTraceHash` has no step for a decision the responder threw on**, and
+  therefore none for what the FR-9 fallback submitted in its place. A divergence confined to
+  fallback-resolved decisions would not move it. The corpus still catches such a divergence — via
+  `stableStateHash` and the separately-compared `fallbacks` count — but not by the field anyone
+  would assume, and that is worth knowing before relying on the trace hash for something it does
+  not cover.
+
+## Side effects worth knowing about
+
+**The determinism corpus was regenerated, and that is the corpus working.** The budget cap changes
+which cards a player starts with whenever the old code would have over-selected, so it changes the
+game. `--verify` against the committed 300-fingerprint corpus reported **43 configs changed
+(14.3%)**, on every comparable field, before regeneration. This is exactly the design the bullet-6
+write-up argued for — agent code changes must surface as *fingerprint mismatches* naming the
+configs that moved, not as a header rejection that refuses to look — and it is the first time that
+design has been exercised by a real behaviour change. The regenerated corpus verifies clean
+(`--repeat 2`, 0 mismatches).
+
+**An integration test was inverted, deliberately.** `randomLegalAgent.integration.spec.ts` asserted
+that the over-budget selection *triggered* the FR-9 fallback. With the cap in place it cannot, so
+that test now asserts the cap holds (7 cards under PhoboLog's 23 M€, not 10 and not the fallback's
+0), and a **new** test covers the fallback's recovery by building an over-budget response by hand.
+Verifying a safety net through a defect it now prevents is how a safety net quietly loses its
+coverage.
+
+## What this run does *not* establish
+
+- **It is the random-legal agent's legality, not the future agent's.** Every Milestone 3–6 agent
+  will submit different moves; AC-1 must be re-run for each, which is what the committed runner is
+  for. The one enumerator defect this run found had been sitting behind the FR-9 fallback since
+  bullet 3, invisible to a 20-game batch.
+- **Scope is base + Corporate Era + Prelude on Tharsis, 2–4 players**, one machine, one OS, one Node
+  version, one Engine pin. Out-of-scope expansions were never exercised, so the `OutOfScopeDecisionError`
+  path remains untested by this run (0 occurrences).
+- **It says nothing about move quality.** A random-legal agent playing 1,500 legal games is a
+  statement about the interface, not about strength. AC-3 through AC-8 are Milestones 2+.
+- **The FR-9 fallback is still load-bearing** at 5.65 events/game. Zero class-A rejections means the
+  Agent submits nothing illegal; it does not mean the fallback could be removed.
+
+## How to reproduce
+
+From the repo root with `node_modules` installed (`npm ci`). The compiled build is ~46 games/s
+against `tsx`'s ~29, and both produce identical games:
+
+```bash
+npx tsc -p agent/tsconfig.json && npx tsc-alias -p agent/tsconfig.json
+```
+
+```bash
+node --expose-gc build/agent/agent/src/runner/legalityCli.js --out agent/docs/data/ac1_legality_run.json
+```
+
+`--expose-gc` matters for criterion L7 only; the run works without it. A smaller shard is
+`--composition 2:100,3:50,4:50`, the neutrality check is `--check-instrumentation 12`, and
+`--list` prints the resolved seed schedule without playing anything. The runner exits non-zero if
+any game fails to complete or any unrecovered illegal move occurs, so it is usable as a gate.
