@@ -145,6 +145,7 @@ and Milestone 1's exit criterion is not met:
 | `GAME_CACHE` / `MAX_GAME_DAYS` | both unset |
 | Agent version | 0.0.1, `seedDerivationVersion` 1 |
 | Artifact | [data/ac1_legality_run.json](data/ac1_legality_run.json) — header, summary, cause tallies, 60 stability samples, and all 1,500 per-game rows |
+| Reproduced | The whole run was executed **four times** (pre-fix, post-fix, and twice more while finalizing). The two post-fix runs agree on every per-game row and every summary field except wall-clock timings — 1,500 games reproducing exactly, in different processes |
 
 ## Criteria adjudication
 
