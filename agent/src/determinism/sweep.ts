@@ -20,11 +20,11 @@ import {ReplayConfig, ReplayFingerprint, TraceStep} from './types';
  * (the routing table's own description): everything here composes `replay()` and `corpus.ts`'s
  * comparison helpers, which sub-task A already built and tested.
  *
- * Every check here is committed, not sampled from `Math.random()` - a fixed, explicit list
- * costs nothing and removes any question about whether a generated range happens to correlate
- * with something (Milestone1_Bullet6_Prompts.md sub-task B, "In-process (P1)"). The lists are
- * written out in full below rather than built by a `for` loop over consecutive integers, so
- * they read as an explicit, auditable set rather than "a bare range".
+ * Every check here is committed, not sampled from the platform's unseeded RNG - a fixed,
+ * explicit list costs nothing and removes any question about whether a generated range happens
+ * to correlate with something (Milestone1_Bullet6_Prompts.md sub-task B, "In-process (P1)"). The
+ * lists are written out in full below rather than built by a `for` loop over consecutive
+ * integers, so they read as an explicit, auditable set rather than "a bare range".
  */
 
 // 50 engine seeds: base 500,000 with a fixed prime stride of 977, so the list is spread out and
