@@ -674,3 +674,80 @@ job, not a reason to weaken the assertion"), and that is exactly what happened o
 review, against B's own corpus. The corpus is now wider, the specific gap is pinned as a
 regression case, and the two new phase-coverage assertions mean either guard's phase list
 regressing would be caught directly rather than requiring another sweep to notice.
+
+## 2026-07-24 — Simulator-speed spike: gate PASSED by 3–5×, and clone cost is no longer the top risk (Milestone 1, bullet 5)
+
+Full results, tables and reasoning live in **[Simulator_Speed_Spike.md](Simulator_Speed_Spike.md)**
+— that document is the deliverable. This entry records only what a future session would otherwise
+have to rediscover.
+
+**The gate:** 5,248 simulations per decision at the NFR-1 10-second budget (depth-10 truncated
+rollouts, free leaf eval; 3,442 with a 1 ms eval), against a pre-committed threshold of ≥1,000 →
+proceed. **M4/M6 proceed, no rescope.** The "state-clone cost" risk (Implementation Plan §7.2,
+currently High and described as the single biggest feasibility risk) should be downgraded.
+
+**Four things that were believed going in and turned out to be wrong.** These are the reason to
+read this entry rather than only the verdict:
+
+1. **`toModel` is not the hidden tax.** The spike was designed partly to catch it —
+   `toDecisionPoint` builds the full HTTP-transport model on every decision, on the embedded hot
+   path. Measured share: **7.0%**. The Engine residual (`process` + deferred drain + driver loop) is
+   **84.4%**, and `enumerate` is 8.6%. There is very little agent-side fat to cut; the cost is the
+   Engine advancing its own state, which CON-1 forbids touching. Do not spend a week on a lazy
+   decision model — it buys 7%.
+2. **The 28%-of-points-unforkable figure costs 1.6%, not 28%.** Unforkable points sit in short
+   isolated runs (median run length **1**, replay distance median 0 / p95 3 / max 5), so
+   fork-at-nearest-ancestor-and-replay costs 0.979 ms against a raw restore of 0.963 ms. The
+   fork-realism concern that motivated sub-task D is real but small — and it took measuring the
+   *clustering*, not just the density, to find that out.
+3. **`deserialize` no longer dominates the copy.** The 2026-07-22 probe's "deserialize ≈3× the copy,
+   ≈50× the serialize" was a `tsx` artifact. Compiled: 0.427 vs 0.333 ms at mid-game, and by the
+   late game the *copy* is larger (0.554 vs 0.472) because it grows with the game log while
+   deserialize stays flat. **Stop quoting the 3× ratio.** Snapshot-once/restore-many is still the
+   right pattern (+60%), but for a different reason than recorded.
+4. **`tsx` understates the simulator by ~3.5×.** A full clone is ~1.5 ms under `tsx` and **0.94 ms**
+   compiled; `Game.deserialize` goes 1.44–1.63 → 0.43 ms. The agent test suite runs under `tsx`, so
+   **any timing taken from a spec is worthless as a performance figure.** Corpora are byte-identical
+   across the two runtimes, so only the constant differs.
+
+**Replay-from-quiescent-ancestor is validated, not assumed.** It was an assertion in the 2026-07-22
+entry that had never been executed. 26,026 fork experiments across 90 games (2p/3p/4p),
+**100% exact reproduction** by both `pendingSignature` and `stableStateOf`, including all 7,021 that
+needed a non-zero replay. Milestone 4 can build on it.
+
+**`verify: 'pending'` is free — 0.0001 ms.** `restore(verify: 'pending')` and `restore(verify:
+'none')` are indistinguishable (0.783 vs 0.786 ms mid-game). Bullet 4 built that guard not knowing
+what it cost; it costs nothing. **Search should never run with `verify: 'none'`,** and the
+speed-spike-needs-raw-numbers justification for that option is now the only reason it exists.
+
+**Two operating points, not one — write this into the M6 budget.** NFR-1 (10 s/decision) and NFR-2
+(thousands of games/day) cannot both hold at the same simulation count: a search agent at the full
+live budget takes ~46 min/game (~31 games/day/core). Self-play at 5,000 games/day on 8 cores runs at
+roughly **260 sims/decision** (353 log-stripped; ~1.9× more if a strong policy finishes in ~11
+generations instead of the random agent's 22). Live play gets 5,000; self-play gets ~300. Normal for
+an AlphaZero-family design, but budget for it explicitly.
+
+**Log-stripping is the best remaining lever, and it is worth more than the old 40% figure suggested
+— but only late.** It cuts restore 14% early and **52% late**, because `gameLog` grows from 32% to
+77% of serialized bytes. In the self-play regime that is ~35% more simulations at the same
+throughput. Already proven rules-neutral by bullet 4 sub-task B, so it can be the default for
+search-only snapshots today.
+
+**Engine gotchas found while measuring, all recorded rather than fixed (CON-1):**
+- **`--json` output is not pure JSON.** `Game.gotoEndGame()` sets `phase = END` synchronously then
+  calls `gameLoader.completeGame(this)` **without awaiting**, and its caller doesn't await either;
+  `completeGame` logs `Marking …` on a later microtask, after any synchronous measured region has
+  returned and restored the real `console.log`. So stray lines land *after* the report. Any consumer
+  must slice from the first `{` to the last `}`. Also means `silenceConsole` cannot catch it — not a
+  harness bug.
+- **`Cache.mark` volume:** 13,500 suppressed log lines in the clone-cost run alone (one per
+  END-phase restore), plus an unbounded map. Cosmetic at M1, real at self-play scale.
+- **FR-9 fallback rate, measured at scale for the first time:** 16.2 / 20.9 / 27.3 per 1,000
+  decisions at 2p/3p/4p — 1.6–2.7% of decisions, rising with player count. All of it is the known
+  `SelectStandardProjectToPlay` / `SelectProjectCardToPlay` overlap. Fixing `enumerateProjectCard`
+  before Milestone 3 would remove a per-decision cost as well as a correctness wart.
+
+**The plan's "incremental apply/undo copy path" is rejected, with reasons**, so it stops being an
+open suggestion: the Engine has no undo journal (its undo is `restoreGameAt` from save history —
+the same serialization path), building one would need mutation tracking across ~1,000 card
+implementations in violation of CON-1, and at 0.979 ms/fork there is no problem for it to solve.
