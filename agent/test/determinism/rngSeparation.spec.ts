@@ -146,6 +146,16 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'The legality CLI\'s progress line ("N/1500 games (29.1 games/s)"). Console output on a run that takes ' +
       'roughly a minute; it reaches no file, no fingerprint and no decision.',
   },
+  {
+    file: 'src/runner/coverageCli.ts',
+    rule: 'date-now',
+    occurrences: 3,
+    reason:
+      'The Milestone 1 bullet 7 play sweep\'s progress line and elapsed-time summary ("N/1500 games (X games/s)" ' +
+      '/ "sweep: N/M games completed in Xs"). Same category as legalityCli.ts\'s progress line above: console ' +
+      'output only, reaches no file, no fingerprint and no decision - the sweep\'s games are built from its own ' +
+      'seed schedule (coverage/playSweep.ts) and never read the clock.',
+  },
 ];
 
 type Violation = {file: string; line: number; rule: string; text: string};
