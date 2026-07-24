@@ -10,6 +10,7 @@
  */
 import {ensureHeadlessEngine} from '../engine/headlessEngine';
 import {benchEnvironment, formatReport, measure} from '../bench/harness';
+import {cloneCostSuite} from '../bench/cloneCost';
 import {forkCostSuite} from '../bench/forkCost';
 import {gameRuntime} from '../bench/gameRuntime';
 import {BenchReport, BenchSuite, BenchSuiteOptions} from '../bench/types';
@@ -50,7 +51,7 @@ const harnessSelfTest: BenchSuite = {
 // B, C and D append their suite objects here as they land (see the file-ownership table in
 // Milestone1_Bullet5_Prompts.md: this array is the only place their registration may conflict,
 // and any such conflict is a two-line one).
-const SUITES: ReadonlyArray<BenchSuite> = [harnessSelfTest, gameRuntime, forkCostSuite];
+const SUITES: ReadonlyArray<BenchSuite> = [harnessSelfTest, gameRuntime, cloneCostSuite, forkCostSuite];
 
 type ParsedArgs = {
   list: boolean;
