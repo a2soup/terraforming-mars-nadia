@@ -1,6 +1,11 @@
+import {CardName} from '@/common/cards/CardName';
+import {InputResponse} from '@/common/inputs/InputResponse';
 import {Units} from '@/common/Units';
+import {IPlayer} from '@/server/IPlayer';
+import {ICorporationCard} from '@/server/cards/corporation/ICorporationCard';
 import {AndOptions} from '@/server/inputs/AndOptions';
 import {OrOptions} from '@/server/inputs/OrOptions';
+import {SelectCard} from '@/server/inputs/SelectCard';
 import {SelectInitialCards} from '@/server/inputs/SelectInitialCards';
 import {SelectProductionToLose} from '@/server/inputs/SelectProductionToLose';
 import {UndoActionOption} from '@/server/inputs/UndoActionOption';
@@ -81,6 +86,31 @@ export const enumerateAnd: DecisionEnumerator = (decision, rng, recurse) => {
  * see the class's own `TODO(kberg)` about that), its `toModel`/`process` shape is identical to
  * `AndOptions`: a `responses` array of the same length as `options`, each recursed into
  * independently and in order.
+ *
+ * **The one place a child's legality is not decided by the child's own input.** Every sub-input
+ * here accepts its response on its own terms - `SelectCard.process` checks only count and
+ * membership - but `SelectInitialCards.completed()` then rejects the *whole* composite if the
+ * chosen project cards cost more than the chosen corporation's starting M€:
+ * `cardsInHand.length * cardCost > corporation.startingMegaCredits` throws `Too many cards
+ * selected`. So a uniformly-random project-card count is locally legal and globally illegal, and
+ * no amount of care inside `enumerateCard` can see it: the budget depends on a *sibling* response.
+ *
+ * That coupling is why the driver's FR-9 fallback exists at all (Running Notes 2026-07-22, sub-task
+ * E), and until the AC-1 legality run it was left to the fallback to absorb - which it did, at the
+ * cost of the Agent submitting a move the Engine rejects. The run measured that cost at **59
+ * rejections across 1,500 games** and, since they were the *only* Agent-attributable illegal moves
+ * it found, this cap is the fix that takes NFR-4's "zero Agent-attributable illegal-move
+ * rejections" from nearly-true to true. See agent/docs/AC1_Legality_Run.md.
+ *
+ * The cap is read from the Engine's own objects, mirroring `completed()` rather than restating it
+ * (the same discipline `enumerateStandardProject` follows for `SelectStandardProjectToPlay.validate()`),
+ * and applied by *truncating* the sampled selection rather than resampling: `enumerateCard`'s
+ * partial Fisher-Yates already produces a uniformly random ordered sample, so its first `k` entries
+ * are themselves a uniform subset of size `k`, and truncating consumes exactly the same rng draws
+ * as before. The distributional consequence is real and worth naming: the selected count becomes
+ * `min(uniform, cap)` rather than uniform over the affordable range, so it piles up slightly at the
+ * cap. For a random-legal baseline that is irrelevant; a Milestone-3 agent will choose this count
+ * deliberately anyway.
  */
 export const enumerateInitialCards: DecisionEnumerator = (decision, rng, recurse) => {
   const {model, player} = decision;
@@ -89,8 +119,47 @@ export const enumerateInitialCards: DecisionEnumerator = (decision, rng, recurse
   }
   const raw = decision.raw as SelectInitialCards;
   const responses = raw.options.map((option) => recurse(toDecisionPoint(player, option), rng));
+
+  const corporation = chosenCorporation(raw, responses);
+  const projectIndex = raw.inputs.project === undefined ? -1 : raw.options.indexOf(raw.inputs.project);
+  if (corporation !== undefined && projectIndex >= 0) {
+    const projectResponse = responses[projectIndex];
+    if (projectResponse.type === 'card') {
+      const cap = affordableCardCount(player, corporation);
+      if (projectResponse.cards.length > cap) {
+        responses[projectIndex] = {type: 'card', cards: projectResponse.cards.slice(0, cap)};
+      }
+    }
+  }
+
   return {type: 'initialCards', responses};
 };
+
+/** The corporation the just-built `corp` sub-response selected, or `undefined` if it can't be identified. */
+function chosenCorporation(raw: SelectInitialCards, responses: ReadonlyArray<InputResponse>): ICorporationCard | undefined {
+  const corpInput = raw.inputs.corp;
+  if (corpInput === undefined) {
+    return undefined;
+  }
+  const corpResponse = responses[raw.options.indexOf(corpInput)];
+  if (corpResponse?.type !== 'card' || corpResponse.cards.length !== 1) {
+    return undefined;
+  }
+  return (corpInput as SelectCard<ICorporationCard>).cards.find((card) => card.name === corpResponse.cards[0]);
+}
+
+/**
+ * The most project cards affordable under `corporation`, straight from `SelectInitialCards.completed()`'s
+ * own predicate: the per-card cost is the corporation's `cardCost` override if it has one, else the
+ * player's, and the Beginner Corporation is exempt from the check entirely.
+ */
+function affordableCardCount(player: IPlayer, corporation: ICorporationCard): number {
+  if (corporation.name === CardName.BEGINNER_CORPORATION) {
+    return Number.POSITIVE_INFINITY;
+  }
+  const cardCost = corporation.cardCost ?? player.cardCost;
+  return cardCost <= 0 ? Number.POSITIVE_INFINITY : Math.floor(corporation.startingMegaCredits / cardCost);
+}
 
 /**
  * `resources` (SelectResources, src/server/inputs/SelectResources.ts): distribute `model.count`

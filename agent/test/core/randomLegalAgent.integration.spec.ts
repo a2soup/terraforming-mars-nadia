@@ -3,12 +3,14 @@ import {createGame} from '../../src/engine/gameFactory';
 import {randomLegalAgent} from '../../src/core/randomLegalAgent';
 import {createAgentRandom, agentRandomFrom} from '../../src/core/rng';
 import {applyDecision, runGame, FallbackEvent} from '../../src/driver/embeddedDriver';
+import {EmbeddedResponder} from '../../src/driver/responder';
 import {computeResult, GameResult} from '../../src/driver/gameResult';
 import {stableState} from '../testUtils/stableState';
 import {Phase} from '../../../src/common/Phase';
 import {ConstRandom} from '../../../src/common/utils/Random';
 import {CardName} from '../../../src/common/cards/CardName';
 import {PhoboLog} from '../../../src/server/cards/corporation/PhoboLog';
+import {SelectInitialCards} from '../../../src/server/inputs/SelectInitialCards';
 
 /**
  * Milestone 1, sub-task E: the first real, end-to-end proof of the random-legal agent - full
@@ -23,7 +25,20 @@ describe('randomLegalAgent integration (Milestone 1, sub-task E)', () => {
   // ---------------------------------------------------------------------------------------------
 
   describe('the FR-9 affordability coupling (initial project-card over-selection)', () => {
-    it('recovers when a low-starting-M€ corporation is dealt and the agent is forced toward selecting every offered project card', () => {
+    /**
+     * **This test was rewritten by the AC-1 legality run.** It used to assert that a forced
+     * over-selection *triggered* the FR-9 fallback and that the fallback recovered - which was the
+     * right test while the enumerator could produce an over-budget selection at all. The legality
+     * run measured that coupling as the only Agent-attributable illegal move in 1,500 games (59
+     * rejections) and `enumerateInitialCards` now caps the count at the chosen corporation's budget
+     * (agent/docs/AC1_Legality_Run.md), so the same setup can no longer produce one. The assertion
+     * is inverted accordingly: the cap holds, and no fallback fires.
+     *
+     * The fallback's own recovery is still covered - by the test below, which builds an over-budget
+     * response by hand instead of relying on the enumerator to emit one. Testing a safety net
+     * through a defect it now prevents is how a safety net silently loses its coverage.
+     */
+    it('caps the initial project-card selection at the corporation\'s budget, so no illegal move is submitted at all', () => {
       const game = createGame({players: 2, seed: 8001});
       const [red] = game.playersInGenerationOrder;
 
@@ -55,19 +70,51 @@ describe('randomLegalAgent integration (Milestone 1, sub-task E)', () => {
       // game to prove it fires and recovers.
       expect(() => applyDecision(red, forcedTowardMax, {onFallback: (e) => events.push(e)})).to.not.throw();
 
-      // The coupling actually fired (genuinely exercised, not just "present"): the forced
-      // toward-max rng selected all 10 offered project cards (10 * 3 M€ = 30 > PhoboLog's 23),
-      // which `SelectInitialCards.completed()` rejects, so the responder's first attempt must
-      // have been rejected and recovered via the fallback.
-      expect(events, 'expected the over-budget initialCards selection to trigger the FR-9 fallback').to.have.length(1);
-      expect(events[0].decision.model.type).to.equal('initialCards');
-      expect(events[0].decision.player.id).to.equal(red.id);
-
-      // The fallback actually recovered: red ended up with PhoboLog as its corporation (the only
-      // one offered) and zero project cards in hand (the conservative `card` fallback selects
-      // `min` - see embeddedDriver.ts's `buildConservativeResponse`), not stuck or crashed.
+      // The rigged rng still asks for `max` (10) project cards; the cap is what stops that being
+      // submitted. PhoboLog's 23 M€ at the default 3 M€/card affords floor(23/3) = 7.
+      expect(events, 'the enumerator now caps the selection, so nothing illegal is submitted and the FR-9 fallback must not fire').to.have.length(0);
       expect(red.pickedCorporationCard?.name).to.equal(CardName.PHOBOLOG);
-      expect(red.cardsInHand, 'the fallback should have selected zero (min) project cards, affordable under any corporation').to.have.length(0);
+      expect(red.cardsInHand, 'expected the budget cap (floor(23 / 3)), not the rigged rng\'s 10 and not the old fallback\'s 0').to.have.length(7);
+      expect(red.preludeCardsInHand).to.have.length(2);
+    });
+
+    it('still recovers via the FR-9 fallback if an over-budget initialCards response reaches the Engine anyway', () => {
+      const game = createGame({players: 2, seed: 8001});
+      const [red] = game.playersInGenerationOrder;
+
+      red.dealtCorporationCards.length = 0;
+      red.dealtCorporationCards.push(new PhoboLog());
+
+      // Build a *deliberately* over-budget response by hand rather than by breaking the enumerator:
+      // take the real agent's response and overwrite the project-card sub-response with all 10 dealt
+      // cards (30 M€ > PhoboLog's 23). This is what the enumerator used to emit on its own, and the
+      // driver's recovery for it must go on working whether or not the enumerator can still produce
+      // it - the fallback is the FR-9 "never stall or error" net for couplings nobody has found yet,
+      // not only for this one.
+      const agent = randomLegalAgent(createAgentRandom(4242));
+      const overBudget: EmbeddedResponder = (decision) => {
+        const response = agent(decision);
+        if (response.type !== 'initialCards') {
+          return response;
+        }
+        const raw = decision.raw as SelectInitialCards;
+        const projectIndex = raw.options.indexOf(raw.inputs.project!);
+        const responses = [...response.responses];
+        responses[projectIndex] = {type: 'card', cards: red.dealtProjectCards.map((card) => card.name)};
+        return {type: 'initialCards', responses};
+      };
+
+      const events: FallbackEvent[] = [];
+      expect(() => applyDecision(red, overBudget, {onFallback: (e) => events.push(e)})).to.not.throw();
+
+      expect(events, 'expected the hand-built over-budget selection to trigger the FR-9 fallback').to.have.length(1);
+      expect(events[0].decision.model.type).to.equal('initialCards');
+      expect(events[0].rejectedInput, 'a submitted-and-rejected move, not a responder that threw').to.not.be.undefined;
+
+      // The fallback recovered: PhoboLog picked, and the conservative `card` response selects `min`
+      // (embeddedDriver.ts's `buildConservativeResponse`), which is affordable under any corporation.
+      expect(red.pickedCorporationCard?.name).to.equal(CardName.PHOBOLOG);
+      expect(red.cardsInHand).to.have.length(0);
       expect(red.preludeCardsInHand).to.have.length(2);
     });
   });

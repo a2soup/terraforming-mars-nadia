@@ -124,6 +124,28 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'seedDerivationVersion and the two gameplay-reaching env vars), never reaches a decision, and never enters a ' +
       'fingerprint - saveCorpus writes it into the header alone. Removing it would lose provenance and gain no determinism.',
   },
+  {
+    file: 'src/legality/run.ts',
+    rule: 'date-now',
+    occurrences: 6,
+    reason:
+      'AC-1 legality-run durations: the run\'s own wall-clock (`wallClockMs`), each game\'s `durationMs`, and the ' +
+      'elapsed stamp on each L7 heap sample. Every one of them is *reported* - they land in the run summary and the ' +
+      'committed artifact - and none is ever read back: no seed, no decision, and no game state derives from them ' +
+      '(the run creates games from its seed schedule alone, seeds.ts). This is the same category as corpus.ts\'s ' +
+      'createdAt above, at a slightly larger surface because a 1,500-game run reports timing per game as well as ' +
+      'per run. Criterion L7 (agent/docs/AC1_Legality_Run.md) is what needs them: a run that cannot say how its ' +
+      'heap and per-game cost moved over 1,500 games cannot answer the long-run stability question ' +
+      'Determinism_Verification.md left open.',
+  },
+  {
+    file: 'src/runner/legalityCli.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      'The legality CLI\'s progress line ("N/1500 games (29.1 games/s)"). Console output on a run that takes ' +
+      'roughly a minute; it reaches no file, no fingerprint and no decision.',
+  },
 ];
 
 type Violation = {file: string; line: number; rule: string; text: string};
