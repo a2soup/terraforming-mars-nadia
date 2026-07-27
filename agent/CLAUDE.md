@@ -156,10 +156,11 @@ attempted only on a foundation that already works.
 | 6 | Reinforcement learning via self-play (Python+PyTorch, optional expert warm-start) | Learned agent beats M5 with significance; monotonic improvement |
 | 7 | Evaluation, tuning, acceptance | Primary AC (AC-1, AC-4, AC-6) met and documented |
 
-**Current status: Milestone 1's exit criterion is fully met — the gating spike PASSED, Engine
-determinism is verified, and the 1,000-game AC-1 legality run is done and clean.** Only bullet 7
-(the card-coverage audit) remains outstanding in Milestone 1. `.nvmrc` pinned to
-Node 22, Engine commit pinned. Bullet 1 (headless base + Corporate Era + Prelude game creation,
+**Current status: Milestone 1 is COMPLETE (27 Jul 2026) — all seven bullets done.** The exit
+criterion was met 24 Jul (gating spike PASSED, Engine determinism verified, 1,000-game AC-1 legality
+run clean), and bullet 7 (the card-coverage audit) — the last outstanding item, which never gated the
+exit criterion — is now done. **Next up: Milestone 2** (match harness, baselines, ratings, expert
+benchmark). `.nvmrc` pinned to Node 22, Engine commit pinned. Bullet 1 (headless base + Corporate Era + Prelude game creation,
 `agent/src/engine/gameFactory.ts`), bullet 2 (embedded driver, `agent/src/driver/`), bullet 3
 (legal-action enumerator, `agent/src/core/enumerator/`, + the random-legal agent,
 `agent/src/core/randomLegalAgent.ts`), and bullet 4 (snapshot/restore for search/self-play, SRS
@@ -255,9 +256,17 @@ Four things worth knowing before re-running AC-1 for a future agent:
   changed 43 of its 300 configs, which is that corpus reporting a real behaviour change exactly as
   bullet 6 designed it to.
 
-**Next up: bullet 7, the card-coverage audit** — the last outstanding Milestone-1 item.
+**Next up: Milestone 2** — the match harness, fixed baselines (random-legal + greedy one-ply),
+the rating pipeline, and the expert-distribution report. Two things Milestone 1 built specifically to
+feed it: the determinism fingerprint corpus (a ready regression-seed set) and the card-coverage census
+(`agent/docs/data/card_census.json` — the skeleton of the FR-DATA-1 BGA↔engine reconciliation, so M2
+does not rebuild it). The card-coverage audit also handed M2 a **catalogue of eight Engine-vs-print
+card divergences** ([docs/Card_Coverage_Audit.md](docs/Card_Coverage_Audit.md)) that the reconciliation
+must treat as known Engine-specific rules rather than reconcile away.
 
-**The gating first task (Plan §9, Milestone 1) — do this before any strategy work:**
+**Milestone 1 is complete. All bullets below are DONE — retained as the build record.**
+
+**The gating first task (Plan §9, Milestone 1):**
 1. Confirm a headless base + Corporate Era + Prelude game can be created and stepped through
    programmatically for 2–4 players.
 2. Implement the embedded driver + the legal-action enumerator (built on the FR-ACT-4 factorization)
@@ -271,8 +280,11 @@ Four things worth knowing before re-running AC-1 for a future agent:
 4. **Verify Engine determinism — DONE, all criteria met (24 Jul 2026).** Verified under fixed seeds
    with the Agent's RNG seeded separately from the Engine's (SRS CON-5/NFR-5); residual
    non-determinism recorded and isolated. See [docs/Determinism_Verification.md](docs/Determinism_Verification.md).
-5. **Card-coverage audit:** confirm every in-scope base + Corporate Era + Prelude card/corporation
-   is implemented and test-covered at the pin; record gaps as known limitations.
+5. **Card-coverage audit — DONE, all criteria met (27 Jul 2026).** Every in-scope card/corporation
+   present (277/277) and reachable-as-classified; Engine test coverage 275/277; play coverage 273/274
+   reachable over 1,500 games; all 73 logic-bearing cards read against the printed cards. Eight
+   Engine-vs-print divergences catalogued, none an Agent defect. Gaps recorded as known limitations.
+   See [docs/Card_Coverage_Audit.md](docs/Card_Coverage_Audit.md).
 
 **Decision gate after Milestone 5:** measure the classical agent's strength against AC-4, then
 decide whether to commit to RL (M6) or ship M5. M6 requires ML expertise / a collaborator / library;

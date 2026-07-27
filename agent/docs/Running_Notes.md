@@ -883,3 +883,76 @@ cross-*process*; this adds cross-*runner*, which it never tested. Compiled ~46 g
 over-budget coupling *fired*. It cannot now, so it asserts the cap instead (7 cards under PhoboLog's
 23 M€), and a new test covers the fallback's recovery via a hand-built over-budget response. Testing
 a safety net through a defect it now prevents is how the net silently loses its coverage.
+
+## 2026-07-27 — Card-coverage audit: the Engine is ground truth *with a catalogued list of exceptions* (Milestone 1, bullet 7 — closes M1)
+
+Full deliverable: [docs/Card_Coverage_Audit.md](Card_Coverage_Audit.md). This closes the last
+Milestone-1 work item. The findings worth not rediscovering:
+
+**Measuring coverage on declarative cards is a trap, and the instrument choice *is* the work.** 247 of
+277 in-scope cards are pure `behavior` blocks or metadata — their source file is a constructor and a
+literal, so file-level line coverage (c8) reports ~100% for a card whose effect never ran, because the
+effect lives in `behavior/Executor.ts`, not the card file. Phase I built instantiate-and-execute
+instrumentation instead (wrap card construction + the behaviour executor, record per `CardName`
+whether the card was instantiated and whether its effect actually fired). **This trap will be walked
+into again at M3** when the feature schema wants "is this card covered" — the answer for a declarative
+card is an execution flag, not a coverage percentage.
+
+**"Test-covered" splits three ways, and a matching spec name is not coverage of the effect.** Hackers
+has a dedicated spec (`Hackers.spec.ts`) — and it tests `canPlay()` only, never `play()`, so the
+card's actual effect (steal 2 M€ production) is asserted by *nothing* in the Engine suite. The
+instrument caught it because it checks execution, not spec-file existence. Two cards ended `uncovered`
+at the Engine-test level (City standard project, Hackers); both are nonetheless played in the sweep, so
+a *crashing* regression would surface — but a *silent* one would not, which is why both go into the M2
+regression seed set. Conversely, SF Memorial — the plan's predicted zero-coverage card — turned out
+`behavioural` (exercised incidentally 2×), a reminder that the spec-file count *understates* coverage
+as often as it overstates effect-coverage.
+
+**Random play is not uniform play: one reachable card scored 0/1,500.** Anti-Gravity Technology
+requires 7 science tags; random-legal play never builds a 7-science engine, so its 0 plays is the
+requirement-never-satisfied case, not a defect. Every one of the 17 corporations and 35 preludes was
+played many times, which is the real signal — a corporation or prelude at 0 would have been a defect
+flag. **A directed M3+ agent will reach Anti-Gravity and other high-requirement cards random play
+spread too thin to hit**, so this play-coverage number, like AC-1's, expires on every new agent.
+
+**Sell Patents is structurally invisible to the play sweep.** `Player.getActions()` calls the standard
+project's `action()` directly, which calls `projectPlayed` itself and never reaches `payAndExecute` —
+the chokepoint the sweep wraps. So Sell Patents reads 0 plays however often it is used. This is an
+instrument blind spot, not a defect signal, and it means a `reachable-by-other-route` card cannot be
+discharged by play coverage — the honest statement is "not observable by this instrument."
+
+**Eight cards diverge from the printed cards, and none of them is an Agent bug.** Because the Agent
+treats the Engine as ground truth (CON-1), an Engine-vs-print divergence never makes the Agent play
+illegally or mis-score in its own world — it only (a) partially falsifies SRS §2.6 and (b) opens a
+reconciliation gap against the printed-rules BGA dataset at M2. The five that change legality/scoring:
+Immigrant City (playable at M€ prod −4/−5, deferring losses past its own city trigger — deliberate and
+tested); Energy Tapping + Power Supply Consortium (byte-identical `bespokePlay`; net-zero no-ops when
+no player has energy production, the Engine manufacturing the player as their own decrease target);
+Decomposers + Ecological Zone (retroactively credit Ecology Experts' tags when played via it). The
+last is the one **phase W had to adjudicate**: three review batches gave the same mechanism three
+different verdicts. The tiebreaker is Viral Enhancers — it responds to plant *and* microbe tags, Ecology
+Experts carries both, and it has *no* retroactive-credit code, so the Engine applies the reading to two
+cards and not a third. That internal inconsistency is what makes it a defect rather than a coherent
+"simultaneous play" interpretation. Whether the upstream fix removes the credit from two cards or adds
+it to the third is the maintainers' call — **do not patch `src/`** (CON-1).
+
+**A mid-play snapshot can carry a negative resource, and the Engine's own illegal-state log is bypassed
+on that path.** Moss / Nitrophilic Moss accept the play when plants are short but Viral Enhancers is in
+the tableau, then `bespokePlay` does a raw `player.plants--`. That setter (`Player.ts:225-227`) assigns
+straight to stock, bypassing `Stock.add`'s clamp *and* its `logIllegalState` call, so `stock.plants`
+transiently reaches −1 before `onCardPlayed` hands the plant back. It settles at 0, so no printed
+outcome differs — but a snapshot taken mid-play would capture the −1, and nothing would flag it. **An
+`agent/src/engine/snapshot.ts` / M4-search note, not a rules finding.**
+
+**The "including this" idiom is fragile on a pin move.** Terraforming Ganymede's `1 + count` is correct
+only because `playCard` runs `play()` before pushing to `playedCards` — and `Player.ts:852-865` carries
+the authors' own comment that this order is wrong and that fixing it would break every "including this"
+card at once. If the Engine pin ever moves (`agent/CLAUDE.md` §2 requires re-verification), this is the
+named behaviour to re-check. Vitor takes the opposite tack for the same idiom (hard-codes 48 M€ starting
+cash while its description says 45) and is `undecided` on its own merits.
+
+**Milestones and awards were not audited, and their Engine test coverage is materially worse.** 2 of
+the 10 Tharsis milestones/awards have a dedicated spec; 4 have no test contact at all — on items the
+prior-art study found to be dominant win drivers. Out of bullet 7's literal "card and corporation"
+wording, recorded as a known limitation with M3 (which must reason about them explicitly) named as
+where it first bites.
