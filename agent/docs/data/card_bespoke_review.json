@@ -1187,9 +1187,21 @@
         "timesObserved": 127,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: requires 4% oxygen; action 'remove 1 microbe from any card to add 1 to this card'; 1 VP per 2 microbes on this card. Metadata is cost 9, microbe tag, resourceType MICROBE, requirements {oxygen: 4}, victoryPoints {resourcesHere: {}, per: 2} which Counter floors the division for (Counter.ts:228-230), matching 'per 2'. Structure is identical to Predators and correct for the same reasons: canAct is exactly 'a legal microbe exists to remove', own cards are legal targets per the printed 'any card', and Pets-style protectedResources and opponents' Protected Habitats are both honoured.",
+      "lines": [
+        "src/server/cards/base/Ants.ts:22-53"
+      ],
+      "printedText": "Ants (035). 9 M€, microbe tag, active. 'Requires 4% oxygen.' Action: 'Remove 1 microbe from any card to add 1 to this card.' '1 VP per 2 microbes on this card.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Same degenerate-move note as Predators: Ants is itself a legal removal target once it holds a microbe, so remove-from-Ants/add-to-Ants is a legal no-op action. Printed rules allow it; record it for the enumerator, not as an Engine defect."
     },
     {
       "name": "Aquifer Pumping",
@@ -1212,9 +1224,22 @@
         "timesObserved": 231,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "undecided",
+      "justification": "Cost 18, Building tag, ACTIVE, no VP, and the action (spend 8 M€, steel usable at the player's own steel value including Advanced Alloys, then place an ocean) all match the printed card; canAct's canAfford({cost: 8, steel: true}) is exactly the payment SelectPaymentDeferred(8, {canUseSteel: true}) then demands, so there is no gap of the Immigrant City kind. The one unsettled point is that canAct returns true when all 9 oceans are placed — it only calls addWarning('maxoceans') — so the action is legal, costs 8 M€, and does nothing.",
+      "lines": [
+        "src/server/cards/base/AquiferPumping.ts:32-38",
+        "src/server/deferredActions/PlaceOceanTile.ts:27-36"
+      ],
+      "printedText": "Aquifer Pumping (187), cost 18, Building tag, ACTIVE. 'Action: Spend 8 M€ to place 1 ocean tile. STEEL MAY BE USED as if you were playing a building card.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Shared open question with Water Import From Europa / Aquifer / Asteroid:SP / Convert Heat — one register row, not five. Note that the Engine's stance here is deliberate and internally consistent, not an oversight: ArtificialLake.ts:31-36 carries the explicit comment 'Card is playable, it just has no effect' for the same maxed-ocean state, and src/common/cards/Warning.ts defines 'maxoceans'/'maxtemp' precisely so the client can advise rather than forbid."
     },
     {
       "name": "Algae",
@@ -1280,9 +1305,21 @@
         "timesObserved": 111,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: Plant tag, cost 12, 'It must be -12 C or colder to play. Gain 1 plant.', effect 'When anyone places an ocean tile, gain 2 plants.' Metadata matches exactly, including the maximum-temperature requirement ({temperature: -12, max}) which is the right direction. The onTilePlaced override deliberately does NOT filter on cardOwner === activePlayer, which is what 'anyone' requires, and gates on Board.isUncoveredOceanSpace (the BASE_OCEAN_TILES set) so a derivative ocean overplaced on an existing ocean does not double-pay — inert in Nadia's configuration, where the only ocean tile type is OCEAN.",
+      "lines": [
+        "src/server/cards/base/ArcticAlgae.ts:15-48"
+      ],
+      "printedText": "Arctic Algae (023) — Cost 12. Tag: Plant. It must be -12 C or colder to play. Gain 1 plant. Effect: When anyone places an ocean tile, gain 2 plants.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The card owner's own ocean placements also trigger it (correct — 'anyone' includes you), and the gain is routed through Priority.OPPONENT_TRIGGER only when someone else placed the tile, which is queue ordering, not a rules question. When the ocean maximum is already reached Game.addOcean returns before addTile, so no tile is placed and the card correctly does not fire."
     },
     {
       "name": "Artificial Lake",
@@ -1304,9 +1341,21 @@
         "timesObserved": 123,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Cost 15, Building tag, 1 VP, requires -6 C or warmer, and places an ocean tile on a land area (behavior.ocean.on = 'land'). bespokeCanPlay returns true when oceans are already maxed - correct, and the standard rule: a card that would raise a maxed global parameter may still be played, it simply yields nothing - and otherwise requires a free land space, matching the placement.",
+      "lines": [
+        "src/server/cards/base/ArtificialLake.ts:31-37"
+      ],
+      "printedText": "Artificial Lake (116), 15 M€, green/automated, Building tag, 1 VP. 'Requires -6 C or warmer. Place 1 ocean tile ON AN AREA NOT RESERVED FOR OCEAN.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The bespokeCanPlay comment ('This is not covered in executor') is accurate: Executor.canExecute only attaches a `maxoceans` warning for behavior.ocean and never blocks (src/server/behavior/Executor.ts:84-86), so this override is load-bearing."
     },
     {
       "name": "Artificial Photosynthesis",
@@ -1704,9 +1753,23 @@
         "timesObserved": 159,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "behavioural-divergence",
+      "justification": "Printed Decomposers is an ongoing effect: 'when you play an animal, plant, or microbe tag, INCLUDING THIS, add a microbe to this card.' An ongoing effect only sees plays that happen while it is in play, and the 'including this' clause is precisely the card explicitly extending the trigger to its own arrival — and to nothing earlier. `bespokePlay` instead grants 2 extra microbes when Decomposers is played during `Phase.PRELUDES` immediately after Ecology Experts, retroactively crediting Ecology Experts' plant and microbe tags, which were played before Decomposers existed in the tableau.",
+      "lines": [
+        "src/server/cards/base/Decomposers.ts:48-54",
+        "src/server/Player.ts:852-866",
+        "src/server/Player.ts:881-904"
+      ],
+      "printedText": "Decomposers (131, cost 5, microbe tag, active, requires 3% oxygen, microbe resource, 1 VP per 3 microbes): 'Effect: When you play an animal, plant, or microbe tag, including this, add a microbe to this card. 1 VP per 3 microbes on this card.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": true
+      },
+      "escalates": true,
+      "downstreamImpact": "Milestone 3 (heuristic evaluation) is where it first bites, and it bites through scoring. Decomposers' VP is `resourcesHere / 3`, so 2 unearned microbes are worth up to 1 VP outright and permanently raise the card's realised value in exactly the Ecology-Experts-enabled line that makes Decomposers playable at 0% oxygen at all. M3 fits evaluation weights to observed outcomes from the M2 harness, so the weight learned for Decomposers (and for the Ecology Experts prelude that enables it) is fitted against a card that scores more than the printed card does. It also silently reaches M2's FR-DATA-1 BGA reconciliation, since BGA's implementation of the same combo is the comparison baseline. Isolation: add an Ecology-Experts-then-Decomposers game to the M2 regression seed set so the microbe count is pinned and any upstream change to the rule is detected rather than absorbed.",
+      "notes": "Trace confirming the magnitude, from the Engine's own control flow rather than from the spec: `Player.playCard` calls `card.play()` BEFORE pushing to `playedCards` (Player.ts:866 vs 884, with a standing comment at 852-865 acknowledging this is the wrong order), so `bespokePlay` adds 2, then the push happens, then `onCardPlayed(Decomposers)` iterates `playedCards` — now including Decomposers — and `cardTagCount` adds 1 more for its own microbe tag. Total 3, which is what tests/cards/base/Decomposers.spec.ts asserts. Printed total is 1. WHY I LANDED ON DIVERGENCE RATHER THAN R1's `undecided` FOR ECOLOGICAL ZONE, since W must adjudicate them together: the question is not what Decomposers' text means but whether an ongoing 'when you play' effect can see a play that preceded it, and the printed sequence is not ambiguous — you place Ecology Experts in your play area and gain its tags, and only then does its text instruct you to play a card, so Decomposers demonstrably arrives second. The counter-reading, which is presumably the authors' motive, is that a prelude and the card it plays form one simultaneous play so that play order should not matter; the hack exists only to make the EcoExperts-then-Decomposers order match the Decomposers-then-EcoExperts order, which the ordinary `onCardPlayed` path already handles correctly. I do not think 'order should not matter' survives contact with a card that says 'when you play'. If W prefers the simultaneity reading it must apply it to Ecological Zone too, and vice versa — the two must not land on different verdicts. Frequency note for severity: the combo is narrow (Decomposers requires 3% oxygen, unreachable during preludes except via Ecology Experts' requirement bypass) but it is exactly the line a strong agent looks for. Unrelated minor point, inert in scope: `onNonCardTagAdded` handles only Tag.PLANT, not ANIMAL or MICROBE (Decomposers.ts:43-47); no in-scope card produces a non-card animal or microbe tag, so it cannot fire wrongly today."
     },
     {
       "name": "Deep Well Heating",
@@ -1842,9 +1905,23 @@
         "timesObserved": 137,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "undecided",
+      "justification": "Everything about the card is right - cost 12, Animal+Plant tags, 'requires that YOU have a greenery' correctly compiled as an own-greenery requirement (GreeneriesRequirement scopes to the player unless `all`), placement filtered to land spaces adjacent to ANY greenery, 1 VP per 2 animals, and 2 animals when played normally (its own animal and plant tags via onCardPlayed after the card enters playedCards). The one open question is bespokePlay lines 66-70: if the card is played during Phase.PRELUDES immediately after Ecology Experts, it silently grants a THIRD animal, on the theory that the card played via Ecology Experts should retroactively see Ecology Experts' own plant tag. Nothing in the printed text supports a retroactive trigger - an effect applies only while its card is in play, and Ecology Experts was fully played (and its onCardPlayed pass already run) before Ecological Zone entered the tableau. Against that, the Engine applies the same rule consistently to Decomposers (+2 microbes for Ecology Experts' plant and microbe tags, src/server/cards/base/Decomposers.ts:48-53), which is what a genuine 'the nested card play is simultaneous with the prelude' reading would produce. I cannot settle which reading the printed rules intend, so: undecided.",
+      "lines": [
+        "src/server/cards/base/EcologicalZone.ts:66-70",
+        "src/server/cards/base/Decomposers.ts:48-53",
+        "tests/cards/base/EcologicalZone.spec.ts:48-59"
+      ],
+      "printedText": "Ecological Zone (128), 12 M€, blue/active, Animal + Plant tags. 'Requires that you have a greenery tile.' Effect: 'When you play an animal or plant tag, including these, add an animal to this card.' 'Place this tile adjacent to ANY greenery.' 1 VP per 2 animals on this card.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "If W resolves this against the Engine it is a scoring divergence (animals are 1 VP per 2) and should escalate under K5. Impact is small and rare: it needs Ecology Experts and Ecological Zone (or Decomposers) together in the prelude phase. Note that the Engine's condition is `phase === PRELUDES && playedCards.last() === ECOLOGY_EXPERTS`, which does not check that this card was actually played *via* Ecology Experts, and does not extend the same retroactive credit to any other previously-played card - i.e. it is a special case, not a general rule, which is itself weak evidence that it is a hack rather than a ruling. onCardPlayed and onNonCardTagAdded (plant tags added by non-card sources) both match the printed effect."
     },
     {
       "name": "Energy Saving",
@@ -1933,9 +2010,21 @@
         "timesObserved": 119,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: requires -10 C or colder; action 'gain 1 plant, or add 2 microbes to ANOTHER card'. Metadata is cost 13, microbe tag, requirements {temperature: -10, max}, no resourceType and no VP - all correct; the card holds no resources of its own, which is exactly why 'another card' is automatically satisfied by any microbe card the player owns. canAct returning an unconditional true matches the printed precondition, because the 'gain 1 plant' branch is always performable. The action auto-gains the plant when the player owns no microbe card, and otherwise offers the plant against a single named card or a SelectCard over several.",
+      "lines": [
+        "src/server/cards/base/ExtremeColdFungus.ts:24-77"
+      ],
+      "printedText": "Extreme-Cold Fungus (134). 13 M€, microbe tag, active. 'It must be -10 C or colder.' Action: 'Gain 1 plant, or add 2 microbes to ANOTHER card.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Targets come from getResourceCards (every microbe card the player owns, whether or not it currently holds resources), not getCardsWithResources - correct, since you may seed an empty microbe card. Restricting targets to the player's own cards is the general rule for adding resources, not a divergence."
     },
     {
       "name": "Farming",
@@ -2001,9 +2090,21 @@
         "timesObserved": 233,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: place an ocean, then you MAY remove 4 M€ from the owner of one tile adjacent to that ocean. The implementation defers PlaceOceanTile, then collects adjacent spaces that have both an owner and a tile, offers a SelectPlayer plus an explicit decline option, and calls target.attack(..., MEGACREDITS, 4) WITHOUT `stealing`, i.e. the 4 M€ is destroyed rather than gained - which is what the printed card says. Two things that could have gone wrong do not: `Game.simpleAddTile` sets `space.player = undefined` for OCEAN tiles (Game.ts:1449-1458), so an adjacent ocean correctly has no owner; and the `space.tile` test correctly excludes a Land-Claim-marked but empty space.",
+      "lines": [
+        "src/server/cards/base/Flooding.ts:33-66"
+      ],
+      "printedText": "Flooding (188). 7 M€, event, no tags, -1 VP. 'Place an ocean tile. If there are tiles adjacent to this ocean tile, you may remove 4 M€ from the owner of one of those tiles.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": false,
+        "requirements": false,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Printed says 'remove 4 M€', not 'up to 4' - so the fixed amount is correct, and Stock.add's clamp (Stock.ts:24) handles a target holding fewer than 4 without going negative. This is the exact contrast case for the 'up to' finding on Sabotage/Hired Raiders below. Two inert restrictions: the implementation excludes the placing player's own adjacent tiles (self-removal is a strictly pointless 'may', and Mons Insurance, the only card that could make it non-pointless, is promo/out of scope), and if all 9 oceans are already placed PlaceOceanTile never invokes the andThen, so no removal happens - which is right, since no ocean means no adjacency."
     },
     {
       "name": "Food Factory",
@@ -2333,9 +2434,21 @@
         "timesObserved": 107,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: Animal tag, cost 12, requires 8% oxygen, 'Decrease any plant production 1 step. Add 1 animal to this card.', effect 'When you place a greenery tile, add an animal to this card.', 1 VP per 2 animals. Every metadata field agrees (cost 12, tags [ANIMAL], requirements {oxygen: 8}, victoryPoints {resourcesHere, per: 2}, resourceType ANIMAL) and the declarative behavior is decreaseAnyProduction plants 1 + addResources 1. The onTilePlaced override uses the right two arguments of the Engine's (cardOwner, activePlayer, space, boardType) signature: it requires cardOwner.id === activePlayer.id, matching the printed 'when YOU place', and Board.isGreenerySpace, which is the GREENERY_TILES set — so the Ecological Zone, Mohole Area, Natural Preserve and other special tiles correctly do not count.",
+      "lines": [
+        "src/server/cards/base/Herbivores.ts:15-55"
+      ],
+      "printedText": "Herbivores (147) — Cost 12. Tag: Animal. Requires 8% oxygen. Decrease any plant production 1 step. Add 1 animal to this card. Effect: When you place a greenery tile, add an animal to this card. 1 VP per 2 animals on this card.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "TODO at Herbivores.ts:41-42 CONFIRMED COSMETIC, as the plan document classifies it. It sits on metadata.description ('revert the original description once a solution for description space is found'), which is a client-rendering summary string only; the abbreviated text ('Requires 8% oxygen. +1 animal to this card. -1 any plant production') is semantically identical to the printed card, differing only in phrasing and clause order. No legality, resource or scoring effect. Separately: final greenery placement runs with phase === Phase.PRODUCTION, not Phase.SOLAR (Game.ts:774-793 — postProductionPhase branches to takeNextFinalGreeneryAction before line 801 sets Phase.SOLAR), so end-of-game greeneries DO feed Herbivores animals, which is correct per the printed effect and is scoring-relevant."
     },
     {
       "name": "Ice Asteroid",
@@ -2403,9 +2516,26 @@
         "timesObserved": 173,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "behavioural-divergence",
+      "justification": "The printed card's production box (-1 energy, -2 M€ production) is paid when the card is played, before the city tile is placed and therefore before the card's own 'when a city tile is placed, including this' trigger can pay any of it back; M€ production floors at -5, so the printed card is unplayable at M€ production -4 or -5. The Engine instead defers both production losses until after placement (bespokePlay lines 57-64), so the +1 trigger resolves first (Priority.GAIN_RESOURCE_OR_PRODUCTION 47 before Priority.LOSE_RESOURCE_OR_PRODUCTION 48), and bespokeCanPlay accordingly permits play at M€ production >= -4, or at ANY M€ production when the player holds Tharsis Republic. Both extra states are deliberate and asserted in tests/cards/base/ImmigrantCity.spec.ts ('Can play at -4 M€ production', 'Tharsis can play at -5 M€ production'), so this is a considered Engine interpretation rather than an oversight - but it is more permissive than the printed card in a way that changes which moves are legal.",
+      "lines": [
+        "src/server/cards/base/ImmigrantCity.ts:39-46",
+        "src/server/cards/base/ImmigrantCity.ts:57-64",
+        "src/server/player/Production.ts:12-19",
+        "src/server/deferredActions/Priority.ts:47-48",
+        "tests/cards/base/ImmigrantCity.spec.ts:42-59",
+        "tests/cards/base/ImmigrantCity.spec.ts:84-104"
+      ],
+      "printedText": "Immigrant City (200), 13 M€, blue/active, City + Building tags. Effect: 'When a city tile is placed, including this, increase your M€ production 1 step.' Production box: -1 energy, -2 M€. 'Decrease your energy production 1 step and decrease your M€ production 2 steps. Place a city tile.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": true,
+      "downstreamImpact": "Bites first at M2 (baselines and the FR-DATA-1 BGA reconciliation are computed on a game whose legal move set differs from the printed game in this state) and retroactively at M1: the AC-1 legality run measured legality against the Engine's own canPlay, so an Engine-side over-permission is invisible to it by construction. It also bites M3/M4: the enumerator will offer Immigrant City in states where the printed game forbids it, so any evaluation weight or search line that leans on 'Immigrant City is always available once you have a city space' is fitted to a slightly different game. Concrete repro: 2p Tharsis, player has energy production 1, M€ production -4 (reachable via repeated Hackers-class attacks), an available non-city-adjacent land space, and 13 M€. Expected (printed): the card cannot be played, because the -2 M€ production step cannot be taken from -4. Actual (Engine): canPlay is true; the card is played; the placed city triggers +1 (to -3), then -2 applies (to -5), ending at energy production 0 and M€ production -5. With Tharsis Republic in the tableau the same happens from M€ production -5, ending unchanged at -5, i.e. the printed card's entire M€ production cost is skipped. Recommend an upstream report; do not patch src/.",
+      "notes": "The verdict rests on one interpretive premise: that a card's effects resolve in printed order (production box on play, tile placement after) and that a decrease of your own production is a cost that must be fully payable at that moment. If W disagrees with that premise the finding collapses to `undecided`. The Tharsis Republic branch is the stronger half of the case - at M€ production -5 there is no ordering at all under which 'decrease your M€ production 2 steps' is performable, yet the Engine allows it and asserts a net-zero M€ production change. Reachability is low: M€ production <= -4 requires sustained attacks, and Immigrant City was played 173 times in the 1,500-game sweep with no record of the M€ production at play time."
     },
     {
       "name": "Immigration Shuttles",
@@ -2471,9 +2601,21 @@
         "timesObserved": 233,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: gain 3 plants, or add 3 microbes or 2 animals to ANOTHER card; place an ocean tile. `behavior: {ocean: {}}` places exactly one ocean (Executor.ts:534-540, TR source oceans 1 at Executor.ts:723) and `bespokePlay` offers the three-way choice, auto-taking the plants when the player owns no microbe and no animal card. Amounts (3 plants / 3 microbes / 2 animals) and the restriction to the player's own resource cards are both correct - the general rule is that you may only add resources to your own cards, and the card itself is an event so 'another card' is automatically satisfied.",
+      "lines": [
+        "src/server/cards/base/ImportedHydrogen.ts:25-92"
+      ],
+      "printedText": "Imported Hydrogen (019). 16 M€, event, Earth + space tags. 'Gain 3 plants, or add 3 microbes or 2 animals to ANOTHER card. Place an ocean tile.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The behavior (ocean) is executed by Card.play before bespokePlay returns its OrOptions, so the ocean is queued at Priority.PLACE_OCEAN_TILE while the resource choice arrives separately; the presented order can therefore be ocean-then-choice, the reverse of the printed sentence order. No outcome depends on it (the option list is computed at play time and an ocean placement cannot create or destroy a resource card), so this is presentation only, not even worth a cosmetic verdict. `getResourceCards` also matches CardResource.WARE cards, which is Underworld and unreachable here."
     },
     {
       "name": "Imported Nitrogen",
@@ -2584,9 +2726,21 @@
         "timesObserved": 184,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Cost 2, no tags, and the effect is a SelectAmount from 1 to the player's current heat production, moving that many steps from heat production to M€ production. bespokeCanPlay requires heat production >= 1, i.e. the card is unplayable when the effect would necessarily be a no-op - the standard reading of 'any number of steps' as 'at least one'.",
+      "lines": [
+        "src/server/cards/base/Insulation.ts:29-40"
+      ],
+      "printedText": "Insulation (152), 2 M€, green/automated, no tags. 'Decrease your heat production any number of steps and increase your M€ production the same number of steps.' (-X heat production, +X M€ production.)",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The only reading under which the Engine is wrong is one where 'any number' includes zero and the card may be played for no effect at 0 heat production. I take the minimum-of-1 reading to be settled."
     },
     {
       "name": "Ironworks",
@@ -2674,9 +2828,21 @@
         "timesObserved": 182,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: place an ocean tile, draw 2 cards, then gain 5 plants or add 4 animals to ANOTHER card. The declarative half (`ocean: {}`, `drawCard: 2`) covers the first sentence and `bespokePlay` covers the choice, auto-taking the plants when the player holds no animal-resource card and otherwise returning an `OrOptions` of the two branches. 'ANOTHER card' is satisfied structurally — Large Convoy is an event with no `resourceType`, so it is never in `getResourceCards(ANIMAL)` and cannot target itself.",
+      "lines": [
+        "src/server/cards/base/LargeConvoy.ts:43-80"
+      ],
+      "printedText": "Large Convoy (143, cost 36, Earth + space tags, event, 2 VP): 'Place an ocean tile and draw 2 cards. Gain 5 plants or add 4 animals to ANOTHER card.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Checked the one thing that could have made this a legality divergence: at 9 oceans the `ocean` behavior does NOT block the play — `Executor.ts:84-85` only attaches a 'maxoceans' warning and `canExecute` still returns true — so the card stays playable for its 2 VP and 2 cards with the tile simply not placed, as printed. The single-animal-card case is auto-named rather than routed through `SelectCard`; that changes the shape of the decision Nadia sees (a `SelectOption` rather than a `card` response) but not the set of outcomes."
     },
     {
       "name": "Lava Flows",
@@ -2765,9 +2931,21 @@
         "timesObserved": 170,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Cost 1, red/event, no tags. The canPlay override exists because the 5 heat is a reserve cost that must not be double-counted against the 1 M€ card cost for a player who can spend heat as M€: it deducts one unit of heat (or one Stormcraft floater) for the card cost only when the cost is 1 and the player has no M€, then requires 5 heat-equivalents remaining. That is exactly 'you must be able to spend 5 heat after paying for the card'. The play override then offers 4 plants or 2 animals on another card, with the animal branch only offered when the player actually holds an animal card - correct, since Local Heat Trapping holds no resources itself, so every animal card is 'ANOTHER card'.",
+      "lines": [
+        "src/server/cards/base/LocalHeatTrapping.ts:43-104"
+      ],
+      "printedText": "Local Heat Trapping (190), 1 M€, red/event, no tags. 'Spend 5 heat to gain either 4 plants, or to add 2 animals to ANOTHER card.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Overriding `canPlay` rather than `bespokeCanPlay` skips CardRequirements.satisfies and Executor.canExecute - safe here only because the card has no `requirements` and no `behavior`. The Stormcraft Incorporated floater arithmetic is Colonies and out of Nadia's scope; it was read but not audited against the printed Stormcraft card."
     },
     {
       "name": "Lunar Beam",
@@ -2967,9 +3145,22 @@
         "timesObserved": 243,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Cost 9, Building tag, no requirement, placed on any free LAND space carrying a steel or titanium placement bonus, with the matching production increased 1 step. MiningCard.getAvailableSpaces filters getAvailableSpacesOnLand to spaces with SpaceBonus.STEEL or SpaceBonus.TITANIUM, which correctly excludes the two Tharsis ocean-reserved spaces that carry steel/titanium bonuses (row 0's ocean(STEEL,STEEL) and the bottom row's ocean(TITANIUM,TITANIUM)) - ocean areas are reserved for ocean tiles and a Mining Rights tile may not go there.",
+      "lines": [
+        "src/server/cards/base/MiningCard.ts:34-49",
+        "src/server/cards/base/MiningRights.ts:7-28"
+      ],
+      "printedText": "Mining Rights (067), 9 M€, green/automated, Building tag. 'Place this tile on an area with a steel or titanium placement bonus. Increase that production 1 step.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The resource-type choice is resolved before the tile is actually placed (MiningCard.spaceSelected), which is the reverse of the printed order; unobservable on Tharsis because no Tharsis space carries both a steel and a titanium bonus, so the choice is forced whenever it matters."
     },
     {
       "name": "Mohole Area",
@@ -3014,9 +3205,22 @@
         "timesObserved": 172,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Cost 4, Plant tag, requires 3 oceans (declarative), +1 plant production, and 'lose 1 plant' as a play cost. bespokeCanPlay requires 1 plant, or Viral Enhancers in the tableau - which is arithmetically sound, because Moss carries exactly one plant tag and Viral Enhancers on a card with no animal/microbe resource type grants the plant automatically rather than offering a choice, so the trigger reliably covers the cost.",
+      "lines": [
+        "src/server/cards/base/Moss.ts:32-41",
+        "src/server/cards/base/ViralEnhancers.ts:40-50"
+      ],
+      "printedText": "Moss (122), 4 M€, green/automated, Plant tag. 'Requires 3 ocean tiles and that you lose 1 plant. Increase your plant production 1 step.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Two things a later phase should know. (1) The Viral Enhancers allowance is a timing choice: the Engine lets a trigger on the plant tag pay a cost printed on the same card. I believe that is the standard reading (simultaneous triggers may be ordered favourably) and have recorded it as `matches`, but it is the same family of question as the Immigrant City finding and W may want to treat them together. (2) bespokePlay does `player.plants--`, which writes stock.plants through an unclamped setter; with Viral Enhancers and 0 plants the player's plant count is transiently -1 between play() and onCardPlayed and settles at 0. No lasting effect, but a mid-play snapshot would capture a negative resource. The Manutech branch is Venus and out of scope."
     },
     {
       "name": "Natural Preserve",
@@ -3082,9 +3286,21 @@
         "timesObserved": 200,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: raise TR 2 steps and temperature 1 step; increase plant production 1 step, or 4 steps if you have 3 plant tags. `behavior` supplies `tr: 2` plus `global: {temperature: 1}` — which itself grants the ordinary +1 TR for raising a global parameter, so the play is worth +3 TR in total, matching the printed card — and `bespokePlay` branches on `player.tags.count(Tag.PLANT) < 3`.",
+      "lines": [
+        "src/server/cards/base/NitrogenRichAsteroid.ts:38-45"
+      ],
+      "printedText": "Nitrogen-Rich Asteroid (037, cost 31, space tag, event, no VP): 'Raise your terraforming rating 2 steps and temperature 1 step. Increase your plant production 1 step, or 4 steps if you have 3 plant tags.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The tag count is self-count-safe by construction: the card carries only a space tag, so the 'including this' question that bites Terraforming Ganymede does not arise here, and it would be safe anyway because `Player.playCard` runs `play()` before pushing to `playedCards`. `count(tag)` defaults to mode 'default', which folds in wild tags — correct, and reachable in scope, since Research Coordination and Research Network are in-scope preludes carrying `Tag.WILD`. Event tags are excluded from the count (no Odyssey in scope), which is also correct: played events are face-down and their tags do not count."
     },
     {
       "name": "Nitrophilic Moss",
@@ -3107,9 +3323,21 @@
         "timesObserved": 161,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Same shape as Moss with the numbers doubled and the Viral Enhancers arithmetic correspondingly tightened: `plants >= 2 || (plants >= 1 && Viral Enhancers)`, which is right because Nitrophilic Moss carries one plant tag and so draws exactly one plant from Viral Enhancers. Cost 8, Plant tag, requires 3 oceans, +2 plant production, lose 2 plants - all as printed.",
+      "lines": [
+        "src/server/cards/base/NitrophilicMoss.ts:34-43"
+      ],
+      "printedText": "Nitrophilic Moss (146), 8 M€, green/automated, Plant tag. 'Requires 3 ocean tiles and that you lose 2 plants. Increase your plant production 2 steps.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Same transient-negative-plants note as Moss (`player.plants -= 2`, settles at 0)."
     },
     {
       "name": "Noctis City",
@@ -3132,9 +3360,21 @@
         "timesObserved": 188,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Cost 18, City + Building, +3 M€ production declaratively, -1 energy production, and the city goes on the Tharsis reserved Noctis space with no adjacency restriction. bespokeCanPlay takes the `noctisCitySpaceId !== undefined` branch on Tharsis and reduces to `player.production.energy >= 1`, which is exactly the printed cost. The reserved space cannot be taken by anything else (getAvailableSpacesOnLand:232 and getNonReservedLandSpaces:264 both exclude it), so there is no state where the Engine would offer a play the printed card forbids.",
+      "lines": [
+        "src/server/cards/base/NoctisCity.ts:39-70"
+      ],
+      "printedText": "Noctis City (017), 18 M€, green/automated, City + Building tags. Production box: -1 energy, +3 M€. 'Decrease your energy production 1 step and increase your M€ production 3 steps. Place a city tile ON THE RESERVED AREA, disregarding normal placement restrictions.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The non-Tharsis branch (boards without a reserved Noctis space) is unreachable in Nadia's configuration and was not audited."
     },
     {
       "name": "Noctis Farming",
@@ -3244,9 +3484,22 @@
         "timesObserved": 254,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: blue card, 7 M€, Space tag, effect triggering only on the owner's own Space Events for 3 M€ and 3 heat. The override fires only when card.type === EVENT && card.tags.includes(SPACE) and is reached exclusively from Player.onCardPlayed's own-cards loop (`for (const effectCard of this.playedCards)` where `this` is the player who played the card), so the owner-scope is the printed one: an opponent's space event never reaches it (that would require onCardPlayedByAnyPlayer, which this card does not implement). Fires exactly once per play (Player.onCardPlayed is invoked once, at Player.ts:903, for a project/prelude play), and cannot self-trigger because Optimal Aerobraking is ACTIVE, not EVENT, even though the just-played card is already in playedCards when the loop runs.",
+      "lines": [
+        "src/server/cards/base/OptimalAerobraking.ts:11-34",
+        "src/server/Player.ts:915-936"
+      ],
+      "printedText": "Optimal Aerobraking (#031, 7 M€, Space tag, blue/Active, no VP). Effect: When you play a Space Event card, you gain 3 M€ and 3 heat.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Metadata verified against the printed card: cost 7, tags [space], type ACTIVE, no requirements, no VP. The gain is granted synchronously inside the trigger loop (player.stock.add, no deferral); the override returns void, so Player.ts:922's `this.defer(...)` is a no-op. Tag test uses the card's printed tags rather than player.tags.cardHasTag, so a wild/clone tag would not count -- irrelevant in Nadia's base+corpera+prelude configuration, which has no wild or clone tags."
     },
     {
       "name": "Ore Processor",
@@ -3334,9 +3587,21 @@
         "timesObserved": 217,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: Earth and Animal tags, cost 10, 'Add 1 animal to this card. Animals may not be removed from this card.', effect 'When any city tile is placed, add an animal to this card.', 1 VP per 2 animals. All metadata agrees, including protectedResources: true (honoured by RemoveResourcesFromCard.ts:123-133) and the resourcesHere-per-2 VP. The onTilePlaced override correctly omits any owner filter — 'any city tile', by anyone — and gates on Board.isCitySpace, whose CITY_TILES set includes CAPITAL, so the Capital tile counts. Off-Mars cities (Ganymede Colony, Phobos Space Haven) go through the same Game.addTile path and therefore also count, which matches the printed 'any city tile'.",
+      "lines": [
+        "src/server/cards/base/Pets.ts:16-56"
+      ],
+      "printedText": "Pets (172) — Cost 10. Tags: Earth, Animal. Add 1 animal to this card. Animals may not be removed from this card. Effect: When any city tile is placed, add an animal to this card. 1 VP per 2 animals here.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Priority.OPPONENT_TRIGGER is applied only when someone else placed the city; queue ordering, not a rules question. AddResourcesToCard with filter name === this.name resolves to a single card and so executes without presenting a decision point."
     },
     {
       "name": "Phobos Space Haven",
@@ -3447,9 +3712,21 @@
         "timesObserved": 63,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: requires 11% oxygen; action 'remove 1 animal from any card and add it to this card'; 1 VP per animal on this card. Metadata is cost 14, animal tag, resourceType ANIMAL, requirements {oxygen: 11}, victoryPoints {resourcesHere: {}} which Counter resolves to the raw resource count (Counter.ts:160-162). canAct is exactly 'there exists a legal animal to remove' and the action removes 1 then adds 1 to this card, so it is neither stricter nor looser than the printed precondition. The target set correctly honours the printed 'any card': RemoveResourcesFromCard.getAvailableTargetCards includes the player's OWN animal cards as well as opponents', excludes Pets (protectedResources, whose printed text forbids removal even by its owner) and excludes opponents' animal/microbe cards when they hold Protected Habitats.",
+      "lines": [
+        "src/server/cards/base/Predators.ts:22-55"
+      ],
+      "printedText": "Predators (024). 14 M€, animal tag, active. 'Requires 11% oxygen.' Action: 'Remove 1 animal from any card and add it to this card.' '1 VP per animal on this card.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Degenerate-move note for the enumerator, not a correctness problem: Predators itself is a legal removal target once it holds an animal, so when it is the only animal card in play canAct is true and the action is a strict no-op that burns the player's action for the generation. Printed rules permit it ('any card'), so the Engine is right; M3/M4 need to know the null action exists rather than assume every canAct=true action changes state. The blockable path routes through UnderworldExpansion.maybeBlockAttack, which returns cb(true) immediately when the expansion is off (UnderworldExpansion.ts:449-451)."
     },
     {
       "name": "Protected Valley",
@@ -3581,9 +3858,22 @@
         "timesObserved": 265,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: 8 M€, Building tag, 1 VP, 'When any city tile is placed, gain 2 M€' -- explicitly ANY player's city, not just the owner's. The Engine's hook signature is onTilePlaced(cardOwner, activePlayer, space), dispatched from Game.triggerForAllCards which walks every player's tableau (Game.ts:1401, 1410-1416); the card gains to `cardOwner` and uses `activePlayer` only to pick Priority.OPPONENT_TRIGGER for deferred ordering. The owner scope is therefore the printed one (any city, gain to the card's owner), not the inverted one.",
+      "lines": [
+        "src/server/cards/base/RoverConstruction.ts:16-44",
+        "src/server/Game.ts:1346-1416"
+      ],
+      "printedText": "Rover Construction (#038, 8 M€, Building tag, blue/Active, 1 VP). Effect: When any city tile is placed, gain 2 M€.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Metadata verified: cost 8, tags [building], ACTIVE, no requirements, victoryPoints 1. Trigger set checked in both directions. Over-firing: isCitySpace tests CITY_TILES = {CITY, CAPITAL, OCEAN_CITY, RED_CITY, NEW_HOLLAND} (common/TileType.ts:119) evaluated after the tile is placed, so only genuine city tiles fire, and each addTile dispatches the hook exactly once. Under-firing: every in-scope city placement routes through Game.addTile (Game.addCity -> addTile), including the reserved-area cities Ganymede Colony and Phobos Space Haven, which per the standard ruling do count as city tiles placed. The unused BoardType parameter means a Moon call would also be considered, but Moon tile types are not in CITY_TILES, and the Moon is out of Nadia's scope anyway."
     },
     {
       "name": "Search For Life",
@@ -3607,9 +3897,21 @@
         "timesObserved": 151,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: requires oxygen 6% or less; action 'spend 1 M€ to reveal the top card of the draw deck, if that card has a microbe tag add a science resource here'; 3 VP if there is one or more science resource here. Metadata is cost 3, science tag, resourceType SCIENCE, requirements {oxygen: 6, max}, victoryPoints 'special' with the getVictoryPoints override returning 3 iff resourceCount > 0 - a threshold, not a per-resource count, which is what the printed card says. The action pays via SelectPaymentDeferred(1) and only then draws, logs the reveal publicly, adds the resource on a microbe tag, and discards the revealed card (the printed card does not spell out the discard; the standard ruling does).",
+      "lines": [
+        "src/server/cards/base/SearchForLife.ts:23-65"
+      ],
+      "printedText": "Search For Life (005). 3 M€, science tag, active. 'Oxygen must be 6% or less.' Action: 'Spend 1 M€ to reveal the top card of the draw deck. If that card has a microbe tag, add a science resource here.' '3 VPs if you have one or more science resources here.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "canAct is `canAfford(1) && projectDeck.canDraw(1)`; Deck.canDraw counts drawPile + discardPile and draw() reshuffles the discard when the draw pile empties (Deck.ts:88-99), so the deck clause can only be false when literally every project card is in hands/tableaux - it is not stricter than the printed precondition. The microbe test is `card.tags.includes(Tag.MICROBE)` with no WILD handling; officially a wild tag counts as any tag, but base + Corporate Era + Prelude contains no wild-tag project card, so this is unreachable in config. Belief-model note for M4: the reveal is logged with no `reservedFor`, i.e. it is public information, and the revealed card goes to the discard pile - both facts the card-flow belief update must consume."
     },
     {
       "name": "Shuttles",
@@ -4029,9 +4331,21 @@
         "timesObserved": 90,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Cost 10, City + Building, +2 M€ production declaratively and -1 energy production via LoseProduction after placement; bespokeCanPlay requires a free land space with at least 2 adjacent city tiles (any player's) and, on Tharsis, energy production >= 1. That is exactly the printed card. The MarsBoard.hasEnergyCoverage branch cannot fire on Tharsis (no ENERGY_PRODUCTION space bonuses on that board), so the check is `player.production.energy >= 1` in Nadia's configuration.",
+      "lines": [
+        "src/server/cards/base/UrbanizedArea.ts:44-66"
+      ],
+      "printedText": "Urbanized Area (120), 10 M€, green/automated, City + Building tags. Production box: -1 energy, +2 M€. 'Decrease your energy production 1 step and increase your M€ production 2 steps. Place a city tile ADJACENT TO AT LEAST 2 OTHER CITY TILES.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Splitting the production box (M€ applied on play through `behavior`, energy applied after placement through LoseProduction) is the same architectural choice that produces the Immigrant City finding, but here it is harmless: Urbanized Area has no trigger that can pay the energy cost back, so the ordering is unobservable."
     },
     {
       "name": "Water Import From Europa",
@@ -4054,9 +4368,22 @@
         "timesObserved": 192,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "undecided",
+      "justification": "Cost 25, tags Jovian + Space, ACTIVE, 1 VP per Jovian tag, and the action (pay 12 M€, titanium usable at the player's own titanium value, then place an ocean) all match the printed card, and canAct's affordability check is exactly the payment the action then demands (canAfford({cost: 12, titanium: true}) vs SelectPaymentDeferred(12, {canUseTitanium: true})) — neither stricter nor looser, with Helion heat available on both sides. The one unsettled point is that canAct stays true when all 9 oceans are already placed: the player pays 12 M€ and PlaceOceanTile returns without offering a space, so the action is legal and wholly effect-free.",
+      "lines": [
+        "src/server/cards/base/WaterImportFromEuropa.ts:35-42",
+        "src/server/deferredActions/PlaceOceanTile.ts:27-36"
+      ],
+      "printedText": "Water Import From Europa (012), cost 25, Jovian + Space tags, ACTIVE. 'Action: Pay 12 M€ to place an ocean tile. TITANIUM MAY BE USED as if playing a space card.' 1 VP for each Jovian tag you have.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Same root cause as Aquifer Pumping / Aquifer / Asteroid:SP / Convert Heat — see the shared open question described in those entries; W should merge all five into ONE register row, not five. Card-specific cosmetic nit: unlike AquiferPumping.ts:34 and AquiferStandardProject.ts:32, this card does not addWarning('maxoceans'), so the client gives the player no hint that the action will do nothing. That is client advisory text only and changes no legality or resource outcome."
     },
     {
       "name": "Water Splitting Plant",
@@ -4211,9 +4538,21 @@
         "timesObserved": 256,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: start with 57 M€, no tags, 'When you pay for a card or standard project with a basic cost of 20 M€ or more, you gain 4 M€.' Implementation gates on `card.cost >= 20` — the printed cost, not the discounted one, which is what 'basic cost' means — and covers both routes: onCardPlayed (guarded by isIProjectCard, so AUTOMATED/ACTIVE/EVENT only, correctly excluding corporations and preludes) and onStandardProject. Both dispatchers are own-player-only (Player.ts:921 and StandardProjectCard.ts:50-53). Timing is right in both: Player.playCard pays at line 835 before onCardPlayed at 903, and StandardProjectCard.payAndExecute pays before projectPlayed triggers the hook, so the 4 M€ can never help afford the thing that produced it.",
+      "lines": [
+        "src/server/cards/corporation/CrediCor.ts:11-46"
+      ],
+      "printedText": "CrediCor (R08) — Corporation, no tags. You start with 57 M€. Effect: When you pay for a card or standard project with a basic cost of 20 M€ or more, you gain 4 M€.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "I grepped the whole of src/ for CrediCor/CREDICOR: there is no special case anywhere in the affordability path, so the bonus is never pre-credited (the anti-pattern R1 found on Immigrant City). In Nadia's configuration the qualifying standard projects are exactly Greenery (23) and City (25). A card played at a large discount (e.g. via Eccentric Sponsor's 25 M€ reduction) still triggers, which is correct for 'basic cost'."
     },
     {
       "name": "Ecoline",
@@ -4257,9 +4596,21 @@
         "timesObserved": 223,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: start with 42 M€ and 3 heat production; effect 'you may use heat as M€ (but not M€ as heat)'. Metadata is startingMegaCredits 42, behavior production heat 3, one space tag. `bespokePlay` sets the single flag `canUseHeatAsMegaCredits`, and I traced every consumer: Player.payingAmount sets `usable.heat = canUseHeatAsMegaCredits` unconditionally (Player.ts:1321), canAffordInternal forces `options.heat` from the same flag (Player.ts:1355), and SelectPaymentDeferred/SelectPayment/SelectCardToPlay/SelectStandardProjectToPlay all read it - so heat pays for project cards, standard projects, card action costs, milestones (Player.ts:1091) and awards (Player.ts:1125) alike, which is the printed 'anywhere M€ is spent'. Nothing anywhere converts M€ into heat.",
+      "lines": [
+        "src/server/cards/corporation/Helion.ts:15-37"
+      ],
+      "printedText": "Helion (R18). Corporation, space tag. 'You start with 42 M€ and 3 heat production.' Effect: 'You may use heat as M€. You may not use M€ as heat.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The flag is serialized/deserialized (Player.ts:1784, 1865), so it survives the snapshot/restore path M4 search depends on. `availableHeat()` also folds in Stormcraft floaters x2, but Stormcraft is Colonies and out of Nadia's config. Note for the enumerator: with Helion, heat is spendable at every payment decision, which widens the FR-ACT-4 payment factorization for exactly one corporation."
     },
     {
       "name": "Interplanetary Cinematics",
@@ -4281,9 +4632,21 @@
         "timesObserved": 213,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: one Building tag, start with 30 M€ and 20 steel, 'Each time you play an event card, you gain 2 M€.' Metadata (tags [BUILDING], startingMegaCredits 30, behavior stock steel 20) and the hook (card.type === CardType.EVENT -> +2 M€) both agree, and the hook is reached only through the acting player's own tableau loop, so opponents' events do not pay it. The gain lands after payment (Player.ts:835 pays, 903 triggers), so it can never help afford the event itself.",
+      "lines": [
+        "src/server/cards/corporation/InterplanetaryCinematics.ts:12-43"
+      ],
+      "printedText": "Interplanetary Cinematics (R19) — Corporation, Building tag. You start with 30 M€ and 20 steel. Effect: Each time you play an event card, you gain 2 M€.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Gains immediately inside the hook rather than through a deferred action (unlike Media Group). No rules consequence; noted only because the two sibling event-payers differ in mechanism."
     },
     {
       "name": "Inventrix",
@@ -4327,9 +4690,21 @@
         "timesObserved": 223,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: two Building tags, start with 30 M€, 5 steel and 1 steel production, 'Each time you get any steel or titanium as a placement bonus, increase your steel production 1 step.' Metadata matches (tags [BUILDING, BUILDING], startingMegaCredits 30, behavior production steel 1 + stock steel 5). The hook is correctly owner-scoped (cardOwner.id !== activePlayer.id returns) and correctly covers the PLACEMENT-BONUS route rather than merely 'a tile': it inspects space.bonus for SpaceBonus.STEEL or TITANIUM, which is precisely the set of placements that pay steel or titanium. The three early returns (non-Mars board, Phase.SOLAR, overplaced tile with space.tile.covers set, Mars Nomads' phantom space) all exclude cases where the Engine does not in fact grant the bonus, so implementation and printed text coincide.",
+      "lines": [
+        "src/server/cards/corporation/MiningGuild.ts:16-69"
+      ],
+      "printedText": "Mining Guild (R24) — Corporation, two Building tags. You start with 30 M€, 5 steel and 1 steel production. Effect: Each time you get any steel or titanium as a placement bonus, increase your steel production 1 step.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The renderer's paraphrase ('each time you place a tile on an area with a steel or titanium placement bonus') is narrower than the printed 'each time you get any steel or titanium as a placement bonus', but I could not construct an in-scope divergence between them: every in-scope route to a steel/titanium placement bonus is a tile placement, the two off-Mars colony spaces (Ganymede, Phobos) are built with `bonus: []` (BoardBuilder.ts:13), and the Ares adjacency clauses (AresHandler.anyAdjacentSpaceGivesBonus reads space.adjacency, set only by Ares) are inert. Phase.SOLAR in this Engine is the World Government / temporarySolarPhase, not final greenery placement, and solarPhaseOption is off in Nadia's configuration, so that guard never fires here — final greeneries DO grant placement bonuses and DO feed Mining Guild, which is correct."
     },
     {
       "name": "PhoboLog",
@@ -4374,9 +4749,21 @@
         "timesObserved": 209,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: start with 40 M€; first action place a city tile; when any city tile is placed ON MARS increase your M€ production 1 step; when YOU place a city tile gain 3 M€. `onTilePlaced` implements both clauses with their different scopes correctly — the 3 M€ is conditioned on `cardOwner.id === activePlayer.id` and carries no on-Mars test (the printed clause has none), while the production step is conditioned on `space.spaceType !== SpaceType.COLONY` and applies to any player's placement.",
+      "lines": [
+        "src/server/cards/corporation/TharsisRepublic.ts:47-60"
+      ],
+      "printedText": "Tharsis Republic (R31, corporation, building tag, 40 M€): 'You start with 40 M€. As your first action in the game, place a city tile. Effect: When any city tile is placed ON MARS, increase your M€ production 1 step. Effect: When you place a city tile, gain 3 M€.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The COLONY test is the load-bearing part and it is right, which is not obvious: the base game DOES have off-Mars city tiles — Ganymede Colony (081) and Phobos Space Haven both place a city on a reserved space, and `BoardBuilder.ts:90-91` builds both as `colonySpace(...)`, i.e. `SpaceType.COLONY`. So those two cities correctly pay their owner 3 M€ and correctly do NOT raise anyone's M€ production. `Board.isCitySpace` (Board.ts:279-281) keys on the CITY_TILES set, so Capital counts as a city, as printed. R1'S IMMIGRANT CITY FINDING IS NOT THIS CARD'S DEFECT. I confirmed the mechanism from this side: both of Tharsis Republic's triggers are `Priority.GAIN_RESOURCE_OR_PRODUCTION` (47) — `GainProduction.ts:16`, `GainResourcesDeferred.ts:19` — which is what lets them resolve ahead of a `LOSE_RESOURCE_OR_PRODUCTION` (48) cost queued in the same play. Deferring a trigger is the ordinary and correct thing for a trigger to do; the divergence R1 found lives in the card that lets a later trigger fund an up-front cost, not in the corporation that fires the trigger. `bespokePlay`'s +2 M€ production compensation for the two neutral solo cities is unreachable in Nadia's configuration (`Game.isSoloMode()` is `players.length === 1`, Game.ts:532; `gameFactory.ts` builds 2-4p only) and I make no claim about its solo correctness."
     },
     {
       "name": "ThorGate",
@@ -4421,9 +4808,23 @@
         "timesObserved": 231,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed 40 M€ start, Earth tag, and the action 'If your Terraform Rating was raised this generation, you may pay 3 M€ to raise it 1 step more' — canAct is exactly that conjunction (player.hasIncreasedTerraformRatingThisGeneration, a flag set inside Player.increaseTerraformRating and reset for every player at Game.startGeneration, plus affordability of 3 M€) and action pays 3 then raises TR by 1. Repeated use within one generation is permitted because the action's own raise re-sets the flag, which is the correct printed behaviour.",
+      "lines": [
+        "src/server/cards/corporation/UnitedNationsMarsInitiative.ts:35-43",
+        "src/server/Player.ts:322-334",
+        "src/server/Game.ts:887-901"
+      ],
+      "printedText": "United Nations Mars Initiative (R32), Earth tag. 'You start with 40 M€.' Action: 'If your Terraform Rating was raised this generation, you may pay 3 M€ to raise it 1 step more.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The TODO at UnitedNationsMarsInitiative.ts:22 is confirmed cosmetic, and narrower than 'description spacing' implies: it sits above a commented-out 'b.br.br.br' and a b.empty() used as a spacer inside renderData. It affects card layout in the client only — no text, cost, legality or resource consequence. cost/victoryPoints marked false because a corporation card has neither; startingMegaCredits (40) and tags ([EARTH]) were both checked."
     },
     {
       "name": "Aquifer",
@@ -4447,9 +4848,23 @@
         "timesObserved": 11415,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "undecided",
+      "justification": "Printed cost 18 and the printed effect (place an ocean tile, with its TR) are exact: cost: 18, tr: {oceans: 1}, actionEssence defers PlaceOceanTile, and addOcean grants the TR only while oceans remain. canPayWith returns {} in every Nadia game (its Kuiper Cooperative branch is out of configuration), so the project correctly takes neither steel nor titanium and takes heat only via Helion. The one unsettled point is that at 9 oceans canAct only calls addWarning('maxoceans') and then returns super.canAct, so paying 18 M€ for nothing is an enabled, server-validated legal move.",
+      "lines": [
+        "src/server/cards/base/standardProjects/AquiferStandardProject.ts:31-40",
+        "src/server/deferredActions/PlaceOceanTile.ts:27-36",
+        "src/server/Game.ts:1575-1586"
+      ],
+      "printedText": "Aquifer standard project (SP2): 'Spend 18 M€ to place an ocean tile.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "THE SHARED OPEN QUESTION (one register row for all five of Aquifer, Asteroid:SP, Convert Heat, Aquifer Pumping, Water Import From Europa): may a player take an action whose entire printed effect is an increase to an already-maxed global parameter? The Engine's answer is yes-with-a-warning, applied consistently and stated in as many words at ArtificialLake.ts:35 ('Card is playable, it just has no effect'). It is defensible under the rulebook's 'increases beyond the goal are ignored and give no TR', and the Engine is scrupulous about the TR half (Game.increaseTemperature:1283, increaseOxygenLevel:1187 and addOcean:1576 all return before granting TR). But it is a rules interpretation I cannot settle from the printed card text, and it is a *legality* question, not a cosmetic one: it puts a strictly-dominated, money-burning move into the enumerated legal set. Practical consequence for Nadia: the random-legal agent will occasionally take it (Aquifer alone was played 11,415 times in the 1,500-game sweep), so AC-1-style random baselines burn some M€ this way; any evaluating agent will never choose it, so M3+ is unaffected. If the printed rules do forbid no-effect actions, this is an over-permissive legal set rather than a wrong effect — no state the Engine reaches is mis-scored either way."
     },
     {
       "name": "City",
@@ -4473,9 +4888,21 @@
         "timesObserved": 10187,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed standard project: pay 25 M€, place a city tile, increase your M€ production 1 step. Cost 25 is transcribed correctly, `actionEssence` defers `PlaceCityTile` and adds exactly 1 M€ production, and `canAct` correctly refuses when the board offers no legal city space before falling through to the affordability check in `StandardProjectCard.canAct`.",
+      "lines": [
+        "src/server/cards/base/standardProjects/CityStandardProject.ts:26-45"
+      ],
+      "printedText": "City (SP4, standard project): 'Spend 25 M€ to place a city tile and increase your M€ production 1 step.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": false,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "`canPayWith` is inert under Nadia's options: it returns `{steel: true}` only when the player holds Prefabrication of Human Habitats, which is a Pathfinders card and not in any in-scope manifest, so the card is always M€-only here — correct per the printed rules, which allow steel only for building-tagged projects. Phase I classes this `uncovered` / `instantiated-but-inert`: it has no dedicated spec and `actionEssence` executed zero times in the whole Engine suite, so the 10,187 plays across the 1,500-game sweep are the ONLY execution evidence this card has. That is a question-4 gap on a card the agent uses in essentially every game, and it deserves a register row on those grounds even though the correctness read is clean — but it is not a correctness finding and I have not treated it as one."
     },
     {
       "name": "Power Plant:SP",
@@ -4497,9 +4924,21 @@
         "timesObserved": 14094,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed standard project: pay 11 M€ to increase your energy production 1 step. The class sets cost 11 and its only override, actionEssence, does exactly `player.production.add(Resource.ENERGY, 1)`; payment, logging and the onStandardProject broadcast are the shared StandardProjectCard base (payAndExecute -> pay, projectPlayed, actionEssence). Thorgate's 3 M€ reduction reaches it through the generic getAdjustedCost/getStandardProjectDiscount route rather than a card-local hack, so the Thorgate clause on the printed corporation is honoured without Power Plant needing to know about it.",
+      "lines": [
+        "src/server/cards/base/standardProjects/PowerPlantStandardProject.ts:7-28"
+      ],
+      "printedText": "Standard project (SP7): Spend 11 M€ to increase your energy production 1 step.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Census key is the disambiguated string 'Power Plant:SP'. Standard projects carry no tags/requirements/VP, hence victoryPoints:false. canPayWith is not overridden ({}), which is correct — standard projects are M€-only; Helion's heat-as-M€ goes through the player-level payment options, not the card."
     },
     {
       "name": "Greenery",
@@ -4523,9 +4962,23 @@
         "timesObserved": 10688,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed cost 23 and the printed effect (place a greenery tile and raise oxygen 1 step) are both exact: cost: 23, tr: {oxygen: 1} for the Reds check only, and actionEssence defers PlaceGreeneryTile, whose addGreenery raises oxygen 1 and grants the TR (and correctly grants no TR once oxygen is at 14). canAct additionally requires at least one placeable greenery space, which is right — the tile must be placeable — and MarsBoard.getAvailableSpacesForGreenery implements the printed placement rule (adjacent to a tile you own if any such space exists, otherwise anywhere available). canPayWith returns {} for every Nadia game (its Soylent Seedling Systems branch is Pathfinders, out of configuration), so the project takes neither steel nor titanium and accepts heat only via Helion — which is the printed rule for standard projects.",
+      "lines": [
+        "src/server/cards/base/standardProjects/GreeneryStandardProject.ts:9-42",
+        "src/server/cards/StandardProjectCard.ts:39-74",
+        "src/server/inputs/SelectStandardProjectToPlay.ts:37-61"
+      ],
+      "printedText": "Greenery standard project (SP6): 'Spend 23 M€ to place a greenery tile and raise oxygen 1 step.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "No maxed-parameter question arises here: at oxygen 14 the project still places a real tile, so it remains legal and useful and the Engine correctly adds no warning. Cost is not discountable in scope — the only in-scope getStandardProjectDiscount is Thorgate's, and it applies solely to POWER_PLANT_STANDARD_PROJECT (corporation/Thorgate.ts:37-41). Server-side enforcement is real, not just client greying: SelectStandardProjectToPlay.validate re-checks canAct and re-prices the payment."
     },
     {
       "name": "Asteroid:SP",
@@ -4549,9 +5002,22 @@
         "timesObserved": 12491,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "undecided",
+      "justification": "Printed cost 14 and the printed effect (raise temperature 1 step, with its TR) are exact: cost: 14, tr: {temperature: 1}, and actionEssence calls game.increaseTemperature(player, 1), which moves the track 2 degrees per step, awards the -20/-24 heat-production bonuses and the 0 C ocean, and grants exactly 1 TR. canPayWith returns {} in every Nadia game (Kuiper Cooperative is out of configuration), so no steel or titanium, heat only via Helion. The one unsettled point is that at +8 C canAct only calls addWarning('maxtemp') and returns super.canAct, so paying 14 M€ for nothing is an enabled, server-validated legal move.",
+      "lines": [
+        "src/server/cards/base/standardProjects/AsteroidStandardProject.ts:32-41",
+        "src/server/Game.ts:1282-1320"
+      ],
+      "printedText": "Asteroid standard project (SP9): 'Spend 14 M€ to raise the temperature 1 step.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Same shared open question as Aquifer — see that entry's notes for the full statement; W should fold all five cards into one register row. Nothing here is Asteroid-specific: cost, step size, TR, bonus thresholds and payment options all check out against the printed project. The census name is 'Asteroid:SP' to disambiguate from the project card Asteroid; the card's own metadata.cardNumber is SP9."
     },
     {
       "name": "Sell Patents",
@@ -4575,9 +5041,23 @@
         "timesObserved": 0,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed standard project: discard any number of cards, gain 1 M€ each. `canAct` gates on a non-empty hand, `action()` offers a `SelectCard` over the whole hand with `max = hand size` (and `SelectCard`'s default `min` of 1, SelectCard.ts:38, so a zero-card no-op sale is not offered), credits `cards.length` M€ and discards them. `actionEssence` is a deliberate no-op because this card never routes through `payAndExecute`. The two exclusions are printed, not invented: Standard Technology's own text exempts selling patents, and `projectPlayed` keeps it out of `standardProjectsThisGeneration`.",
+      "lines": [
+        "src/server/cards/base/standardProjects/SellPatentsStandardProject.ts:24-45",
+        "src/server/Player.ts:1660-1664",
+        "src/server/cards/StandardProjectCard.ts:82-89"
+      ],
+      "printedText": "Sell Patents (SP8, standard project, cost 0): 'Discard any number of cards to gain that amount of M€' (1 M€ per card discarded).",
+      "metadataChecked": {
+        "cost": true,
+        "tags": false,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "0 PLAYS IN THE SWEEP IS AN INSTRUMENT BLIND SPOT, NOT A DEFECT SIGNAL — checked, not assumed. The card is genuinely reachable: `Game.getStandardProjects()` filters it out of the standard-project list (Game.ts:1637) exactly as the census records, and `Player.getActions()` instead constructs a throwaway `SellPatentsStandardProject`, tests `canAct`, and pushes `sellPatents.action(this)` directly into the turn's top-level `OrOptions` (Player.ts:1660-1664). That path calls `action()`, whose continuation calls `projectPlayed` itself — it NEVER calls `payAndExecute`, and `payAndExecute` is precisely the chokepoint phase M's sweep wraps for standard projects (playSweep.ts:122-127). So Sell Patents is structurally invisible to the sweep and its count would read 0 no matter how often the agent used it. This is a K4 finding for W, not a K5 one: the K4 denominator's `reachable-by-other-route` row cannot be discharged by this artifact, and the honest statement is 'not observable by this instrument', not 'never played'. Corroborating evidence that the card is exercised at all: phase I records it `behavioural` with executionCount 25 in the Engine suite. If W wants the real number, the fix is a third chokepoint on `SellPatentsStandardProject.prototype.action` — but that is phase M's file, and this batch changed nothing."
     },
     {
       "name": "Buffer Gas",
@@ -4599,9 +5079,21 @@
         "timesObserved": 0,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: solo-play-only standard project, spend 16 M€ to raise your TR 1 step. Metadata is cost 16 and tr {tr: 1}; actionEssence calls player.increaseTerraformRating() (default 1 step), and StandardProjectCard.payAndExecute charges the cost and logs the project before the essence runs. Nothing is missing and nothing extra is added. I also re-verified the reachability classification rather than trusting it: Game.getStandardProjects (Game.ts:1638-1641) returns this card only when `this.isSoloMode() && gameOptions.soloTR`, and the only other routes that surface standard projects are StandardTechnology (Underworld) and EstablishedMethods (promo), both outside Nadia's module set - so `unreachable-in-config` is correct and the 0 plays in the sweep are expected, not a gap.",
+      "lines": [
+        "src/server/cards/prelude/BufferGasStandardProject.ts:8-25"
+      ],
+      "printedText": "Buffer Gas (SP3, Prelude expansion standard project). 'Solo games only. Spend 16 M€ to increase your TR 1 step.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": false,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Phase M's census classification for this entry is confirmed correct, including its scopeReason citing Game.ts:1640 - this is a negative control that came back clean rather than an untested assumption. Note the engine gate is narrower than the printed text: the card says 'solo games only' while the engine additionally requires the 63-TR (soloTR) variant. That is the standard rule for the Prelude solo card and is out of Nadia's config either way."
     },
     {
       "name": "Convert Plants",
@@ -4624,9 +5116,22 @@
         "timesObserved": 11848,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed standard action: 8 plants to place a greenery tile and raise oxygen 1 step. Every plant count in the implementation — the canAct threshold, the canAfford reserveUnits, the prompt text and the deduction — reads player.plantsNeededForGreenery rather than a literal 8, so EcoLine's printed 7-plant clause (applied as behavior.greeneryDiscount through Executor.ts:429-431, and correctly reversed on card removal at Executor.ts:687-689) flows through all four sites. canAct additionally requires a placeable greenery space, which is right, and it short-circuits to true at oxygen 14 rather than trying to price a Reds tax on an increase that cannot happen. The action places the greenery (raising oxygen and TR) and then deducts the plants.",
+      "lines": [
+        "src/server/cards/base/standardActions/ConvertPlants.ts:26-55",
+        "src/server/behavior/Executor.ts:429-431"
+      ],
+      "printedText": "Convert Plants standard action (SA2): 'Spend 8 plants to place a greenery tile and raise oxygen 1 step.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Deliberately checked the hard-coded-8 hazard named in the brief and it is clean — the only literal 8 is the '8 plants' string in renderData, which is the correct printed text for the standard action itself (EcoLine's discount is a corporation effect that modifies it, exactly as printed). The addGreenery-then-deduct ordering is safe: a greenery placed on a plant-bonus space credits the bonus first and the fixed deduction still lands correctly. cost marked false because StandardActionCard takes no cost property (the census's 0 is a default, not a printed cost); the printed price is plants, and it was checked. The SA2 card-number collision with Convert Heat is a known benign census fact, not a finding of mine."
     },
     {
       "name": "Convert Heat",
@@ -4649,9 +5154,22 @@
         "timesObserved": 29796,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "undecided",
+      "justification": "Printed standard action: 8 heat to raise temperature 1 step. The implementation uses HEAT_FOR_TEMPERATURE = 8 for both the availability check and the spend, routes the spend through player.spendHeat (so Stormcraft-style heat substitutes are handled where they exist) and calls game.increaseTemperature(player, 1), which moves the track one step and grants exactly 1 TR. The one unsettled point is that at +8 C canAct only calls addWarning('maxtemp') and then returns true whenever the player holds 8 heat, so burning 8 heat for nothing is an enabled legal move.",
+      "lines": [
+        "src/server/cards/base/standardActions/ConvertHeat.ts:24-47",
+        "src/server/Game.ts:1282-1320"
+      ],
+      "printedText": "Convert Heat standard action (SA2): 'Spend 8 heat to raise temperature 1 step.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Same shared open question as Aquifer/Asteroid:SP/Aquifer Pumping/Water Import From Europa — see the Aquifer entry's notes for the full statement; one register row for all five. This is the highest-frequency member of the group (29,796 uses in the 1,500-game sweep), so if the shared question ever resolves against the Engine, this is where the wasted-resource effect on random baselines concentrates. Minor latent inconsistency, cosmetic today: the reserveUnits at ConvertHeat.ts:37 is the literal Units.of({heat: 8}) while the guard two lines above uses the HEAT_FOR_TEMPERATURE constant; both are 8, so nothing diverges now, but the two would drift apart if the constant ever changed. cost marked false because StandardActionCard takes no cost property; the printed price is heat, and it was checked."
     },
     {
       "name": "Acquired Company",
@@ -4762,9 +5280,21 @@
         "timesObserved": 123,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Cost 13, Jovian tag, 1 VP, requirement 'you have titanium production' compiled as a ProductionRequirement on the player's own titanium production (count 1), and the effect is DecreaseAnyProduction(titanium, stealing) plus GainProduction(titanium) - i.e. decrease ANY player's titanium production 1 step and increase your own. bespokeCanPlay returns true unconditionally; its only job is to attach a `selfTarget` warning when the player is the sole eligible target, which is UI advice, not legality.",
+      "lines": [
+        "src/server/cards/base/AsteroidMiningConsortium.ts:36-54"
+      ],
+      "printedText": "Asteroid Mining Consortium (002), 13 M€, green/automated, Jovian tag, 1 VP. 'Requires that you have titanium production. Decrease any titanium production 1 step and increase your own 1 step.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "bespokeCanPlay mutates the card (addWarning) from what is nominally a pure query. Harmless for correctness - warnings are cleared and re-derived - but worth knowing if any agent-side code memoises canPlay results."
     },
     {
       "name": "Bribed Committee",
@@ -5094,9 +5624,23 @@
         "timesObserved": 264,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "behavioural-divergence",
+      "justification": "Printed: 'Decrease any energy production 1 step and increase your own 1 step.' Two effects joined by 'and', resolved in written order, and TM's general rule is that a part of an effect that cannot be carried out is ignored - so when NO player has energy production the decrease is ignored and the player still gains 1 step. The implementation detects exactly that case and inverts the order: it defers GainProduction FIRST, then DecreaseAnyProduction, which now finds the player themselves as the only legal target and forces them to take the step back (the comment says so explicitly: 'This Player must gain their energy production in order to lose it'). Net effect in the engine is zero production for 3 M€ and -1 VP, where the printed card gives +1 energy production. When somebody does have energy production the implementation matches the printed card exactly, including 'any' correctly including the player themselves.",
+      "lines": [
+        "src/server/cards/base/EnergyTapping.ts:35-45",
+        "src/server/deferredActions/DecreaseAnyProduction.ts:38-59",
+        "src/server/deferredActions/GainProduction.ts:20-32"
+      ],
+      "printedText": "Energy Tapping (201). 3 M€, power tag, automated, -1 VP. 'Decrease any energy production 1 step and increase your own 1 step.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": true
+      },
+      "escalates": true,
+      "downstreamImpact": "Reproduction: 2p game, generation 1, neither player has built energy production (both at 0, no Thorgate, no energy-production prelude). Player A plays Energy Tapping for 3 M€. EXPECTED (printed): the '-1 energy production (any player)' has no legal target and is ignored; A's energy production goes 0 -> 1; A takes -1 VP. ACTUAL (engine): GainProduction runs first, A goes 0 -> 1; DecreaseAnyProduction then finds A as the sole target, presents a one-option SelectPlayer, and A must remove their own step, ending at 0. A paid 3 M€ and 1 VP for nothing, and answered a decision that should not exist. The engine's own spec (tests/cards/base/EnergyTapping.spec.ts, 'play - no targets') asserts this net-zero outcome, so it is intentional rather than accidental. First bites at Milestone 2: FR-DATA-1's required BGA<->engine reconciliation compares per-card win rates, and Energy Tapping (and Power Supply Consortium, see notes) is materially weaker in this engine than in the printed game, so its expert-dataset row is not comparable. It bites again at Milestone 3, where any hand-written evaluation term that scores Energy Tapping as '+1 energy production' will be wrong in exactly the early-generation states where the card is most often affordable and most often played. Recommend reporting upstream (H10: record, do not patch src/).",
+      "notes": "Scope of the pattern: the identical gain-first special case appears verbatim in PowerSupplyConsortium.ts:34-44, GreatEscarpmentConsortium and AsteroidMiningConsortium. The latter two are protected by their own printed requirements ('requires that you have steel/titanium production'), so their zero-target branch is unreachable; only Energy Tapping and Power Supply Consortium (whose requirement is 2 power tags, which does not imply energy production) can actually reach it. Power Supply Consortium is outside my batch - flagging it so the write-up can treat the pair together. Residual uncertainty, stated honestly: my anchor is the general TM rule ('do as much as you can; ignore what you cannot') plus the card's written order, not a card-specific FAQ entry I can quote verbatim. If the write-up phase judges that anchor insufficient this should become `undecided` rather than `matches` - it should not be recorded as agreement. I set escalates=true even though the divergence is in production rather than literally legality or scoring, because production is the card's entire effect and it propagates to resources and VP; the extra forced SelectPlayer decision is also a spurious node in M4's search tree."
     },
     {
       "name": "Fuel Factory",
@@ -5162,9 +5706,21 @@
         "timesObserved": 111,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: requires that you have steel production; decrease any steel production 1 step and increase your own 1 step. The requirement is transcribed as `{production: Resource.STEEL, count: 1}`, and both halves are deferred with the decrease resolving first — `DecreaseAnyProduction` is `Priority.ATTACK_OPPONENT` (44) and `GainProduction` is `GAIN_RESOURCE_OR_PRODUCTION` (47), so written order is preserved regardless of the order they were queued in.",
+      "lines": [
+        "src/server/cards/base/GreatEscarpmentConsortium.ts:33-38"
+      ],
+      "printedText": "Great Escarpment Consortium (061, cost 6, no tags, automated, no VP): 'Requires that you have steel production. Decrease any steel production 1 step and increase your own 1 step.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": false,
+        "requirements": true,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "This card is the control that makes the Power Supply Consortium finding legible: because the printed requirement guarantees the acting player has ≥1 steel production, an eligible target always exists and the Engine never needs — and never applies — the gain-first workaround. If the two cards were treated as a pair the divergence in the other one would be invisible. Cosmetic only, recorded and dismissed: the renderer calls `pb.minus().steel(-1, {all})`, a double negation where every sibling card writes `steel(1)`; it affects the card image only, not the behaviour."
     },
     {
       "name": "Hackers",
@@ -5186,9 +5742,24 @@
         "timesObserved": 233,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "undecided",
+      "justification": "Printed effect and every metadata field transcribe exactly (cost 3, no tags, -1 VP, -1 energy production / -2 any M€ production / +2 own M€ production). The open point is resolution order: the card's own +2 M€ production is applied immediately by the declarative `behavior` block, while the printed-first '-2 any M€ production' is deferred (`DecreaseAnyProduction`, Priority.ATTACK_OPPONENT=44) and therefore evaluates its target list against the post-gain state. `canHaveProductionReduced` (Player.ts:400-403) treats M€ production as reducible only down to -5, so a player at M€ production -5 or -4 is not an eligible target before the gain but is after it. Whether the printed card licenses that depends on whether a production box resolves in written order or nets simultaneously, which I cannot settle from the card face.",
+      "lines": [
+        "src/server/cards/base/Hackers.ts:19-21",
+        "src/server/cards/base/Hackers.ts:36-40",
+        "src/server/deferredActions/DecreaseAnyProduction.ts:38-59",
+        "src/server/Player.ts:400-417"
+      ],
+      "printedText": "Hackers (125, cost 3, no tags, automated, -1 VP): 'Decrease your Energy production 1 step and any M€ production 2 steps. Increase your M€ production 2 steps.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": false,
+        "requirements": false,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Concrete state that separates the readings: 2p, acting player M€ production -5, opponent M€ production -5, acting player has ≥1 energy production. Engine: +2 M€ production (→ -3), then the attack finds exactly one eligible target (the acting player, reducible 2) and `SelectPlayer` forces it → back to -5; net effect of the card is -1 energy production, -1 VP, no M€ production. Printed-order reading: no player can absorb -2 at the moment the decrease is written, so the decrease is simply not performed and the player ends at -3. Same family as this batch's Power Supply Consortium finding and R1's Immigrant City finding — W should adjudicate the three together rather than card-by-card, since the Engine is internally consistent about it. Separately (question 4, not question 3): phase I classes Hackers `uncovered` / `instantiated-but-inert` — tests/cards/base/Hackers.spec.ts only calls `canPlay()`, so `bespokePlay`, i.e. the entire M€-stealing half of the card, is never executed anywhere in the Engine suite. 233 plays in the sweep are the only execution evidence."
     },
     {
       "name": "Hired Raiders",
@@ -5210,9 +5781,21 @@
         "timesObserved": 261,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "behavioural-divergence",
+      "justification": "Printed: 'Steal UP TO 2 steel, or 3 M€ from any player.' The implementation offers, per opponent, only the maximum: steal 2 steel (if they have any) or steal 3 M€ (if they have any), plus a global 'Do not steal'. The printed 'up to' grants a free choice of any amount from 0 to N; the engine's legal set is therefore {max, 0} instead of {0..N}. Everything else is right: it uses attack(..., {stealing: true}) so the thief GAINS the resources (Stock.steal clamps to what the target actually has, Stock.ts:64-72), no option is offered against a target holding none, and the amounts 2/3 and cost 1 are correct.",
+      "lines": [
+        "src/server/cards/base/HiredRaiders.ts:32-77"
+      ],
+      "printedText": "Hired Raiders (124). 1 M€, event, no tags. 'Steal up to 2 steel, or 3 M€ from any player.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": false,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "escalates is deliberately false: this is a universal engine convention for every 'remove/steal up to N' card (Asteroid, Sabotage, Deimos Down, ...), not a card-specific error, and the omitted intermediate amounts are dominated in almost every position - taking more from an opponent never costs the thief anything directly. The one non-contrived exception is award denial in 3-4p: the Miner award counts steel+titanium RESOURCES, so removing more from opponent B can hand Miner to opponent C. The write-up should adjudicate this once for the whole class rather than per card. Also note the self-target case ('any player' includes yourself) is excluded, which is inert. The solo branch (lines 33-44) adds resources with no source player and is unreachable in Nadia's 2-4p config."
     },
     {
       "name": "Indentured Workers",
@@ -5234,9 +5817,24 @@
         "timesObserved": 255,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: Event, 0 M€, no tags, -1 VP, 'The next card you play this generation costs 8 M€ less.' The override returns 8 exactly while player.lastCardPlayed === INDENTURED_WORKERS, and all three printed dimensions check out: magnitude is 8; scope is project-card plays only (getCardDiscount is consulted solely from Player.getCardCost(card: IProjectCard) at Player.ts:708-721 -- standard projects use the separate getStandardProjectDiscount path, and research-phase card buying uses cardCost, so neither is discounted, matching 'the next card you play'); and it is consumed exactly once, because Player.checkPaymentAndPlayCard computes getCardCost (line 750) before playCard overwrites lastCardPlayed with the card just played (line 848), after which the override returns 0. Generation expiry is honoured because Player.pass() clears lastCardPlayed (Player.ts:1141) and pass() is the only route by which an in-scope player ends a generation, so an unused discount cannot leak into the next generation.",
+      "lines": [
+        "src/server/cards/base/IndenturedWorkers.ts:10-34",
+        "src/server/Player.ts:708-729",
+        "src/server/Player.ts:833-850",
+        "src/server/Player.ts:1139-1144"
+      ],
+      "printedText": "Indentured Workers (#195, 0 M€, no tags, red/Event, -1 VP). The next card you play this generation costs 8 M€ less.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Checked as a legality question, not only an economy one. The discount enters affordability through Player.affordOptionsForCard -> getCardCost -> canPlay (Player.ts:1239-1255), so it correctly widens the legal move set for exactly one card and no more, and Math.max(cost, 0) at Player.ts:728 prevents a negative cost. Owner scope is correct: getCardCost only walks the paying player's own tableau. The card stays in the tableau permanently (events remain in PlayedCards.array, so the iterator still reaches them -- worth stating because the existing spec calls card.getCardDiscount directly and would not have caught an events-excluded-from-tableau bug). One residual, non-divergent observation for later phases: the expiry is implemented as 'lastCardPlayed changed or the player passed' rather than an explicit generation stamp; that is equivalent under Nadia's configuration only because every player passes to end a generation and no in-scope card sets lastCardPlayed outside Player.playCard. Out-of-scope modules (e.g. prelude2 RedAppeasement's forced pass, promo Double Down) touch the same flag, so a later expansion-scope change should re-check this."
     },
     {
       "name": "Industrial Center",
@@ -5260,9 +5858,20 @@
         "timesObserved": 191,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Cost 4, Building tag, blue/active, action 'spend 7 M€ -> +1 steel production' expressed declaratively, and placement restricted to free land spaces adjacent to a city tile of any player. bespokeCanPlay is exactly 'there is such a space', which is the printed placement requirement and nothing more.",
+      "lines": [
+        "src/server/cards/base/IndustrialCenter.ts:43-59"
+      ],
+      "printedText": "Industrial Center (123), 4 M€, blue/active, Building tag. Action: 'Spend 7 M€ to increase your steel production 1 step.' 'Place this tile adjacent to a city tile.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null
     },
     {
       "name": "Interstellar Colony Ship",
@@ -5417,9 +6026,22 @@
         "timesObserved": 260,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Cost 1, red/event, no tags. bespokeCanPlay is 'there is at least one non-reserved land area', and getNonReservedLandSpaces excludes ocean-reserved spaces, the Tharsis Noctis reserved space, spaces already carrying a tile, and spaces already claimed by anybody - which is the printed 'non-reserved area'. The claim is implemented by setting space.player, and getAvailableSpacesOnLand rejects spaces whose player is somebody else, giving exactly 'only you may place a tile there'.",
+      "lines": [
+        "src/server/cards/base/LandClaim.ts:27-39",
+        "src/server/boards/MarsBoard.ts:262-271",
+        "src/server/boards/Board.ts:224-249"
+      ],
+      "printedText": "Land Claim (066), 1 M€, red/event, no tags. 'Place your marker on a non-reserved area. Only you may place a tile there.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null
     },
     {
       "name": "Lightning Harvest",
@@ -5465,9 +6087,21 @@
         "timesObserved": 249,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: Science/Building tags, cost 8, 1 VP, 'When you play a science tag, including this, you may discard a card from hand to draw a card.' Implementation matches all metadata and defers one OrOptions(discard-and-draw, do nothing) per science tag on the played card; the empty-hand short-circuit and the explicit 'Do nothing' branch together honour the 'may'. Own-plays only (Player.ts:921), and 'including this' is satisfied by the push-before-trigger ordering in Player.playCard.",
+      "lines": [
+        "src/server/cards/base/MarsUniversity.ts:14-65"
+      ],
+      "printedText": "Mars University (073) — Cost 8. Tags: Science, Building. Effect: When you play a science tag, including this, you may discard a card from hand to draw a card. 1 VP.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The card just played is already out of hand when the trigger resolves, so it cannot be the discarded card — correct. Same Priority-ordering observation as Olympus Conference (Priority.DISCARD_AND_DRAW resolves after OLYMPUS_CONFERENCE by design). onNonCardTagAdded(SCIENCE) is unreachable in Nadia's configuration."
     },
     {
       "name": "Mass Converter",
@@ -5511,9 +6145,22 @@
         "timesObserved": 239,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: gain 1 M€ for each event EVER PLAYED by all players. The implementation sums getPlayedEventsCount() over game.players - which includes the player themselves, as 'all players' requires - and PlayedCards maintains _eventCount by incrementing on every CardType.EVENT pushed into a tableau (PlayedCards.ts:154-158). Media Archives is itself AUTOMATED, so it does not count itself. getPlayedEventsCount also adds 1 for a disabled Pharmacy Union, and its doc comment cites the FAQ ruling that this applies to Legend and Media Archives but not Media Group - that is the printed FAQ, and Pharmacy Union is promo/out of scope anyway.",
+      "lines": [
+        "src/server/cards/base/MediaArchives.ts:30-34",
+        "src/server/Player.ts:477-483"
+      ],
+      "printedText": "Media Archives (107). 8 M€, Earth tag, automated. 'Gain 1 M€ for each event EVER PLAYED by all players.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Nothing in base + Corporate Era + Prelude removes an event from a tableau after it is played, so the 'ever played' semantics cannot drift in Nadia's config."
     },
     {
       "name": "Media Group",
@@ -5535,9 +6182,21 @@
         "timesObserved": 231,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: Earth tag, cost 6, no VP, 'After you play an event card, you gain 3 M€.' All metadata agrees and onCardPlayed defers exactly 3 M€ when card.type is EVENT, own plays only. Timing is after payment, matching the printed 'after you play'.",
+      "lines": [
+        "src/server/cards/base/MediaGroup.ts:12-36"
+      ],
+      "printedText": "Media Group (109) — Cost 6. Tag: Earth. Effect: After you play an event card, you gain 3 M€.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Uses GainResourcesDeferred (Priority.GAIN_RESOURCE_OR_PRODUCTION) where Interplanetary Cinematics adds inline; both are correct, but it means the Agent sees the two payouts at different points in the deferred queue."
     },
     {
       "name": "Medical Lab",
@@ -5627,9 +6286,21 @@
         "timesObserved": 177,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Mining Rights' filter plus 'adjacent to another of your tiles': the extra filter requires an adjacent space with a tile that is not an ocean and whose owner is the player. Excluding oceans is right (ocean tiles are nobody's) and requiring `tile !== undefined` is right (a bare Land Claim marker is not a tile of yours). Cost 4, Building tag, no requirement, all as printed.",
+      "lines": [
+        "src/server/cards/base/MiningArea.ts:29-32",
+        "src/server/cards/base/MiningCard.ts:34-49"
+      ],
+      "printedText": "Mining Area (064), 4 M€, green/automated, Building tag. 'Place this tile on an area with a steel or titanium placement bonus, ADJACENT TO ANOTHER OF YOUR TILES. Increase that production 1 step.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null
     },
     {
       "name": "Miranda Resort",
@@ -5675,9 +6346,21 @@
         "timesObserved": 219,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: Science/Earth/Building tags, cost 10, holds science resources, 1 VP, 'When you play a science tag, including this, either add a science resource to this card, or remove a science resource from this card to draw a card.' Implementation matches every metadata field, and onCardPlayed defers one choice per science tag on the card just played (Tags.cardTagCount counts literal tags on that one card), evaluating resourceCount at execution time so the add/remove choice is correct for each of several triggers on the same card. 'Including this' works because Player.playCard pushes the card into playedCards (Player.ts:884) before calling onCardPlayed (Player.ts:903), and the loop at Player.ts:921 is over the acting player's own tableau only — correctly not other players' plays.",
+      "lines": [
+        "src/server/cards/base/OlympusConference.ts:14-71"
+      ],
+      "printedText": "Olympus Conference (185) — Cost 10. Tags: Science, Earth, Building. Effect: When you play a science tag, including this, either add a science resource to this card, or remove a science resource from this card to draw a card. 1 VP.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Two cross-cutting observations, neither a divergence on this card. (1) When resourceCount is 0 the card silently auto-adds instead of presenting a one-option choice — correct, since 'remove' is illegal, but it means the Agent sees no decision point there. (2) The Engine fixes the resolution order of a player's own simultaneous triggers via the Priority enum (Priority.OLYMPUS_CONFERENCE deliberately ordered ahead of SPONSORED_ACADEMIES/DISCARD_AND_DRAW, src/server/deferredActions/Priority.ts:22-40); the printed rules let the player choose. Here the fixed order (Olympus Conference before Mars University) weakly dominates for the player, so no reachable loss. onNonCardTagAdded(SCIENCE) is only reachable via Colony trade (Colony.ts:108) and Underworld (UnderworldExpansion.ts:417) — both out of Nadia's configuration, so that branch is dead code here, not a divergence."
     },
     {
       "name": "Physics Complex",
@@ -5722,9 +6405,21 @@
         "timesObserved": 252,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed cost 4, Power + Building tags, ACTIVE, no VP, and the action 'Spend any amount of energy and gain that amount of M€' — the implementation offers SelectAmount bounded 1..player.energy, deducts that much energy and adds the same number of M€ one-for-one. canAct is player.energy > 0, which is exactly right: the action needs at least 1 energy to have an effect, and no other precondition exists.",
+      "lines": [
+        "src/server/cards/base/PowerInfrastructure.ts:30-40"
+      ],
+      "printedText": "Power Infrastructure (194, Corporate Era), cost 4, Power + Building tags, ACTIVE. 'Action: Spend any amount of energy and gain that amount of M€.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The minimum of 1 in SelectAmount is a real (and correct) restriction — a zero-energy conversion would be a no-op action. player.energy reads the player's own energy stock; there is no interaction with Helion's heat-as-M€ or with heat conversion here, and the card is not a payment path, so nothing in the affordability machinery touches it. Source file lives under cards/base/ but the manifest attributes it to corpera, consistent with the printed Corporate Era symbol."
     },
     {
       "name": "Power Supply Consortium",
@@ -5746,9 +6441,22 @@
         "timesObserved": 76,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "behavioural-divergence",
+      "justification": "Printed: 'Requires 2 power tags. Decrease any Energy production 1 step and increase your own 1 step.' When NO player has any energy production there is no legal target for the decrease, so under the standard rule for an effect that cannot be carried out it is simply not performed and the player still gains 1 energy production. The Engine instead detects that case and inverts the order specifically to manufacture a target — it grants the +1 first, which makes the acting player the sole eligible target, and `DecreaseAnyProduction` then forces the self-decrease because `targets[0] === this.player`. The card becomes a complete no-op instead of a +1.",
+      "lines": [
+        "src/server/cards/base/PowerSupplyConsortium.ts:35-45",
+        "src/server/deferredActions/DecreaseAnyProduction.ts:43-58"
+      ],
+      "printedText": "Power Supply Consortium (160, cost 5, power tag, automated, no VP): 'Requires 2 power tags. Decrease any Energy production 1 step and increase your own 1 step.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": true,
+        "victoryPoints": false
+      },
+      "escalates": true,
+      "downstreamImpact": "Milestone 3 (heuristic evaluation) first, then Milestone 4. The divergence is a full step of energy production — a permanent, compounding resource — on a 5 M€ card, so the card's true value in the no-target state is 'pay 5 M€ for a power tag and nothing else' where the printed card is 'pay 5 M€ for a power tag and +1 energy production'. M3 fits card weights to harness outcomes, so it will learn a systematically depressed weight for Power Supply Consortium and, worse, will learn it from a state (nobody has energy production) that is most common in the EARLY game, which is exactly when the card is most likely to be played. M4's search inherits the same evaluation. Isolation: pin the no-target case in the M2 regression seed set with the expected end-state energy production asserted, so the value is fixed by data rather than inferred, and flag the card in the M3 feature schema as rules-contested until upstream rules on it. This is ONE defect in TWO cards, not two defects: the block is duplicated verbatim from Energy Tapping (R3's finding), the two are the only in-scope cards that reach it, and they compound — so it should take a single register row and a single upstream report covering both.",
+      "notes": "ANSWERS R3's QUESTION ON THE ENERGY TAPPING PAIR: NO, the printed requirement does NOT make the zero-target branch unreachable. `PowerSupplyConsortium.ts:35-45` is byte-for-byte identical to `EnergyTapping.ts:35-45`, comment included, and the requirement that separates them is a TAG requirement (2 power tags), not a production requirement. Concrete generation-1 line, all in-scope base/corpera cards, no attack and no expansion needed: Power Infrastructure (base, 4 M€, `tags: [Tag.POWER, Tag.BUILDING]`, PowerInfrastructure.ts:17-18 — it has NO `behavior` production block at all, its effect is the spend-energy-for-M€ action) gives a power tag and zero energy production; Energy Tapping (3 M€, power tag) gives the second power tag and, if nobody yet has energy production, lands in its OWN zero-target branch and leaves the player at zero; the player now satisfies '2 power tags' with 0 energy production and, with all opponents also at 0, playing Power Supply Consortium reaches the branch. Printed outcome of that line is +2 energy production; Engine outcome is 0, plus the -1 VP Energy Tapping charges. THE TWO DEFECTS COMPOUND — Energy Tapping is one of the very cards that manufactures the precondition for Power Supply Consortium's copy of the bug. Energy Saving (15 M€, power tag, `production: {energy: {cities: {}}}`) is a third power tag that yields zero energy production while no city is on the board. I ALSO AGREE WITH R3's ANCHOR, and reached this verdict independently before R3's finding arrived: the general 'perform as much as you can, skip what you cannot' rule plus written resolution order. I have no card-specific FAQ line to quote either, and I record that as the weakest link in both entries — but the Engine's own conduct is corroborating, because it does not merely fail to skip the unperformable part, it actively reorders the card to create a target that the printed sequence never has. Contrast Great Escarpment Consortium, the sibling in this batch, which requires you to HAVE steel production and therefore always has a target; R3's reading that the printed requirement is what makes the steel/titanium consortium cards safe is correct, and that asymmetry is presumably why only the two energy cards needed the workaround. THIS IS A DELIBERATE ENGINE DECISION, NOT AN OVERSIGHT, and any upstream report should say so: the code carries an explanatory comment ('If no player has energy production, then This Player must gain their energy production in order to lose it') and tests/cards/base/PowerSupplyConsortium.spec.ts:31-44 ('Can play - no targets') asserts the net-zero outcome explicitly. That spec is the same source as the implementation and is not independent evidence for the rule. The normal branch is correct: the decrease is deferred first and the gain chained after it, so a player who is the ONLY holder of energy production is properly forced to take it from themselves for a net zero, which the printed card does require. Same family as this batch's Hackers entry and R1's Immigrant City — in all three the acting player's own same-play gain is allowed to satisfy a same-play cost or eligibility test — but this one is unconditional and explicit, which is why it is a divergence here and only an `undecided` on Hackers."
     },
     {
       "name": "Protected Habitats",
@@ -5881,9 +6589,22 @@
         "timesObserved": 176,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Cost 9, Science tag, and bespokeCanPlay is 'you have at least one card whose production box you could copy', which is the printed requirement (you must be able to perform the effect). The applicability filter is sound: a Building (or Wild) tag, not an event, and a production change the player could actually take (production.canAdjust / Executor.canExecute on the production-only slice of the behavior), so the card is refused exactly when the duplication would be impossible.",
+      "lines": [
+        "src/server/cards/base/RoboticWorkforce.ts:29-43",
+        "src/server/cards/base/RoboticWorkforceBase.ts:31-72"
+      ],
+      "printedText": "Robotic Workforce (086), 9 M€, green/automated, Science tag. 'Duplicate only the production box of one of your building cards.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Two interpretive choices baked in, both of which I read as the standard ones but neither of which is stated on the card. (a) Events are excluded (they are used up and turned over) - matches the usual ruling. (b) Corporations ARE included, because player.tableau is playedCards and corporations are pushed there; in Nadia's card set that means Mining Guild's +1 steel production (behavior.production.steel, Building tags) is a legal copy target, and tests/cards/base/RoboticWorkforce.spec.ts:166 asserts the corporation case deliberately. If W wants a second opinion on anything in this entry it should be the corporation question."
     },
     {
       "name": "Sabotage",
@@ -5905,9 +6626,21 @@
         "timesObserved": 267,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "behavioural-divergence",
+      "justification": "Printed: 'Remove UP TO 3 titanium from any player, or 4 steel, or 7 M€.' As with Hired Raiders, the implementation offers only the maximum per resource per opponent plus a global 'Do not remove resource', so the legal set is {max, 0} rather than {0..N}. The rest is correct and notably careful: it uses attack() WITHOUT `stealing`, so the resources are destroyed and the player gains nothing (which is what Sabotage does, in contrast to Hired Raiders), the amounts 3/4/7 and cost 1 are right, Stock.add clamps a target holding fewer than the printed amount instead of going negative or blocking the option, and an opponent holding none of a resource simply generates no option for it.",
+      "lines": [
+        "src/server/cards/base/Sabotage.ts:37-86"
+      ],
+      "printedText": "Sabotage (121). 1 M€, event, no tags. 'Remove up to 3 titanium from any player, or 4 steel, or 7 M€.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": false,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Same class as Hired Raiders and same reasoning for escalates=false; see that entry's note. The alloysAreProtected guards refer to Lunar Security Stations (Moon), which is out of config, so in Nadia's games steel/titanium options are gated only on the target actually holding some. The solo Mons Insurance branch (lines 40-47) is unreachable at 2-4p."
     },
     {
       "name": "Satellites",
@@ -6039,9 +6772,23 @@
         "timesObserved": 241,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: 6 M€, Science tag, blue; you gain 3 M€ after paying for a standard project, selling patents excepted -- a rebate, not a discount, so it never helps you afford the project (this is the settled FAQ point). The Engine grants the 3 M€ from onStandardProject, which is reached only from StandardProjectCard.projectPlayed, itself called after player.pay(payment) in payAndExecute (StandardProjectCard.ts:76-89), and it leaves getAdjustedCost untouched, so affordability is computed on the full price. The exclusion is checked by name against the route the Engine actually uses: SellPatentsStandardProject is filtered out of getStandardProjects (Game.ts:1637) and reached instead via Player.ts:1661-1663, but that route still calls the shared this.projectPlayed(player) (SellPatentsStandardProject.ts:41), so the name check is the correct and only guard, and it holds.",
+      "lines": [
+        "src/server/cards/base/StandardTechnology.ts:11-34",
+        "src/server/cards/StandardProjectCard.ts:50-89",
+        "src/server/cards/base/standardProjects/SellPatentsStandardProject.ts:32-45"
+      ],
+      "printedText": "Standard Technology (#156, 6 M€, Science tag, blue/Active, no VP). Effect: After you pay for a standard project, except selling patents, you gain 3 M€.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Metadata verified: cost 6, tags [science], ACTIVE, no requirements, no VP. Owner scope is correct: StandardProjectCard.onStandardProject iterates only the acting player's tableau, so an opponent's standard project does not pay out. No in-scope standard project overrides payAndExecute or projectPlayed, so there is exactly one payment route and one trigger per project. Wording caveat, non-behavioural: I am confident the effect is a 3 M€ gain after payment with selling patents excepted, but less certain whether the physical card reads 'After you pay for a standard project' (the renderer's phrasing) or 'When you perform a standard project'; either phrasing describes the same post-payment rebate under the FAQ, so this is not even a cosmetic divergence in effect, only a possible paraphrase."
     },
     {
       "name": "Tardigrades",
@@ -6107,9 +6854,21 @@
         "timesObserved": 184,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: raise your TR 1 step for each Jovian tag you have, INCLUDING THIS. `bespokePlay` computes `1 + player.tags.count(Tag.JOVIAN)`, and the `1 +` is correct rather than a double count because `Player.playCard` calls `card.play()` before pushing the card into `playedCards`, so the card's own Jovian tag is not yet in the count at that moment.",
+      "lines": [
+        "src/server/cards/base/TerraformingGanymede.ts:28-37"
+      ],
+      "printedText": "Terraforming Ganymede (197, cost 33, Jovian + space tags, automated, 2 VP): 'Raise your TR 1 step for each Jovian tag you have, including this.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": true
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "This is the card where the `1 +` idiom had to be checked rather than assumed, because it is wrong the moment the play order changes — and Player.ts:852-865 carries a standing comment from the Engine's own author saying the current order IS the wrong one and that every 'including this' card is 'hacked to +1 things' to compensate, with a warning that fixing it would break these cards. Recorded for W: this is a live upstream fragility that would silently double-count Terraforming Ganymede's TR if the pin ever moves past that refactor, and it is worth a register row on the pin-move path rather than on today's behaviour. `computeTr` (line 28-30) returns the same `1 + count` for TR-cost previewing and stays consistent; it is only consumed by Turmoil Reds pricing, which is out of scope. Wild tags count via mode 'default', correct for a printed wild tag."
     },
     {
       "name": "Titanium Mine",
@@ -6242,9 +7001,21 @@
         "timesObserved": 232,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: Science/Microbe tags, cost 9, no VP, 'When you play a plant, microbe, or an animal tag, including this, gain 1 plant or add 1 resource to THAT CARD.' Implementation counts plant/microbe/animal tags on the played card, and when that card cannot hold animal or microbe resources it grants plants directly with no illusory choice — which is exhaustive under Nadia's configuration (I enumerated every in-scope card carrying a resourceType: no base/Corporate-Era/Prelude card has a plant, microbe or animal tag together with a resourceType other than ANIMAL or MICROBE). Own-plays only, and 'including this' is satisfied: playing Viral Enhancers itself triggers once on its own microbe tag and, since Viral Enhancers holds no resources, correctly resolves as +1 plant.",
+      "lines": [
+        "src/server/cards/base/ViralEnhancers.ts:16-74"
+      ],
+      "printedText": "Viral Enhancers (074) — Cost 9. Tags: Science, Microbe. Effect: When you play a plant, microbe, or an animal tag, including this, gain 1 plant or add 1 resource to THAT CARD.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "TWO THINGS FOR W. (a) R1's Moss/Nitrophilic Moss transient negative-plants observation is CONFIRMED, and the defect is not in Viral Enhancers. Moss.ts:33-42 and NitrophilicMoss.ts:34-42 accept the play when `player.plants` is short but Viral Enhancers is in the tableau, then bespokePlay does the raw `player.plants--` / `player.plants -= 2` (Player.ts:225-227 assigns straight through to stock, bypassing Stock.add's clamp at src/server/player/Stock.ts:24-41), and only afterwards does Player.playCard reach onCardPlayed (Player.ts:903) where Viral Enhancers grants the plant back. Net result is 0, but the intermediate state is stock.plants = -1 (or -1/0 for Nitrophilic Moss) and no logIllegalState is emitted because the raw setter is used. This is the Immigrant-City pattern (a gain arriving later in the play is counted toward an up-front cost) and it lives on the Moss cards' bespokeCanPlay/bespokePlay, not on Viral Enhancers, whose own +1 plant is exactly what the printed card promises. It matters to the Agent because a snapshot taken mid-play would carry a negative resource. (b) NESTED-PLAY ASYMMETRY. EcologicalZone.ts:73-76 carries an explicit hack granting one extra animal when it is played during Phase.PRELUDES immediately after Ecology Experts, i.e. crediting Ecology Experts' own already-played plant tag to a card that entered play afterwards. Viral Enhancers has no such hack, and Ecology Experts carries BOTH a plant and a microbe tag — exactly the tags Viral Enhancers responds to. So if W rules the Ecological Zone hack correct, Viral Enhancers under-fires by 2 triggers when played through Ecology Experts; if W rules it incorrect, Ecological Zone over-fires by 1. The Engine cannot be right about both. My reading of the printed rules is that an ongoing effect applies only from the moment its card is in play, which makes Viral Enhancers correct and Ecological Zone the outlier — but W must adjudicate the two together. Olympus Conference, Mars University, Media Group and Point Luna are unaffected: Ecology Experts and Eccentric Sponsor (the only two in-scope cards that defer a PlayProjectCard) carry no science, Earth or event tag between them."
     },
     {
       "name": "Virus",
@@ -6266,9 +7037,23 @@
         "timesObserved": 282,
         "marker": "src/server/cards/base/Virus.ts:36 - TODO \"Special case for Mons Insurance owner\""
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "behavioural-divergence",
+      "justification": "Printed Virus lets you remove up to 2 animals OR 5 plants from ANY player, which under the red-border/'any' rule includes yourself. The animal half honours that (`RemoveResourcesFromCard` with the default source 'all' includes the acting player's own animal cards). The plant half does not: `bespokePlay` takes `RemoveAnyPlants`' option list and does `options.slice(0, -1)` on the assumption that the last entry is the skip option, but `RemoveAnyPlants.execute()` pushes 'Skip removing plants' and THEN appends the acting player's own-plants option when they hold plants. So when the Virus player has plants, `slice(0, -1)` discards their own-plants option and keeps the skip option, which Virus then duplicates with its own 'Skip removal'.",
+      "lines": [
+        "src/server/cards/base/Virus.ts:46-49",
+        "src/server/cards/base/Virus.ts:58-67",
+        "src/server/deferredActions/RemoveAnyPlants.ts:89-101"
+      ],
+      "printedText": "Virus (050, cost 1, microbe tag, event, no VP): 'Remove up to 2 Animals or 5 Plants from any player.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "MARKER `Virus.ts:36` ('Special case for Mons Insurance owner') VERIFIED INERT, on two independent grounds, neither assumed: (1) it sits inside `if (player.game.isSoloMode())` (Virus.ts:35) and `Game.isSoloMode()` is `players.length === 1` (Game.ts:532), while `gameFactory.ts` builds 2-4 player games only; (2) Mons Insurance lives in `src/server/cards/promo/` and is registered only in `PromoCardManifest.ts:206`, and `promoCardsOption` is false under Nadia's options, so `game.monsInsuranceOwner` can never be set. The same reasoning discharges the `resolveInsurance()` hook that `Production.add` fires on every stolen production step in this batch's other attack cards. Reproduction for the divergence: 2p, Virus player holds 3 plants, opponent holds 5 plants. Expected (printed): the choice set includes removing 5 plants from the opponent, removing 3 from yourself, and declining. Actual: removing from the opponent, and TWO behaviourally identical decline options; your own plants are not offered. Severity argued as low for correctness — the lost option is strictly self-harming and no rational agent selects it — but it is legality-affecting in the strict sense and I have not hidden it inside `matches`. The duplicate no-op branch is the part with a real Nadia-side cost: it inflates the branching factor of this decision by one behaviourally-identical arm, which biases uniform-random rollouts at M4 (two of N arms are the same move) and doubles this node's weight in any visit-count statistic. tests/cards/base/Virus.spec.ts:36-40 asserts the acting player's plants are untouched, so the Engine's authors locked the behaviour in — same source, not independent evidence. One point I did not settle and am not calling a divergence: the animal half removes 2 from a single selected card rather than splitting across cards; that is the Engine-wide convention for card-resource removal, not specific to Virus."
     },
     {
       "name": "Saturn Systems",
@@ -6445,9 +7230,21 @@
         "timesObserved": 176,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Cost 15, Building + City, production box (-1 energy, +2 M€) applied atomically through `behavior` at play time - the printed order - and the city restricted to Tharsis' four volcanic spaces with no adjacency restriction. bespokeCanPlay requires a free volcanic space and energy production >= 1, which is the printed cost, and Executor.canExecute independently enforces the energy floor via production.canAdjust.",
+      "lines": [
+        "src/server/cards/prelude/LavaTubeSettlement.ts:37-56"
+      ],
+      "printedText": "Lava Tube Settlement (P37), 15 M€, green/automated, Building + City tags. Production box: -1 energy, +2 M€. 'Decrease your energy production 1 step and increase your M€ production 2 steps. Place a city tile on a VOLCANIC AREA regardless of adjacent cities.'",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "This is the correct pattern for a city card with an energy cost, and a useful contrast with Urbanized Area / Immigrant City / Noctis City, which all defer the energy loss past placement. The `volcanicSpaceIds.length === 0` fallback (place as a normal city) is for boards without volcanic areas and is unreachable on Tharsis."
     },
     {
       "name": "Psychrophiles",
@@ -6513,9 +7310,21 @@
         "timesObserved": 212,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed: Space and Earth tags, start with 38 M€ and 1 titanium production, 'When you play an Earth tag, including this, draw a card.' Metadata agrees exactly, and onCardPlayed draws once per Earth tag on the played card (Tags.cardTagCount, literal tags on that card). 'Including this' is satisfied because Player.playCorporationCard pushes the corporation into playedCards (Player.ts:975) before calling onCardPlayed (Player.ts:1003), so Point Luna draws one card for its own Earth tag on selection. Own plays only, and preludes and events with Earth tags correctly trigger it because both go through Player.playCard.",
+      "lines": [
+        "src/server/cards/prelude/PointLuna.ts:9-42"
+      ],
+      "printedText": "Point Luna (R10) — Corporation, Space and Earth tags. You start with 38 M€ and 1 titanium production. Effect: When you play an Earth tag, including this, draw a card.",
+      "metadataChecked": {
+        "cost": true,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Draws synchronously inside the hook rather than deferring. WILD-TAG CHECK (cross-cutting; applies equally to Olympus Conference, Mars University and Viral Enhancers in this batch): Tags.cardTagCount (src/server/player/Tags.ts:152-165) does NOT credit Tag.WILD, so playing either of the two in-scope wild-tag cards — Research Coordination (P40, a project card, cost 4) or Research Network (P28, a prelude) — triggers none of the on-play tag hooks. I anchored this on the printed wild-tag text itself, 'After being played, when you perform an action, the wild tag counts as any tag of your choice': the flexibility begins AFTER the card has been played and is scoped to actions you subsequently perform, so the act of playing the wild-tag card is not the playing of an Earth/science/plant tag. The Engine is consistent here in a way that looks deliberate rather than accidental — Tags.count(tag, 'default') DOES add wild tags (Tags.ts:98-101), so a wild tag counts toward requirements and tag totals while not firing on-play triggers. Recorded because it is the kind of asymmetry a later reader would otherwise re-investigate."
     },
     {
       "name": "Robinson Industries",
@@ -6538,9 +7347,21 @@
         "timesObserved": 215,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed 47 M€ start with no tags, and the action 'Spend 4 M€ to increase (one of) your LOWEST production 1 step' — the implementation offers exactly the tied-lowest productions (the minimum scan seeds on megacredits production, which is the only production that can be negative, and rebuilds the tie list whenever a strictly lower value appears), charges 4 M€, and adds one step of the chosen production. canAct is player.canAfford(4), which is the right precondition: raising a lowest production is always possible, so affordability is the whole requirement.",
+      "lines": [
+        "src/server/cards/prelude/RobinsonIndustries.ts:34-62"
+      ],
+      "printedText": "Robinson Industries (R27), no tags. 'You start with 47 M€.' Action: 'Spend 4 M€ to increase (one of) your LOWEST production 1 step.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "cost/victoryPoints marked false because a corporation card has neither; startingMegaCredits (47) and the empty tag list (correct — Robinson Industries is untagged) were both checked. Production is added after payment resolves rather than before, deliberately (the in-code reason is Manutech, out of scope here); the ordering has no effect in a base+CorpEra+Prelude game. ALL_RESOURCES (common/Resource.ts:10) is exactly the six printed production tracks, so no out-of-scope resource can be offered."
     },
     {
       "name": "Valley Trust",
@@ -6562,9 +7383,23 @@
         "timesObserved": 237,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Printed 37 M€ start, Earth tag, science discount, and the first action 'draw 3 Prelude cards, and play one of them. Discard the other two' — initialAction draws exactly 3 from the game's own prelude deck and hands them to PreludesExpansion.selectPreludeToPlay with remainders: 'discard', which plays the chosen one and discards the other two back to the prelude deck. The discount is declared as cardDiscount {tag: SCIENCE, amount: 2} with no 'per', which Card.getCardDiscount resolves as amount * tagCount, i.e. 4 M€ off a two-science-tag card — the same per-tag reading the Engine (and the printed game) applies to Point Luna's 'when you play an Earth tag, including this, draw a card'.",
+      "lines": [
+        "src/server/cards/prelude/ValleyTrust.ts:11-39",
+        "src/server/preludes/PreludesExpansion.ts:25-61",
+        "src/server/cards/Card.ts:419-438"
+      ],
+      "printedText": "Valley Trust (R34), Earth tag. 'You start with 37 M€. As your first action, draw 3 Prelude cards, and play one of them. Discard the other two.' Effect: 'When you play a science tag, you pay 2 M€ less for it.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The TODO at ValleyTrust.ts:34 is confirmed cosmetic. It is not that warnings are missing from the drawn preludes — selectPreludeToPlay does set the 'preludeFizzle' warning on any unplayable prelude (PreludesExpansion.ts:32-40) — it is that the corporation's initialAction has no channel to surface a warning on the initial-action option itself. Client advisory only; the same three preludes are selectable either way. ONE THING FOR ANOTHER PHASE, not a Valley Trust finding: choosing an unplayable prelude here routes into PreludesExpansion.fizzle, which discards it and grants 15 M€. That is shared Prelude-expansion machinery reached identically from the ordinary prelude phase (Player.ts:1462), so it belongs with whichever batch owns EccentricSponsor.ts:24 — I did not adjudicate whether the 15 M€ consolation is printed rules. cost/victoryPoints false because a corporation has neither; startingMegaCredits (37) and tags ([EARTH]) checked."
     },
     {
       "name": "Vitor",
@@ -6587,9 +7422,24 @@
         "timesObserved": 206,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "undecided",
+      "justification": "The printed corporation says 'You start with 45 M€'; the Engine sets startingMegaCredits to 48 with the comment 'It's 45 + 3 when this corp is played', i.e. it hard-codes Vitor triggering its own 'including this' effect even though Vitor carries no VP icon (its own onCardPlayed would return early on victoryPoints === undefined, so the +3 could never arise dynamically). Everything else matches: initialAction funds one not-yet-funded award for free via game.fundAward (no charge, and it does occupy one of the three award slots, correctly raising the cost of later awards), and onCardPlayed pays 3 M€ exactly for cards whose VP *icon* is non-negative, correctly excluding no-icon cards, negative fixed VP, and negative dynamic VP (it reads the icon value, not the currently-scored VP, which is the right reading of 'non-negative VP icon').",
+      "lines": [
+        "src/server/cards/prelude/Vitor.ts:19",
+        "src/server/cards/prelude/Vitor.ts:24",
+        "src/server/cards/prelude/Vitor.ts:45-79",
+        "src/server/Player.ts:975-1005"
+      ],
+      "printedText": "Vitor (R35), Earth tag. 'You start with 45 M€. As your first action, fund an award for free.' Effect: 'When you play a card with a NON-NEGATIVE VP icon, including this, gain 3 M€.' I can state the 45 and the award clause with confidence; I cannot independently confirm the exact 'including this' wording, and that clause is the whole question — it is the only thing that could justify 48.",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "The open question is worth exactly 3 M€ of starting cash on 1 of 17 dealable corporations, so it is small but it is a resource divergence if the reading is wrong, and it is invisible to every other check in this audit. Internal evidence for the Engine's reading: Point Luna (prelude/PointLuna.ts:36-41) implements the same 'including this' idiom dynamically (its own Earth tag fires when the corp is played, since Player.playCorporationCard pushes the corp into playedCards before calling onCardPlayed), so the authors clearly believe a corporation triggers its own on-play effect; for Vitor the trigger predicate cannot fire, hence the hard-coded +3. Internal evidence against: the card's own description string still says 'You start with 45 M€' and the renderer draws 45, so the UI shows 45 while the player receives 48 with no log entry explaining the difference. cost/victoryPoints marked false because a corporation card has neither field; startingMegaCredits (48) and tags ([EARTH], correct) were both checked. No requirements field (correct — the printed card has no requirement)."
     },
     {
       "name": "Allied Bank",
@@ -6656,9 +7506,21 @@
         "timesObserved": 214,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Prelude, Power tag: +2 energy production and one ocean tile through `behavior`, then a deferred 3 M€ payment; bespokeCanPlay is `player.canAfford(3)`, matching the printed cost. The ocean placement goes through the normal PlaceOceanTile path, so the TR and the ocean's adjacency/placement bonuses are handled by the Engine's shared code rather than by the card.",
+      "lines": [
+        "src/server/cards/prelude/AquiferTurbines.ts:32-40"
+      ],
+      "printedText": "Aquifer Turbines (P02), prelude, Power tag. 'Place an ocean tile. Increase your energy production 2 steps. Pay 3 M€.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Same Reds-tax caveat as Huge Asteroid (inert out of Turmoil). See crossCuttingNotes.preludeFizzle."
     },
     {
       "name": "Mohole Excavation",
@@ -6857,9 +7719,21 @@
         "timesObserved": 207,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Prelude, Earth tag: +6 M€ production applied through `behavior` at play time, then a deferred payment of 6 M€ - the printed order, and bespokeCanPlay's `player.canAfford(6)` is exactly the printed 'Pay 6 M€' treated as a cost that must be payable.",
+      "lines": [
+        "src/server/cards/prelude/BusinessEmpire.ts:30-41"
+      ],
+      "printedText": "Business Empire (P06), prelude, Earth tag. 'Increase your M€ production 6 steps. Pay 6 M€.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "See crossCuttingNotes.preludeFizzle: when canAfford(6) is false the Engine does not merely forbid the play, it converts the prelude into +15 M€ and discards it. Reachable - e.g. Ecoline (36 M€ start) buying 10 initial project cards leaves 6 M€, so a second paid prelude can be unaffordable. The Manutech short-circuit is Venus and out of scope."
     },
     {
       "name": "Donation",
@@ -7124,9 +7998,21 @@
         "timesObserved": 199,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Prelude, Jovian tag: +2 titanium production through `behavior`, then a deferred 5 M€ payment; bespokeCanPlay is `player.canAfford(5)`, matching the printed cost exactly.",
+      "lines": [
+        "src/server/cards/prelude/GalileanMining.ts:32-40"
+      ],
+      "printedText": "Galilean Mining (P13), prelude, Jovian tag. 'Increase your titanium production 2 steps. Pay 5 M€.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "See crossCuttingNotes.preludeFizzle."
     },
     {
       "name": "Huge Asteroid",
@@ -7149,9 +8035,21 @@
         "timesObserved": 207,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "matches",
+      "justification": "Prelude, no tags: temperature +3 through `behavior` (which correctly yields 3 TR and any temperature-track bonuses via the normal global-parameter path), then a deferred 5 M€ payment; bespokeCanPlay is `player.canAfford(5)`, matching the printed cost.",
+      "lines": [
+        "src/server/cards/prelude/HugeAsteroid.ts:29-37"
+      ],
+      "printedText": "Huge Asteroid (P15), prelude, no tags. 'Increase temperature 3 steps. Pay 5 M€.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "canAfford(5) does not model a Reds tax on the 3 TR, which is correct here only because Turmoil is out of Nadia's configuration; if the pin or scope ever adds Turmoil this check would need a `tr` term. See crossCuttingNotes.preludeFizzle."
     },
     {
       "name": "Metals Company",
@@ -7328,9 +8226,24 @@
         "timesObserved": 241,
         "marker": "src/server/cards/prelude/EccentricSponsor.ts:24 - TODO: prelude cannot detect during canPlay that it will fizzle (legality-relevant)"
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "undecided",
+      "justification": "The printed mechanic is implemented exactly: a flat 25 M€ reduction on exactly one card played out of hand, keyed on `player.lastCardPlayed`, and — importantly — the discount is live while `PlayProjectCard` computes `getPlayableCards()`, so cards affordable only with the discount are correctly offered. What has no basis on the printed card is the failure path: when no card is playable the Engine grants +15 M€ and returns the prelude to the deck (`PreludesExpansion.fizzle`). Whether the printed Prelude rules compensate an unexecutable mandatory prelude at all, let alone with 15 M€, is a rules question I cannot settle; the only occurrences of the number in the repo are the Engine's own log string, UI warning and their translations, which is the same source, not evidence.",
+      "lines": [
+        "src/server/cards/prelude/EccentricSponsor.ts:24-44",
+        "src/server/preludes/PreludesExpansion.ts:8-19",
+        "src/server/preludes/PreludesExpansion.ts:30-52",
+        "src/server/deferredActions/PlayProjectCard.ts:12-22"
+      ],
+      "printedText": "Eccentric Sponsor (P11, prelude, no tags, no cost, no VP): 'Play a card from hand, reducing its cost by 25 M€.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": false,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "MARKER `EccentricSponsor.ts:24` characterised. The card overrides neither `canPlay` nor `bespokeCanPlay` and carries no `requirements` and no `behavior`, so `Card.canPlay` (Card.ts:242-260) is unconditionally true — that is exactly why the TODO exists, and it is the whole of the Ecology Experts asymmetry R1 flagged. The two cards take different code paths to the same rule: Ecology Experts' `canPlay` override returns false and `selectPreludeToPlay` fizzles it AT THE GATE, never calling `playCard`; Eccentric Sponsor is genuinely played, and fizzles from inside its own `bespokePlay` continuation after `PlayProjectCard` yields `undefined`. For Eccentric Sponsor the two paths converge on the identical outcome (+15 M€) because the card has no other on-play effect, no tags and no VP, so nothing is lost by being un-played; for Ecology Experts they do not converge (its +1 plant production is forfeited on the gate path). NO LEGALITY DIFFERENCE for Nadia: both preludes remain selectable in `selectPreludeToPlay` either way, so the enumerator's legal set is unaffected; the missing `preludeFizzle` warning is a client-side hint Nadia does not read. NO EXPLOIT: `PlayProjectCard` returns `undefined` only when `getPlayableCards()` is empty (PlayProjectCard.ts:13-17) — `SelectProjectCardToPlay` offers no decline option, so a player who CAN play a card cannot elect the 15 M€ instead. `EccentricSponsor.ts:39-40` clears `lastCardPlayed` on fizzle so the 25 M€ never leaks to a later card; belt-and-braces, since the fizzle also removes the card from the tableau. If W adjudicates the fizzle rule as unprinted, this card becomes a `behavioural-divergence` with magnitude exactly 15 M€ per fizzle, and the same ruling must be applied to Ecology Experts, Merger and Double Down (the other `fizzle` callers; only the first two are in scope)."
     },
     {
       "name": "Ecology Experts",
@@ -7353,9 +8266,23 @@
         "timesObserved": 229,
         "marker": null
       },
-      "verdict": "not-reviewed",
-      "justification": "Queued for review; not yet read.",
-      "lines": []
+      "verdict": "undecided",
+      "justification": "The printed prelude states two things unconditionally: increase your plant production 1 step, and play a card from hand ignoring global requirements. The Engine's canPlay override (lines 36-52) makes the whole prelude conditional on the second half being performable: it temporarily grants itself +50 to every global-parameter requirement and +1 plant production, then requires `player.getPlayableCards().length > 0`. When that is false - most obviously when the player bought no project cards at all during SelectInitialCards, or cannot afford any card in hand - PreludesExpansion.selectPreludeToPlay fizzles the prelude: +15 M€, card discarded, and the printed +1 plant production never happens. Whether an unperformable *benefit* on a prelude blocks the prelude is exactly the unsettled question the plan flagged; the Engine answers it inconsistently, refusing here but allowing Eccentric Sponsor to be played and fizzle afterwards. The probe itself is otherwise correct: the +1 plant production is included before testing playability (so a card gated on plant production is correctly considered), and the bonus is scoped to global parameters only, matching 'ignoring global requirements' rather than 'ignoring all requirements' (tests/cards/prelude/EcologyExperts.spec.ts confirms AI Central's science-tag requirement is not waived).",
+      "lines": [
+        "src/server/cards/prelude/EcologyExperts.ts:36-52",
+        "src/server/preludes/PreludesExpansion.ts:8-19",
+        "src/server/preludes/PreludesExpansion.ts:33-51"
+      ],
+      "printedText": "Ecology Experts (P10), prelude, Plant + Microbe tags. 'Increase your plant production 1 step. PLAY A CARD FROM HAND, IGNORING GLOBAL REQUIREMENTS.'",
+      "metadataChecked": {
+        "cost": false,
+        "tags": true,
+        "requirements": false,
+        "victoryPoints": false
+      },
+      "escalates": false,
+      "downstreamImpact": null,
+      "notes": "Reachability is NOT low, unlike most findings in this batch: an empty starting hand is a perfectly ordinary outcome for a random-legal agent, and Ecology Experts was played 229 times in the 1,500-game sweep, so the fizzle path is very likely exercised. If W resolves this against the Engine the divergence is a resource swap (+15 M€ and a discarded prelude, instead of +1 plant production and a free card play) and escalates under K5. Two side-effects of the probe worth recording even if the verdict lands on `matches`: (a) canPlay mutates player state (temporaryGlobalParameterRequirementBonus, production.plants, and plants under Manutech) and restores it in a `finally`, so any snapshot taken mid-probe would be wrong - relevant to agent/src/engine/snapshot.ts if M4 search ever forks inside a canPlay; (b) getPlayableCards() calls canPlay on every card in hand, which can set transient `warnings` on those cards (e.g. Asteroid Mining Consortium's selfTarget)."
     },
     {
       "name": "Experimental Forest",
@@ -7379,5 +8306,309 @@
       "justification": "Carries no imperative override: the implementation is a `behavior` block and/or metadata only, so it is out of the K5 shortlist (Milestone1_Bullet7_Prompts.md, phase R section 1).",
       "lines": []
     }
-  ]
+  ],
+  "summary": {
+    "inScope": 277,
+    "reviewed": 73,
+    "verdicts": {
+      "not-reviewed": 204,
+      "matches": 56,
+      "undecided": 10,
+      "behavioural-divergence": 7
+    },
+    "escalating": [
+      "Decomposers",
+      "Immigrant City",
+      "Energy Tapping",
+      "Power Supply Consortium"
+    ],
+    "nonMatching": [
+      {
+        "name": "Ecological Zone",
+        "verdict": "undecided",
+        "rank": 1,
+        "escalates": false
+      },
+      {
+        "name": "Immigrant City",
+        "verdict": "behavioural-divergence",
+        "rank": 3,
+        "escalates": true
+      },
+      {
+        "name": "Ecology Experts",
+        "verdict": "undecided",
+        "rank": 19,
+        "escalates": false
+      },
+      {
+        "name": "Hackers",
+        "verdict": "undecided",
+        "rank": 22,
+        "escalates": false
+      },
+      {
+        "name": "Eccentric Sponsor",
+        "verdict": "undecided",
+        "rank": 23,
+        "escalates": false
+      },
+      {
+        "name": "Virus",
+        "verdict": "behavioural-divergence",
+        "rank": 24,
+        "escalates": false
+      },
+      {
+        "name": "Decomposers",
+        "verdict": "behavioural-divergence",
+        "rank": 25,
+        "escalates": true
+      },
+      {
+        "name": "Power Supply Consortium",
+        "verdict": "behavioural-divergence",
+        "rank": 29,
+        "escalates": true
+      },
+      {
+        "name": "Energy Tapping",
+        "verdict": "behavioural-divergence",
+        "rank": 37,
+        "escalates": true
+      },
+      {
+        "name": "Hired Raiders",
+        "verdict": "behavioural-divergence",
+        "rank": 38,
+        "escalates": false
+      },
+      {
+        "name": "Sabotage",
+        "verdict": "behavioural-divergence",
+        "rank": 40,
+        "escalates": false
+      },
+      {
+        "name": "Vitor",
+        "verdict": "undecided",
+        "rank": 46,
+        "escalates": false
+      },
+      {
+        "name": "Water Import From Europa",
+        "verdict": "undecided",
+        "rank": 47,
+        "escalates": false
+      },
+      {
+        "name": "Aquifer Pumping",
+        "verdict": "undecided",
+        "rank": 48,
+        "escalates": false
+      },
+      {
+        "name": "Aquifer",
+        "verdict": "undecided",
+        "rank": 52,
+        "escalates": false
+      },
+      {
+        "name": "Asteroid:SP",
+        "verdict": "undecided",
+        "rank": 53,
+        "escalates": false
+      },
+      {
+        "name": "Convert Heat",
+        "verdict": "undecided",
+        "rank": 57,
+        "escalates": false
+      }
+    ],
+    "merge": {
+      "batches": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6"
+      ],
+      "method": "Batches R2-R6 ran concurrently and each wrote its own file, per the plan's ownership table (a shared file with concurrent writers is a lost-findings bug). Merged here with three checks: every queued card claimed by exactly one batch, no batch writing outside its own list, and no queued card left at `not-reviewed`.",
+      "problems": []
+    },
+    "crossBatch": [
+      {
+        "id": "X1-nested-play-tag-crediting",
+        "title": "Retroactive tag crediting for a card played from inside a prelude - three batches, three different verdicts on one mechanism",
+        "cards": [
+          "Ecological Zone",
+          "Decomposers",
+          "Viral Enhancers",
+          "Ecology Experts"
+        ],
+        "batches": [
+          "R1",
+          "R2",
+          "R5"
+        ],
+        "verdictConflict": true,
+        "escalatesIfResolvedAgainstEngine": true,
+        "statement": "When Ecology Experts defers a PlayProjectCard, the card that enters play afterwards is credited with Ecology Experts' own already-played tags. EcologicalZone.ts:66-76 implements this explicitly (a third animal); Decomposers.ts:48-53 does the same (+2 microbes, 3 where the printed card gives 1); Viral Enhancers has no such hack, although Ecology Experts carries both a plant and a microbe tag and Viral Enhancers responds to both. So the Engine cannot be right both ways: if the crediting is correct, Viral Enhancers under-fires by 2; if it is incorrect, Ecological Zone over-fires by 1 and Decomposers by 2.",
+        "verdicts": {
+          "Ecological Zone": "undecided (R1) - the Engine applies the rule consistently across the two cards that implement it, which is what a genuine \"the nested play is simultaneous\" reading would produce",
+          "Decomposers": "behavioural-divergence, escalating (R2) - the printed sequence is unambiguous: you place Ecology Experts and gain its tags before its text tells you to play a card, so an ongoing \"when you play\" effect cannot see a play that preceded it",
+          "Viral Enhancers": "matches (R5) - and R5's own reading (ongoing effects apply only from when the card is in play) makes Viral Enhancers correct and the other two the outliers"
+        },
+        "forW": "Adjudicate all four together and give Ecological Zone and Decomposers the same verdict. They are the same mechanism and they currently differ only because two independent batches read them. Scoring-relevant either way (1 VP per 2 animals, 1 VP per 3 microbes), so the resolution decides whether this escalates under K5."
+      },
+      {
+        "id": "X2-manufactured-gain-to-satisfy-a-loss",
+        "title": "Identical gain-first code in two cards, and the two defects compound",
+        "cards": [
+          "Energy Tapping",
+          "Power Supply Consortium"
+        ],
+        "batches": [
+          "R2",
+          "R3"
+        ],
+        "verdictConflict": false,
+        "escalatesIfResolvedAgainstEngine": true,
+        "statement": "PowerSupplyConsortium.ts:35-45 is byte-for-byte identical to EnergyTapping.ts:35-45, comment included. When no player has energy production, both defer the gain first, making the player their own only legal target for the \"decrease any energy production\" step and handing the gain straight back. R3 read Energy Tapping and R2 read Power Supply Consortium independently and reached the same verdict. R2 answered R3's open question: Power Supply Consortium's printed requirement is 2 POWER TAGS, not energy production, so the zero-target branch is reachable - and Energy Tapping landing in its own zero-target branch is one of the ways to reach it, so the two defects compound on a concrete generation-1 line.",
+        "forW": "One register row and one upstream report covering both cards, not two. Note the shared weakest link both batches recorded: the anchor is the general \"do as much as you can, ignore what you cannot\" rule plus written order, not a card-specific FAQ line either batch could quote. If W rejects that anchor, both entries become `undecided`, not `matches`. Great Escarpment Consortium and Asteroid Mining Consortium carry the same code but their printed steel/titanium-production requirements make the branch unreachable."
+      },
+      {
+        "id": "X3-prelude-fizzle-15-mc",
+        "title": "PreludesExpansion.fizzle grants 15 M€ with no printed basis - systemic, not per-card",
+        "cards": [
+          "Ecology Experts",
+          "Eccentric Sponsor",
+          "Valley Trust",
+          "Business Empire",
+          "Galilean Mining",
+          "Huge Asteroid",
+          "Aquifer Turbines"
+        ],
+        "batches": [
+          "R1",
+          "R2",
+          "R4"
+        ],
+        "verdictConflict": false,
+        "escalatesIfResolvedAgainstEngine": false,
+        "statement": "When a prelude cannot be played, the Engine discards it and grants 15 M€. Three batches hit this from three directions and none of them could find a printed basis for the 15 M€ anywhere in Prelude. It is also the mechanism behind an Engine inconsistency: Ecology Experts is refused at the selection gate by its own `canPlay` and then fizzles, whereas Eccentric Sponsor (the pre-located marker, EccentricSponsor.ts:24) is genuinely played and fizzles from inside `bespokePlay`. R2 established that for Eccentric Sponsor the two paths converge - it has no other on-play effect, no tags and no VP - so there is no legality difference for Nadia and no exploit. Valley Trust's initial action reaches the same shared machinery (Player.ts:1462).",
+        "forW": "Adjudicate once as one systemic register entry rather than as seven card entries. The four paid preludes' own canAfford checks were each verified correct; they appear here only because the fizzle rule governs them. Reachable: Ecoline (36 M€) buying 10 initial cards leaves 6 M€."
+      },
+      {
+        "id": "X4-up-to-N-granularity",
+        "title": "\"Remove up to N\" is implemented as all-or-nothing across the whole attack class",
+        "cards": [
+          "Hired Raiders",
+          "Sabotage"
+        ],
+        "batches": [
+          "R3"
+        ],
+        "verdictConflict": false,
+        "escalatesIfResolvedAgainstEngine": false,
+        "statement": "Both cards print \"up to\" and both offer only {maximum, none}, where the printed text grants any amount 0..N. R3 marked both non-escalating because it is a universal Engine convention for the whole attack class and the omitted amounts are dominated - with one non-contrived exception at 3-4p, where the Miner award counts steel plus titanium, so removing more from one opponent can hand the award to another. Flooding is the printed-text contrast that shows the distinction is real rather than a blanket excuse: it says \"remove 4 M€\" with no \"up to\", the implementation removes exactly 4, and it verdicts `matches`.",
+        "forW": "Adjudicate once for the class. Names AC-5 (3-4p placement) as where it could first bite."
+      },
+      {
+        "id": "X5-maxed-global-parameter-actions",
+        "title": "Actions whose entire printed effect raises an already-maxed global parameter are legal moves that do nothing",
+        "cards": [
+          "Aquifer",
+          "Asteroid:SP",
+          "Convert Heat",
+          "Aquifer Pumping",
+          "Water Import From Europa"
+        ],
+        "batches": [
+          "R4"
+        ],
+        "verdictConflict": false,
+        "escalatesIfResolvedAgainstEngine": false,
+        "statement": "The Engine's answer is yes-with-a-warning: canAct calls addWarning('maxoceans'/'maxtemp') and returns true, so paying 18 M€ for a 10th ocean or 8 heat at +8 C is an enabled, server-validated legal move with no effect. Deliberate and internally consistent (ArtificialLake.ts:35 says so outright), and the Engine is scrupulous about the TR half - increaseTemperature, increaseOxygenLevel and addOcean all return before granting TR. R4 could not settle it from printed card text, so all five are `undecided`.",
+        "forW": "One register row, not five. Practical impact is confined to random-legal baselines burning resources; no evaluating agent picks a strictly dominated move, so M3+ is unaffected and no state is mis-scored either way."
+      },
+      {
+        "id": "X6-sell-patents-blind-spot",
+        "title": "Sell Patents' 0 plays in the sweep is an instrument blind spot, not a defect signal - a K4 correction, not a K5 finding",
+        "cards": [
+          "Sell Patents"
+        ],
+        "batches": [
+          "R2"
+        ],
+        "verdictConflict": false,
+        "escalatesIfResolvedAgainstEngine": false,
+        "statement": "Player.getActions() (Player.ts:1660-1664) calls the standard project's action() directly, and that path calls projectPlayed itself - it never reaches payAndExecute, which is the chokepoint agent/src/coverage/playSweep.ts wraps. Sell Patents is therefore structurally invisible to the sweep and would read 0 plays however often it was used.",
+        "forW": "This corrects an entry in phase M's artifact, not phase R's. The `reachable-by-other-route` row cannot be discharged by card_play_coverage.json; the honest statement is \"not observable by this instrument\". Belongs to question 2/4, not question 3."
+      },
+      {
+        "id": "X7-negative-resource-through-unclamped-setter",
+        "title": "A mid-play snapshot can carry a negative resource count",
+        "cards": [
+          "Moss",
+          "Nitrophilic Moss",
+          "Viral Enhancers"
+        ],
+        "batches": [
+          "R1",
+          "R5"
+        ],
+        "verdictConflict": false,
+        "escalatesIfResolvedAgainstEngine": false,
+        "statement": "Moss.ts:33-42 and NitrophilicMoss.ts:34-42 accept the play when plants are short but Viral Enhancers is in the tableau, then bespokePlay does a raw `player.plants--`. That setter (Player.ts:225-227) assigns straight to stock, bypassing Stock.add's clamp AND its logIllegalState call (Stock.ts:24-41), so stock.plants transiently reaches -1 before onCardPlayed hands the plant back. It settles at 0, so no printed outcome differs and all three cards verdict correctly - Viral Enhancers grants exactly what its printed card promises.",
+        "forW": "Not a rules finding. It is an Agent-side note for agent/src/engine/snapshot.ts and M4 search: a snapshot taken mid-play would capture a negative resource, and the Engine's own illegal-state logging is bypassed on exactly this path so nothing would flag it. Running Notes material."
+      },
+      {
+        "id": "X8-checked-and-dismissed",
+        "title": "Worries raised by a batch and then disproved - recorded so no later phase re-investigates them",
+        "cards": [
+          "Virus",
+          "Buffer Gas",
+          "Herbivores",
+          "Mining Guild",
+          "United Nations Mars Initiative",
+          "Valley Trust",
+          "Standard Technology",
+          "Indentured Workers",
+          "Tharsis Republic"
+        ],
+        "batches": [
+          "R2",
+          "R3",
+          "R4",
+          "R5",
+          "R6"
+        ],
+        "verdictConflict": false,
+        "escalatesIfResolvedAgainstEngine": false,
+        "statement": "Virus.ts:36 (Mons Insurance) verified inert on two independent grounds, not assumed: it sits inside an isSoloMode() branch, and Mons Insurance is Promo-only. Buffer Gas: R3 re-verified phase M's `unreachable-in-config` classification against Game.ts:1638-1641 rather than trusting it - the classification holds and 0 plays is expected. The three TODOs the plan pre-classified as cosmetic (Herbivores.ts:42, UnitedNationsMarsInitiative.ts:22, ValleyTrust.ts:34) were each confirmed cosmetic by reading them. Standard Technology's Sell-Patents exclusion is a by-name guard that holds against the route the Engine actually uses. Mining Guild, Tharsis Republic and Indentured Workers each survived a targeted attempt to find the expected defect. Census module attribution for Virus, Power Supply Consortium and Great Escarpment Consortium was queried by R2 and checked against the manifests: all three are `corpera`, which is correct - they are printed Corporate Era cards, and phase M's census is right.",
+        "forW": "No action. Recorded to stop the next audit re-deriving them."
+      },
+      {
+        "id": "X9-upstream-fragility-on-pin-move",
+        "title": "\"Including this\" depends on a play-ordering the Engine authors document as wrong",
+        "cards": [
+          "Terraforming Ganymede",
+          "Vitor",
+          "Point Luna"
+        ],
+        "batches": [
+          "R2",
+          "R4",
+          "R5"
+        ],
+        "verdictConflict": false,
+        "escalatesIfResolvedAgainstEngine": false,
+        "statement": "Terraforming Ganymede's `1 + count` idiom is correct only because playCard runs play() before pushing to playedCards - and Player.ts:852-865 carries the authors' own comment saying that order is wrong and that fixing it would break every \"including this\" card. Vitor takes the opposite approach for the same idiom, hard-coding startingMegaCredits: 48 (\"45 + 3 when this corp is played\") while its own description and renderer say 45; Point Luna implements the same idiom dynamically and correctly.",
+        "forW": "agent/CLAUDE.md §2 requires re-verification if the Engine pin moves. This is a named thing to re-check: an upstream fix to the playCard ordering would change the behaviour of every \"including this\" card at once. Vitor itself is `undecided` on its own merits (3 M€ of starting cash on 1 of 17 dealable corporations, silently differing from its printed text)."
+      }
+    ]
+  }
 }
