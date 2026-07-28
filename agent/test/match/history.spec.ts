@@ -15,6 +15,7 @@ import {
   RecordedDecision,
   RecordedGameHistory,
   loadMovesFile,
+  mergeHistoryDetail,
   movesFileName,
   recordGameHistory,
   traceRecordedDecisions,
@@ -448,6 +449,71 @@ describe('match history (Unit B)', function() {
 
       expect(verification.rowMatchesSidecar).to.be.false;
       expect(verification.ok).to.be.false;
+    });
+  });
+
+  // The seam Unit D's validation battery found open: `pool.ts` had no rule for merging this
+  // module's `detail` block, so every instrumented pooled run produced a structurally different
+  // artifact from the single-process run of the same specification - a criterion R6 failure.
+  describe('mergeHistoryDetail (criterion R6: the pooled artifact is not a different artifact)', () => {
+    const workerDetail = (games: number, decisions: number) => ({
+      historyTier: 'trace',
+      games,
+      decisionsRecorded: decisions,
+      rejectedSubmissionsRecorded: 0,
+      strayProcessCalls: 0,
+    });
+
+    it('sums per-worker counters and keeps the shared fields once', () => {
+      const merged = mergeHistoryDetail([workerDetail(20, 5835), workerDetail(20, 5995), workerDetail(40, 11853)]);
+
+      expect(merged).to.deep.equal({
+        historyTier: 'trace',
+        games: 80,
+        decisionsRecorded: 23683,
+        rejectedSubmissionsRecorded: 0,
+        strayProcessCalls: 0,
+      });
+    });
+
+    it('serializes byte-identically to a single-process block, not merely equal field for field', () => {
+      // R6 compares JSON strings, so key order is part of the criterion.
+      const single = workerDetail(80, 23683);
+      const merged = mergeHistoryDetail([workerDetail(40, 11841), workerDetail(40, 11842)]);
+
+      expect(JSON.stringify(merged)).to.equal(JSON.stringify(single));
+    });
+
+    it('recomputes movesBytesPerGame from the merged totals rather than averaging the averages', () => {
+      // Uneven shards: averaging 100 and 200 would give 150; the true figure is 3000/20 = 150 only
+      // if the shards are equal, and they are not.
+      const merged = mergeHistoryDetail([
+        {...workerDetail(5, 1000), movesBytes: 500, movesBytesPerGame: 100, movesFiles: 5},
+        {...workerDetail(15, 3000), movesBytes: 3000, movesBytesPerGame: 200, movesFiles: 15},
+      ]) as Record<string, number>;
+
+      expect(merged.movesBytes).to.equal(3500);
+      expect(merged.games).to.equal(20);
+      expect(merged.movesBytesPerGame).to.equal(175);
+      expect(merged.movesFiles).to.equal(20);
+    });
+
+    it('falls back to the unmerged per-worker shape when the workers disagree on a shared field', () => {
+      const details = [workerDetail(20, 100), {...workerDetail(20, 100), historyTier: 'moves'}];
+
+      expect(mergeHistoryDetail(details)).to.deep.equal({perWorker: details});
+    });
+
+    it('falls back to the unmerged per-worker shape rather than guessing at an unknown field', () => {
+      const details = [{...workerDetail(20, 100), somethingNew: 7}, workerDetail(20, 100)];
+
+      expect(mergeHistoryDetail(details)).to.deep.equal({perWorker: details});
+    });
+
+    it('passes a single worker through unchanged', () => {
+      const only = workerDetail(20, 100);
+
+      expect(mergeHistoryDetail([only])).to.equal(only);
     });
   });
 });

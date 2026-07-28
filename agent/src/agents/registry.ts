@@ -53,7 +53,7 @@ export type AgentEntry = AgentIdentity & {
   create: (seed: number) => EmbeddedResponder;
 };
 
-export const AGENTS: Readonly<Record<string, AgentEntry>> = {
+const REGISTRY: Record<string, AgentEntry> = {
   'random-legal': {
     name: 'random-legal',
     // Version 1 is the agent the Milestone 1 AC-1 run (docs/AC1_Legality_Run.md) adjudicated,
@@ -66,6 +66,42 @@ export const AGENTS: Readonly<Record<string, AgentEntry>> = {
   // Milestone 2 bullet 2 adds the greedy one-ply baseline here:
   //   'greedy-1ply': {name: 'greedy-1ply', version: '1', description: '...', create: (seed) => ...},
 };
+
+/** The roster. A read-only view of {@link REGISTRY}, which {@link withTemporaryAgent} can add to. */
+export const AGENTS: Readonly<Record<string, AgentEntry>> = REGISTRY;
+
+/**
+ * Registers `entry` for the duration of `fn`, then removes it. Returns whatever `fn` returns.
+ *
+ * **This exists for verification code that must seat an agent the roster does not permanently
+ * carry, and it has exactly one production caller: criterion R8's equivalence check**
+ * (`match/legality.ts`). That check has to make the match runner and the Milestone-1
+ * `runLegalityBatch` play the *same* game, and the two construct agents differently - the oracle
+ * builds one `randomLegalAgent` and lets every player draw from its single RNG stream, while the
+ * match runner builds one agent per seat from that seat's own seed. The bridge is a fact about
+ * `randomLegalAgent`: it holds no state but its `AgentRandom`, so **n per-seat agents sharing one
+ * `AgentRandom` are behaviourally identical to one shared agent**. An entry whose `create` hands
+ * every seat an agent bound to the same stream therefore reproduces the oracle's game exactly -
+ * while leaving the runner's real per-seat construction and seat router fully in place, which is
+ * the whole point (the earlier version of that check replaced the router and so could not test it).
+ *
+ * Deliberately narrow: it mutates process-global state, so it is not a general extension point.
+ * A permanent agent belongs in {@link REGISTRY} above, where `--list-agents` will show it and a
+ * version number pins its behaviour. Registering over an existing name throws rather than
+ * shadowing it - a silent shadow would make two runs of the same lineup name incomparable, which
+ * is precisely what the `version` discipline above exists to prevent.
+ */
+export async function withTemporaryAgent<T>(entry: AgentEntry, fn: () => Promise<T>): Promise<T> {
+  if (REGISTRY[entry.name] !== undefined) {
+    throw new Error(`withTemporaryAgent: '${entry.name}' is already registered; pick a name that cannot shadow a real agent.`);
+  }
+  REGISTRY[entry.name] = entry;
+  try {
+    return await fn();
+  } finally {
+    delete REGISTRY[entry.name];
+  }
+}
 
 export const DEFAULT_AGENT = 'random-legal';
 

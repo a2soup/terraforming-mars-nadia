@@ -798,6 +798,107 @@ export function createMatchInstrument(capture: MatchCaptureOptions): MatchInstru
   return new MatchHistoryInstrument(capture);
 }
 
+/** Run-level `detail` fields that are per-worker totals: a pooled run's value is their sum. */
+const SUMMED_DETAIL_FIELDS: ReadonlyArray<string> = [
+  'games',
+  'decisionsRecorded',
+  'rejectedSubmissionsRecorded',
+  'strayProcessCalls',
+  'movesBytes',
+  'movesFiles',
+];
+
+/** Run-level `detail` fields that describe the *run*, not a worker's share of it: every worker must agree. */
+const SHARED_DETAIL_FIELDS: ReadonlyArray<string> = ['historyTier', 'movesDir'];
+
+/**
+ * Merges the run-level `detail` blocks of several {@link MatchHistoryInstrument}s - one per pool
+ * worker - into the block a single-process run of the same specification would have produced.
+ *
+ * **Why this lives here and not in `match/pool.ts`.** `detail` is this module's escape hatch
+ * (`types.ts`: "Unit B's own tier-specific detail"), so `pool.ts` could not merge it without
+ * guessing at a shape it does not own - and it correctly declined to guess, preserving each
+ * worker's block under `perWorker` instead. That conservative choice was right in the absence of a
+ * merge rule and wrong once there is one: it left the pooled artifact structurally different from
+ * the single-process artifact for every instrumented run, which is a **criterion R6 failure** (§4.5
+ * - the parallel path must not be a different runner). The Unit D validation battery found it; this
+ * function is the missing half of the seam, and `pool.ts` delegates here.
+ *
+ * The rules follow from what each field means: {@link SUMMED_DETAIL_FIELDS} are counts of things a
+ * worker did, so they add; {@link SHARED_DETAIL_FIELDS} describe the run, so they must agree and are
+ * carried through once; and `movesBytesPerGame` is *derived*, so it is recomputed from the merged
+ * totals rather than averaged (averaging per-worker averages would silently weight uneven shards
+ * wrongly).
+ *
+ * If the blocks disagree on a shared field or carry a field this function has no rule for, it falls
+ * back to `pool.ts`'s original `{perWorker}` shape. That is deliberate: a wrong merge is worse than a
+ * visibly unmerged one, and R6 will fail loudly on the difference rather than quietly on a number.
+ */
+export function mergeHistoryDetail(
+  details: ReadonlyArray<Record<string, unknown>>,
+): Record<string, unknown> {
+  if (details.length === 1) {
+    return details[0];
+  }
+
+  const knownFields = new Set([...SUMMED_DETAIL_FIELDS, ...SHARED_DETAIL_FIELDS, 'movesBytesPerGame']);
+  const merged: Record<string, unknown> = {};
+
+  for (const field of SHARED_DETAIL_FIELDS) {
+    const present = details.filter((detail) => detail[field] !== undefined);
+    if (present.length === 0) {
+      continue;
+    }
+    const values = new Set(present.map((detail) => JSON.stringify(detail[field])));
+    if (values.size > 1 || present.length !== details.length) {
+      return {perWorker: details};
+    }
+    merged[field] = present[0][field];
+  }
+
+  for (const detail of details) {
+    for (const field of Object.keys(detail)) {
+      if (!knownFields.has(field)) {
+        return {perWorker: details};
+      }
+    }
+  }
+
+  for (const field of SUMMED_DETAIL_FIELDS) {
+    if (!details.some((detail) => detail[field] !== undefined)) {
+      continue;
+    }
+    let total = 0;
+    for (const detail of details) {
+      const value = detail[field];
+      if (typeof value !== 'number') {
+        return {perWorker: details};
+      }
+      total += value;
+    }
+    merged[field] = total;
+  }
+
+  if (details.some((detail) => detail.movesBytesPerGame !== undefined)) {
+    const games = merged.games as number | undefined;
+    const bytes = merged.movesBytes as number | undefined;
+    merged.movesBytesPerGame = games === undefined || games === 0 || bytes === undefined ?
+      0 :
+      Math.round(bytes / games);
+  }
+
+  // Rebuild in the producing order (`finish()`), so the merged block is byte-identical to the
+  // single-process one and not merely equal field for field - R6 compares serialized JSON.
+  const ordered: Record<string, unknown> = {};
+  for (const field of ['historyTier', 'games', 'decisionsRecorded', 'rejectedSubmissionsRecorded',
+    'strayProcessCalls', 'movesBytes', 'movesBytesPerGame', 'movesFiles', 'movesDir']) {
+    if (merged[field] !== undefined) {
+      ordered[field] = merged[field];
+    }
+  }
+  return ordered;
+}
+
 // ---------------------------------------------------------------------------------------------
 // Criterion R3: the recorded history is verified, not asserted
 // ---------------------------------------------------------------------------------------------

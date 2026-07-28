@@ -1,3 +1,4 @@
+import {AgentEntry, withTemporaryAgent} from '../agents/registry';
 import {randomLegalAgent} from '../core/randomLegalAgent';
 import {createAgentRandom} from '../core/rng';
 import {EmbeddedResponder} from '../driver/responder';
@@ -8,7 +9,7 @@ import {runLegalityBatch} from '../legality/run';
 import {GameCounters, SubmissionMonitor} from '../legality/submissionMonitor';
 import {CauseTally, LegalityGameConfig} from '../legality/types';
 import {resolveMatchSpec} from './pairing';
-import {MatchInstrument, resolveInstrument, runMatchConfigs} from './runner';
+import {runMatchConfigs} from './runner';
 import {MatchGameConfig, MatchGameRecord, MatchLegalityCounters, ResolvedMatchSpec} from './types';
 
 /**
@@ -268,22 +269,32 @@ export type LegalityEquivalenceReport = {
  * field in {@link EQUIVALENCE_FIELDS}. Any difference is a blocking failure: it means the absorption
  * changed what the number counts, which is the one outcome §4.6 exists to prevent.
  *
- * **The one deliberate distortion, stated up front, because without it the comparison is
- * meaningless.** The two runners do not seat agents the same way. `runLegalityBatch` builds *one*
- * `randomLegalAgent(createAgentRandom(agentSeed))` and lets every player draw from that single RNG
- * stream; the match runner builds one agent **per seat** from that seat's own agent seed (§4.1 -
- * agent seeds travel with the lineup slot). Two agents seeded identically are not the same thing as
- * one agent shared: the streams are consumed in a different order, so the games diverge at the first
- * decision. Comparing counters across two *different games* would compare noise.
+ * **Making the two runners play the same game, without disabling anything.** They do not seat
+ * agents the same way. `runLegalityBatch` builds *one* `randomLegalAgent(createAgentRandom(agentSeed))`
+ * and lets every player draw from that single RNG stream; the match runner builds one agent **per
+ * seat** from that seat's own agent seed (§4.1 - agent seeds travel with the lineup slot). Two
+ * agents seeded identically are not the same thing as one agent shared: the streams are consumed in
+ * a different order, so the games diverge at the first decision. Comparing counters across two
+ * *different games* would compare noise.
  *
- * So this comparison replaces the match runner's seat router with the oracle's single shared agent
- * ({@link sharedStreamInstrument}), which makes the two runners play **the same game** - same engine
- * seed, same decisions, same submissions - and isolates the only thing R8 is about: the accounting.
- * What that costs is stated plainly: this comparison does not exercise the per-seat router, and the
- * match record's own `decisions` counter (incremented by the router in `playMatchGame`) is 0 here by
- * construction, which is why `decisions` is read from the history instead. The router *is* exercised
- * by {@link checkMatchNeutrality}, on real per-seat match games; the two checks are complementary
- * and neither substitutes for the other.
+ * The bridge is a fact about the agent rather than a substitution in the runner: `randomLegalAgent`
+ * holds **no state but its `AgentRandom`**, so *n* per-seat agents sharing one `AgentRandom` are
+ * behaviourally identical to one shared agent. {@link playThroughMatchRunner} therefore seats a
+ * temporary registry entry whose `create` hands every seat an agent bound to the same stream
+ * (`agents/registry.ts`'s `withTemporaryAgent`). The two runners play the same game - same engine
+ * seed, same decisions, same submissions - while the match runner's loop, its per-seat construction
+ * and its **seat router all run for real**.
+ *
+ * **This closed a real gap in the evidence.** The first version of this check substituted the
+ * router away wholesale, which made the games identical but meant the comparison never exercised
+ * the router, and left the match record's own `decisions` counter 0 by construction (it was read
+ * from the history instead). So no single check compared the *real* per-seat match runner against
+ * the Milestone-1 oracle: this one covered the accounting on a path that was not the real one, and
+ * {@link checkMatchNeutrality} covered the real path but only against another match run, never
+ * against the oracle. Since a promotion gate rests on this equivalence (§4.6), that composition was
+ * weaker than it looked. It is now one direct measurement, and `decisions` is compared from the
+ * router's own counter on both variants. {@link checkMatchNeutrality} remains, and is still worth
+ * having: it asks the different question of whether instrumenting a game changes it.
  */
 export async function compareLegalityAccounting(
   configs: ReadonlyArray<LegalityGameConfig>,
@@ -359,7 +370,7 @@ function sameCauses(a: ReadonlyArray<CauseTally>, b: ReadonlyArray<CauseTally>):
   return a.every((tally, index) => causeTallyKey(tally) === causeTallyKey(b[index]) && tally.count === b[index].count);
 }
 
-function observedFields(record: MatchGameRecord, variant: EquivalenceVariant): Partial<Record<EquivalenceField, number>> {
+function observedFields(record: MatchGameRecord, _variant: EquivalenceVariant): Partial<Record<EquivalenceField, number>> {
   const counters = record.legality ?? EMPTY_LEGALITY_COUNTERS;
   return {
     submissions: counters.submissions,
@@ -370,64 +381,71 @@ function observedFields(record: MatchGameRecord, variant: EquivalenceVariant): P
     fallbacksAfterThrow: record.fallbacksAfterThrow,
     completed: record.completed ? 1 : 0,
     generation: record.generation,
-    ...(variant === 'trace' ? {decisions: record.history?.decisions} : {}),
+    // The **router's own** count, on both variants. This used to be readable only from the history
+    // (`trace` tier), because the comparison substituted the router away and left this counter 0 by
+    // construction. Now that the router runs for real, this is the direct like-for-like with the
+    // oracle's own `decisions`: both increment before invoking the responder, so a decision the
+    // responder threw on counts on both sides.
+    decisions: record.decisions,
   };
 }
 
 /**
- * One config, played by the match runner's own loop and instrument, with the seat router replaced by
- * the oracle's single shared agent stream. See {@link compareLegalityAccounting} for why.
+ * The name the shared-stream agent is registered under for the duration of one comparison. Chosen
+ * so it cannot collide with a real roster entry, and so a stray occurrence in an artifact is
+ * obviously not a real agent.
+ */
+const SHARED_STREAM_AGENT = 'r8-shared-stream-probe';
+
+/**
+ * One config, played by the match runner's **own loop, own per-seat construction and own seat
+ * router** - nothing substituted - on a game made identical to the oracle's by seating agents that
+ * share one RNG stream. See {@link compareLegalityAccounting} for why identity is required, and
+ * `agents/registry.ts`'s `withTemporaryAgent` for why sharing a stream is sufficient.
  */
 async function playThroughMatchRunner(
   config: LegalityGameConfig,
   variant: EquivalenceVariant,
 ): Promise<{record: MatchGameRecord; causes: ReadonlyArray<CauseTally>}> {
-  const spec = singleGroupSpec(config.players);
   const matchConfig: MatchGameConfig = {
     groupIndex: 0,
     permutationIndex: 0,
     players: config.players,
     engineSeed: config.engineSeed,
     seating: identitySeating(config.players),
-    // Every slot on the same agent seed, matching the oracle's single seed. The shared-stream
-    // substitution below is what actually makes them one stream rather than n identically-seeded
-    // ones; this keeps the recorded seeds honest about which seed produced the game.
+    // Every slot on the oracle's single seed. The agent below is what makes them one *stream*
+    // rather than n identically-seeded ones; this keeps the recorded seeds honest about which
+    // seed produced the game.
     agentSeeds: new Array(config.players).fill(config.agentSeed),
-    lineup: new Array(config.players).fill('random-legal'),
+    lineup: new Array(config.players).fill(SHARED_STREAM_AGENT),
+  };
+
+  // One stream for the whole game, handed to every seat - see the registry's doc for why this is
+  // exactly the oracle's single-agent behaviour. Built per game, so consecutive configs in a
+  // comparison do not bleed into one another.
+  const shared = createAgentRandom(config.agentSeed);
+  const entry: AgentEntry = {
+    name: SHARED_STREAM_AGENT,
+    version: '0-probe',
+    description: 'R8 equivalence probe: every seat draws from one shared RNG stream (not a real agent).',
+    create: () => randomLegalAgent(shared),
   };
 
   const capture = {historyTier: variant, legality: true} as const;
-  const real = resolveInstrument(capture);
-  if (real === undefined) {
-    throw new Error('legality mode did not produce an instrument; match/history.ts is the factory (§4.6).');
-  }
-  const report = await runMatchConfigs([matchConfig], spec, {
-    capture,
-    instrument: sharedStreamInstrument(real, config.agentSeed),
-    silenceRoutineLogs: true,
+  return withTemporaryAgent(entry, async () => {
+    // Resolved *inside* the registration: `resolveMatchSpec` looks every lineup name up in the
+    // registry to record its version, so hoisting this out of the callback throws before the probe
+    // agent exists.
+    const spec = resolveMatchSpec({
+      players: config.players,
+      lineup: new Array(config.players).fill(SHARED_STREAM_AGENT),
+      groups: 1,
+    });
+    const report = await runMatchConfigs([matchConfig], spec, {capture, silenceRoutineLogs: true});
+    return {record: report.games[0], causes: report.instrumentation?.causes ?? []};
   });
-  return {record: report.games[0], causes: report.instrumentation?.causes ?? []};
 }
 
-/**
- * Wraps a real match instrument so the responder the driver sees is one shared random-legal agent
- * rather than the per-seat router. Everything else - the process wrapper, the monitor, the record
- * assembly - is the instrument under test, untouched.
- */
-function sharedStreamInstrument(real: MatchInstrument, agentSeed: number): MatchInstrument {
-  const shared: EmbeddedResponder = randomLegalAgent(createAgentRandom(agentSeed));
-  return {
-    install: () => real.install?.(),
-    uninstall: () => real.uninstall?.(),
-    beginGame: (config, _router) => real.beginGame(config, shared),
-    endGame: (config, record, game) => real.endGame(config, record, game),
-    finish: () => real.finish?.(),
-  };
-}
-
-function singleGroupSpec(players: 2 | 3 | 4): ResolvedMatchSpec {
-  return resolveMatchSpec({players, lineup: new Array(players).fill('random-legal'), groups: 1});
-}
 
 function identitySeating(players: number): ReadonlyArray<number> {
   return [...Array(players).keys()];

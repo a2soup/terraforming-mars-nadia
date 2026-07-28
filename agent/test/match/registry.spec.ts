@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {AGENTS, agentIdentity, agentNames, createAgent, DEFAULT_AGENT, formatIdentity, lookupAgent} from '../../src/agents/registry';
+import {AGENTS, AgentEntry, agentIdentity, agentNames, createAgent, DEFAULT_AGENT, formatIdentity, lookupAgent, withTemporaryAgent} from '../../src/agents/registry';
 import * as demoAgents from '../../demo/agents';
 
 /**
@@ -42,5 +42,47 @@ describe('agent registry', () => {
   it('is the same roster the demo uses (hazard H10)', () => {
     expect(demoAgents.AGENTS).to.equal(AGENTS);
     expect(demoAgents.DEFAULT_AGENT).to.equal(DEFAULT_AGENT);
+  });
+
+  // The seam criterion R8's equivalence check needs: it seats an agent whose seats share one RNG
+  // stream, so the match runner and the Milestone-1 oracle play the same game with the runner's
+  // real per-seat router still in place (`match/legality.ts`).
+  describe('withTemporaryAgent', () => {
+    const probe: AgentEntry = {
+      name: 'test-temporary-probe',
+      version: '0-probe',
+      description: 'registered only for the duration of one test.',
+      create: () => () => { throw new Error('never invoked'); },
+    };
+
+    it('registers for the duration of the call and removes it afterwards', async () => {
+      expect(agentNames()).to.not.include(probe.name);
+
+      const seenInside = await withTemporaryAgent(probe, async () => agentNames().includes(probe.name));
+
+      expect(seenInside, 'visible while registered').to.be.true;
+      expect(agentNames(), 'removed afterwards').to.not.include(probe.name);
+      expect(() => lookupAgent(probe.name)).to.throw(/unknown agent/);
+    });
+
+    it('removes the entry even when the body throws', async () => {
+      await withTemporaryAgent(probe, () => Promise.reject(new Error('boom'))).then(
+        () => expect.fail('expected the rejection to propagate'),
+        (error: Error) => expect(error.message).to.equal('boom'));
+
+      expect(agentNames()).to.not.include(probe.name);
+    });
+
+    it('refuses to shadow a real agent rather than silently replacing it', async () => {
+      // A silent shadow would make two runs of the same lineup name incomparable - exactly what the
+      // `version` discipline exists to prevent.
+      const shadow: AgentEntry = {...probe, name: DEFAULT_AGENT};
+
+      await withTemporaryAgent(shadow, () => Promise.resolve()).then(
+        () => expect.fail('expected a throw'),
+        (error: Error) => expect(error.message).to.match(/already registered/));
+
+      expect(AGENTS[DEFAULT_AGENT].version, 'the real entry is untouched').to.equal(agentIdentity(DEFAULT_AGENT).version);
+    });
   });
 });

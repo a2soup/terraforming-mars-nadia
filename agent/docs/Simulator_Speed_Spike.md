@@ -315,6 +315,24 @@ is an assumption, not a measurement** — the spike did not run a parallel harne
 it (peak heap 341 MB single-process against 8 GB), and the games are genuinely independent, so it
 is a reasonable assumption; it should still be verified when the Milestone 2 harness is built.
 
+> **Milestone 2 built the harness and the pool — and the assumption is STILL UNVERIFIED (28 Jul
+> 2026).** The match runner (agent/docs/Match_Runner.md) has a child-process pool, and criterion R7
+> was written to settle exactly this column. It could not be measured validly: the host was swapping
+> **5.67 GB of 6.14 GB on an 8 GB machine**, and eight Node children at ~300 MB peak heap each thrash
+> rather than scale. The invalidity is not subtle — the *single-process* baseline swung **4.3×** (9.0,
+> 38.3 and 39.4 games/s) within one session on an identical specification, and this document's own
+> `game-runtime` suite, re-run unchanged at this pin on this machine, reported both 7.5 and 41.4
+> games/s. (The 38.1 figure below does reproduce; it just does not reproduce *reliably* on a loaded
+> host.) Measured speedups — 1.50× at 2 workers, 1.25× at 4, 1.02× at 8 — are measurements of the
+> host, not of the pool, and are **not** used to revise anything here. **The `games/day (×8)` column
+> below, the §5 self-play budget table, and the Milestone-6 sizing derived from them all still rest
+> on an untested multiplier.** To settle it, on an idle host with ≥ 16 GB:
+> `node build/agent/agent/src/runner/matchValidationCli.js --phase r7` — the phase records load
+> average, free memory and swap per point so the next reader can tell whether the run was valid.
+> Note also, for anyone re-deriving these numbers: `gamesPerSecond` here times `runGame` only, so it
+> excludes `createGame` (measured separately at 7.2 ms/game, ~5% of a game — not the explanation for
+> any large discrepancy).
+
 **But those are random-agent games, and NFR-2 is about the search agent.** A search agent spending
 the full NFR-1 live budget of 10 s per decision would take 278 × 10 s ≈ **46 minutes per game** —
 about **31 games/day/core**. NFR-1 and NFR-2 are therefore *different operating points of the same

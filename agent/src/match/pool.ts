@@ -6,6 +6,7 @@ import {formatIdentity, lookupAgent} from '../agents/registry';
 import {CauseTally} from '../legality/types';
 import {parseMatchArgs, ParsedMatchArgs} from '../runner/matchCli';
 import {defaultOutputDir, resolveOutputPath, saveMatchArtifact} from './artifact';
+import {mergeHistoryDetail} from './history';
 import {buildMatchConfigs, defaultRunId, resolveMatchSpec} from './pairing';
 import {buildMatchHeader, DEFAULT_CAPTURE, MatchCaptureOptions, MatchRunOptions, seatPlayerId, summarizeMatch} from './runner';
 import {
@@ -124,9 +125,16 @@ export function shardConfigs(
 
 /**
  * Merges each child's {@link MatchInstrumentationReport}: cause tallies sum by signature and keep
- * one representative message; `detail` (Unit B's own escape hatch, shape unknown to this unit) is
- * not guessed at - each child's `detail` is preserved under `perWorker` rather than combined field
- * by field, so nothing is silently dropped or wrongly summed.
+ * one representative message; `detail` is delegated to {@link mergeHistoryDetail}, which owns that
+ * field's shape (`match/history.ts`).
+ *
+ * This unit deliberately does not merge `detail` itself - it is Unit B's escape hatch and a merge
+ * rule guessed at here would be a wrong number rather than a missing one. It originally preserved
+ * each child's block under `perWorker` for that reason, which was right in the absence of a rule and
+ * wrong once R6 was actually measured: it made the pooled artifact structurally different from the
+ * single-process artifact for **every** instrumented run (Unit D's validation battery, criterion
+ * R6). `mergeHistoryDetail` is the missing half of the seam and falls back to the same `perWorker`
+ * shape whenever it has no rule for what it is given.
  */
 export function mergeInstrumentation(
   reports: ReadonlyArray<MatchInstrumentationReport | undefined>,
@@ -153,7 +161,7 @@ export function mergeInstrumentation(
 
   return {
     ...(causes.length > 0 ? {causes} : {}),
-    ...(details.length > 0 ? {detail: {perWorker: details}} : {}),
+    ...(details.length > 0 ? {detail: mergeHistoryDetail(details)} : {}),
   };
 }
 
