@@ -137,10 +137,14 @@ Nadia.
 
 The demo doesn't know anything about *how* an agent thinks — it only knows the project's one
 decision seam, `decide(observation) -> action` (`EmbeddedResponder`). To make a new agent
-available, add a line to `AGENTS` in [`agents.ts`](agents.ts):
+available, add an entry to the project-wide registry, `AGENTS` in
+[`../src/agents/registry.ts`](../src/agents/registry.ts) — [`agents.ts`](agents.ts) just re-exports
+it, so the demo and the match runner always see the same roster:
 
 ```ts
 'heuristic': {
+  name: 'heuristic',
+  version: '1',
   description: 'Milestone 2 heuristic evaluator.',
   create: (seed) => heuristicAgent(createAgentRandom(seed)),
 },

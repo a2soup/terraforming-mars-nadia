@@ -9,6 +9,8 @@
     "determinism": "tsx src/runner/determinismCli.ts",
     "legality": "tsx src/runner/legalityCli.ts",
     "coverage": "tsx src/runner/coverageCli.ts",
+    "match": "tsx src/runner/matchCli.ts",
+    "match:pool": "tsx src/match/pool.ts",
     "determinism:sweep": "tsx src/determinism/sweep.ts",
     "determinism:cross-process": "tsx src/determinism/childReplay.ts",
     "test": "mocha --import=tsx --require ../tests/testing/setup.ts \"test/**/*.spec.ts\""

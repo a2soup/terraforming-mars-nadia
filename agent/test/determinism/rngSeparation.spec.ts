@@ -156,6 +156,27 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'output only, reaches no file, no fingerprint and no decision - the sweep\'s games are built from its own ' +
       'seed schedule (coverage/playSweep.ts) and never read the clock.',
   },
+  {
+    file: 'src/match/runner.ts',
+    rule: 'date-now',
+    occurrences: 4,
+    reason:
+      'Match-runner durations: each game\'s `durationMs` and the run\'s `wallClockMs` (Milestone 2 bullet 1). Same ' +
+      'category as legality/run.ts above - reported, never read back; a match\'s games are built from the pairing ' +
+      'seed schedule alone (match/pairing.ts) and no seed, decision or game state derives from the clock. The ' +
+      'match runner goes further than the legality run did: these two are the *only* non-deterministic fields it ' +
+      'produces, they are declared as such in `MATCH_TIMING_FIELDS` (match/artifact.ts), and criteria R2 and R6 ' +
+      '(Milestone2_Bullet1_Prompts.md §6) strip exactly them before requiring two runs of the same specification ' +
+      'to be identical - so this allowlist entry and that criterion are two statements of the same fact.',
+  },
+  {
+    file: 'src/runner/matchCli.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      'The match CLI\'s progress line ("N/1000 games (38.1 games/s)"). Identical in kind to legalityCli.ts\'s above: ' +
+      'console output on a long run, reaching no file, no fingerprint and no decision.',
+  },
 ];
 
 type Violation = {file: string; line: number; rule: string; text: string};
