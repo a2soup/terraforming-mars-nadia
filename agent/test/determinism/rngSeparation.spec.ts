@@ -177,6 +177,19 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'The match CLI\'s progress line ("N/1000 games (38.1 games/s)"). Identical in kind to legalityCli.ts\'s above: ' +
       'console output on a long run, reaching no file, no fingerprint and no decision.',
   },
+  {
+    file: 'src/match/pool.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      'The pool\'s own `wallClockMs` (Milestone 2 bullet 1, Unit C, §4.5): the wall-clock elapsed while every ' +
+      'child\'s shard ran, in place of the single-process run\'s own timing since the pool never calls ' +
+      '`runMatchConfigs` itself. Same category as `match/runner.ts`\'s entry above - reported into `MatchTiming`, ' +
+      'stripped by the same `MATCH_TIMING_FIELDS`/`stripTimingFields` before any R2/R6 comparison, and never read ' +
+      'back into a seed, a decision or a game\'s state. Each child\'s own games are built from the shard of ' +
+      '`pairing.ts`\'s seed schedule it was handed; nothing about what a child plays depends on when the parent ' +
+      'started its clock.',
+  },
 ];
 
 type Violation = {file: string; line: number; rule: string; text: string};
