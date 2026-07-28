@@ -1,0 +1,2037 @@
+{
+  "header": {
+    "engineCommit": "868714d72a434ab68fe08e5570ebc6863859ae15",
+    "agentCommit": "42992a080a7da4729c99f7f84a9b1f3dc55f408d",
+    "nodeVersion": "v22.23.1",
+    "agentVersion": "0.0.1",
+    "seedDerivationVersion": 1,
+    "env": {},
+    "createdAt": "2026-07-24T19:16:09.362Z",
+    "gameOptions": {
+      "altVenusBoard": false,
+      "aresExtension": false,
+      "aresHazards": true,
+      "aresExtremeVariant": false,
+      "boardName": "tharsis",
+      "bannedCards": [],
+      "includedCards": [],
+      "ceoExtension": false,
+      "coloniesExtension": false,
+      "communityCardsOption": false,
+      "corporateEra": true,
+      "customCeos": [],
+      "customColoniesList": [],
+      "customCorporationsList": [],
+      "customPreludes": [],
+      "draftVariant": false,
+      "expansions": {
+        "corpera": false,
+        "promo": false,
+        "venus": false,
+        "colonies": false,
+        "prelude": false,
+        "prelude2": false,
+        "turmoil": false,
+        "community": false,
+        "ares": false,
+        "moon": false,
+        "pathfinders": false,
+        "ceo": false,
+        "starwars": false,
+        "underworld": false,
+        "deltaProject": false
+      },
+      "fastModeOption": false,
+      "includeFanMA": false,
+      "initialDraftVariant": false,
+      "modularMA": false,
+      "moonExpansion": false,
+      "moonStandardProjectVariant": false,
+      "moonStandardProjectVariant1": false,
+      "pathfindersExpansion": false,
+      "politicalAgendasExtension": "Standard",
+      "preludeDraftVariant": false,
+      "ceosDraftVariant": false,
+      "preludeExtension": true,
+      "prelude2Expansion": false,
+      "promoCardsOption": false,
+      "randomMA": "No randomization",
+      "requiresMoonTrackCompletion": false,
+      "removeNegativeGlobalEventsOption": false,
+      "requiresVenusTrackCompletion": false,
+      "showOtherPlayersVP": false,
+      "showTimers": true,
+      "shuffleMapOption": false,
+      "solarPhaseOption": false,
+      "soloTR": false,
+      "startingCeos": 3,
+      "startingCorporations": 2,
+      "startingPreludes": 4,
+      "starWarsExpansion": false,
+      "turmoilExtension": false,
+      "underworldExpansion": false,
+      "deltaProjectExpansion": false,
+      "undoOption": false,
+      "venusNextExtension": false,
+      "twoCorpsVariant": false
+    },
+    "composition": [
+      {
+        "players": 2,
+        "games": 1000
+      },
+      {
+        "players": 3,
+        "games": 250
+      },
+      {
+        "players": 4,
+        "games": 250
+      }
+    ],
+    "gamesRun": 1500,
+    "gamesCompleted": 1500
+  },
+  "entries": [
+    {
+      "name": "Adaptation Technology",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 215,
+      "gamesObserved": 215
+    },
+    {
+      "name": "Adapted Lichen",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 215,
+      "gamesObserved": 215
+    },
+    {
+      "name": "Advanced Ecosystems",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 10,
+      "gamesObserved": 10
+    },
+    {
+      "name": "Aerobraked Ammonia Asteroid",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 198,
+      "gamesObserved": 198
+    },
+    {
+      "name": "Ants",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 127,
+      "gamesObserved": 127
+    },
+    {
+      "name": "Aquifer Pumping",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 231,
+      "gamesObserved": 231
+    },
+    {
+      "name": "Algae",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 109,
+      "gamesObserved": 109
+    },
+    {
+      "name": "ArchaeBacteria",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 105,
+      "gamesObserved": 105
+    },
+    {
+      "name": "Arctic Algae",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 111,
+      "gamesObserved": 111
+    },
+    {
+      "name": "Artificial Lake",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 123,
+      "gamesObserved": 123
+    },
+    {
+      "name": "Artificial Photosynthesis",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 219,
+      "gamesObserved": 219
+    },
+    {
+      "name": "Asteroid",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 223,
+      "gamesObserved": 223
+    },
+    {
+      "name": "Asteroid Mining",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 210,
+      "gamesObserved": 210
+    },
+    {
+      "name": "Beam From A Thorium Asteroid",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 86,
+      "gamesObserved": 86
+    },
+    {
+      "name": "Big Asteroid",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 196,
+      "gamesObserved": 196
+    },
+    {
+      "name": "Biomass Combustors",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 119,
+      "gamesObserved": 119
+    },
+    {
+      "name": "Birds",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 41,
+      "gamesObserved": 41
+    },
+    {
+      "name": "Black Polar Dust",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 200,
+      "gamesObserved": 200
+    },
+    {
+      "name": "Breathing Filters",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 97,
+      "gamesObserved": 97
+    },
+    {
+      "name": "Bushes",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 132,
+      "gamesObserved": 132
+    },
+    {
+      "name": "Capital",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 100,
+      "gamesObserved": 100
+    },
+    {
+      "name": "Carbonate Processing",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 208,
+      "gamesObserved": 208
+    },
+    {
+      "name": "Cloud Seeding",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 165,
+      "gamesObserved": 165
+    },
+    {
+      "name": "Colonizer Training Camp",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 148,
+      "gamesObserved": 148
+    },
+    {
+      "name": "Comet",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 236,
+      "gamesObserved": 236
+    },
+    {
+      "name": "Convoy From Europa",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 227,
+      "gamesObserved": 227
+    },
+    {
+      "name": "Cupola City",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 102,
+      "gamesObserved": 102
+    },
+    {
+      "name": "Decomposers",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 159,
+      "gamesObserved": 159
+    },
+    {
+      "name": "Deep Well Heating",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 233,
+      "gamesObserved": 233
+    },
+    {
+      "name": "Deimos Down",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 213,
+      "gamesObserved": 213
+    },
+    {
+      "name": "Designed Microorganisms",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 92,
+      "gamesObserved": 92
+    },
+    {
+      "name": "Domed Crater",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 93,
+      "gamesObserved": 93
+    },
+    {
+      "name": "Dust Seals",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 132,
+      "gamesObserved": 132
+    },
+    {
+      "name": "Ecological Zone",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 137,
+      "gamesObserved": 137
+    },
+    {
+      "name": "Energy Saving",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 210,
+      "gamesObserved": 210
+    },
+    {
+      "name": "Eos Chasma National Park",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 127,
+      "gamesObserved": 127
+    },
+    {
+      "name": "Equatorial Magnetizer",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 259,
+      "gamesObserved": 259
+    },
+    {
+      "name": "Extreme-Cold Fungus",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 119,
+      "gamesObserved": 119
+    },
+    {
+      "name": "Farming",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 91,
+      "gamesObserved": 91
+    },
+    {
+      "name": "Fish",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 84,
+      "gamesObserved": 84
+    },
+    {
+      "name": "Flooding",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 233,
+      "gamesObserved": 233
+    },
+    {
+      "name": "Food Factory",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 140,
+      "gamesObserved": 140
+    },
+    {
+      "name": "Fusion Power",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 58,
+      "gamesObserved": 58
+    },
+    {
+      "name": "Fueled Generators",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 284,
+      "gamesObserved": 284
+    },
+    {
+      "name": "Ganymede Colony",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 230,
+      "gamesObserved": 230
+    },
+    {
+      "name": "Geothermal Power",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 253,
+      "gamesObserved": 253
+    },
+    {
+      "name": "GHG Factories",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 212,
+      "gamesObserved": 212
+    },
+    {
+      "name": "GHG Producing Bacteria",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 164,
+      "gamesObserved": 164
+    },
+    {
+      "name": "Giant Ice Asteroid",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 178,
+      "gamesObserved": 178
+    },
+    {
+      "name": "Giant Space Mirror",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 233,
+      "gamesObserved": 233
+    },
+    {
+      "name": "Grass",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 142,
+      "gamesObserved": 142
+    },
+    {
+      "name": "Great Dam",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 152,
+      "gamesObserved": 152
+    },
+    {
+      "name": "Greenhouses",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 259,
+      "gamesObserved": 259
+    },
+    {
+      "name": "Heather",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 167,
+      "gamesObserved": 167
+    },
+    {
+      "name": "Heat Trappers",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 238,
+      "gamesObserved": 238
+    },
+    {
+      "name": "Herbivores",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 107,
+      "gamesObserved": 107
+    },
+    {
+      "name": "Ice Asteroid",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 198,
+      "gamesObserved": 198
+    },
+    {
+      "name": "Ice Cap Melting",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 86,
+      "gamesObserved": 86
+    },
+    {
+      "name": "Immigrant City",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 173,
+      "gamesObserved": 173
+    },
+    {
+      "name": "Immigration Shuttles",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 219,
+      "gamesObserved": 219
+    },
+    {
+      "name": "Imported GHG",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 256,
+      "gamesObserved": 256
+    },
+    {
+      "name": "Imported Hydrogen",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 233,
+      "gamesObserved": 233
+    },
+    {
+      "name": "Imported Nitrogen",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 207,
+      "gamesObserved": 207
+    },
+    {
+      "name": "Import of Advanced GHG",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 250,
+      "gamesObserved": 250
+    },
+    {
+      "name": "Industrial Microbes",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 233,
+      "gamesObserved": 233
+    },
+    {
+      "name": "Insects",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 120,
+      "gamesObserved": 120
+    },
+    {
+      "name": "Insulation",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 184,
+      "gamesObserved": 184
+    },
+    {
+      "name": "Ironworks",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 226,
+      "gamesObserved": 226
+    },
+    {
+      "name": "Kelp Farming",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 105,
+      "gamesObserved": 105
+    },
+    {
+      "name": "Lake Marineris",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 75,
+      "gamesObserved": 75
+    },
+    {
+      "name": "Large Convoy",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 182,
+      "gamesObserved": 182
+    },
+    {
+      "name": "Lava Flows",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 183,
+      "gamesObserved": 183
+    },
+    {
+      "name": "Lichen",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 189,
+      "gamesObserved": 189
+    },
+    {
+      "name": "Livestock",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 56,
+      "gamesObserved": 56
+    },
+    {
+      "name": "Local Heat Trapping",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 170,
+      "gamesObserved": 170
+    },
+    {
+      "name": "Lunar Beam",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 236,
+      "gamesObserved": 236
+    },
+    {
+      "name": "Magnetic Field Dome",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 160,
+      "gamesObserved": 160
+    },
+    {
+      "name": "Magnetic Field Generators",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 81,
+      "gamesObserved": 81
+    },
+    {
+      "name": "Mangrove",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 82,
+      "gamesObserved": 82
+    },
+    {
+      "name": "Martian Rails",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 248,
+      "gamesObserved": 248
+    },
+    {
+      "name": "Methane From Titan",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 172,
+      "gamesObserved": 172
+    },
+    {
+      "name": "Micro-Mills",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 255,
+      "gamesObserved": 255
+    },
+    {
+      "name": "Mining Expedition",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 201,
+      "gamesObserved": 201
+    },
+    {
+      "name": "Mining Rights",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 243,
+      "gamesObserved": 243
+    },
+    {
+      "name": "Mohole Area",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 199,
+      "gamesObserved": 199
+    },
+    {
+      "name": "Moss",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 172,
+      "gamesObserved": 172
+    },
+    {
+      "name": "Natural Preserve",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 116,
+      "gamesObserved": 116
+    },
+    {
+      "name": "Nitrite Reducing Bacteria",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 203,
+      "gamesObserved": 203
+    },
+    {
+      "name": "Nitrogen-Rich Asteroid",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 200,
+      "gamesObserved": 200
+    },
+    {
+      "name": "Nitrophilic Moss",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 161,
+      "gamesObserved": 161
+    },
+    {
+      "name": "Noctis City",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 188,
+      "gamesObserved": 188
+    },
+    {
+      "name": "Noctis Farming",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 164,
+      "gamesObserved": 164
+    },
+    {
+      "name": "Nuclear Power",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 227,
+      "gamesObserved": 227
+    },
+    {
+      "name": "Nuclear Zone",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 211,
+      "gamesObserved": 211
+    },
+    {
+      "name": "Open City",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 54,
+      "gamesObserved": 54
+    },
+    {
+      "name": "Optimal Aerobraking",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 254,
+      "gamesObserved": 254
+    },
+    {
+      "name": "Ore Processor",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 243,
+      "gamesObserved": 243
+    },
+    {
+      "name": "Permafrost Extraction",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 120,
+      "gamesObserved": 120
+    },
+    {
+      "name": "Peroxide Power",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 250,
+      "gamesObserved": 250
+    },
+    {
+      "name": "Pets",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 217,
+      "gamesObserved": 217
+    },
+    {
+      "name": "Phobos Space Haven",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 200,
+      "gamesObserved": 200
+    },
+    {
+      "name": "Plantation",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 67,
+      "gamesObserved": 67
+    },
+    {
+      "name": "Power Grid",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 206,
+      "gamesObserved": 206
+    },
+    {
+      "name": "Power Plant",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 251,
+      "gamesObserved": 251
+    },
+    {
+      "name": "Predators",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 63,
+      "gamesObserved": 63
+    },
+    {
+      "name": "Protected Valley",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 215,
+      "gamesObserved": 215
+    },
+    {
+      "name": "Rad-Chem Factory",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 202,
+      "gamesObserved": 202
+    },
+    {
+      "name": "Regolith Eaters",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 221,
+      "gamesObserved": 221
+    },
+    {
+      "name": "Release of Inert Gases",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 208,
+      "gamesObserved": 208
+    },
+    {
+      "name": "Research Outpost",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 197,
+      "gamesObserved": 197
+    },
+    {
+      "name": "Rover Construction",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 265,
+      "gamesObserved": 265
+    },
+    {
+      "name": "Search For Life",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 151,
+      "gamesObserved": 151
+    },
+    {
+      "name": "Shuttles",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 124,
+      "gamesObserved": 124
+    },
+    {
+      "name": "Small Animals",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 112,
+      "gamesObserved": 112
+    },
+    {
+      "name": "Soil Factory",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 195,
+      "gamesObserved": 195
+    },
+    {
+      "name": "Solar Power",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 226,
+      "gamesObserved": 226
+    },
+    {
+      "name": "Solar Wind Power",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 222,
+      "gamesObserved": 222
+    },
+    {
+      "name": "Soletta",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 197,
+      "gamesObserved": 197
+    },
+    {
+      "name": "Space Mirrors",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 276,
+      "gamesObserved": 276
+    },
+    {
+      "name": "Special Design",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 244,
+      "gamesObserved": 244
+    },
+    {
+      "name": "Steelworks",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 232,
+      "gamesObserved": 232
+    },
+    {
+      "name": "Strip Mine",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 135,
+      "gamesObserved": 135
+    },
+    {
+      "name": "Subterranean Reservoir",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 211,
+      "gamesObserved": 211
+    },
+    {
+      "name": "Symbiotic Fungus",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 140,
+      "gamesObserved": 140
+    },
+    {
+      "name": "Tectonic Stress Power",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 73,
+      "gamesObserved": 73
+    },
+    {
+      "name": "Towing A Comet",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 216,
+      "gamesObserved": 216
+    },
+    {
+      "name": "Trees",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 110,
+      "gamesObserved": 110
+    },
+    {
+      "name": "Tundra Farming",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 114,
+      "gamesObserved": 114
+    },
+    {
+      "name": "Underground City",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 142,
+      "gamesObserved": 142
+    },
+    {
+      "name": "Underground Detonations",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 249,
+      "gamesObserved": 249
+    },
+    {
+      "name": "Urbanized Area",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 90,
+      "gamesObserved": 90
+    },
+    {
+      "name": "Water Import From Europa",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 192,
+      "gamesObserved": 192
+    },
+    {
+      "name": "Water Splitting Plant",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 192,
+      "gamesObserved": 192
+    },
+    {
+      "name": "Wave Power",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 166,
+      "gamesObserved": 166
+    },
+    {
+      "name": "Windmills",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 112,
+      "gamesObserved": 112
+    },
+    {
+      "name": "Worms",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 157,
+      "gamesObserved": 157
+    },
+    {
+      "name": "Zeppelins",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 116,
+      "gamesObserved": 116
+    },
+    {
+      "name": "Beginner Corporation",
+      "section": "corporationCards",
+      "scope": "unreachable-in-config",
+      "timesObserved": 0,
+      "gamesObserved": 0
+    },
+    {
+      "name": "CrediCor",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 256,
+      "gamesObserved": 256
+    },
+    {
+      "name": "Ecoline",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 209,
+      "gamesObserved": 209
+    },
+    {
+      "name": "Helion",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 223,
+      "gamesObserved": 223
+    },
+    {
+      "name": "Interplanetary Cinematics",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 213,
+      "gamesObserved": 213
+    },
+    {
+      "name": "Inventrix",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 220,
+      "gamesObserved": 220
+    },
+    {
+      "name": "Mining Guild",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 223,
+      "gamesObserved": 223
+    },
+    {
+      "name": "PhoboLog",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 232,
+      "gamesObserved": 232
+    },
+    {
+      "name": "Tharsis Republic",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 209,
+      "gamesObserved": 209
+    },
+    {
+      "name": "ThorGate",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 207,
+      "gamesObserved": 207
+    },
+    {
+      "name": "United Nations Mars Initiative",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 231,
+      "gamesObserved": 231
+    },
+    {
+      "name": "Aquifer",
+      "section": "standardProjects",
+      "scope": "reachable",
+      "timesObserved": 11415,
+      "gamesObserved": 1499
+    },
+    {
+      "name": "City",
+      "section": "standardProjects",
+      "scope": "reachable",
+      "timesObserved": 10187,
+      "gamesObserved": 1493
+    },
+    {
+      "name": "Power Plant:SP",
+      "section": "standardProjects",
+      "scope": "reachable",
+      "timesObserved": 14094,
+      "gamesObserved": 1500
+    },
+    {
+      "name": "Greenery",
+      "section": "standardProjects",
+      "scope": "reachable",
+      "timesObserved": 10688,
+      "gamesObserved": 1499
+    },
+    {
+      "name": "Asteroid:SP",
+      "section": "standardProjects",
+      "scope": "reachable",
+      "timesObserved": 12491,
+      "gamesObserved": 1499
+    },
+    {
+      "name": "Sell Patents",
+      "section": "standardProjects",
+      "scope": "reachable-by-other-route",
+      "timesObserved": 0,
+      "gamesObserved": 0
+    },
+    {
+      "name": "Buffer Gas",
+      "section": "standardProjects",
+      "scope": "unreachable-in-config",
+      "timesObserved": 0,
+      "gamesObserved": 0
+    },
+    {
+      "name": "Convert Plants",
+      "section": "standardActions",
+      "scope": "reachable",
+      "timesObserved": 11848,
+      "gamesObserved": 1498
+    },
+    {
+      "name": "Convert Heat",
+      "section": "standardActions",
+      "scope": "reachable",
+      "timesObserved": 29796,
+      "gamesObserved": 1500
+    },
+    {
+      "name": "Acquired Company",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 234,
+      "gamesObserved": 234
+    },
+    {
+      "name": "Advanced Alloys",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 211,
+      "gamesObserved": 211
+    },
+    {
+      "name": "AI Central",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 27,
+      "gamesObserved": 27
+    },
+    {
+      "name": "Anti-Gravity Technology",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 0,
+      "gamesObserved": 0
+    },
+    {
+      "name": "Asteroid Mining Consortium",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 123,
+      "gamesObserved": 123
+    },
+    {
+      "name": "Bribed Committee",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 232,
+      "gamesObserved": 232
+    },
+    {
+      "name": "Building Industries",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 198,
+      "gamesObserved": 198
+    },
+    {
+      "name": "Business Contacts",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 229,
+      "gamesObserved": 229
+    },
+    {
+      "name": "Business Network",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 264,
+      "gamesObserved": 264
+    },
+    {
+      "name": "Callisto Penal Mines",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 208,
+      "gamesObserved": 208
+    },
+    {
+      "name": "Caretaker Contract",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 94,
+      "gamesObserved": 94
+    },
+    {
+      "name": "Cartel",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 238,
+      "gamesObserved": 238
+    },
+    {
+      "name": "CEO's Favorite Project",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 66,
+      "gamesObserved": 66
+    },
+    {
+      "name": "Commercial District",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 154,
+      "gamesObserved": 154
+    },
+    {
+      "name": "Corporate Stronghold",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 178,
+      "gamesObserved": 178
+    },
+    {
+      "name": "Development Center",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 215,
+      "gamesObserved": 215
+    },
+    {
+      "name": "Earth Catapult",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 201,
+      "gamesObserved": 201
+    },
+    {
+      "name": "Earth Office",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 287,
+      "gamesObserved": 287
+    },
+    {
+      "name": "Electro Catapult",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 122,
+      "gamesObserved": 122
+    },
+    {
+      "name": "Energy Tapping",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 264,
+      "gamesObserved": 264
+    },
+    {
+      "name": "Fuel Factory",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 176,
+      "gamesObserved": 176
+    },
+    {
+      "name": "Gene Repair",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 28,
+      "gamesObserved": 28
+    },
+    {
+      "name": "Great Escarpment Consortium",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 111,
+      "gamesObserved": 111
+    },
+    {
+      "name": "Hackers",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 233,
+      "gamesObserved": 233
+    },
+    {
+      "name": "Hired Raiders",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 261,
+      "gamesObserved": 261
+    },
+    {
+      "name": "Indentured Workers",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 255,
+      "gamesObserved": 255
+    },
+    {
+      "name": "Industrial Center",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 191,
+      "gamesObserved": 191
+    },
+    {
+      "name": "Interstellar Colony Ship",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 2,
+      "gamesObserved": 2
+    },
+    {
+      "name": "Invention Contest",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 236,
+      "gamesObserved": 236
+    },
+    {
+      "name": "Inventors' Guild",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 253,
+      "gamesObserved": 253
+    },
+    {
+      "name": "Investment Loan",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 246,
+      "gamesObserved": 246
+    },
+    {
+      "name": "Io Mining Industries",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 182,
+      "gamesObserved": 182
+    },
+    {
+      "name": "Lagrange Observatory",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 261,
+      "gamesObserved": 261
+    },
+    {
+      "name": "Land Claim",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 260,
+      "gamesObserved": 260
+    },
+    {
+      "name": "Lightning Harvest",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 40,
+      "gamesObserved": 40
+    },
+    {
+      "name": "Mars University",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 249,
+      "gamesObserved": 249
+    },
+    {
+      "name": "Mass Converter",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 5,
+      "gamesObserved": 5
+    },
+    {
+      "name": "Media Archives",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 239,
+      "gamesObserved": 239
+    },
+    {
+      "name": "Media Group",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 231,
+      "gamesObserved": 231
+    },
+    {
+      "name": "Medical Lab",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 227,
+      "gamesObserved": 227
+    },
+    {
+      "name": "Mine",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 243,
+      "gamesObserved": 243
+    },
+    {
+      "name": "Mineral Deposit",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 238,
+      "gamesObserved": 238
+    },
+    {
+      "name": "Mining Area",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 177,
+      "gamesObserved": 177
+    },
+    {
+      "name": "Miranda Resort",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 254,
+      "gamesObserved": 254
+    },
+    {
+      "name": "Olympus Conference",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 219,
+      "gamesObserved": 219
+    },
+    {
+      "name": "Physics Complex",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 252,
+      "gamesObserved": 252
+    },
+    {
+      "name": "Power Infrastructure",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 252,
+      "gamesObserved": 252
+    },
+    {
+      "name": "Power Supply Consortium",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 76,
+      "gamesObserved": 76
+    },
+    {
+      "name": "Protected Habitats",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 230,
+      "gamesObserved": 230
+    },
+    {
+      "name": "Quantum Extractor",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 17,
+      "gamesObserved": 17
+    },
+    {
+      "name": "Rad-Suits",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 195,
+      "gamesObserved": 195
+    },
+    {
+      "name": "Research",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 221,
+      "gamesObserved": 221
+    },
+    {
+      "name": "Restricted Area",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 229,
+      "gamesObserved": 229
+    },
+    {
+      "name": "Robotic Workforce",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 176,
+      "gamesObserved": 176
+    },
+    {
+      "name": "Sabotage",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 267,
+      "gamesObserved": 267
+    },
+    {
+      "name": "Satellites",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 250,
+      "gamesObserved": 250
+    },
+    {
+      "name": "Security Fleet",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 217,
+      "gamesObserved": 217
+    },
+    {
+      "name": "Space Elevator",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 217,
+      "gamesObserved": 217
+    },
+    {
+      "name": "Space Station",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 252,
+      "gamesObserved": 252
+    },
+    {
+      "name": "Sponsors",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 239,
+      "gamesObserved": 239
+    },
+    {
+      "name": "Standard Technology",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 241,
+      "gamesObserved": 241
+    },
+    {
+      "name": "Tardigrades",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 243,
+      "gamesObserved": 243
+    },
+    {
+      "name": "Technology Demonstration",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 270,
+      "gamesObserved": 270
+    },
+    {
+      "name": "Terraforming Ganymede",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 184,
+      "gamesObserved": 184
+    },
+    {
+      "name": "Titanium Mine",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 239,
+      "gamesObserved": 239
+    },
+    {
+      "name": "Toll Station",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 259,
+      "gamesObserved": 259
+    },
+    {
+      "name": "Trans-Neptune Probe",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 250,
+      "gamesObserved": 250
+    },
+    {
+      "name": "Tropical Resort",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 141,
+      "gamesObserved": 141
+    },
+    {
+      "name": "Vesta Shipyard",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 224,
+      "gamesObserved": 224
+    },
+    {
+      "name": "Viral Enhancers",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 232,
+      "gamesObserved": 232
+    },
+    {
+      "name": "Virus",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 282,
+      "gamesObserved": 282
+    },
+    {
+      "name": "Saturn Systems",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 222,
+      "gamesObserved": 222
+    },
+    {
+      "name": "Teractor",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 226,
+      "gamesObserved": 226
+    },
+    {
+      "name": "SF Memorial",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 245,
+      "gamesObserved": 245
+    },
+    {
+      "name": "House Printing",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 262,
+      "gamesObserved": 262
+    },
+    {
+      "name": "Space Hotels",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 73,
+      "gamesObserved": 73
+    },
+    {
+      "name": "Martian Survey",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 106,
+      "gamesObserved": 106
+    },
+    {
+      "name": "Research Coordination",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 249,
+      "gamesObserved": 249
+    },
+    {
+      "name": "Lava Tube Settlement",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 176,
+      "gamesObserved": 176
+    },
+    {
+      "name": "Psychrophiles",
+      "section": "projectCards",
+      "scope": "reachable",
+      "timesObserved": 116,
+      "gamesObserved": 116
+    },
+    {
+      "name": "Cheung Shing MARS",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 209,
+      "gamesObserved": 209
+    },
+    {
+      "name": "Point Luna",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 212,
+      "gamesObserved": 212
+    },
+    {
+      "name": "Robinson Industries",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 215,
+      "gamesObserved": 215
+    },
+    {
+      "name": "Valley Trust",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 237,
+      "gamesObserved": 237
+    },
+    {
+      "name": "Vitor",
+      "section": "corporationCards",
+      "scope": "reachable",
+      "timesObserved": 206,
+      "gamesObserved": 206
+    },
+    {
+      "name": "Allied Bank",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 204,
+      "gamesObserved": 204
+    },
+    {
+      "name": "Biosphere Support",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 203,
+      "gamesObserved": 203
+    },
+    {
+      "name": "Aquifer Turbines",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 214,
+      "gamesObserved": 214
+    },
+    {
+      "name": "Mohole Excavation",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 211,
+      "gamesObserved": 211
+    },
+    {
+      "name": "Early Settlement",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 205,
+      "gamesObserved": 205
+    },
+    {
+      "name": "Biofuels",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 224,
+      "gamesObserved": 224
+    },
+    {
+      "name": "Power Generation",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 230,
+      "gamesObserved": 230
+    },
+    {
+      "name": "Self-Sufficient Settlement",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 221,
+      "gamesObserved": 221
+    },
+    {
+      "name": "Mining Operations",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 230,
+      "gamesObserved": 230
+    },
+    {
+      "name": "UNMI Contractor",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 233,
+      "gamesObserved": 233
+    },
+    {
+      "name": "Dome Farming",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 242,
+      "gamesObserved": 242
+    },
+    {
+      "name": "Business Empire",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 207,
+      "gamesObserved": 207
+    },
+    {
+      "name": "Donation",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 225,
+      "gamesObserved": 225
+    },
+    {
+      "name": "Nitrogen Shipment",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 218,
+      "gamesObserved": 218
+    },
+    {
+      "name": "Smelting Plant",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 237,
+      "gamesObserved": 237
+    },
+    {
+      "name": "Supplier",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 231,
+      "gamesObserved": 231
+    },
+    {
+      "name": "Supply Drop",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 230,
+      "gamesObserved": 230
+    },
+    {
+      "name": "Great Aquifer",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 219,
+      "gamesObserved": 219
+    },
+    {
+      "name": "Biolab",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 217,
+      "gamesObserved": 217
+    },
+    {
+      "name": "Martian Industries",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 222,
+      "gamesObserved": 222
+    },
+    {
+      "name": "Io Research Outpost",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 205,
+      "gamesObserved": 205
+    },
+    {
+      "name": "Polar Industries",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 227,
+      "gamesObserved": 227
+    },
+    {
+      "name": "Society Support",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 242,
+      "gamesObserved": 242
+    },
+    {
+      "name": "Galilean Mining",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 199,
+      "gamesObserved": 199
+    },
+    {
+      "name": "Huge Asteroid",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 207,
+      "gamesObserved": 207
+    },
+    {
+      "name": "Metals Company",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 225,
+      "gamesObserved": 225
+    },
+    {
+      "name": "Loan",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 225,
+      "gamesObserved": 225
+    },
+    {
+      "name": "Mohole",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 229,
+      "gamesObserved": 229
+    },
+    {
+      "name": "Metal-Rich Asteroid",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 180,
+      "gamesObserved": 180
+    },
+    {
+      "name": "Orbital Construction Yard",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 218,
+      "gamesObserved": 218
+    },
+    {
+      "name": "Acquired Space Agency",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 218,
+      "gamesObserved": 218
+    },
+    {
+      "name": "Research Network",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 190,
+      "gamesObserved": 190
+    },
+    {
+      "name": "Eccentric Sponsor",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 241,
+      "gamesObserved": 241
+    },
+    {
+      "name": "Ecology Experts",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 229,
+      "gamesObserved": 229
+    },
+    {
+      "name": "Experimental Forest",
+      "section": "preludeCards",
+      "scope": "reachable",
+      "timesObserved": 214,
+      "gamesObserved": 214
+    }
+  ],
+  "unexpectedlyPlayed": []
+}

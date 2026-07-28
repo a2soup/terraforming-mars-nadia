@@ -1,0 +1,4758 @@
+{
+  "header": {
+    "engineCommit": "868714d72a434ab68fe08e5570ebc6863859ae15",
+    "agentCommit": "42992a080a7da4729c99f7f84a9b1f3dc55f408d",
+    "nodeVersion": "v22.23.1",
+    "agentVersion": "0.0.1",
+    "seedDerivationVersion": 1,
+    "env": {},
+    "createdAt": "2026-07-24T19:15:12.656Z",
+    "gameOptions": {
+      "altVenusBoard": false,
+      "aresExtension": false,
+      "aresHazards": true,
+      "aresExtremeVariant": false,
+      "boardName": "tharsis",
+      "bannedCards": [],
+      "includedCards": [],
+      "ceoExtension": false,
+      "coloniesExtension": false,
+      "communityCardsOption": false,
+      "corporateEra": true,
+      "customCeos": [],
+      "customColoniesList": [],
+      "customCorporationsList": [],
+      "customPreludes": [],
+      "draftVariant": false,
+      "expansions": {
+        "corpera": false,
+        "promo": false,
+        "venus": false,
+        "colonies": false,
+        "prelude": false,
+        "prelude2": false,
+        "turmoil": false,
+        "community": false,
+        "ares": false,
+        "moon": false,
+        "pathfinders": false,
+        "ceo": false,
+        "starwars": false,
+        "underworld": false,
+        "deltaProject": false
+      },
+      "fastModeOption": false,
+      "includeFanMA": false,
+      "initialDraftVariant": false,
+      "modularMA": false,
+      "moonExpansion": false,
+      "moonStandardProjectVariant": false,
+      "moonStandardProjectVariant1": false,
+      "pathfindersExpansion": false,
+      "politicalAgendasExtension": "Standard",
+      "preludeDraftVariant": false,
+      "ceosDraftVariant": false,
+      "preludeExtension": true,
+      "prelude2Expansion": false,
+      "promoCardsOption": false,
+      "randomMA": "No randomization",
+      "requiresMoonTrackCompletion": false,
+      "removeNegativeGlobalEventsOption": false,
+      "requiresVenusTrackCompletion": false,
+      "showOtherPlayersVP": false,
+      "showTimers": true,
+      "shuffleMapOption": false,
+      "solarPhaseOption": false,
+      "soloTR": false,
+      "startingCeos": 3,
+      "startingCorporations": 2,
+      "startingPreludes": 4,
+      "starWarsExpansion": false,
+      "turmoilExtension": false,
+      "underworldExpansion": false,
+      "deltaProjectExpansion": false,
+      "undoOption": false,
+      "venusNextExtension": false,
+      "twoCorpsVariant": false
+    }
+  },
+  "entries": [
+    {
+      "name": "Adaptation Technology",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "153",
+      "type": "active",
+      "tags": [
+        "science"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/AdaptationTechnology.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Adapted Lichen",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "048",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/AdaptedLichen.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Advanced Ecosystems",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "135",
+      "type": "automated",
+      "tags": [
+        "plant",
+        "microbe",
+        "animal"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/AdvancedEcosystems.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Aerobraked Ammonia Asteroid",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "170",
+      "type": "event",
+      "tags": [
+        "space"
+      ],
+      "cost": 26,
+      "sourceFile": "src/server/cards/base/AerobrakedAmmoniaAsteroid.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Ants",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "035",
+      "type": "active",
+      "tags": [
+        "microbe"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/Ants.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "action",
+        "canAct"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Aquifer Pumping",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "187",
+      "type": "active",
+      "tags": [
+        "building"
+      ],
+      "cost": 18,
+      "sourceFile": "src/server/cards/base/AquiferPumping.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "action",
+        "canAct"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Algae",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "047",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/Algae.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "ArchaeBacteria",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "042",
+      "type": "automated",
+      "tags": [
+        "microbe"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/ArchaeBacteria.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Arctic Algae",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "023",
+      "type": "active",
+      "tags": [
+        "plant"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/ArcticAlgae.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onTilePlaced"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Artificial Lake",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "116",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 15,
+      "sourceFile": "src/server/cards/base/ArtificialLake.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Artificial Photosynthesis",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "115",
+      "type": "automated",
+      "tags": [
+        "science"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/ArtificialPhotosynthesis.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Asteroid",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "009",
+      "type": "event",
+      "tags": [
+        "space"
+      ],
+      "cost": 14,
+      "sourceFile": "src/server/cards/base/Asteroid.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Asteroid Mining",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "040",
+      "type": "automated",
+      "tags": [
+        "jovian",
+        "space"
+      ],
+      "cost": 30,
+      "sourceFile": "src/server/cards/base/AsteroidMining.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Beam From A Thorium Asteroid",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "058",
+      "type": "automated",
+      "tags": [
+        "jovian",
+        "space",
+        "power"
+      ],
+      "cost": 32,
+      "sourceFile": "src/server/cards/base/BeamFromAThoriumAsteroid.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Big Asteroid",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "011",
+      "type": "event",
+      "tags": [
+        "space"
+      ],
+      "cost": 27,
+      "sourceFile": "src/server/cards/base/BigAsteroid.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Biomass Combustors",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "183",
+      "type": "automated",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 4,
+      "sourceFile": "src/server/cards/base/BiomassCombustors.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Birds",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "072",
+      "type": "active",
+      "tags": [
+        "animal"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/Birds.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Black Polar Dust",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "022",
+      "type": "automated",
+      "tags": [],
+      "cost": 15,
+      "sourceFile": "src/server/cards/base/BlackPolarDust.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Breathing Filters",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "114",
+      "type": "automated",
+      "tags": [
+        "science"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/BreathingFilters.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Bushes",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "093",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/Bushes.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Capital",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "008",
+      "type": "automated",
+      "tags": [
+        "city",
+        "building"
+      ],
+      "cost": 26,
+      "sourceFile": "src/server/cards/base/Capital.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Carbonate Processing",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "043",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/CarbonateProcessing.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Cloud Seeding",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "004",
+      "type": "automated",
+      "tags": [],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/CloudSeeding.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Colonizer Training Camp",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "001",
+      "type": "automated",
+      "tags": [
+        "jovian",
+        "building"
+      ],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/ColonizerTrainingCamp.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Comet",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "010",
+      "type": "event",
+      "tags": [
+        "space"
+      ],
+      "cost": 21,
+      "sourceFile": "src/server/cards/base/Comet.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Convoy From Europa",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "161",
+      "type": "event",
+      "tags": [
+        "space"
+      ],
+      "cost": 15,
+      "sourceFile": "src/server/cards/base/ConvoyFromEuropa.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Cupola City",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "029",
+      "type": "automated",
+      "tags": [
+        "city",
+        "building"
+      ],
+      "cost": 16,
+      "sourceFile": "src/server/cards/base/CupolaCity.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Decomposers",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "131",
+      "type": "active",
+      "tags": [
+        "microbe"
+      ],
+      "cost": 5,
+      "sourceFile": "src/server/cards/base/Decomposers.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay",
+        "onCardPlayed",
+        "onNonCardTagAdded"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Deep Well Heating",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "003",
+      "type": "automated",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/DeepWellHeating.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Deimos Down",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "039",
+      "type": "event",
+      "tags": [
+        "space"
+      ],
+      "cost": 31,
+      "sourceFile": "src/server/cards/base/DeimosDown.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Designed Microorganisms",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "155",
+      "type": "automated",
+      "tags": [
+        "science",
+        "microbe"
+      ],
+      "cost": 16,
+      "sourceFile": "src/server/cards/base/DesignedMicroOrganisms.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Domed Crater",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "016",
+      "type": "automated",
+      "tags": [
+        "city",
+        "building"
+      ],
+      "cost": 24,
+      "sourceFile": "src/server/cards/base/DomedCrater.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Dust Seals",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "119",
+      "type": "automated",
+      "tags": [],
+      "cost": 2,
+      "sourceFile": "src/server/cards/base/DustSeals.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Ecological Zone",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "128",
+      "type": "active",
+      "tags": [
+        "animal",
+        "plant"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/EcologicalZone.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay",
+        "getAvailableSpaces",
+        "onCardPlayed",
+        "onNonCardTagAdded"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Energy Saving",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "189",
+      "type": "automated",
+      "tags": [
+        "power"
+      ],
+      "cost": 15,
+      "sourceFile": "src/server/cards/base/EnergySaving.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Eos Chasma National Park",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "026",
+      "type": "automated",
+      "tags": [
+        "plant",
+        "building"
+      ],
+      "cost": 16,
+      "sourceFile": "src/server/cards/base/EOSChasmaNationalPark.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Equatorial Magnetizer",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "015",
+      "type": "active",
+      "tags": [
+        "building"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/EquatorialMagnetizer.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Extreme-Cold Fungus",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "134",
+      "type": "active",
+      "tags": [
+        "microbe"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/ExtremeColdFungus.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "action",
+        "canAct"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Farming",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "118",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 16,
+      "sourceFile": "src/server/cards/base/Farming.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Fish",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "052",
+      "type": "active",
+      "tags": [
+        "animal"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/Fish.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Flooding",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "188",
+      "type": "event",
+      "tags": [],
+      "cost": 7,
+      "sourceFile": "src/server/cards/base/Flooding.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Food Factory",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "041",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/FoodFactory.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Fusion Power",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "132",
+      "type": "automated",
+      "tags": [
+        "science",
+        "power",
+        "building"
+      ],
+      "cost": 14,
+      "sourceFile": "src/server/cards/base/FusionPower.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Fueled Generators",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "100",
+      "type": "automated",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 1,
+      "sourceFile": "src/server/cards/base/FueledGenerators.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Ganymede Colony",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "081",
+      "type": "automated",
+      "tags": [
+        "jovian",
+        "space",
+        "city"
+      ],
+      "cost": 20,
+      "sourceFile": "src/server/cards/base/GanymedeColony.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Geothermal Power",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "117",
+      "type": "automated",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/GeothermalPower.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "GHG Factories",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "126",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/GHGFactories.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "GHG Producing Bacteria",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "034",
+      "type": "active",
+      "tags": [
+        "science",
+        "microbe"
+      ],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/GHGProducingBacteria.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Giant Ice Asteroid",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "080",
+      "type": "event",
+      "tags": [
+        "space"
+      ],
+      "cost": 36,
+      "sourceFile": "src/server/cards/base/GiantIceAsteroid.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Giant Space Mirror",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "083",
+      "type": "automated",
+      "tags": [
+        "power",
+        "space"
+      ],
+      "cost": 17,
+      "sourceFile": "src/server/cards/base/GiantSpaceMirror.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Grass",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "087",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/Grass.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Great Dam",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "136",
+      "type": "automated",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/GreatDam.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Greenhouses",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "096",
+      "type": "automated",
+      "tags": [
+        "plant",
+        "building"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/Greenhouses.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Heather",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "88",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/Heather.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Heat Trappers",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "178",
+      "type": "automated",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/HeatTrappers.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Herbivores",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "147",
+      "type": "active",
+      "tags": [
+        "animal"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/Herbivores.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onTilePlaced"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Ice Asteroid",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "078",
+      "type": "event",
+      "tags": [
+        "space"
+      ],
+      "cost": 23,
+      "sourceFile": "src/server/cards/base/IceAsteroid.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Ice Cap Melting",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "181",
+      "type": "event",
+      "tags": [],
+      "cost": 5,
+      "sourceFile": "src/server/cards/base/IceCapMelting.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Immigrant City",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "200",
+      "type": "active",
+      "tags": [
+        "city",
+        "building"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/ImmigrantCity.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay",
+        "onTilePlaced"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Immigration Shuttles",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "198",
+      "type": "automated",
+      "tags": [
+        "earth",
+        "space"
+      ],
+      "cost": 31,
+      "sourceFile": "src/server/cards/base/ImmigrationShuttles.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Imported GHG",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "162",
+      "type": "event",
+      "tags": [
+        "earth",
+        "space"
+      ],
+      "cost": 7,
+      "sourceFile": "src/server/cards/base/ImportedGHG.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Imported Hydrogen",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "019",
+      "type": "event",
+      "tags": [
+        "earth",
+        "space"
+      ],
+      "cost": 16,
+      "sourceFile": "src/server/cards/base/ImportedHydrogen.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Imported Nitrogen",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "163",
+      "type": "event",
+      "tags": [
+        "earth",
+        "space"
+      ],
+      "cost": 23,
+      "sourceFile": "src/server/cards/base/ImportedNitrogen.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Import of Advanced GHG",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "167",
+      "type": "event",
+      "tags": [
+        "earth",
+        "space"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/ImportOfAdvancedGHG.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Industrial Microbes",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "158",
+      "type": "automated",
+      "tags": [
+        "microbe",
+        "building"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/IndustrialMicrobes.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Insects",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "148",
+      "type": "automated",
+      "tags": [
+        "microbe"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/Insects.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Insulation",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "152",
+      "type": "automated",
+      "tags": [],
+      "cost": 2,
+      "sourceFile": "src/server/cards/base/Insulation.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Ironworks",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "101",
+      "type": "active",
+      "tags": [
+        "building"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/Ironworks.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Kelp Farming",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "055",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 17,
+      "sourceFile": "src/server/cards/base/KelpFarming.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Lake Marineris",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "053",
+      "type": "automated",
+      "tags": [],
+      "cost": 18,
+      "sourceFile": "src/server/cards/base/LakeMarineris.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Large Convoy",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "143",
+      "type": "event",
+      "tags": [
+        "earth",
+        "space"
+      ],
+      "cost": 36,
+      "sourceFile": "src/server/cards/base/LargeConvoy.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Lava Flows",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "140",
+      "type": "event",
+      "tags": [],
+      "cost": 18,
+      "sourceFile": "src/server/cards/base/LavaFlows.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Lichen",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "159",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 7,
+      "sourceFile": "src/server/cards/base/Lichen.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Livestock",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "184",
+      "type": "active",
+      "tags": [
+        "animal"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/Livestock.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Local Heat Trapping",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "190",
+      "type": "event",
+      "tags": [],
+      "cost": 1,
+      "sourceFile": "src/server/cards/base/LocalHeatTrapping.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "canPlay",
+        "play"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Lunar Beam",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "030",
+      "type": "automated",
+      "tags": [
+        "earth",
+        "power"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/LunarBeam.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Magnetic Field Dome",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "171",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 5,
+      "sourceFile": "src/server/cards/base/MagneticFieldDome.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Magnetic Field Generators",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "165",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 20,
+      "sourceFile": "src/server/cards/base/MagneticFieldGenerators.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Mangrove",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "059",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/Mangrove.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Martian Rails",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "007",
+      "type": "active",
+      "tags": [
+        "building"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/MartianRails.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Methane From Titan",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "018",
+      "type": "automated",
+      "tags": [
+        "jovian",
+        "space"
+      ],
+      "cost": 28,
+      "sourceFile": "src/server/cards/base/MethaneFromTitan.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Micro-Mills",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "164",
+      "type": "automated",
+      "tags": [],
+      "cost": 3,
+      "sourceFile": "src/server/cards/base/MicroMills.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Mining Expedition",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "063",
+      "type": "event",
+      "tags": [],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/MiningExpedition.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Mining Rights",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "067",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/MiningRights.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay",
+        "getAvailableSpaces"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Mohole Area",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "142",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 20,
+      "sourceFile": "src/server/cards/base/MoholeArea.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Moss",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "122",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 4,
+      "sourceFile": "src/server/cards/base/Moss.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Natural Preserve",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "044",
+      "type": "automated",
+      "tags": [
+        "science",
+        "building"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/NaturalPreserve.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Nitrite Reducing Bacteria",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "157",
+      "type": "active",
+      "tags": [
+        "microbe"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/NitriteReducingBacteria.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Nitrogen-Rich Asteroid",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "037",
+      "type": "event",
+      "tags": [
+        "space"
+      ],
+      "cost": 31,
+      "sourceFile": "src/server/cards/base/NitrogenRichAsteroid.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Nitrophilic Moss",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "146",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/NitrophilicMoss.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Noctis City",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "017",
+      "type": "automated",
+      "tags": [
+        "city",
+        "building"
+      ],
+      "cost": 18,
+      "sourceFile": "src/server/cards/base/NoctisCity.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Noctis Farming",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "176",
+      "type": "automated",
+      "tags": [
+        "plant",
+        "building"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/NoctisFarming.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Nuclear Power",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "045",
+      "type": "automated",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/NuclearPower.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Nuclear Zone",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "097",
+      "type": "automated",
+      "tags": [
+        "earth"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/NuclearZone.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Open City",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "108",
+      "type": "automated",
+      "tags": [
+        "city",
+        "building"
+      ],
+      "cost": 23,
+      "sourceFile": "src/server/cards/base/OpenCity.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Optimal Aerobraking",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "031",
+      "type": "active",
+      "tags": [
+        "space"
+      ],
+      "cost": 7,
+      "sourceFile": "src/server/cards/base/OptimalAerobraking.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onCardPlayed"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Ore Processor",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "104",
+      "type": "active",
+      "tags": [
+        "building"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/OreProcessor.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Permafrost Extraction",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "191",
+      "type": "event",
+      "tags": [],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/PermafrostExtraction.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Peroxide Power",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "089",
+      "type": "automated",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 7,
+      "sourceFile": "src/server/cards/base/PeroxidePower.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Pets",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "172",
+      "type": "active",
+      "tags": [
+        "earth",
+        "animal"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/Pets.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onTilePlaced"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Phobos Space Haven",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "021",
+      "type": "automated",
+      "tags": [
+        "space",
+        "city"
+      ],
+      "cost": 25,
+      "sourceFile": "src/server/cards/base/PhobosSpaceHaven.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Plantation",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "193",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 15,
+      "sourceFile": "src/server/cards/base/Plantation.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Power Grid",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "102",
+      "type": "automated",
+      "tags": [
+        "power"
+      ],
+      "cost": 18,
+      "sourceFile": "src/server/cards/base/PowerGrid.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Power Plant",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "141",
+      "type": "automated",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 4,
+      "sourceFile": "src/server/cards/base/PowerPlant.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Predators",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "024",
+      "type": "active",
+      "tags": [
+        "animal"
+      ],
+      "cost": 14,
+      "sourceFile": "src/server/cards/base/Predators.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "action",
+        "canAct"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Protected Valley",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "174",
+      "type": "automated",
+      "tags": [
+        "plant",
+        "building"
+      ],
+      "cost": 23,
+      "sourceFile": "src/server/cards/base/ProtectedValley.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Rad-Chem Factory",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "205",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/RadChemFactory.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Regolith Eaters",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "033",
+      "type": "active",
+      "tags": [
+        "science",
+        "microbe"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/RegolithEaters.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Release of Inert Gases",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "036",
+      "type": "event",
+      "tags": [],
+      "cost": 14,
+      "sourceFile": "src/server/cards/base/ReleaseOfInertGases.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Research Outpost",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "020",
+      "type": "active",
+      "tags": [
+        "science",
+        "city",
+        "building"
+      ],
+      "cost": 18,
+      "sourceFile": "src/server/cards/base/ResearchOutpost.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Rover Construction",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "038",
+      "type": "active",
+      "tags": [
+        "building"
+      ],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/RoverConstruction.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onTilePlaced"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Search For Life",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "005",
+      "type": "active",
+      "tags": [
+        "science"
+      ],
+      "cost": 3,
+      "sourceFile": "src/server/cards/base/SearchForLife.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "action",
+        "canAct",
+        "getVictoryPoints"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Shuttles",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "166",
+      "type": "active",
+      "tags": [
+        "space"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/Shuttles.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Small Animals",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "054",
+      "type": "active",
+      "tags": [
+        "animal"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/SmallAnimals.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Soil Factory",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "179",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/SoilFactory.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Solar Power",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "113",
+      "type": "automated",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/SolarPower.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Solar Wind Power",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "077",
+      "type": "automated",
+      "tags": [
+        "science",
+        "space",
+        "power"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/SolarWindPower.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Soletta",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "203",
+      "type": "automated",
+      "tags": [
+        "space"
+      ],
+      "cost": 35,
+      "sourceFile": "src/server/cards/base/Soletta.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Space Mirrors",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "076",
+      "type": "active",
+      "tags": [
+        "power",
+        "space"
+      ],
+      "cost": 3,
+      "sourceFile": "src/server/cards/base/SpaceMirrors.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Special Design",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "206",
+      "type": "event",
+      "tags": [
+        "science"
+      ],
+      "cost": 4,
+      "sourceFile": "src/server/cards/base/SpecialDesign.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Steelworks",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "103",
+      "type": "active",
+      "tags": [
+        "building"
+      ],
+      "cost": 15,
+      "sourceFile": "src/server/cards/base/Steelworks.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Strip Mine",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "138",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 25,
+      "sourceFile": "src/server/cards/base/StripMine.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Subterranean Reservoir",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "127",
+      "type": "event",
+      "tags": [],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/SubterraneanReservoir.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Symbiotic Fungus",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "133",
+      "type": "active",
+      "tags": [
+        "microbe"
+      ],
+      "cost": 4,
+      "sourceFile": "src/server/cards/base/SymbioticFungus.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Tectonic Stress Power",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "145",
+      "type": "automated",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 18,
+      "sourceFile": "src/server/cards/base/TectonicStressPower.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Towing A Comet",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "075",
+      "type": "event",
+      "tags": [
+        "space"
+      ],
+      "cost": 23,
+      "sourceFile": "src/server/cards/base/TowingAComet.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Trees",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "060",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/Trees.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Tundra Farming",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "169",
+      "type": "automated",
+      "tags": [
+        "plant"
+      ],
+      "cost": 16,
+      "sourceFile": "src/server/cards/base/TundraFarming.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Underground City",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "032",
+      "type": "automated",
+      "tags": [
+        "city",
+        "building"
+      ],
+      "cost": 18,
+      "sourceFile": "src/server/cards/base/UndergroundCity.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Underground Detonations",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "202",
+      "type": "active",
+      "tags": [
+        "building"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/UndergroundDetonations.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Urbanized Area",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "120",
+      "type": "automated",
+      "tags": [
+        "city",
+        "building"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/UrbanizedArea.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay",
+        "getAvailableSpaces"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Water Import From Europa",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "012",
+      "type": "active",
+      "tags": [
+        "jovian",
+        "space"
+      ],
+      "cost": 25,
+      "sourceFile": "src/server/cards/base/WaterImportFromEuropa.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "action",
+        "canAct"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Water Splitting Plant",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "177",
+      "type": "active",
+      "tags": [
+        "building"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/WaterSplittingPlant.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Wave Power",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "139",
+      "type": "automated",
+      "tags": [
+        "power"
+      ],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/WavePower.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Windmills",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "168",
+      "type": "automated",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/Windmills.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Worms",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "130",
+      "type": "automated",
+      "tags": [
+        "microbe"
+      ],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/Worms.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Zeppelins",
+      "module": "base",
+      "section": "projectCards",
+      "cardNumber": "129",
+      "type": "automated",
+      "tags": [],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/Zeppelins.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Beginner Corporation",
+      "module": "base",
+      "section": "corporationCards",
+      "cardNumber": "R00",
+      "type": "corporation",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/BeginnerCorporation.ts",
+      "scope": "unreachable-in-config",
+      "scopeReason": "GameCards.ts:88 - GameCards.getCorporationCards() filters out BEGINNER_CORPORATION unconditionally.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "CrediCor",
+      "module": "base",
+      "section": "corporationCards",
+      "cardNumber": "R08",
+      "type": "corporation",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/CrediCor.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onCardPlayed",
+        "onStandardProject"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Ecoline",
+      "module": "base",
+      "section": "corporationCards",
+      "cardNumber": "R17",
+      "type": "corporation",
+      "tags": [
+        "plant"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/EcoLine.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Helion",
+      "module": "base",
+      "section": "corporationCards",
+      "cardNumber": "R18",
+      "type": "corporation",
+      "tags": [
+        "space"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/Helion.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Interplanetary Cinematics",
+      "module": "base",
+      "section": "corporationCards",
+      "cardNumber": "R19",
+      "type": "corporation",
+      "tags": [
+        "building"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/InterplanetaryCinematics.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onCardPlayed"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Inventrix",
+      "module": "base",
+      "section": "corporationCards",
+      "cardNumber": "R43",
+      "type": "corporation",
+      "tags": [
+        "science"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/Inventrix.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Mining Guild",
+      "module": "base",
+      "section": "corporationCards",
+      "cardNumber": "R24",
+      "type": "corporation",
+      "tags": [
+        "building",
+        "building"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/MiningGuild.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onTilePlaced"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "PhoboLog",
+      "module": "base",
+      "section": "corporationCards",
+      "cardNumber": "R09",
+      "type": "corporation",
+      "tags": [
+        "space"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/PhoboLog.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Tharsis Republic",
+      "module": "base",
+      "section": "corporationCards",
+      "cardNumber": "R31",
+      "type": "corporation",
+      "tags": [
+        "building"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/TharsisRepublic.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay",
+        "onTilePlaced"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "ThorGate",
+      "module": "base",
+      "section": "corporationCards",
+      "cardNumber": "R13",
+      "type": "corporation",
+      "tags": [
+        "power"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/Thorgate.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "United Nations Mars Initiative",
+      "module": "base",
+      "section": "corporationCards",
+      "cardNumber": "R32",
+      "type": "corporation",
+      "tags": [
+        "earth"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/UnitedNationsMarsInitiative.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "action",
+        "canAct"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Aquifer",
+      "module": "base",
+      "section": "standardProjects",
+      "cardNumber": "SP2",
+      "type": "standard_project",
+      "tags": [],
+      "cost": 18,
+      "sourceFile": "src/server/cards/base/standardProjects/AquiferStandardProject.ts",
+      "scope": "reachable",
+      "scopeReason": "Game.ts:1630-1662 - no case in the switch excludes this card under Nadia's options; falls through to `return true`.",
+      "imperativeOverrides": [
+        "actionEssence",
+        "canAct",
+        "canPayWith"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "City",
+      "module": "base",
+      "section": "standardProjects",
+      "cardNumber": "SP4",
+      "type": "standard_project",
+      "tags": [],
+      "cost": 25,
+      "sourceFile": "src/server/cards/base/standardProjects/CityStandardProject.ts",
+      "scope": "reachable",
+      "scopeReason": "Game.ts:1630-1662 - no case in the switch excludes this card under Nadia's options; falls through to `return true`.",
+      "imperativeOverrides": [
+        "actionEssence",
+        "canAct",
+        "canPayWith"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Power Plant:SP",
+      "module": "base",
+      "section": "standardProjects",
+      "cardNumber": "SP7",
+      "type": "standard_project",
+      "tags": [],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/standardProjects/PowerPlantStandardProject.ts",
+      "scope": "reachable",
+      "scopeReason": "Game.ts:1630-1662 - no case in the switch excludes this card under Nadia's options; falls through to `return true`.",
+      "imperativeOverrides": [
+        "actionEssence"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Greenery",
+      "module": "base",
+      "section": "standardProjects",
+      "cardNumber": "SP6",
+      "type": "standard_project",
+      "tags": [],
+      "cost": 23,
+      "sourceFile": "src/server/cards/base/standardProjects/GreeneryStandardProject.ts",
+      "scope": "reachable",
+      "scopeReason": "Game.ts:1630-1662 - no case in the switch excludes this card under Nadia's options; falls through to `return true`.",
+      "imperativeOverrides": [
+        "actionEssence",
+        "canAct",
+        "canPayWith"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Asteroid:SP",
+      "module": "base",
+      "section": "standardProjects",
+      "cardNumber": "SP9",
+      "type": "standard_project",
+      "tags": [],
+      "cost": 14,
+      "sourceFile": "src/server/cards/base/standardProjects/AsteroidStandardProject.ts",
+      "scope": "reachable",
+      "scopeReason": "Game.ts:1630-1662 - no case in the switch excludes this card under Nadia's options; falls through to `return true`.",
+      "imperativeOverrides": [
+        "actionEssence",
+        "canAct",
+        "canPayWith"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Sell Patents",
+      "module": "base",
+      "section": "standardProjects",
+      "cardNumber": "SP8",
+      "type": "standard_project",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/base/standardProjects/SellPatentsStandardProject.ts",
+      "scope": "reachable-by-other-route",
+      "scopeReason": "Game.ts:1637 - Game.getStandardProjects() excludes it ('sell patents is not displayed as a card'); it is offered through a different decision route instead.",
+      "imperativeOverrides": [
+        "action",
+        "actionEssence",
+        "canAct"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Buffer Gas",
+      "module": "base",
+      "section": "standardProjects",
+      "cardNumber": "SP3",
+      "type": "standard_project",
+      "tags": [],
+      "cost": 16,
+      "sourceFile": "src/server/cards/prelude/BufferGasStandardProject.ts",
+      "scope": "unreachable-in-config",
+      "scopeReason": "Game.ts:1640 - shown only when `this.isSoloMode() && gameOptions.soloTR`; Nadia is always 2-4p, so this is never true.",
+      "imperativeOverrides": [
+        "actionEssence"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Convert Plants",
+      "module": "base",
+      "section": "standardActions",
+      "cardNumber": "SA2",
+      "type": "standard_action",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/base/standardActions/ConvertPlants.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "action",
+        "canAct"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Convert Heat",
+      "module": "base",
+      "section": "standardActions",
+      "cardNumber": "SA2",
+      "type": "standard_action",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/base/standardActions/ConvertHeat.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "action",
+        "canAct"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Acquired Company",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "106",
+      "type": "automated",
+      "tags": [
+        "earth"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/AcquiredCompany.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Advanced Alloys",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "071",
+      "type": "active",
+      "tags": [
+        "science"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/AdvancedAlloys.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "AI Central",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "208",
+      "type": "active",
+      "tags": [
+        "science",
+        "building"
+      ],
+      "cost": 21,
+      "sourceFile": "src/server/cards/base/AICentral.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Anti-Gravity Technology",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "150",
+      "type": "active",
+      "tags": [
+        "science"
+      ],
+      "cost": 14,
+      "sourceFile": "src/server/cards/base/AntiGravityTechnology.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Asteroid Mining Consortium",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "002",
+      "type": "automated",
+      "tags": [
+        "jovian"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/AsteroidMiningConsortium.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Bribed Committee",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "112",
+      "type": "event",
+      "tags": [
+        "earth"
+      ],
+      "cost": 7,
+      "sourceFile": "src/server/cards/base/BribedCommittee.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Building Industries",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "065",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/BuildingIndustries.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Business Contacts",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "111",
+      "type": "event",
+      "tags": [
+        "earth"
+      ],
+      "cost": 7,
+      "sourceFile": "src/server/cards/base/BusinessContacts.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Business Network",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "110",
+      "type": "active",
+      "tags": [
+        "earth"
+      ],
+      "cost": 4,
+      "sourceFile": "src/server/cards/base/BusinessNetwork.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Callisto Penal Mines",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "082",
+      "type": "automated",
+      "tags": [
+        "jovian",
+        "space"
+      ],
+      "cost": 24,
+      "sourceFile": "src/server/cards/base/CallistoPenalMines.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Caretaker Contract",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "154",
+      "type": "active",
+      "tags": [],
+      "cost": 3,
+      "sourceFile": "src/server/cards/base/CaretakerContract.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Cartel",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "137",
+      "type": "automated",
+      "tags": [
+        "earth"
+      ],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/Cartel.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "CEO's Favorite Project",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "149",
+      "type": "event",
+      "tags": [],
+      "cost": 1,
+      "sourceFile": "src/server/cards/base/CEOsFavoriteProject.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Commercial District",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "085",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 16,
+      "sourceFile": "src/server/cards/base/CommercialDistrict.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Corporate Stronghold",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "182",
+      "type": "automated",
+      "tags": [
+        "city",
+        "building"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/CorporateStronghold.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Development Center",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "014",
+      "type": "active",
+      "tags": [
+        "science",
+        "building"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/DevelopmentCenter.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Earth Catapult",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "070",
+      "type": "active",
+      "tags": [
+        "earth"
+      ],
+      "cost": 23,
+      "sourceFile": "src/server/cards/base/EarthCatapult.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Earth Office",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "105",
+      "type": "active",
+      "tags": [
+        "earth"
+      ],
+      "cost": 1,
+      "sourceFile": "src/server/cards/base/EarthOffice.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Electro Catapult",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "069",
+      "type": "active",
+      "tags": [
+        "building"
+      ],
+      "cost": 17,
+      "sourceFile": "src/server/cards/base/ElectroCatapult.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Energy Tapping",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "201",
+      "type": "automated",
+      "tags": [
+        "power"
+      ],
+      "cost": 3,
+      "sourceFile": "src/server/cards/base/EnergyTapping.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Fuel Factory",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "180",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/FuelFactory.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Gene Repair",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "091",
+      "type": "automated",
+      "tags": [
+        "science"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/GeneRepair.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Great Escarpment Consortium",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "061",
+      "type": "automated",
+      "tags": [],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/GreatEscarpmentConsortium.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Hackers",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "125",
+      "type": "automated",
+      "tags": [],
+      "cost": 3,
+      "sourceFile": "src/server/cards/base/Hackers.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Hired Raiders",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "124",
+      "type": "event",
+      "tags": [],
+      "cost": 1,
+      "sourceFile": "src/server/cards/base/HiredRaiders.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Indentured Workers",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "195",
+      "type": "event",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/base/IndenturedWorkers.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "getCardDiscount"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Industrial Center",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "123",
+      "type": "active",
+      "tags": [
+        "building"
+      ],
+      "cost": 4,
+      "sourceFile": "src/server/cards/base/IndustrialCenter.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay",
+        "getAvailableSpaces"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Interstellar Colony Ship",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "027",
+      "type": "event",
+      "tags": [
+        "earth",
+        "space"
+      ],
+      "cost": 24,
+      "sourceFile": "src/server/cards/base/InterstellarColonyShip.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Invention Contest",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "192",
+      "type": "event",
+      "tags": [
+        "science"
+      ],
+      "cost": 2,
+      "sourceFile": "src/server/cards/base/InventionContest.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Inventors' Guild",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "006",
+      "type": "active",
+      "tags": [
+        "science"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/InventorsGuild.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Investment Loan",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "151",
+      "type": "event",
+      "tags": [
+        "earth"
+      ],
+      "cost": 3,
+      "sourceFile": "src/server/cards/base/InvestmentLoan.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Io Mining Industries",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "092",
+      "type": "automated",
+      "tags": [
+        "jovian",
+        "space"
+      ],
+      "cost": 41,
+      "sourceFile": "src/server/cards/base/IoMiningIndustries.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Lagrange Observatory",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "196",
+      "type": "automated",
+      "tags": [
+        "science",
+        "space"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/LagrangeObservatory.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Land Claim",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "066",
+      "type": "event",
+      "tags": [],
+      "cost": 1,
+      "sourceFile": "src/server/cards/base/LandClaim.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Lightning Harvest",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "046",
+      "type": "automated",
+      "tags": [
+        "power"
+      ],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/LightningHarvest.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Mars University",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "073",
+      "type": "active",
+      "tags": [
+        "science",
+        "building"
+      ],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/MarsUniversity.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onCardPlayed",
+        "onNonCardTagAdded",
+        "onScienceTagAdded"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Mass Converter",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "094",
+      "type": "active",
+      "tags": [
+        "science",
+        "power"
+      ],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/MassConverter.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Media Archives",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "107",
+      "type": "automated",
+      "tags": [
+        "earth"
+      ],
+      "cost": 8,
+      "sourceFile": "src/server/cards/base/MediaArchives.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Media Group",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "109",
+      "type": "active",
+      "tags": [
+        "earth"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/MediaGroup.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onCardPlayed"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Medical Lab",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "207",
+      "type": "automated",
+      "tags": [
+        "science",
+        "building"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/MedicalLab.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Mine",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "056",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 4,
+      "sourceFile": "src/server/cards/base/Mine.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Mineral Deposit",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "062",
+      "type": "event",
+      "tags": [],
+      "cost": 5,
+      "sourceFile": "src/server/cards/base/MineralDeposit.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Mining Area",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "064",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 4,
+      "sourceFile": "src/server/cards/base/MiningArea.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay",
+        "getAvailableSpaces"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Miranda Resort",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "051",
+      "type": "automated",
+      "tags": [
+        "jovian",
+        "space"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/MirandaResort.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Olympus Conference",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "185",
+      "type": "active",
+      "tags": [
+        "science",
+        "earth",
+        "building"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/OlympusConference.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onCardPlayed",
+        "onNonCardTagAdded",
+        "onScienceTagAdded"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Physics Complex",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "095",
+      "type": "active",
+      "tags": [
+        "science",
+        "building"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/PhysicsComplex.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Power Infrastructure",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "194",
+      "type": "active",
+      "tags": [
+        "power",
+        "building"
+      ],
+      "cost": 4,
+      "sourceFile": "src/server/cards/base/PowerInfrastructure.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "action",
+        "canAct"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Power Supply Consortium",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "160",
+      "type": "automated",
+      "tags": [
+        "power"
+      ],
+      "cost": 5,
+      "sourceFile": "src/server/cards/base/PowerSupplyConsortium.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Protected Habitats",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "173",
+      "type": "active",
+      "tags": [],
+      "cost": 5,
+      "sourceFile": "src/server/cards/base/ProtectedHabitats.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Quantum Extractor",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "079",
+      "type": "active",
+      "tags": [
+        "science",
+        "power"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/QuantumExtractor.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Rad-Suits",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "186",
+      "type": "automated",
+      "tags": [],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/RadSuits.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Research",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "090",
+      "type": "automated",
+      "tags": [
+        "science",
+        "science"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/Research.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Restricted Area",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "199",
+      "type": "active",
+      "tags": [
+        "science"
+      ],
+      "cost": 11,
+      "sourceFile": "src/server/cards/base/RestrictedArea.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Robotic Workforce",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "086",
+      "type": "automated",
+      "tags": [
+        "science"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/RoboticWorkforce.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Sabotage",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "121",
+      "type": "event",
+      "tags": [],
+      "cost": 1,
+      "sourceFile": "src/server/cards/base/Sabotage.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Satellites",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "175",
+      "type": "automated",
+      "tags": [
+        "space"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/Satellites.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Security Fleet",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "028",
+      "type": "active",
+      "tags": [
+        "space"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/SecurityFleet.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Space Elevator",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "013",
+      "type": "active",
+      "tags": [
+        "space",
+        "building"
+      ],
+      "cost": 27,
+      "sourceFile": "src/server/cards/base/SpaceElevator.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Space Station",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "025",
+      "type": "active",
+      "tags": [
+        "space"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/base/SpaceStation.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Sponsors",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "068",
+      "type": "automated",
+      "tags": [
+        "earth"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/Sponsors.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Standard Technology",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "156",
+      "type": "active",
+      "tags": [
+        "science"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/StandardTechnology.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onStandardProject"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Tardigrades",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "049",
+      "type": "active",
+      "tags": [
+        "microbe"
+      ],
+      "cost": 4,
+      "sourceFile": "src/server/cards/base/Tardigrades.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Technology Demonstration",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "204",
+      "type": "event",
+      "tags": [
+        "science",
+        "space"
+      ],
+      "cost": 5,
+      "sourceFile": "src/server/cards/base/TechnologyDemonstration.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Terraforming Ganymede",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "197",
+      "type": "automated",
+      "tags": [
+        "jovian",
+        "space"
+      ],
+      "cost": 33,
+      "sourceFile": "src/server/cards/base/TerraformingGanymede.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Titanium Mine",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "144",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 7,
+      "sourceFile": "src/server/cards/base/TitaniumMine.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Toll Station",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "099",
+      "type": "automated",
+      "tags": [
+        "space"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/base/TollStation.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Trans-Neptune Probe",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "084",
+      "type": "automated",
+      "tags": [
+        "science",
+        "space"
+      ],
+      "cost": 6,
+      "sourceFile": "src/server/cards/base/TransNeptuneProbe.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Tropical Resort",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "098",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 13,
+      "sourceFile": "src/server/cards/base/TropicalResort.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Vesta Shipyard",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "057",
+      "type": "automated",
+      "tags": [
+        "jovian",
+        "space"
+      ],
+      "cost": 15,
+      "sourceFile": "src/server/cards/base/VestaShipyard.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Viral Enhancers",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "074",
+      "type": "active",
+      "tags": [
+        "science",
+        "microbe"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/base/ViralEnhancers.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onCardPlayed",
+        "onNonCardTagAdded"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Virus",
+      "module": "corpera",
+      "section": "projectCards",
+      "cardNumber": "050",
+      "type": "event",
+      "tags": [
+        "microbe"
+      ],
+      "cost": 1,
+      "sourceFile": "src/server/cards/base/Virus.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Saturn Systems",
+      "module": "corpera",
+      "section": "corporationCards",
+      "cardNumber": "R03",
+      "type": "corporation",
+      "tags": [
+        "jovian"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/SaturnSystems.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Teractor",
+      "module": "corpera",
+      "section": "corporationCards",
+      "cardNumber": "R30",
+      "type": "corporation",
+      "tags": [
+        "earth"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/corporation/Teractor.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "SF Memorial",
+      "module": "prelude",
+      "section": "projectCards",
+      "cardNumber": "P41",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 7,
+      "sourceFile": "src/server/cards/prelude/SFMemorial.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "House Printing",
+      "module": "prelude",
+      "section": "projectCards",
+      "cardNumber": "P36",
+      "type": "automated",
+      "tags": [
+        "building"
+      ],
+      "cost": 10,
+      "sourceFile": "src/server/cards/prelude/HousePrinting.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Space Hotels",
+      "module": "prelude",
+      "section": "projectCards",
+      "cardNumber": "P42",
+      "type": "automated",
+      "tags": [
+        "space",
+        "earth"
+      ],
+      "cost": 12,
+      "sourceFile": "src/server/cards/prelude/SpaceHotels.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Martian Survey",
+      "module": "prelude",
+      "section": "projectCards",
+      "cardNumber": "P38",
+      "type": "event",
+      "tags": [
+        "science"
+      ],
+      "cost": 9,
+      "sourceFile": "src/server/cards/prelude/MartianSurvey.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Research Coordination",
+      "module": "prelude",
+      "section": "projectCards",
+      "cardNumber": "P40",
+      "type": "automated",
+      "tags": [
+        "wild"
+      ],
+      "cost": 4,
+      "sourceFile": "src/server/cards/prelude/ResearchCoordination.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Lava Tube Settlement",
+      "module": "prelude",
+      "section": "projectCards",
+      "cardNumber": "P37",
+      "type": "automated",
+      "tags": [
+        "building",
+        "city"
+      ],
+      "cost": 15,
+      "sourceFile": "src/server/cards/prelude/LavaTubeSettlement.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Psychrophiles",
+      "module": "prelude",
+      "section": "projectCards",
+      "cardNumber": "P39",
+      "type": "active",
+      "tags": [
+        "microbe"
+      ],
+      "cost": 2,
+      "sourceFile": "src/server/cards/prelude/Psychrophiles.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": false
+    },
+    {
+      "name": "Cheung Shing MARS",
+      "module": "prelude",
+      "section": "corporationCards",
+      "cardNumber": "R16",
+      "type": "corporation",
+      "tags": [
+        "building"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/CheungShingMARS.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Point Luna",
+      "module": "prelude",
+      "section": "corporationCards",
+      "cardNumber": "R10",
+      "type": "corporation",
+      "tags": [
+        "space",
+        "earth"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/PointLuna.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "onCardPlayed"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Robinson Industries",
+      "module": "prelude",
+      "section": "corporationCards",
+      "cardNumber": "R27",
+      "type": "corporation",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/RobinsonIndustries.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "action",
+        "canAct"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Valley Trust",
+      "module": "prelude",
+      "section": "corporationCards",
+      "cardNumber": "R34",
+      "type": "corporation",
+      "tags": [
+        "earth"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/ValleyTrust.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "initialAction"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Vitor",
+      "module": "prelude",
+      "section": "corporationCards",
+      "cardNumber": "R35",
+      "type": "corporation",
+      "tags": [
+        "earth"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/Vitor.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "initialAction",
+        "onCardPlayed"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Allied Bank",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P01",
+      "type": "prelude",
+      "tags": [
+        "earth"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/AlliedBanks.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Biosphere Support",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P05",
+      "type": "prelude",
+      "tags": [
+        "plant"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/BiosphereSupport.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Aquifer Turbines",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P02",
+      "type": "prelude",
+      "tags": [
+        "power"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/AquiferTurbines.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Mohole Excavation",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P23",
+      "type": "prelude",
+      "tags": [
+        "building"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/MoholeExcavation.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Early Settlement",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P09",
+      "type": "prelude",
+      "tags": [
+        "building",
+        "city"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/EarlySettlement.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Biofuels",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P03",
+      "type": "prelude",
+      "tags": [
+        "microbe"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/Biofuels.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Power Generation",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P27",
+      "type": "prelude",
+      "tags": [
+        "power"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/PowerGeneration.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Self-Sufficient Settlement",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P29",
+      "type": "prelude",
+      "tags": [
+        "building",
+        "city"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/SelfSufficientSettlement.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Mining Operations",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P21",
+      "type": "prelude",
+      "tags": [
+        "building"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/MiningOperations.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "UNMI Contractor",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P34",
+      "type": "prelude",
+      "tags": [
+        "earth"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/UNMIContractor.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Dome Farming",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P07",
+      "type": "prelude",
+      "tags": [
+        "plant",
+        "building"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/DomeFarming.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Business Empire",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P06",
+      "type": "prelude",
+      "tags": [
+        "earth"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/BusinessEmpire.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Donation",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P08",
+      "type": "prelude",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/Donation.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Nitrogen Shipment",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P24",
+      "type": "prelude",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/NitrogenShipment.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Smelting Plant",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P30",
+      "type": "prelude",
+      "tags": [
+        "building"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/SmeltingPlant.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Supplier",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P32",
+      "type": "prelude",
+      "tags": [
+        "power"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/Supplier.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Supply Drop",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P33",
+      "type": "prelude",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/SupplyDrop.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Great Aquifer",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P14",
+      "type": "prelude",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/GreatAquifer.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Biolab",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P04",
+      "type": "prelude",
+      "tags": [
+        "science"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/Biolab.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Martian Industries",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P18",
+      "type": "prelude",
+      "tags": [
+        "building"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/MartianIndustries.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Io Research Outpost",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P16",
+      "type": "prelude",
+      "tags": [
+        "jovian",
+        "science"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/IoResearchOutpost.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Polar Industries",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P26",
+      "type": "prelude",
+      "tags": [
+        "building"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/PolarIndustries.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Society Support",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P31",
+      "type": "prelude",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/SocietySupport.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Galilean Mining",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P13",
+      "type": "prelude",
+      "tags": [
+        "jovian"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/GalileanMining.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Huge Asteroid",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P15",
+      "type": "prelude",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/HugeAsteroid.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokeCanPlay",
+        "bespokePlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Metals Company",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P20",
+      "type": "prelude",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/MetalsCompany.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Loan",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P17",
+      "type": "prelude",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/Loan.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Mohole",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P22",
+      "type": "prelude",
+      "tags": [
+        "building"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/Mohole.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Metal-Rich Asteroid",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P19",
+      "type": "prelude",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/MetalRichAsteroid.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Orbital Construction Yard",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P25",
+      "type": "prelude",
+      "tags": [
+        "space"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/OrbitalConstructionYard.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Acquired Space Agency",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P35",
+      "type": "prelude",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/AcquiredSpaceAgency.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Research Network",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P28",
+      "type": "prelude",
+      "tags": [
+        "wild"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/ResearchNetwork.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    },
+    {
+      "name": "Eccentric Sponsor",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P11",
+      "type": "prelude",
+      "tags": [],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/EccentricSponsor.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay",
+        "getCardDiscount"
+      ],
+      "declarative": false
+    },
+    {
+      "name": "Ecology Experts",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P10",
+      "type": "prelude",
+      "tags": [
+        "plant",
+        "microbe"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/EcologyExperts.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [
+        "bespokePlay",
+        "canPlay"
+      ],
+      "declarative": true
+    },
+    {
+      "name": "Experimental Forest",
+      "module": "prelude",
+      "section": "preludeCards",
+      "cardNumber": "P12",
+      "type": "prelude",
+      "tags": [
+        "plant"
+      ],
+      "cost": 0,
+      "sourceFile": "src/server/cards/prelude/ExperimentalForest.ts",
+      "scope": "reachable",
+      "scopeReason": "No in-scope compatibility gate, banned-card entry, or cardsToRemove entry applies (GameCards.ts, CardFactorySpec.ts) - see classifyReachability's doc comment.",
+      "imperativeOverrides": [],
+      "declarative": true
+    }
+  ],
+  "presence": {
+    "cardNumberIssues": [],
+    "corporations": {
+      "expectedNames": [
+        "Beginner Corporation",
+        "Cheung Shing MARS",
+        "CrediCor",
+        "Ecoline",
+        "Helion",
+        "Interplanetary Cinematics",
+        "Inventrix",
+        "Mining Guild",
+        "PhoboLog",
+        "Point Luna",
+        "Robinson Industries",
+        "Saturn Systems",
+        "Teractor",
+        "Tharsis Republic",
+        "ThorGate",
+        "United Nations Mars Initiative",
+        "Valley Trust",
+        "Vitor"
+      ],
+      "foundNames": [
+        "Beginner Corporation",
+        "Cheung Shing MARS",
+        "CrediCor",
+        "Ecoline",
+        "Helion",
+        "Interplanetary Cinematics",
+        "Inventrix",
+        "Mining Guild",
+        "PhoboLog",
+        "Point Luna",
+        "Robinson Industries",
+        "Saturn Systems",
+        "Teractor",
+        "Tharsis Republic",
+        "ThorGate",
+        "United Nations Mars Initiative",
+        "Valley Trust",
+        "Vitor"
+      ],
+      "missing": [],
+      "unexpected": []
+    }
+  }
+}

@@ -156,10 +156,11 @@ attempted only on a foundation that already works.
 | 6 | Reinforcement learning via self-play (Python+PyTorch, optional expert warm-start) | Learned agent beats M5 with significance; monotonic improvement |
 | 7 | Evaluation, tuning, acceptance | Primary AC (AC-1, AC-4, AC-6) met and documented |
 
-**Current status: Milestone 1's exit criterion is fully met — the gating spike PASSED, Engine
-determinism is verified, and the 1,000-game AC-1 legality run is done and clean.** Only bullet 7
-(the card-coverage audit) remains outstanding in Milestone 1. `.nvmrc` pinned to
-Node 22, Engine commit pinned. Bullet 1 (headless base + Corporate Era + Prelude game creation,
+**Current status: Milestone 1 is COMPLETE (27 Jul 2026) — all seven bullets done.** The exit
+criterion was met 24 Jul (gating spike PASSED, Engine determinism verified, 1,000-game AC-1 legality
+run clean), and bullet 7 (the card-coverage audit) — the last outstanding item, which never gated the
+exit criterion — is now done. **Next up: Milestone 2** (match harness, baselines, ratings, expert
+benchmark). `.nvmrc` pinned to Node 22, Engine commit pinned. Bullet 1 (headless base + Corporate Era + Prelude game creation,
 `agent/src/engine/gameFactory.ts`), bullet 2 (embedded driver, `agent/src/driver/`), bullet 3
 (legal-action enumerator, `agent/src/core/enumerator/`, + the random-legal agent,
 `agent/src/core/randomLegalAgent.ts`), and bullet 4 (snapshot/restore for search/self-play, SRS
@@ -255,9 +256,17 @@ Four things worth knowing before re-running AC-1 for a future agent:
   changed 43 of its 300 configs, which is that corpus reporting a real behaviour change exactly as
   bullet 6 designed it to.
 
-**Next up: bullet 7, the card-coverage audit** — the last outstanding Milestone-1 item.
+**Next up: Milestone 2** — the match harness, fixed baselines (random-legal + greedy one-ply),
+the rating pipeline, and the expert-distribution report. Two things Milestone 1 built specifically to
+feed it: the determinism fingerprint corpus (a ready regression-seed set) and the card-coverage census
+(`agent/docs/data/card_census.json` — the skeleton of the FR-DATA-1 BGA↔engine reconciliation, so M2
+does not rebuild it). The card-coverage audit also handed M2 a **catalogue of eight Engine-vs-print
+card divergences** ([docs/Card_Coverage_Audit.md](docs/Card_Coverage_Audit.md)) that the reconciliation
+must treat as known Engine-specific rules rather than reconcile away.
 
-**The gating first task (Plan §9, Milestone 1) — do this before any strategy work:**
+**Milestone 1 is complete. All bullets below are DONE — retained as the build record.**
+
+**The gating first task (Plan §9, Milestone 1):**
 1. Confirm a headless base + Corporate Era + Prelude game can be created and stepped through
    programmatically for 2–4 players.
 2. Implement the embedded driver + the legal-action enumerator (built on the FR-ACT-4 factorization)
@@ -271,8 +280,11 @@ Four things worth knowing before re-running AC-1 for a future agent:
 4. **Verify Engine determinism — DONE, all criteria met (24 Jul 2026).** Verified under fixed seeds
    with the Agent's RNG seeded separately from the Engine's (SRS CON-5/NFR-5); residual
    non-determinism recorded and isolated. See [docs/Determinism_Verification.md](docs/Determinism_Verification.md).
-5. **Card-coverage audit:** confirm every in-scope base + Corporate Era + Prelude card/corporation
-   is implemented and test-covered at the pin; record gaps as known limitations.
+5. **Card-coverage audit — DONE, all criteria met (27 Jul 2026).** Every in-scope card/corporation
+   present (277/277) and reachable-as-classified; Engine test coverage 275/277; play coverage 273/274
+   reachable over 1,500 games; all 73 logic-bearing cards read against the printed cards. Eight
+   Engine-vs-print divergences catalogued, none an Agent defect. Gaps recorded as known limitations.
+   See [docs/Card_Coverage_Audit.md](docs/Card_Coverage_Audit.md).
 
 **Decision gate after Milestone 5:** measure the classical agent's strength against AC-4, then
 decide whether to commit to RL (M6) or ship M5. M6 requires ML expertise / a collaborator / library;
@@ -348,3 +360,38 @@ FR-DATA-1..5, Plan §7.1 / Appendix A).
   bugs; report genuine Engine bugs upstream rather than silently patching rules.
 - Measure everything through the Milestone 2 harness — it is the single source of truth for
   strength. Judge changes by win rate against fixed baselines, not intuition.
+
+### Planning convention: decompose a plan into prompts for cold-start sessions
+
+When planning a substantial piece of work (a Plan bullet, a milestone sub-goal), the house style is
+to write a **plan document that decomposes the work into self-contained prompts**, each intended for
+a session that starts cold — see `docs/Milestone1_Bullet4_Prompts.md`, `…Bullet5…`, `…Bullet6…`,
+`…Bullet7…`. Each such document carries: what is already known (so nothing is re-derived), the
+located hazards, criteria pre-committed *before* any measurement, a file-ownership table so parallel
+work never collides, a shared preamble, and one prompt per unit of work.
+
+Always include, for each unit: a **rough scale estimate** (lines of code, files, cards read, minutes
+of compute) and a **model recommendation with the reason** — the reason is the useful part, because
+it names what would go wrong if the work were run too cheaply.
+
+**Fit the number of units and the parallelism to the work, not to the shape of the last plan.** The
+decomposition is an output of analysing the task; it is not a template to fill. Bullets 5 and 6 both
+landed on `A → (B, C, D in parallel) → E` because both genuinely had a shared harness plus three
+comparable investigations over it. Bullet 3 did not (`A → (B, D) → C → E`), bullet 4 did not (four
+units, no write-up unit), and bullet 7 did not — it split into a measurement pass, a tooling
+question, a large *ranked, batched* review that is most of the effort, and a write-up. Before
+settling a structure, ask:
+
+- **Is the "do this first" unit a real dependency, or just a shared denominator?** A harness other
+  units call is a dependency. A JSON file they could each derive in thirty lines is coordination —
+  worth ordering, not worth a blocking phase.
+- **Are the parallel units actually comparable in size?** If one is 70% of the effort, it is the
+  spine, not a peer. Fan out *inside* it (over items, batches, cards) rather than across concerns.
+- **Does splitting cost a cold start?** Two sessions re-deriving the same Engine internals is a real
+  cost. Merge units that key off the same objects.
+- **What genuinely warrants its own session?** Work that edits the source-of-truth documents (one
+  writer, always), work whose size is unknown until attempted, and work that is pure judgment over
+  other units' output.
+
+The prompt-per-cold-session format is the convention. The count, the ordering and the fan-out are
+findings about the task, and a plan should say why its shape fits the work.
