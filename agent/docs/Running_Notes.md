@@ -956,3 +956,89 @@ the 10 Tharsis milestones/awards have a dedicated spec; 4 have no test contact a
 prior-art study found to be dominant win drivers. Out of bullet 7's literal "card and corporation"
 wording, recorded as a known limitation with M3 (which must reason about them explicitly) named as
 where it first bites.
+
+## 2026-07-28 — Match runner: seven criteria met, and the one number this machine cannot produce (Milestone 2, bullet 1)
+
+Full deliverable: [docs/Match_Runner.md](Match_Runner.md). The findings worth not rediscovering:
+
+**Absolute throughput on this workstation is not a measurement, and chasing one cost hours.** The
+match runner measured ~6 games/s where the speed spike recorded 38.1, which looks exactly like a 6×
+regression in new code. It is not. The M1 legality runner measured the same ~6.9 (ruling out the
+match runner), and then the spike's *own* `game-runtime` suite, re-run unchanged at the same pin on
+the same machine, reported **7.5 and 41.4 games/s on consecutive runs** — ruling out the code
+entirely. The cause is the host: **5.67 GB of 6.14 GB swap in use, 124 MB free, on an 8 GB machine**
+with other applications running. The identical 2p match spec measured 9.0, 38.3 and 39.4 games/s
+within one session. **Check `sysctl vm.swapusage` and free memory before believing any throughput
+delta.** Two plausible hypotheses were tested and disproved on the way: that the spike's timer
+excludes `createGame` (it does — but that is only 5% of a game), and that the seed schedule mattered
+(it does not; consecutive and strided schedules measure the same).
+
+**So R7 is untested, not failed — and the spike's ×8 assumption is still open.** Eight Node children
+at ~300 MB peak heap each do not fit beside 92%-full swap; the pool thrashes rather than scales
+(measured 1.50× at 2 workers, 1.25× at 4, 1.02× at 8 — all measurements of a swapping host). Reporting
+"the pool doesn't scale" from that would have been a false finding about the code.
+`Simulator_Speed_Spike.md` §5 deferred verifying its ×8 core-scaling assumption *to this harness*, and
+it remains unverified, so the NFR-2 games/day table and the M6 self-play budget still rest on an
+untested multiplier. One command on an idle host settles it: `matchValidationCli.js --phase r7`.
+The phase now records load average, free memory and swap per point so a future reader can tell
+whether the run was valid.
+
+**A byte-identity criterion found a defect neither unit's tests could.** R6 (pooled artifact ==
+single-process artifact) failed on its legality-mode leg with *no game record differing* — the
+divergence was confined to `instrumentation.detail`, where the pool emitted `{perWorker: [...]}`
+against the single-process flat block. Unit C had deliberately refused to merge that field because
+Unit B owns its shape; Unit B had specified merge semantics for the legality counters and cause
+tallies but not for `detail`. Both units were individually correct and spec-covered; the gap lived
+exactly between them, in a field nobody would have thought to assert on. Fixed by putting the merge
+where the shape is owned (`mergeHistoryDetail` in `match/history.ts`, delegated to from `pool.ts`),
+with the fallback preserved for anything it has no rule for. **Keep whole-artifact criteria; field-by-
+field ones would not have caught this.**
+
+**The seat advantage did not show up, and that is not the same as it not existing.** Over 1,000 2p
+games, seat 0 (which leads) won 52.60% [49.50%, 55.68%] — the interval *just* contains 50%. So the
+pairing's necessity is unproven, not disproven. Random-legal play is the weakest possible instrument
+for a tempo advantage: going first only helps a player who can use the tempo. Resolving a 2.6 pp
+effect needs ~5,000–10,000 games. **Re-measure at M3** with an agent that can exploit it — one flag on
+the existing runner. Slot win rate, by contrast, came in at 51.60% [48.50%, 54.69%], so R1a is clean.
+
+**`moves`-tier history is 69.7 KB/game, ~17% above the 30–60 KB the plan estimated**, making a
+1,000-game history run ~70 MB. The retention convention earns its keep: `agent/runs/` is the CLI's
+*default* destination for that tier and is gitignored, and `assertRetentionPolicy` refuses to write it
+into the committed data directory. Summary tier is 2,153 bytes/game.
+
+**The FR-9 fallback fired in 58 of 60 games — it is the normal case.** At ~5–8 per game, a history
+recorder built on the responder wrapper (the obvious implementation) would have been wrong nearly
+everywhere rather than rarely, since the fallback substitutes a different move and a responder that
+throws records nothing at all. Consistent with AC-1's 8,480 throws over 1,500 games, and the reason
+the recorder sits at the submission boundary.
+
+**Real VP ties happen (36 in 1,700 games, ~1.6%) and every one was broken by megacredits.** The
+Engine's tiebreak — which lives only in `src/client/components/GameEnd.vue:292-320`, with no
+server-side equivalent — is therefore exercised by real play, not just by unit tests. No game tied on
+*both* VP and megacredits, so the shared-win path stays construction-covered.
+
+**A path built by counting `..` from `__dirname` lands inside `build/agent/` under the compiled
+build.** `artifact.ts` documents this trap and solves it by walking up to the repo root; the
+validation CLI's first assemble hand-rolled the join and wrote a 7 MB artifact to
+`build/agent/agent/docs/data/` — a directory that exists nowhere and is not gitignored. Use
+`defaultOutputDir()`.
+
+**Follow-up the same day — the R8 equivalence was strengthened, and the first attempt to strengthen
+it produced a false pass.** As originally written, criterion R8's check made the match runner and the
+Milestone-1 `runLegalityBatch` play the same game by *substituting the seat router away*. That bought
+identical games at the price of never exercising the router, and left the match record's own
+`decisions` counter 0 by construction — so no single check compared the *real* per-seat match runner
+against the oracle, which matters because an AC-1 promotion gate rests on the equivalence. **The fix
+works on the agent, not the runner:** `randomLegalAgent` holds no state but its `AgentRandom`, so *n*
+per-seat agents sharing one `AgentRandom` are behaviourally identical to one shared agent. A
+temporary registry entry (`withTemporaryAgent`) whose `create` binds every seat to one stream gives
+an identical game with the router fully live. Result: 0 mismatches over 50 configs, `decisions`
+agreeing exactly at 13,689 — positive evidence the router ran, not just absence of failure.
+
+**And the cautionary half:** the first version of that fix called `resolveMatchSpec` *outside* the
+temporary registration. `resolveMatchSpec` looks every lineup name up to record its version, so it
+threw on every config and the phase aborted — but the check script then read a **stale `r8.json` from
+the previous run** and reported a clean pass with numbers identical to before. It was caught only
+because the full test suite failed on the same ordering bug. **Delete a phase artifact before
+re-running it, and confirm the phase's own completion line**, rather than trusting that a JSON file
+on disk came from the run you just did. The published numbers were re-taken that way.

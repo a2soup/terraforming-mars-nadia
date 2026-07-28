@@ -156,11 +156,58 @@ attempted only on a foundation that already works.
 | 6 | Reinforcement learning via self-play (Python+PyTorch, optional expert warm-start) | Learned agent beats M5 with significance; monotonic improvement |
 | 7 | Evaluation, tuning, acceptance | Primary AC (AC-1, AC-4, AC-6) met and documented |
 
-**Current status: Milestone 1 is COMPLETE (27 Jul 2026) — all seven bullets done.** The exit
+**Current status: Milestone 2 is IN PROGRESS — bullet 1 (the match runner) is DONE (28 Jul 2026).**
+Milestone 1 is complete (all seven bullets; see the build record below). `.nvmrc` pinned to Node 22,
+Engine commit pinned.
+
+### Milestone 2, bullet 1 — the match runner (done)
+
+The measurement instrument every later strength claim depends on (SRS FR-13). Lives in
+`agent/src/match/` + `agent/src/agents/registry.ts`, behind `npm run match` (and `npm run match:pool`
+for the process pool). Full results: [docs/Match_Runner.md](docs/Match_Runner.md); the design and the
+criteria were pre-committed in [docs/Milestone2_Bullet1_Prompts.md](docs/Milestone2_Bullet1_Prompts.md)
+before any code. **Seven of eight criteria met over 1,700 validation games** (1,000 at 2p, 600 at 3p,
+100 at 4p; zero failures, zero Agent-attributable illegal-move rejections).
+
+Five things worth knowing before touching this area:
+
+- **The unit of measurement is a pairing group, not a game.** A group fixes one Engine seed and plays
+  the lineup in *every* seat permutation (2 games at 2p, 6 at 3p, 4 cyclic rotations at 4p), so a win
+  rate is not confounded with seat order. `N` is a group count; a game count that is not a whole
+  number of groups is an unbalanced sample and the CLI rounds up rather than truncating. Win rates are
+  reported twice — `bySlot` (the identity being compared) and `bySeat` (the same games by seat) — and
+  the difference between them is the point.
+- **`gameResult.ts` is not the ranking.** The Engine's real winner rule (VP, then megacredits) exists
+  only in `src/client/components/GameEnd.vue:292-320` — there is no server-side equivalent — and is
+  implemented in `match/ranking.ts`. `computeResult`/`GameResult` are deliberately untouched: the
+  committed 300-fingerprint determinism corpus hashes `JSON.stringify(GameResult)`, so extending that
+  type would look exactly like a determinism regression.
+- **The AC-1 legality accounting is absorbed** (`--legality`), verified counter-for-counter against
+  `npm run legality` on 50 shared configs. See the standing caveat in §7 below for what that changes
+  and, more importantly, what it does not.
+- **R7 (parallel throughput) is UNTESTED, not failed**, and with it the speed spike's ×8
+  core-scaling assumption and the M6 self-play budget built on it. The measurement host was swapping
+  (5.67 GB of 6.14 GB on 8 GB) and the *single-process* baseline swung 4.3× within one session on an
+  identical spec. **Check `sysctl vm.swapusage` and free memory before believing any throughput
+  number from this machine** — a whole afternoon went into an apparent 6× regression that was the host.
+  One command on an idle host settles it: `matchValidationCli.js --phase r7`.
+- **The seat advantage the pairing corrects was not demonstrated**, so the pairing's necessity rests
+  on argument, not measurement: over 1,000 games seat 0 won 52.6% with a 95% CI of [49.5%, 55.7%].
+  Random-legal play is the weakest possible instrument for a tempo advantage. **Re-measure at M3.**
+
+**Next up: Milestone 2 bullets 2–5** — the greedy one-ply baseline, the rating pipeline (FR-14), the
+expert-distribution report (FR-DATA-1), and the regression seed set. Two things Milestone 1 built to
+feed them: the determinism fingerprint corpus and the card-coverage census
+(`agent/docs/data/card_census.json`), plus the eight catalogued Engine-vs-print divergences
+([docs/Card_Coverage_Audit.md](docs/Card_Coverage_Audit.md)) the reconciliation must treat as known
+Engine-specific rules.
+
+---
+
+**Milestone 1 is complete — the build record follows.** The exit
 criterion was met 24 Jul (gating spike PASSED, Engine determinism verified, 1,000-game AC-1 legality
 run clean), and bullet 7 (the card-coverage audit) — the last outstanding item, which never gated the
-exit criterion — is now done. **Next up: Milestone 2** (match harness, baselines, ratings, expert
-benchmark). `.nvmrc` pinned to Node 22, Engine commit pinned. Bullet 1 (headless base + Corporate Era + Prelude game creation,
+exit criterion — is now done. Bullet 1 (headless base + Corporate Era + Prelude game creation,
 `agent/src/engine/gameFactory.ts`), bullet 2 (embedded driver, `agent/src/driver/`), bullet 3
 (legal-action enumerator, `agent/src/core/enumerator/`, + the random-legal agent,
 `agent/src/core/randomLegalAgent.ts`), and bullet 4 (snapshot/restore for search/self-play, SRS
@@ -256,14 +303,6 @@ Four things worth knowing before re-running AC-1 for a future agent:
   changed 43 of its 300 configs, which is that corpus reporting a real behaviour change exactly as
   bullet 6 designed it to.
 
-**Next up: Milestone 2** — the match harness, fixed baselines (random-legal + greedy one-ply),
-the rating pipeline, and the expert-distribution report. Two things Milestone 1 built specifically to
-feed it: the determinism fingerprint corpus (a ready regression-seed set) and the card-coverage census
-(`agent/docs/data/card_census.json` — the skeleton of the FR-DATA-1 BGA↔engine reconciliation, so M2
-does not rebuild it). The card-coverage audit also handed M2 a **catalogue of eight Engine-vs-print
-card divergences** ([docs/Card_Coverage_Audit.md](docs/Card_Coverage_Audit.md)) that the reconciliation
-must treat as known Engine-specific rules rather than reconcile away.
-
 **Milestone 1 is complete. All bullets below are DONE — retained as the build record.**
 
 **The gating first task (Plan §9, Milestone 1):**
@@ -298,10 +337,24 @@ M5 is a valid stopping point with a strong classical deliverable.
 > reach candidate-move code paths random play never did. This is not hypothetical: the M1 run
 > itself found and fixed a real illegal-move-producing defect (the `initialCards` budget coupling)
 > that had hidden behind the FR-9 fallback since bullet 3, invisible to a 20-game batch and only
-> surfaced at 1,500-game scale. **Re-run the AC-1 legality battery (`agent/src/legality/`,
-> `npm run legality`) against every agent version promoted at the end of M3, M4, M5, and M6**,
-> as a promotion-gate step alongside the FR-15/AC-7 significance test — not once at M1 and assumed
-> forever after. Full detail and the risk-register entry: Implementation Plan §7.2.
+> surfaced at 1,500-game scale. **Re-run the AC-1 legality battery against every agent version
+> promoted at the end of M3, M4, M5, and M6**, as a promotion-gate step alongside the FR-15/AC-7
+> significance test — not once at M1 and assumed forever after. Full detail and the risk-register
+> entry: Implementation Plan §7.2.
+>
+> **Since 28 Jul 2026 the battery is a mode of the match runner** (Milestone 2 bullet 1, §4.6 of its
+> plan): `npm run match -- --lineup <agent>,<agent> --groups 500 --legality`. It installs the same
+> `legality/SubmissionMonitor` and was verified to produce **identical values on all nine adjudicated
+> counters** against `npm run legality` over 50 shared configs, in both instrumentation variants
+> (criterion R8, [docs/Match_Runner.md](docs/Match_Runner.md)). `agent/src/legality/` is retained as
+> the M1 artifact-of-record and as that comparison's oracle — do not delete it.
+>
+> **What moved is where the battery lives, not whether it runs.** The consolidation was justified by
+> not playing the same games twice, *not* by the odds of a regression being low — the M1 evidence
+> points the other way. In particular: the driver's `onFallback` counts are **not** AC-1's accounting
+> (they cannot see the FR-9 fallback's own rejected `'or'`-branch probes), so a promotion gate must
+> pass `--legality` and read the strict counters, not the fallback counts a plain match already
+> reports.
 
 ---
 

@@ -23,6 +23,12 @@ assets/locales
 # Local Packages
 node_modules/
 
+# Nadia agent: bulk match-runner output. `moves`-tier histories are tens of MB per run and are
+# deliberately not committed (agent/docs/Milestone2_Bullet1_Prompts.md §4.7); `summary`/`trace`
+# artifacts for named runs go to agent/docs/data/ and are. The match CLI defaults moves-tier
+# output here — this rule is the backstop, not the mechanism.
+agent/runs/
+
 # misc
 .gitconfig
 ./logs/

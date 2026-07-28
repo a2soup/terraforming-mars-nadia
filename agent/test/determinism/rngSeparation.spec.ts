@@ -156,6 +156,63 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'output only, reaches no file, no fingerprint and no decision - the sweep\'s games are built from its own ' +
       'seed schedule (coverage/playSweep.ts) and never read the clock.',
   },
+  {
+    file: 'src/match/runner.ts',
+    rule: 'date-now',
+    occurrences: 4,
+    reason:
+      'Match-runner durations: each game\'s `durationMs` and the run\'s `wallClockMs` (Milestone 2 bullet 1). Same ' +
+      'category as legality/run.ts above - reported, never read back; a match\'s games are built from the pairing ' +
+      'seed schedule alone (match/pairing.ts) and no seed, decision or game state derives from the clock. The ' +
+      'match runner goes further than the legality run did: these two are the *only* non-deterministic fields it ' +
+      'produces, they are declared as such in `MATCH_TIMING_FIELDS` (match/artifact.ts), and criteria R2 and R6 ' +
+      '(Milestone2_Bullet1_Prompts.md §6) strip exactly them before requiring two runs of the same specification ' +
+      'to be identical - so this allowlist entry and that criterion are two statements of the same fact.',
+  },
+  {
+    file: 'src/runner/matchCli.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      'The match CLI\'s progress line ("N/1000 games (38.1 games/s)"). Identical in kind to legalityCli.ts\'s above: ' +
+      'console output on a long run, reaching no file, no fingerprint and no decision.',
+  },
+  {
+    file: 'src/match/pool.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      'The pool\'s own `wallClockMs` (Milestone 2 bullet 1, Unit C, §4.5): the wall-clock elapsed while every ' +
+      'child\'s shard ran, in place of the single-process run\'s own timing since the pool never calls ' +
+      '`runMatchConfigs` itself. Same category as `match/runner.ts`\'s entry above - reported into `MatchTiming`, ' +
+      'stripped by the same `MATCH_TIMING_FIELDS`/`stripTimingFields` before any R2/R6 comparison, and never read ' +
+      'back into a seed, a decision or a game\'s state. Each child\'s own games are built from the shard of ' +
+      '`pairing.ts`\'s seed schedule it was handed; nothing about what a child plays depends on when the parent ' +
+      'started its clock.',
+  },
+  {
+    file: 'src/runner/matchValidationCli.ts',
+    rule: 'date-now',
+    occurrences: 4,
+    reason:
+      'The Unit D validation battery\'s own timing (Milestone 2 bullet 1): the per-phase elapsed line, and R7\'s ' +
+      'per-worker-count wall-clock, which is the measurement R7 *is*. Same category as legality/run.ts and ' +
+      'match/runner.ts above - reported, never read back; every game the battery plays is built from a pairing or ' +
+      'legality seed schedule and nothing it measures feeds a seed, a decision or a game\'s state. This file sits ' +
+      'closest to the `agent/src/bench` line of any outside it, since timing genuinely is part of its job (R7). It ' +
+      'is not moved there because the other five phases are correctness checks (R1-R6, R8) that must run in the ' +
+      'same battery and write the same artifact, and a bench directory that adjudicates criteria would be the ' +
+      'wrong file in the wrong place in exactly the way EXCLUDED_DIRECTORIES\' own comment warns about.',
+  },
+  {
+    file: 'src/runner/matchValidationCli.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      'The validation artifact\'s `generatedAt` provenance stamp, written once when the battery is assembled. ' +
+      'Identical in kind to determinism/corpus.ts\'s `createdAt` above: it lands in the artifact header, is never ' +
+      'compared, and never reaches a decision or a fingerprint.',
+  },
 ];
 
 type Violation = {file: string; line: number; rule: string; text: string};
