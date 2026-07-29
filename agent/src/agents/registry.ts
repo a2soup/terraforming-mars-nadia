@@ -1,3 +1,4 @@
+import {createGreedyOnePlyAgent} from '../core/greedyOnePlyAgent';
 import {randomLegalAgent} from '../core/randomLegalAgent';
 import {createAgentRandom} from '../core/rng';
 import {EmbeddedDriverOptions} from '../driver/embeddedDriver';
@@ -31,11 +32,12 @@ import {EmbeddedResponder} from '../driver/responder';
  * incomparable runs look comparable. The registry cannot enforce this; it is a discipline, and
  * this paragraph is where it is written down.
  *
- * **Where the next entries go.** The greedy one-ply baseline (OSLA) is Milestone 2 bullet 2 and
- * belongs here as `'greedy-1ply'`; the M3 heuristic agent, the M4 search agent and every promoted
- * M6 network follow the same shape. Adding one is a single entry - nothing else in the runner
- * knows or cares which brain is in which seat, which is the whole point of the
- * `decide(observation) -> action` seam (agent/CLAUDE.md §4).
+ * **Where the next entries go.** `'greedy-1ply'` (Milestone 2 bullet 2, the OSLA equivalent) is the
+ * second entry and the first agent that searches; the M3 heuristic agent, the M4 search agent and
+ * every promoted M6 network follow the same shape. Adding one is a single entry - nothing else in
+ * the runner knows or cares which brain is in which seat, which is the whole point of the
+ * `decide(observation) -> action` seam (agent/CLAUDE.md §4). Note what `greedy-1ply` needed *beyond*
+ * a `create`: {@link SeatedAgent}'s two extra fields, which are the whole of hazard H4.
  */
 
 /** The recordable identity of an agent: what a match artifact carries per seat. */
@@ -115,8 +117,25 @@ const REGISTRY: Record<string, AgentEntry> = {
     description: 'Uniformly random legal move at every decision (the Milestone 1 baseline).',
     create: (seed) => randomLegalAgent(createAgentRandom(seed)),
   },
-  // Milestone 2 bullet 2 adds the greedy one-ply baseline here:
-  //   'greedy-1ply': {name: 'greedy-1ply', version: '1', description: '...', create: (seed) => ...},
+  'greedy-1ply': {
+    name: 'greedy-1ply',
+    // Version 1 is the agent Milestone 2 bullet 2 adjudicated (docs/Baselines.md), against the
+    // candidate sets of `core/candidates/` and the fork service of `search/fork.ts` as they stand
+    // at that commit. Per the discipline above, **bump this whenever the move distribution can
+    // change** - and for this agent that includes changes it does not own: a reduction in
+    // `core/candidates/`, the drain boundary in `core/greedyOnePlyAgent.ts`, the 64-candidate cap,
+    // the 32-step drain budget, or anything that changes which decisions are forkable. It is a
+    // **frozen baseline**: AC-3's ">= 80% vs greedy one-ply" only measures the M3 heuristic's
+    // contribution if the yardstick does not move, so a change here is a new version, not an
+    // improvement to this one.
+    version: '1',
+    description:
+      'Greedy one-ply (the OSLA equivalent): scores every candidate move by its own victory points ' +
+      'in the position it reaches, plays the argmax, breaks ties at random. Deliberately myopic - ' +
+      'it values no production, no engine-building, no timing and no opponent, and it is indifferent ' +
+      'to every VP-neutral choice (corporation, initial cards, research buys).',
+    create: (seed) => createGreedyOnePlyAgent(seed),
+  },
 };
 
 /** The roster. A read-only view of {@link REGISTRY}, which {@link withTemporaryAgent} can add to. */
