@@ -1,0 +1,1600 @@
+{
+ "bullet": "Milestone 2, bullet 2 - fixed baselines",
+ "criteria": "agent/docs/Milestone2_Bullet2_Prompts.md §5 (G1-G9), pre-committed before any measurement",
+ "generatedAt": "2026-07-29T16:30:01.856Z",
+ "machine": {
+  "cpuModel": "Apple M2",
+  "cores": 8,
+  "totalMemoryBytes": 8589934592,
+  "node": "v22.23.1",
+  "platform": "darwin",
+  "arch": "arm64",
+  "runtime": "compiled"
+ },
+ "g1": {
+  "g1a": {
+   "source": "docs/data/candidate_validation.json",
+   "gamesRun": 200,
+   "gamesCompleted": 200,
+   "decisionPoints": 60143,
+   "decisionsValidated": 59862,
+   "candidatesGenerated": 849360,
+   "candidatesSubmitted": 843871,
+   "candidatesAccepted": 843871,
+   "candidatesRejected": 0,
+   "cappedDecisions": 89,
+   "emptySets": 0,
+   "rejections": [],
+   "forkGaps": {
+    "forkUnavailable": 0,
+    "forkUnfaithful": 0,
+    "forkPendingModelMismatch": 281,
+    "ancestorPendingModelMismatch": 1017
+   }
+  },
+  "g1b": {
+   "exitCode": 0,
+   "corpusUnchanged": true,
+   "verdict": [
+    "[determinism] verified 300 config(s) from docs/data/determinism_corpus.json",
+    "[determinism] OK - 0 mismatches."
+   ],
+   "elapsedMs": 7363
+  },
+  "g1c": {
+   "typesWithCandidates": [
+    "amount",
+    "card",
+    "initialCards",
+    "option",
+    "or",
+    "payment",
+    "player",
+    "projectCard",
+    "space"
+   ],
+   "unreachedTypes": [
+    "and",
+    "productionToLose",
+    "resource",
+    "resources"
+   ],
+   "unvalidatedTypes": []
+  },
+  "machine": {
+   "loadAverage": [
+    2.455078125,
+    2.3076171875,
+    3.20458984375
+   ],
+   "freeMemoryBytes": 453148672,
+   "swap": "total = 6144.00M  used = 4554.69M  free = 1589.31M  (encrypted)"
+  }
+ },
+ "main": {
+  "runs": [
+   {
+    "players": 2,
+    "groups": 500,
+    "games": 1000,
+    "wallClockMs": 1093484,
+    "greedyAgentsConstructed": 1000,
+    "summary": {
+     "players": 2,
+     "groups": 500,
+     "permutationsPerGroup": 2,
+     "games": 1000,
+     "completed": 1000,
+     "failed": 0,
+     "balancedGroups": 500,
+     "totalDecisions": 237242,
+     "fallbacksAfterRejection": 0,
+     "fallbacksAfterThrow": 2072,
+     "decisionsPerGame": {
+      "min": 146,
+      "p50": 233,
+      "p95": 310,
+      "max": 400,
+      "mean": 237.24
+     },
+     "generationsPerGame": {
+      "min": 12,
+      "p50": 17,
+      "p95": 22,
+      "max": 28,
+      "mean": 17.65
+     },
+     "bySlot": [
+      {
+       "slot": 0,
+       "agent": "greedy-1ply",
+       "agentVersion": "1",
+       "games": 1000,
+       "wins": 992,
+       "sharedWins": 0,
+       "placementCounts": [
+        992,
+        8
+       ],
+       "winRate": 0.992,
+       "winRateCi95": {
+        "low": 0.9842936653888887,
+        "high": 0.9959408042021483
+       }
+      },
+      {
+       "slot": 1,
+       "agent": "random-legal",
+       "agentVersion": "1",
+       "games": 1000,
+       "wins": 8,
+       "sharedWins": 0,
+       "placementCounts": [
+        8,
+        992
+       ],
+       "winRate": 0.008,
+       "winRateCi95": {
+        "low": 0.004059195797851703,
+        "high": 0.01570633461111126
+       }
+      }
+     ],
+     "bySeat": [
+      {
+       "seat": 0,
+       "games": 1000,
+       "wins": 498,
+       "sharedWins": 0,
+       "placementCounts": [
+        498,
+        502
+       ],
+       "winRate": 0.498,
+       "winRateCi95": {
+        "low": 0.46707750013942995,
+        "high": 0.5289378068947527
+       }
+      },
+      {
+       "seat": 1,
+       "games": 1000,
+       "wins": 502,
+       "sharedWins": 0,
+       "placementCounts": [
+        502,
+        498
+       ],
+       "winRate": 0.502,
+       "winRateCi95": {
+        "low": 0.4710621931052472,
+        "high": 0.5329224998605699
+       }
+      }
+     ],
+     "timing": {
+      "wallClockMs": 1093445,
+      "durationMsPerGame": {
+       "min": 496,
+       "p50": 1038,
+       "p95": 1649,
+       "max": 2542,
+       "mean": 1093.15
+      }
+     }
+    },
+    "greedy": {
+     "tieBreakFraction": 0.7592763553515317,
+     "decisions": 130475,
+     "scored": 118069,
+     "tieBroken": 89647,
+     "singleCandidate": 9796,
+     "fallbacks": 2610,
+     "fallbacksByReason": {
+      "no-candidates": 0,
+      "fork-unavailable": 2610,
+      "candidate-rejected": 0,
+      "drain-budget-exhausted": 0,
+      "drain-failed": 0,
+      "candidate-generation-failed": 0,
+      "player-mismatch": 0
+     },
+     "forkUnavailableByReason": {
+      "no-game": 0,
+      "no-ancestor": 2523,
+      "restore-rejected": 0,
+      "replay-failed": 5,
+      "validation-failed": 82
+     },
+     "cappedDecisions": 7,
+     "candidatesScored": 957295,
+     "candidatesRejected": 0,
+     "drainOverruns": 0,
+     "drainFallbacks": 0,
+     "drainBudget": 32,
+     "candidateCounts": {
+      "count": 130475,
+      "median": 6,
+      "p95": 19,
+      "max": 64
+     },
+     "drainSteps": {
+      "count": 957295,
+      "median": 0,
+      "p95": 1,
+      "max": 4
+     },
+     "scoreSpread": {
+      "count": 118069,
+      "median": 0,
+      "p95": 5,
+      "max": 16
+     },
+     "tieSize": {
+      "count": 118069,
+      "median": 3,
+      "p95": 10,
+      "max": 49
+     },
+     "byType": {
+      "initialCards": {
+       "decisions": 1000,
+       "scored": 0,
+       "tieBroken": 0,
+       "singleCandidate": 0,
+       "fallbacks": 1000
+      },
+      "card": {
+       "decisions": 19042,
+       "scored": 16921,
+       "tieBroken": 16883,
+       "singleCandidate": 1113,
+       "fallbacks": 1008
+      },
+      "space": {
+       "decisions": 21240,
+       "scored": 20595,
+       "tieBroken": 17698,
+       "singleCandidate": 214,
+       "fallbacks": 431
+      },
+      "or": {
+       "decisions": 87509,
+       "scored": 80400,
+       "tieBroken": 54934,
+       "singleCandidate": 7025,
+       "fallbacks": 84
+      },
+      "projectCard": {
+       "decisions": 106,
+       "scored": 4,
+       "tieBroken": 1,
+       "singleCandidate": 15,
+       "fallbacks": 87
+      },
+      "player": {
+       "decisions": 58,
+       "scored": 36,
+       "tieBroken": 25,
+       "singleCandidate": 22,
+       "fallbacks": 0
+      },
+      "payment": {
+       "decisions": 1329,
+       "scored": 0,
+       "tieBroken": 0,
+       "singleCandidate": 1329,
+       "fallbacks": 0
+      },
+      "amount": {
+       "decisions": 191,
+       "scored": 113,
+       "tieBroken": 106,
+       "singleCandidate": 78,
+       "fallbacks": 0
+      }
+     },
+     "fork": {
+      "decisions": 237242,
+      "attempts": 959905,
+      "direct": 635350,
+      "replayed": 321945,
+      "unavailable": 2610,
+      "unavailableByReason": {
+       "no-game": 0,
+       "no-ancestor": 2523,
+       "restore-rejected": 0,
+       "replay-failed": 5,
+       "validation-failed": 82
+      },
+      "noAncestor": 2523,
+      "replayDistanceTotal": 588085,
+      "replayDistanceMax": 49,
+      "replaySubmissions": 589771,
+      "stateValidated": 47527,
+      "modelRefusedHere": 3844,
+      "validationFailures": {
+       "pendingModelMismatch": 82
+      },
+      "validateRate": 0.05,
+      "fallbacksOutsideDecision": 0
+     },
+     "forkAvailability": 0.9972809809304046
+    },
+    "machineBefore": {
+     "loadAverage": [
+      1.8466796875,
+      2.15869140625,
+      2.88623046875
+     ],
+     "freeMemoryBytes": 307494912,
+     "swap": "total = 6144.00M  used = 4450.69M  free = 1693.31M  (encrypted)"
+    },
+    "machineAfter": {
+     "loadAverage": [
+      1.83642578125,
+      1.99755859375,
+      2.2998046875
+     ],
+     "freeMemoryBytes": 67485696,
+     "swap": "total = 6144.00M  used = 4508.25M  free = 1635.75M  (encrypted)"
+    }
+   },
+   {
+    "players": 3,
+    "groups": 100,
+    "games": 600,
+    "wallClockMs": 514560,
+    "greedyAgentsConstructed": 600,
+    "summary": {
+     "players": 3,
+     "groups": 100,
+     "permutationsPerGroup": 6,
+     "games": 600,
+     "completed": 600,
+     "failed": 0,
+     "balancedGroups": 100,
+     "totalDecisions": 156459,
+     "fallbacksAfterRejection": 0,
+     "fallbacksAfterThrow": 2391,
+     "decisionsPerGame": {
+      "min": 181,
+      "p50": 255,
+      "p95": 332,
+      "max": 438,
+      "mean": 260.77
+     },
+     "generationsPerGame": {
+      "min": 10,
+      "p50": 14,
+      "p95": 17,
+      "max": 21,
+      "mean": 13.87
+     },
+     "bySlot": [
+      {
+       "slot": 0,
+       "agent": "greedy-1ply",
+       "agentVersion": "1",
+       "games": 600,
+       "wins": 584,
+       "sharedWins": 0,
+       "placementCounts": [
+        584,
+        15,
+        1
+       ],
+       "winRate": 0.9733333333333334,
+       "winRateCi95": {
+        "low": 0.9571240660320578,
+        "high": 0.9835201902472354
+       }
+      },
+      {
+       "slot": 1,
+       "agent": "random-legal",
+       "agentVersion": "1",
+       "games": 600,
+       "wins": 10,
+       "sharedWins": 0,
+       "placementCounts": [
+        10,
+        312,
+        278
+       ],
+       "winRate": 0.016666666666666666,
+       "winRateCi95": {
+        "low": 0.009077730421322587,
+        "high": 0.030405247321652805
+       }
+      },
+      {
+       "slot": 2,
+       "agent": "random-legal",
+       "agentVersion": "1",
+       "games": 600,
+       "wins": 6,
+       "sharedWins": 0,
+       "placementCounts": [
+        6,
+        273,
+        321
+       ],
+       "winRate": 0.01,
+       "winRateCi95": {
+        "low": 0.0045909221508087725,
+        "high": 0.02164354494034559
+       }
+      }
+     ],
+     "bySeat": [
+      {
+       "seat": 0,
+       "games": 600,
+       "wins": 193,
+       "sharedWins": 0,
+       "placementCounts": [
+        193,
+        209,
+        198
+       ],
+       "winRate": 0.32166666666666666,
+       "winRateCi95": {
+        "low": 0.2855266128991445,
+        "high": 0.360075727164643
+       }
+      },
+      {
+       "seat": 1,
+       "games": 600,
+       "wins": 204,
+       "sharedWins": 0,
+       "placementCounts": [
+        204,
+        205,
+        191
+       ],
+       "winRate": 0.34,
+       "winRateCi95": {
+        "low": 0.30322102318748273,
+        "high": 0.3788147211688126
+       }
+      },
+      {
+       "seat": 2,
+       "games": 600,
+       "wins": 203,
+       "sharedWins": 0,
+       "placementCounts": [
+        203,
+        186,
+        211
+       ],
+       "winRate": 0.3383333333333333,
+       "winRateCi95": {
+        "low": 0.30160981618661753,
+        "high": 0.3771138005067225
+       }
+      }
+     ],
+     "timing": {
+      "wallClockMs": 514554,
+      "durationMsPerGame": {
+       "min": 394,
+       "p50": 831,
+       "p95": 1286,
+       "max": 1816,
+       "mean": 857.24
+      }
+     }
+    },
+    "greedy": {
+     "tieBreakFraction": 0.7514982551964801,
+     "decisions": 58404,
+     "scored": 52728,
+     "tieBroken": 39625,
+     "singleCandidate": 4151,
+     "fallbacks": 1525,
+     "fallbacksByReason": {
+      "no-candidates": 0,
+      "fork-unavailable": 1525,
+      "candidate-rejected": 0,
+      "drain-budget-exhausted": 0,
+      "drain-failed": 0,
+      "candidate-generation-failed": 0,
+      "player-mismatch": 0
+     },
+     "forkUnavailableByReason": {
+      "no-game": 0,
+      "no-ancestor": 1513,
+      "restore-rejected": 0,
+      "replay-failed": 5,
+      "validation-failed": 7
+     },
+     "cappedDecisions": 7,
+     "candidatesScored": 419491,
+     "candidatesRejected": 0,
+     "drainOverruns": 0,
+     "drainFallbacks": 0,
+     "drainBudget": 32,
+     "candidateCounts": {
+      "count": 58404,
+      "median": 6,
+      "p95": 19,
+      "max": 64
+     },
+     "drainSteps": {
+      "count": 419491,
+      "median": 0,
+      "p95": 1,
+      "max": 4
+     },
+     "scoreSpread": {
+      "count": 52728,
+      "median": 0,
+      "p95": 5,
+      "max": 12
+     },
+     "tieSize": {
+      "count": 52728,
+      "median": 3,
+      "p95": 10,
+      "max": 50
+     },
+     "byType": {
+      "initialCards": {
+       "decisions": 600,
+       "scored": 0,
+       "tieBroken": 0,
+       "singleCandidate": 0,
+       "fallbacks": 600
+      },
+      "card": {
+       "decisions": 9098,
+       "scored": 7842,
+       "tieBroken": 7817,
+       "singleCandidate": 644,
+       "fallbacks": 612
+      },
+      "space": {
+       "decisions": 8734,
+       "scored": 8366,
+       "tieBroken": 7176,
+       "singleCandidate": 102,
+       "fallbacks": 266
+      },
+      "or": {
+       "decisions": 39347,
+       "scored": 36460,
+       "tieBroken": 24576,
+       "singleCandidate": 2884,
+       "fallbacks": 3
+      },
+      "player": {
+       "decisions": 28,
+       "scored": 26,
+       "tieBroken": 25,
+       "singleCandidate": 2,
+       "fallbacks": 0
+      },
+      "payment": {
+       "decisions": 477,
+       "scored": 0,
+       "tieBroken": 0,
+       "singleCandidate": 477,
+       "fallbacks": 0
+      },
+      "amount": {
+       "decisions": 68,
+       "scored": 34,
+       "tieBroken": 31,
+       "singleCandidate": 34,
+       "fallbacks": 0
+      },
+      "projectCard": {
+       "decisions": 52,
+       "scored": 0,
+       "tieBroken": 0,
+       "singleCandidate": 8,
+       "fallbacks": 44
+      }
+     },
+     "fork": {
+      "decisions": 156459,
+      "attempts": 421016,
+      "direct": 279999,
+      "replayed": 139492,
+      "unavailable": 1525,
+      "unavailableByReason": {
+       "no-game": 0,
+       "no-ancestor": 1513,
+       "restore-rejected": 0,
+       "replay-failed": 5,
+       "validation-failed": 7
+      },
+      "noAncestor": 1513,
+      "replayDistanceTotal": 357796,
+      "replayDistanceMax": 34,
+      "replaySubmissions": 357848,
+      "stateValidated": 20771,
+      "modelRefusedHere": 1877,
+      "validationFailures": {
+       "pendingModelMismatch": 7
+      },
+      "validateRate": 0.05,
+      "fallbacksOutsideDecision": 0
+     },
+     "forkAvailability": 0.9963778098694587
+    },
+    "machineBefore": {
+     "loadAverage": [
+      1.83642578125,
+      1.99755859375,
+      2.2998046875
+     ],
+     "freeMemoryBytes": 66256896,
+     "swap": "total = 6144.00M  used = 4508.25M  free = 1635.75M  (encrypted)"
+    },
+    "machineAfter": {
+     "loadAverage": [
+      2.1875,
+      2.08154296875,
+      2.1748046875
+     ],
+     "freeMemoryBytes": 68354048,
+     "swap": "total = 6144.00M  used = 4606.56M  free = 1537.44M  (encrypted)"
+    }
+   },
+   {
+    "players": 4,
+    "groups": 25,
+    "games": 100,
+    "wallClockMs": 78407,
+    "greedyAgentsConstructed": 100,
+    "summary": {
+     "players": 4,
+     "groups": 25,
+     "permutationsPerGroup": 4,
+     "games": 100,
+     "completed": 100,
+     "failed": 0,
+     "balancedGroups": 25,
+     "totalDecisions": 27891,
+     "fallbacksAfterRejection": 0,
+     "fallbacksAfterThrow": 503,
+     "decisionsPerGame": {
+      "min": 209,
+      "p50": 275,
+      "p95": 355,
+      "max": 409,
+      "mean": 278.91
+     },
+     "generationsPerGame": {
+      "min": 9,
+      "p50": 11,
+      "p95": 15,
+      "max": 17,
+      "mean": 11.63
+     },
+     "bySlot": [
+      {
+       "slot": 0,
+       "agent": "greedy-1ply",
+       "agentVersion": "1",
+       "games": 100,
+       "wins": 94,
+       "sharedWins": 0,
+       "placementCounts": [
+        94,
+        5,
+        1,
+        0
+       ],
+       "winRate": 0.94,
+       "winRateCi95": {
+        "low": 0.8752318448839114,
+        "high": 0.9722138761993719
+       }
+      },
+      {
+       "slot": 1,
+       "agent": "random-legal",
+       "agentVersion": "1",
+       "games": 100,
+       "wins": 2,
+       "sharedWins": 0,
+       "placementCounts": [
+        2,
+        23,
+        40,
+        35
+       ],
+       "winRate": 0.02,
+       "winRateCi95": {
+        "low": 0.0055019675006616475,
+        "high": 0.07001179131757478
+       }
+      },
+      {
+       "slot": 2,
+       "agent": "random-legal",
+       "agentVersion": "1",
+       "games": 100,
+       "wins": 2,
+       "sharedWins": 0,
+       "placementCounts": [
+        2,
+        30,
+        31,
+        37
+       ],
+       "winRate": 0.02,
+       "winRateCi95": {
+        "low": 0.0055019675006616475,
+        "high": 0.07001179131757478
+       }
+      },
+      {
+       "slot": 3,
+       "agent": "random-legal",
+       "agentVersion": "1",
+       "games": 100,
+       "wins": 2,
+       "sharedWins": 0,
+       "placementCounts": [
+        2,
+        42,
+        28,
+        28
+       ],
+       "winRate": 0.02,
+       "winRateCi95": {
+        "low": 0.0055019675006616475,
+        "high": 0.07001179131757478
+       }
+      }
+     ],
+     "bySeat": [
+      {
+       "seat": 0,
+       "games": 100,
+       "wins": 28,
+       "sharedWins": 0,
+       "placementCounts": [
+        28,
+        27,
+        25,
+        20
+       ],
+       "winRate": 0.28,
+       "winRateCi95": {
+        "low": 0.2013968515708077,
+        "high": 0.3748802878875508
+       }
+      },
+      {
+       "seat": 1,
+       "games": 100,
+       "wins": 25,
+       "sharedWins": 0,
+       "placementCounts": [
+        25,
+        19,
+        27,
+        29
+       ],
+       "winRate": 0.25,
+       "winRateCi95": {
+        "low": 0.17545211311910353,
+        "high": 0.34304463626539466
+       }
+      },
+      {
+       "seat": 2,
+       "games": 100,
+       "wins": 24,
+       "sharedWins": 0,
+       "placementCounts": [
+        24,
+        26,
+        19,
+        31
+       ],
+       "winRate": 0.24,
+       "winRateCi95": {
+        "low": 0.1669132550788802,
+        "high": 0.33232336428099796
+       }
+      },
+      {
+       "seat": 3,
+       "games": 100,
+       "wins": 23,
+       "sharedWins": 0,
+       "placementCounts": [
+        23,
+        28,
+        29,
+        20
+       ],
+       "winRate": 0.23,
+       "winRateCi95": {
+        "low": 0.15843265832598313,
+        "high": 0.3215438310092749
+       }
+      }
+     ],
+     "timing": {
+      "wallClockMs": 78405,
+      "durationMsPerGame": {
+       "min": 407,
+       "p50": 745,
+       "p95": 1237,
+       "max": 1628,
+       "mean": 783.31
+      }
+     }
+    },
+    "greedy": {
+     "tieBreakFraction": 0.7554441260744985,
+     "decisions": 7821,
+     "scored": 6980,
+     "tieBroken": 5273,
+     "singleCandidate": 589,
+     "fallbacks": 252,
+     "fallbacksByReason": {
+      "no-candidates": 0,
+      "fork-unavailable": 252,
+      "candidate-rejected": 0,
+      "drain-budget-exhausted": 0,
+      "drain-failed": 0,
+      "candidate-generation-failed": 0,
+      "player-mismatch": 0
+     },
+     "forkUnavailableByReason": {
+      "no-game": 0,
+      "no-ancestor": 247,
+      "restore-rejected": 0,
+      "replay-failed": 4,
+      "validation-failed": 1
+     },
+     "cappedDecisions": 0,
+     "candidatesScored": 54721,
+     "candidatesRejected": 0,
+     "drainOverruns": 0,
+     "drainFallbacks": 0,
+     "drainBudget": 32,
+     "candidateCounts": {
+      "count": 7821,
+      "median": 6,
+      "p95": 19,
+      "max": 55
+     },
+     "drainSteps": {
+      "count": 54721,
+      "median": 0,
+      "p95": 1,
+      "max": 3
+     },
+     "scoreSpread": {
+      "count": 6980,
+      "median": 0,
+      "p95": 5,
+      "max": 11
+     },
+     "tieSize": {
+      "count": 6980,
+      "median": 3,
+      "p95": 9,
+      "max": 48
+     },
+     "byType": {
+      "initialCards": {
+       "decisions": 100,
+       "scored": 0,
+       "tieBroken": 0,
+       "singleCandidate": 0,
+       "fallbacks": 100
+      },
+      "card": {
+       "decisions": 1279,
+       "scored": 1071,
+       "tieBroken": 1066,
+       "singleCandidate": 103,
+       "fallbacks": 105
+      },
+      "space": {
+       "decisions": 1092,
+       "scored": 1041,
+       "tieBroken": 911,
+       "singleCandidate": 12,
+       "fallbacks": 39
+      },
+      "or": {
+       "decisions": 5265,
+       "scored": 4860,
+       "tieBroken": 3288,
+       "singleCandidate": 405,
+       "fallbacks": 0
+      },
+      "amount": {
+       "decisions": 5,
+       "scored": 4,
+       "tieBroken": 4,
+       "singleCandidate": 1,
+       "fallbacks": 0
+      },
+      "player": {
+       "decisions": 5,
+       "scored": 4,
+       "tieBroken": 4,
+       "singleCandidate": 1,
+       "fallbacks": 0
+      },
+      "payment": {
+       "decisions": 66,
+       "scored": 0,
+       "tieBroken": 0,
+       "singleCandidate": 66,
+       "fallbacks": 0
+      },
+      "projectCard": {
+       "decisions": 9,
+       "scored": 0,
+       "tieBroken": 0,
+       "singleCandidate": 1,
+       "fallbacks": 8
+      }
+     },
+     "fork": {
+      "decisions": 27891,
+      "attempts": 54973,
+      "direct": 36292,
+      "replayed": 18429,
+      "unavailable": 252,
+      "unavailableByReason": {
+       "no-game": 0,
+       "no-ancestor": 247,
+       "restore-rejected": 0,
+       "replay-failed": 4,
+       "validation-failed": 1
+      },
+      "noAncestor": 247,
+      "replayDistanceTotal": 61816,
+      "replayDistanceMax": 29,
+      "replaySubmissions": 61831,
+      "stateValidated": 2702,
+      "modelRefusedHere": 299,
+      "validationFailures": {
+       "pendingModelMismatch": 1
+      },
+      "validateRate": 0.05,
+      "fallbacksOutsideDecision": 0
+     },
+     "forkAvailability": 0.9954159314572608
+    },
+    "machineBefore": {
+     "loadAverage": [
+      2.1875,
+      2.08154296875,
+      2.1748046875
+     ],
+     "freeMemoryBytes": 75284480,
+     "swap": "total = 6144.00M  used = 4606.56M  free = 1537.44M  (encrypted)"
+    },
+    "machineAfter": {
+     "loadAverage": [
+      3.61328125,
+      2.46435546875,
+      2.302734375
+     ],
+     "freeMemoryBytes": 99762176,
+     "swap": "total = 6144.00M  used = 4453.69M  free = 1690.31M  (encrypted)"
+    }
+   }
+  ]
+ },
+ "g4": {
+  "games": 1000,
+  "wallClockMs": 13827504,
+  "completed": 1000,
+  "failures": [],
+  "legality": {
+   "submissions": 226840,
+   "rejectedResponder": 0,
+   "rejectedFallbackProbe": 0,
+   "responderThrows": 1
+  },
+  "causeTallies": [
+   {
+    "source": "responder-throw",
+    "decisionType": "or",
+    "errorClass": "Error",
+    "signature": "enumerateProjectCard: no actable, affordable standard project among N offered to player <player>",
+    "count": 1,
+    "representative": "enumerateProjectCard: no actable, affordable standard project among 5 offered to player p-green"
+   }
+  ],
+  "greedy": {
+   "tieBreakFraction": 0.7725566761106463,
+   "decisions": 226840,
+   "scored": 204363,
+   "tieBroken": 157882,
+   "singleCandidate": 17313,
+   "fallbacks": 5164,
+   "fallbacksByReason": {
+    "no-candidates": 0,
+    "fork-unavailable": 5164,
+    "candidate-rejected": 0,
+    "drain-budget-exhausted": 0,
+    "drain-failed": 0,
+    "candidate-generation-failed": 0,
+    "player-mismatch": 0
+   },
+   "forkUnavailableByReason": {
+    "no-game": 0,
+    "no-ancestor": 5019,
+    "restore-rejected": 0,
+    "replay-failed": 0,
+    "validation-failed": 145
+   },
+   "cappedDecisions": 15,
+   "candidatesScored": 1666731,
+   "candidatesRejected": 0,
+   "drainOverruns": 0,
+   "drainFallbacks": 0,
+   "drainBudget": 32,
+   "candidateCounts": {
+    "count": 226840,
+    "median": 6,
+    "p95": 20,
+    "max": 64
+   },
+   "drainSteps": {
+    "count": 1666731,
+    "median": 0,
+    "p95": 1,
+    "max": 4
+   },
+   "scoreSpread": {
+    "count": 204363,
+    "median": 0,
+    "p95": 6,
+    "max": 18
+   },
+   "tieSize": {
+    "count": 204363,
+    "median": 3,
+    "p95": 10,
+    "max": 49
+   },
+   "byType": {
+    "initialCards": {
+     "decisions": 2000,
+     "scored": 0,
+     "tieBroken": 0,
+     "singleCandidate": 0,
+     "fallbacks": 2000
+    },
+    "card": {
+     "decisions": 33901,
+     "scored": 29739,
+     "tieBroken": 29647,
+     "singleCandidate": 2160,
+     "fallbacks": 2002
+    },
+    "or": {
+     "decisions": 152684,
+     "scored": 140490,
+     "tieBroken": 99210,
+     "singleCandidate": 12043,
+     "fallbacks": 151
+    },
+    "space": {
+     "decisions": 35408,
+     "scored": 33903,
+     "tieBroken": 28830,
+     "singleCandidate": 670,
+     "fallbacks": 835
+    },
+    "amount": {
+     "decisions": 260,
+     "scored": 147,
+     "tieBroken": 143,
+     "singleCandidate": 112,
+     "fallbacks": 1
+    },
+    "projectCard": {
+     "decisions": 218,
+     "scored": 2,
+     "tieBroken": 0,
+     "singleCandidate": 41,
+     "fallbacks": 175
+    },
+    "payment": {
+     "decisions": 2229,
+     "scored": 0,
+     "tieBroken": 0,
+     "singleCandidate": 2229,
+     "fallbacks": 0
+    },
+    "player": {
+     "decisions": 140,
+     "scored": 82,
+     "tieBroken": 52,
+     "singleCandidate": 58,
+     "fallbacks": 0
+    }
+   },
+   "fork": {
+    "decisions": 453680,
+    "attempts": 1671895,
+    "direct": 1093821,
+    "replayed": 572910,
+    "unavailable": 5164,
+    "unavailableByReason": {
+     "no-game": 0,
+     "no-ancestor": 5019,
+     "restore-rejected": 0,
+     "replay-failed": 0,
+     "validation-failed": 145
+    },
+    "noAncestor": 5019,
+    "replayDistanceTotal": 1052907,
+    "replayDistanceMax": 44,
+    "replaySubmissions": 1055362,
+    "stateValidated": 82645,
+    "modelRefusedHere": 6450,
+    "validationFailures": {
+     "pendingModelMismatch": 145
+    },
+    "validateRate": 0.05,
+    "fallbacksOutsideDecision": 0
+   },
+   "forkAvailability": 0.9969112892855113
+  },
+  "machineBefore": {
+   "loadAverage": [
+    3.61328125,
+    2.46435546875,
+    2.302734375
+   ],
+   "freeMemoryBytes": 767033344,
+   "swap": "total = 6144.00M  used = 4453.69M  free = 1690.31M  (encrypted)"
+  },
+  "machineAfter": {
+   "loadAverage": [
+    7.001953125,
+    15.1318359375,
+    12.095703125
+   ],
+   "freeMemoryBytes": 140967936,
+   "swap": "total = 3072.00M  used = 2266.19M  free = 805.81M  (encrypted)"
+  }
+ },
+ "g6": {
+  "legs": [
+   {
+    "players": 2,
+    "groups": 20,
+    "games": 40,
+    "inProcessMatches": true,
+    "freshProcessMatches": true
+   },
+   {
+    "players": 3,
+    "groups": 10,
+    "games": 60,
+    "inProcessMatches": true,
+    "freshProcessMatches": true
+   }
+  ]
+ },
+ "g2a": {
+  "equivalence": {
+   "configsChecked": 50,
+   "mismatches": [],
+   "totals": {
+    "submissions": 13689,
+    "rejectedResponder": 0,
+    "rejectedFallbackProbe": 0,
+    "responderThrows": 218,
+    "fallbacksAfterRejection": 0,
+    "fallbacksAfterThrow": 218,
+    "completed": 50,
+    "decisions": 13689,
+    "generation": 1107
+   },
+   "causeTalliesAgree": true,
+   "legalityCauses": [
+    {
+     "source": "responder-throw",
+     "decisionType": "or",
+     "errorClass": "Error",
+     "signature": "enumerateProjectCard: no actable, affordable standard project among N offered to player <player>",
+     "count": 218,
+     "representative": "enumerateProjectCard: no actable, affordable standard project among 5 offered to player p-green"
+    }
+   ],
+   "matchCauses": [
+    {
+     "source": "responder-throw",
+     "decisionType": "or",
+     "errorClass": "Error",
+     "signature": "enumerateProjectCard: no actable, affordable standard project among N offered to player <player>",
+     "count": 218,
+     "representative": "enumerateProjectCard: no actable, affordable standard project among 5 offered to player p-green"
+    }
+   ]
+  },
+  "againstBullet1": {
+   "source": "docs/data/match_runner_validation.json",
+   "priorTotals": {
+    "submissions": 13689,
+    "rejectedResponder": 0,
+    "rejectedFallbackProbe": 0,
+    "responderThrows": 218,
+    "fallbacksAfterRejection": 0,
+    "fallbacksAfterThrow": 218,
+    "completed": 50,
+    "decisions": 13689,
+    "generation": 1107
+   },
+   "driftedFields": {},
+   "unchanged": true
+  },
+  "neutrality": {
+   "gamesChecked": 20,
+   "mismatches": []
+  },
+  "machine": {
+   "loadAverage": [
+    1.8466796875,
+    2.15869140625,
+    2.88623046875
+   ],
+   "freeMemoryBytes": 140951552,
+   "swap": "total = 6144.00M  used = 4450.69M  free = 1693.31M  (encrypted)"
+  }
+ },
+ "g2b": {
+  "players": 2,
+  "groups": 15,
+  "games": 30,
+  "candidatesPerDecision": 4,
+  "speculativeSubmissions": 33654,
+  "speculativeRejections": 8395,
+  "illegalProbesAccepted": 0,
+  "guarded": {
+   "submissions": 8812,
+   "rejectedResponder": 0,
+   "rejectedFallbackProbe": 0,
+   "responderThrows": 157
+  },
+  "counted": {
+   "submissions": 69401,
+   "rejectedResponder": 0,
+   "rejectedFallbackProbe": 8395,
+   "responderThrows": 157
+  },
+  "reference": {
+   "submissions": 8812,
+   "rejectedResponder": 0,
+   "rejectedFallbackProbe": 0,
+   "responderThrows": 157
+  },
+  "guardedMatchesReference": true,
+  "submissionsHidden": 60589,
+  "fork": {
+   "decisions": 17624,
+   "attempts": 34444,
+   "direct": 24484,
+   "replayed": 9692,
+   "unavailable": 268,
+   "unavailableByReason": {
+    "no-game": 0,
+    "no-ancestor": 215,
+    "restore-rejected": 0,
+    "replay-failed": 0,
+    "validation-failed": 53
+   },
+   "noAncestor": 215,
+   "replayDistanceTotal": 25860,
+   "replayDistanceMax": 39,
+   "replaySubmissions": 26935,
+   "stateValidated": 0,
+   "modelRefusedHere": 510,
+   "validationFailures": {
+    "pendingModelMismatch": 53
+   },
+   "validateRate": 0,
+   "fallbacksOutsideDecision": 0
+  },
+  "wallClockMs": 81242,
+  "machine": {
+   "loadAverage": [
+    2.07958984375,
+    2.2763671875,
+    3.2470703125
+   ],
+   "freeMemoryBytes": 107167744,
+   "swap": "total = 6144.00M  used = 4562.69M  free = 1581.31M  (encrypted)"
+  }
+ },
+ "predictions": {
+  "games": 200,
+  "perAgent": {
+   "greedy-1ply": {
+    "games": 200,
+    "milestonesPerGame": 2.215,
+    "awardsFundedPerGame": 2.38,
+    "greeneryVpPerGame": 15.75,
+    "cityVpPerGame": 14.22,
+    "cardVpPerGame": 5.08,
+    "terraformRatingPerGame": 48.795,
+    "victoryPointsPerGame": 106.095,
+    "fractionOfGamesWithAnyCardVp": 0.955
+   },
+   "random-legal": {
+    "games": 200,
+    "milestonesPerGame": 0.585,
+    "awardsFundedPerGame": 0.62,
+    "greeneryVpPerGame": 6.17,
+    "cityVpPerGame": 5.875,
+    "cardVpPerGame": 3.085,
+    "terraformRatingPerGame": 37.27,
+    "victoryPointsPerGame": 60.75,
+    "fractionOfGamesWithAnyCardVp": 0.88
+   }
+  },
+  "summary": {
+   "players": 2,
+   "groups": 100,
+   "permutationsPerGroup": 2,
+   "games": 200,
+   "completed": 200,
+   "failed": 0,
+   "balancedGroups": 100,
+   "totalDecisions": 47532,
+   "fallbacksAfterRejection": 0,
+   "fallbacksAfterThrow": 433,
+   "decisionsPerGame": {
+    "min": 160,
+    "p50": 233,
+    "p95": 306,
+    "max": 365,
+    "mean": 237.66
+   },
+   "generationsPerGame": {
+    "min": 13,
+    "p50": 17,
+    "p95": 23,
+    "max": 24,
+    "mean": 17.75
+   },
+   "bySlot": [
+    {
+     "slot": 0,
+     "agent": "greedy-1ply",
+     "agentVersion": "1",
+     "games": 200,
+     "wins": 198,
+     "sharedWins": 0,
+     "placementCounts": [
+      198,
+      2
+     ],
+     "winRate": 0.99,
+     "winRateCi95": {
+      "low": 0.9642782379732652,
+      "high": 0.997253341891151
+     }
+    },
+    {
+     "slot": 1,
+     "agent": "random-legal",
+     "agentVersion": "1",
+     "games": 200,
+     "wins": 2,
+     "sharedWins": 0,
+     "placementCounts": [
+      2,
+      198
+     ],
+     "winRate": 0.01,
+     "winRateCi95": {
+      "low": 0.0027466581088489567,
+      "high": 0.03572176202673472
+     }
+    }
+   ],
+   "bySeat": [
+    {
+     "seat": 0,
+     "games": 200,
+     "wins": 102,
+     "sharedWins": 0,
+     "placementCounts": [
+      102,
+      98
+     ],
+     "winRate": 0.51,
+     "winRateCi95": {
+      "low": 0.44118587625055616,
+      "high": 0.5784372172160647
+     }
+    },
+    {
+     "seat": 1,
+     "games": 200,
+     "wins": 98,
+     "sharedWins": 0,
+     "placementCounts": [
+      98,
+      102
+     ],
+     "winRate": 0.49,
+     "winRateCi95": {
+      "low": 0.42156278278393533,
+      "high": 0.5588141237494438
+     }
+    }
+   ],
+   "timing": {
+    "wallClockMs": 232713,
+    "durationMsPerGame": {
+     "min": 619,
+     "p50": 1130,
+     "p95": 1686,
+     "max": 2314,
+     "mean": 1163.21
+    }
+   }
+  },
+  "greedy": {
+   "tieBreakFraction": 0.7601636302294197,
+   "decisions": 26181,
+   "scored": 23712,
+   "tieBroken": 18025,
+   "singleCandidate": 1962,
+   "fallbacks": 507,
+   "fallbacksByReason": {
+    "no-candidates": 0,
+    "fork-unavailable": 507,
+    "candidate-rejected": 0,
+    "drain-budget-exhausted": 0,
+    "drain-failed": 0,
+    "candidate-generation-failed": 0,
+    "player-mismatch": 0
+   },
+   "forkUnavailableByReason": {
+    "no-game": 0,
+    "no-ancestor": 507,
+    "restore-rejected": 0,
+    "replay-failed": 0,
+    "validation-failed": 0
+   },
+   "cappedDecisions": 1,
+   "candidatesScored": 194421,
+   "candidatesRejected": 0,
+   "drainOverruns": 0,
+   "drainFallbacks": 0,
+   "drainBudget": 32,
+   "candidateCounts": {
+    "count": 26181,
+    "median": 6,
+    "p95": 19,
+    "max": 64
+   },
+   "drainSteps": {
+    "count": 194421,
+    "median": 0,
+    "p95": 1,
+    "max": 4
+   },
+   "scoreSpread": {
+    "count": 23712,
+    "median": 0,
+    "p95": 5,
+    "max": 12
+   },
+   "tieSize": {
+    "count": 23712,
+    "median": 3,
+    "p95": 10,
+    "max": 49
+   },
+   "byType": {
+    "initialCards": {
+     "decisions": 200,
+     "scored": 0,
+     "tieBroken": 0,
+     "singleCandidate": 0,
+     "fallbacks": 200
+    },
+    "card": {
+     "decisions": 3842,
+     "scored": 3422,
+     "tieBroken": 3409,
+     "singleCandidate": 220,
+     "fallbacks": 200
+    },
+    "or": {
+     "decisions": 17589,
+     "scored": 16197,
+     "tieBroken": 11090,
+     "singleCandidate": 1390,
+     "fallbacks": 2
+    },
+    "space": {
+     "decisions": 4192,
+     "scored": 4067,
+     "tieBroken": 3502,
+     "singleCandidate": 44,
+     "fallbacks": 81
+    },
+    "amount": {
+     "decisions": 28,
+     "scored": 18,
+     "tieBroken": 17,
+     "singleCandidate": 10,
+     "fallbacks": 0
+    },
+    "projectCard": {
+     "decisions": 29,
+     "scored": 1,
+     "tieBroken": 1,
+     "singleCandidate": 5,
+     "fallbacks": 23
+    },
+    "player": {
+     "decisions": 15,
+     "scored": 7,
+     "tieBroken": 6,
+     "singleCandidate": 7,
+     "fallbacks": 1
+    },
+    "payment": {
+     "decisions": 286,
+     "scored": 0,
+     "tieBroken": 0,
+     "singleCandidate": 286,
+     "fallbacks": 0
+    }
+   },
+   "fork": {
+    "decisions": 47532,
+    "attempts": 194928,
+    "direct": 130446,
+    "replayed": 63975,
+    "unavailable": 507,
+    "unavailableByReason": {
+     "no-game": 0,
+     "no-ancestor": 507,
+     "restore-rejected": 0,
+     "replay-failed": 0,
+     "validation-failed": 0
+    },
+    "noAncestor": 507,
+    "replayDistanceTotal": 116560,
+    "replayDistanceMax": 23,
+    "replaySubmissions": 116560,
+    "stateValidated": 0,
+    "modelRefusedHere": 524,
+    "validationFailures": {},
+    "validateRate": 0,
+    "fallbacksOutsideDecision": 0
+   },
+   "forkAvailability": 0.9973990396454075
+  },
+  "machine": {
+   "loadAverage": [
+    3.13037109375,
+    8.91015625,
+    10.1240234375
+   ],
+   "freeMemoryBytes": 90030080,
+   "swap": "total = 3072.00M  used = 2250.19M  free = 821.81M  (encrypted)"
+  }
+ }
+}

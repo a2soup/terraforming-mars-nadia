@@ -156,9 +156,46 @@ attempted only on a foundation that already works.
 | 6 | Reinforcement learning via self-play (Python+PyTorch, optional expert warm-start) | Learned agent beats M5 with significance; monotonic improvement |
 | 7 | Evaluation, tuning, acceptance | Primary AC (AC-1, AC-4, AC-6) met and documented |
 
-**Current status: Milestone 2 is IN PROGRESS — bullet 1 (the match runner) is DONE (28 Jul 2026).**
-Milestone 1 is complete (all seven bullets; see the build record below). `.nvmrc` pinned to Node 22,
-Engine commit pinned.
+**Current status: Milestone 2 is IN PROGRESS — bullet 1 (the match runner, 28 Jul 2026) and bullet 2
+(the fixed baselines, 29 Jul 2026) are DONE.** Milestone 1 is complete (all seven bullets; see the
+build record below). `.nvmrc` pinned to Node 22, Engine commit pinned.
+
+### Milestone 2, bullet 2 — the fixed baselines (done)
+
+`greedy-1ply@1`, the OSLA equivalent, joins `random-legal@1` as the second **frozen** baseline. Lives
+in `agent/src/core/greedyOnePlyAgent.ts` + `agent/src/core/candidates/` + `agent/src/search/`, seatable
+by name in the match runner. Full results: [docs/Baselines.md](docs/Baselines.md); the design and the
+criteria were pre-committed in [docs/Milestone2_Bullet2_Prompts.md](docs/Milestone2_Bullet2_Prompts.md)
+before any code. **All nine criteria met over 3,700 validation games**, zero failures.
+
+Six things worth knowing before touching this area:
+
+- **The objective is current victory points and nothing else** — `player.getVictoryPoints().total`,
+  ties broken at random, **no megacredit term**. That term looks like the game's real tiebreak but
+  inside a move chooser it is a *spending penalty*: it would produce an agent that never buys a card
+  and never plays one. `greedy-1ply@1` is a **frozen yardstick** for AC-3, so any change to its move
+  distribution — a candidate-set reduction, the drain boundary, the 64-cap, the 32-step drain budget,
+  or anything altering which decisions are forkable — is a **new version**, not an improvement.
+- **It wins 99.2% vs random-legal while tie-breaking 75.9% of its scored decisions**, with a median
+  score spread of **0 VP**. Quote those two numbers together; a win rate alone says nothing about
+  whether this agent is choosing or flipping. (The 99.2% is *above* the prior-art ~91% and outside the
+  pre-committed 80–97% band — recorded as a discrepancy with untested hypotheses, deliberately **not**
+  tuned toward the paper's figure.)
+- **Hazard H7's two-way fork check is not sufficient**, and `bench/forkCost.ts`'s "26,026 forks, 100%
+  exact reproduction" shares the blind spot. A fork can pass `pendingSignature` *and* `stableStateOf`
+  and still sit on a regenerated decision. `search/pendingModel.ts` is the third, finer check, and it
+  must gate **ancestor adoption** as well as fork certification. In production **every single
+  validation failure was one only this check could see**.
+- **Fork availability is 99.7% with ancestor replay** (66.2% direct), so the random-legal fallback is
+  a 2.0% path, not a common one. But the **opening is unforkable outright** — all 1,000 `initialCards`
+  decisions fell back — because no forkable ancestor exists before the first action phase.
+- **AC-1 now holds for two agent versions**, `random-legal@1` and `greedy-1ply@1` (1,000 games,
+  226,840 submissions, zero Agent-attributable rejections). It does **not** hold for anything M3
+  produces — see the standing caveat in §7.
+- **The AC-1 battery costs 12.6× more against a forking agent** (13,827 s vs 1,093 s), because the
+  `Player.prototype.process` wrapper is entered ~15 times per real submission. M4's search is three
+  orders of magnitude past one-ply; budget for it, and if it becomes prohibitive short-circuit the
+  guard before the wrapper body rather than cutting the sample.
 
 ### Milestone 2, bullet 1 — the match runner (done)
 
@@ -195,8 +232,9 @@ Five things worth knowing before touching this area:
   on argument, not measurement: over 1,000 games seat 0 won 52.6% with a 95% CI of [49.5%, 55.7%].
   Random-legal play is the weakest possible instrument for a tempo advantage. **Re-measure at M3.**
 
-**Next up: Milestone 2 bullets 2–5** — the greedy one-ply baseline, the rating pipeline (FR-14), the
-expert-distribution report (FR-DATA-1), and the regression seed set. Two things Milestone 1 built to
+**Next up: Milestone 2 bullets 3–5** — the rating pipeline (FR-14), the expert-distribution report
+(FR-DATA-1), and the regression seed set. Bullet 3 can now rate two genuinely different agents rather
+than one agent against itself. Two things Milestone 1 built to
 feed them: the determinism fingerprint corpus and the card-coverage census
 (`agent/docs/data/card_census.json`), plus the eight catalogued Engine-vs-print divergences
 ([docs/Card_Coverage_Audit.md](docs/Card_Coverage_Audit.md)) the reconciliation must treat as known

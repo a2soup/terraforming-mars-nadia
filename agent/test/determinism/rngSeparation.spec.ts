@@ -205,6 +205,30 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'wrong file in the wrong place in exactly the way EXCLUDED_DIRECTORIES\' own comment warns about.',
   },
   {
+    file: 'src/runner/baselinesValidationCli.ts',
+    rule: 'date-now',
+    occurrences: 10,
+    reason:
+      'The Milestone 2 bullet 2 validation battery\'s own timing (Unit D): a per-phase elapsed line, and a ' +
+      '`wallClockMs` on each of the five phases that plays games. Same category as `matchValidationCli.ts`\'s ' +
+      'entry above, and for the same reason - reported, never read back. Every game the battery plays comes from ' +
+      'a pairing or legality seed schedule, and no seed, decision or game state derives from the clock. The ' +
+      'occurrence count is high because the battery has seven phases rather than six and each timed one needs a ' +
+      '`started` stamp and a difference; there is no timing *criterion* here at all, unlike R7 next door. In fact ' +
+      'the opposite: G7 requires the host\'s swap and free-memory state to be recorded beside every elapsed figure ' +
+      'precisely so that nobody reads a throughput claim out of this artifact (agent/docs/Baselines.md §7, item 3).',
+  },
+  {
+    file: 'src/runner/baselinesValidationCli.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      '`generatedAt` on the assembled artifact: a provenance timestamp stamped once when ' +
+      '`docs/data/baselines_validation.json` is written. Identical in kind to `corpus.ts`\'s `createdAt` at the ' +
+      'top of this list - it records when the evidence was produced, is never compared, and never reaches a ' +
+      'decision, a fingerprint or a seed.',
+  },
+  {
     file: 'src/core/candidates/validation.ts',
     rule: 'date-now',
     occurrences: 2,
