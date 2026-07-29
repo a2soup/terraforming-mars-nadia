@@ -205,6 +205,26 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'wrong file in the wrong place in exactly the way EXCLUDED_DIRECTORIES\' own comment warns about.',
   },
   {
+    file: 'src/core/candidates/validation.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      'The candidate-validation corpus run\'s own `wallClockMs` (Milestone 2 bullet 2, Unit B, criterion G1a). ' +
+      'Same category as legality/run.ts above - one elapsed figure, reported in the run summary and the artifact, ' +
+      'never read back: the corpus\'s games come from its own seed schedule ' +
+      '(`buildCandidateValidationConfigs`), candidate sets are a pure function of the decision and the agent rng ' +
+      'stream, and no seed, decision or game state derives from the clock. It is not a performance figure either ' +
+      '(hazard H10 - `tsx` understates the simulator ~3.5x); it exists so a later run can be sized.',
+  },
+  {
+    file: 'src/runner/candidatesCli.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      'The candidates CLI\'s progress line ("N/200 games (0.42 games/s)"). Identical in kind to legalityCli.ts\'s ' +
+      'and matchCli.ts\'s above: console output on a long run, reaching no file, no fingerprint and no decision.',
+  },
+  {
     file: 'src/runner/matchValidationCli.ts',
     rule: 'new-date',
     occurrences: 1,

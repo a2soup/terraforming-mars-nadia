@@ -1,0 +1,180 @@
+{
+  "gamesRun": 200,
+  "gamesCompleted": 200,
+  "decisionPoints": 60143,
+  "decisionsValidated": 59862,
+  "forkGaps": {
+    "forkUnavailable": 0,
+    "forkUnfaithful": 0,
+    "forkPendingModelMismatch": 281,
+    "ancestorPendingModelMismatch": 1017
+  },
+  "candidatesGenerated": 849360,
+  "candidatesSubmitted": 843871,
+  "candidatesAccepted": 843871,
+  "candidatesRejected": 0,
+  "cappedDecisions": 89,
+  "emptySets": 0,
+  "setSize": {
+    "median": 11,
+    "p95": 35,
+    "max": 64
+  },
+  "byType": {
+    "amount": {
+      "decisions": 232,
+      "candidateAppearances": 763,
+      "decisionsValidated": 232,
+      "emptySets": 0,
+      "cappedDecisions": 0,
+      "candidatesGenerated": 763,
+      "candidatesSubmitted": 763,
+      "candidatesAccepted": 763,
+      "candidatesRejected": 0,
+      "setSize": {
+        "median": 3,
+        "p95": 8,
+        "max": 8
+      }
+    },
+    "card": {
+      "decisions": 10807,
+      "candidateAppearances": 298662,
+      "decisionsValidated": 10742,
+      "emptySets": 0,
+      "cappedDecisions": 0,
+      "candidatesGenerated": 58736,
+      "candidatesSubmitted": 58350,
+      "candidatesAccepted": 58350,
+      "candidatesRejected": 0,
+      "setSize": {
+        "median": 6,
+        "p95": 6,
+        "max": 7
+      }
+    },
+    "initialCards": {
+      "decisions": 465,
+      "candidateAppearances": 10089,
+      "decisionsValidated": 465,
+      "emptySets": 0,
+      "cappedDecisions": 0,
+      "candidatesGenerated": 10089,
+      "candidatesSubmitted": 10089,
+      "candidatesAccepted": 10089,
+      "candidatesRejected": 0,
+      "setSize": {
+        "median": 22,
+        "p95": 22,
+        "max": 22
+      }
+    },
+    "option": {
+      "decisions": 0,
+      "candidateAppearances": 92891,
+      "decisionsValidated": 0,
+      "emptySets": 0,
+      "cappedDecisions": 0,
+      "candidatesGenerated": 0,
+      "candidatesSubmitted": 0,
+      "candidatesAccepted": 0,
+      "candidatesRejected": 0,
+      "setSize": {
+        "median": 0,
+        "p95": 0,
+        "max": 0
+      }
+    },
+    "or": {
+      "decisions": 42650,
+      "candidateAppearances": 710341,
+      "decisionsValidated": 42435,
+      "emptySets": 0,
+      "cappedDecisions": 89,
+      "candidatesGenerated": 695422,
+      "candidatesSubmitted": 690320,
+      "candidatesAccepted": 690320,
+      "candidatesRejected": 0,
+      "setSize": {
+        "median": 14,
+        "p95": 35,
+        "max": 64
+      }
+    },
+    "payment": {
+      "decisions": 514,
+      "candidateAppearances": 514,
+      "decisionsValidated": 513,
+      "emptySets": 0,
+      "cappedDecisions": 0,
+      "candidatesGenerated": 514,
+      "candidatesSubmitted": 513,
+      "candidatesAccepted": 513,
+      "candidatesRejected": 0,
+      "setSize": {
+        "median": 1,
+        "p95": 1,
+        "max": 1
+      }
+    },
+    "player": {
+      "decisions": 181,
+      "candidateAppearances": 351,
+      "decisionsValidated": 181,
+      "emptySets": 0,
+      "cappedDecisions": 0,
+      "candidatesGenerated": 344,
+      "candidatesSubmitted": 344,
+      "candidatesAccepted": 344,
+      "candidatesRejected": 0,
+      "setSize": {
+        "median": 2,
+        "p95": 3,
+        "max": 4
+      }
+    },
+    "projectCard": {
+      "decisions": 43,
+      "candidateAppearances": 282431,
+      "decisionsValidated": 43,
+      "emptySets": 0,
+      "cappedDecisions": 0,
+      "candidatesGenerated": 152,
+      "candidatesSubmitted": 152,
+      "candidatesAccepted": 152,
+      "candidatesRejected": 0,
+      "setSize": {
+        "median": 3,
+        "p95": 7,
+        "max": 8
+      }
+    },
+    "space": {
+      "decisions": 5251,
+      "candidateAppearances": 193289,
+      "decisionsValidated": 5251,
+      "emptySets": 0,
+      "cappedDecisions": 0,
+      "candidatesGenerated": 83340,
+      "candidatesSubmitted": 83340,
+      "candidatesAccepted": 83340,
+      "candidatesRejected": 0,
+      "setSize": {
+        "median": 11,
+        "p95": 47,
+        "max": 48
+      }
+    }
+  },
+  "unreachedTypes": [
+    "and",
+    "productionToLose",
+    "resource",
+    "resources"
+  ],
+  "unvalidatedTypes": [],
+  "rejections": [],
+  "fr9Fallbacks": 1065,
+  "failedGames": [],
+  "wallClockMs": 4537072
+}

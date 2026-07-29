@@ -8,6 +8,7 @@
     "bench": "tsx src/runner/speedSpikeCli.ts",
     "determinism": "tsx src/runner/determinismCli.ts",
     "legality": "tsx src/runner/legalityCli.ts",
+    "candidates": "tsx src/runner/candidatesCli.ts",
     "coverage": "tsx src/runner/coverageCli.ts",
     "match": "tsx src/runner/matchCli.ts",
     "match:pool": "tsx src/match/pool.ts",
