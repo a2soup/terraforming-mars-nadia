@@ -86,7 +86,7 @@ recorded decisions.** Do not design this from scratch. Read that file first. It 
 | --- | --- |
 | `submitRecorded(player, response)` | The replay counterpart of `applyDecision`: `player.process(response)` plus the *guarded* deferred drain, deliberately **not** `applyDecision` (no `toModel`, no `enumerate`, and crucially no FR-9 fallback — a rejected replay step must surface as a divergence, not be silently substituted). |
 | `replaySteps(restored, steps, stepMs)` | Walks recorded steps, checking the offered player matches, returning a typed `ReplayFailure`. |
-| `validateReplay(restored, livePending, liveStable)` | Compares **both** `pendingSignature` and `stableStateOf` — bullet 4 established these fail independently, so checking one is not checking. |
+| `validateReplay(restored, livePending, liveStable)` | Compares **both** `pendingSignature` and `stableStateOf` — bullet 4 established these fail independently, so checking one is not checking. **Necessary but not sufficient — see §2.3.1.** |
 | The rolling-ancestor pattern | A single carried snapshot, not a table — cheaper, and it is exactly search's snapshot-once/restore-many access pattern. |
 | `copyResponse` | Recorded responses are replayed into many independently restored games; never share one object. |
 
@@ -96,6 +96,37 @@ experiments with 100% exact reproduction**. Restore-many from one snapshot runs 
 1,061/s for independent clones. `restore`'s default `verify: 'pending'` costs **0.0001 ms** — free;
 never disable it. Log-stripped snapshots roughly halve restore cost late-game and are rules-neutral
 (bullet 4 proved this).
+
+### 2.3.1 Correction (found by Unit B, 29 Jul 2026): the two-way check does not certify a fork
+
+**This supersedes what §2.3, §2.4 and hazard H7 originally said, and it was found after Units A and
+B were both written.** Hazard H7's pair — `pendingSignature` **and** `stableStateOf` — is necessary
+and **still not sufficient** to establish that a fork is sitting on the same *decision* as the live
+game.
+
+Unit B's first 2-game smoke run: 29 candidates came back as Engine rejections, every one an `or`
+whose branch response did not match the branch, some with `Invalid index` — an index the enumerator
+cannot generate for the decision it was looking at. The forks had passed **both** checks and were
+positioned on a **regenerated top-of-turn `OrOptions`** in place of the live mid-action one.
+
+Both checks are blind to that substitution by construction: `pendingSignature` is only
+`` `${player.id}:${type}` ``, so the two `OrOptions` are the same string, and the pending decision is
+**not serialized at all** (`Game.serialize()` hardcodes `deferredActions: []`), so `stableStateOf` is
+byte-identical across it. This is bullet 4's "action-phase failures are 100% silent" population,
+silent to the *validation* too.
+
+**`bench/forkCost.ts`'s "26,026 forks, 100% exact reproduction" carries the same blind spot** — it
+only ever asked whether the **state** came back, which it did. That is a sound result for the
+question it asked (what does a fork cost, and does the state return) and not a sound basis for
+certifying a fork an agent will *answer a decision in*.
+
+**The fix, now implemented in both places:** a third, strictly finer check —
+`pendingModelSignature` (`agent/src/search/pendingModel.ts`), comparing `waitingFor.toModel(player)`
+on both sides — applied to **both** things a restore is used for: adopting an ancestor and
+certifying a fork. Unit B measured 1,017 restores refused as ancestors and 281 probe points skipped
+that the two-way check had accepted; with it, Engine rejections went to **zero**.
+`ForkStats.modelRefusedHere` counts the refusals, and `ReplayFailure` gained
+`'pendingModelMismatch'`.
 
 **The one thing `forkCost.ts` gets right that a re-implementation will get wrong:** it records the
 response the **Engine accepted**, not the one the responder returned. When the FR-9 fallback fires,
@@ -112,6 +143,12 @@ Separately, **28.0% of decision points do not naively round-trip**, and the acti
 `forkCost.ts` therefore uses a stricter operational definition than the phase guard: a point is
 `forkable` only if `assertSnapshotSafe` accepts it **and** `restore(snap, {verify: 'pending'})`
 returns without throwing.
+
+**That definition is still too weak, and the ~72% it implies is an overstatement** for an agent that
+forks in order to try a move — see §2.3.1. Under the three-way definition the rate is lower, by the
+population `ForkStats.modelRefusedHere` counts. **Do not quote ~72% as this bullet's forkability
+figure**; the honest number is `(direct + replayed) / attempts` from a real greedy run, and
+reporting it against the old figure is Unit D's job.
 
 ### 2.5 A restored game shares its `id` with the original
 
@@ -257,8 +294,10 @@ The three reasons that *do* hold:
    ISMCTS where a fidelity bug hides inside a stochastic search and shows up as "the search is
    somehow weak."
 3. **It is cheaper than "moving up M4 work" sounds** — §2.3. The mechanism exists, was run 26,026
-   times with 100% reproduction, and the two traps around it (record the *accepted* response;
-   validate both ways) are already mapped in prose.
+   times with 100% reproduction, and the traps around it (record the *accepted* response; validate
+   three ways, §2.3.1) are already mapped in prose. *Reason 2 has since paid out: it was Unit B's
+   simple, diffable consumer that exposed the fidelity gap in §2.3.1 — under ISMCTS it would have
+   presented as an unaccountably weak search.*
 
 **Do not carry the false claim into the write-up.** The validation will show the opening is still
 effectively random, and a document that promised otherwise reads as a failure when it is a
@@ -379,8 +418,11 @@ Recorded reference figures (SRS §1.5; Gaina, Goodman, Perez-Liebana, *TAG: Terr
   legal move and the replay would look successful having taken a different path. Use
   `submitRecorded`'s semantics, including its **guarded** drain — the guard is the fix for a real
   driver bug (an unconditional `runAll()` overwriting a freshly-set `waitingFor`).
-- **H7 — Validate a fork both ways.** `pendingSignature` **and** `stableStateOf`. Bullet 4 spent a
-  whole sub-task establishing that these fail independently.
+- **H7 — Validate a fork *three* ways.** `pendingSignature` **and** `stableStateOf` (bullet 4 spent a
+  whole sub-task establishing that these fail independently) **and** `pendingModelSignature`
+  (`search/pendingModel.ts`), because the first two are together still blind to a regenerated pending
+  decision — §2.3.1. Already implemented in `search/fork.ts` and `core/candidates/validation.ts`;
+  any *new* code that restores a game and then acts on the decision it finds needs the third check.
 - **H8 — Do not construct `SeededRandom` directly** (M1 hazard H6); go through `createAgentRandom`.
   Engine seed and agent seed stay separate (SRS CON-5), and the drain's common-random-numbers seed
   (§3.4) is derived from the agent stream, never the Engine's.
@@ -421,6 +463,17 @@ G1–G9 are what "bullet 2 is done" means.
   **Zero silent divergences.** Report forkability coverage: the fraction of greedy decisions where a
   fork was obtainable, with and without ancestor replay — the "without" figure is the ~72% baseline
   §2.4 predicts, and the gap is what §3.3 bought.
+
+  > **Annotation, 29 Jul 2026 — the criterion stands, its comparator does not.** G3 was written
+  > against the two-way check, which §2.3.1 shows does not certify a fork. It is **not** being
+  > rewritten after the fact; it is being read with two corrections, both of which make it stricter:
+  > "every fork is validated" now means **three ways**, including `pendingModelSignature`; and the
+  > **~72% comparator is withdrawn** (it was measured under the weaker definition, so the gap it
+  > implies is not the gap §3.3 bought). Unit D reports the measured three-way rate, states the old
+  > figure is not comparable, and says so plainly rather than quietly substituting one number for
+  > the other. Additionally report `ForkStats.modelRefusedHere` — points the two-way check would
+  > have accepted — since a zero there over a real corpus means the third check is not being
+  > exercised and the result is untested rather than met.
 - **G4 — AC-1 for `greedy-1ply@1`.** ≥ 1,000 consecutive embedded games with `greedy-1ply` in every
   seat, under `--legality`: 1,000 completed, zero unhandled errors, **zero Agent-attributable
   illegal-move rejections** across all submissions. Adjudicated on the strict counters, not on the
@@ -512,6 +565,7 @@ in which this bullet is harder than the ones before it: not more code, but no ch
 | --- | --- | --- |
 | `agent/src/search/speculation.ts` | A | new — the `WeakSet` registry, `isSpeculative(game)`, the speculation-in-progress cross-check |
 | `agent/src/search/fork.ts` | A | new — rolling ancestor, recorded accepted responses, `forkAt()`; productionizes `bench/forkCost.ts`'s validated mechanism |
+| `agent/src/search/pendingModel.ts` | A | new — §2.3.1's third fidelity check, shared with Unit B's `candidates/validation.ts` so the two definitions cannot drift |
 | `agent/src/legality/submissionMonitor.ts` | A | **edit** — the early-return guard only. Bullet 1's "nobody edits `legality/`" rule is lifted *for this file, for this guard only*. `run.ts`/`runLegalityBatch` (the R8 oracle) stays untouched. |
 | `agent/src/match/history.ts` | A | **edit** — the same guard at the same boundary |
 | `agent/src/agents/registry.ts` | A | **edit** — the `AgentEntry` extension for driver options (H4). A does the plumbing; **C adds the `greedy-1ply` entry** (different region, and C runs after A) |
@@ -599,9 +653,14 @@ Maintains, for one live game: a rolling nearest-forkable-ancestor snapshot and t
 responses since it (H3 — via `onFallback`, and copy responses per `copyResponse`). Exposes a fork at
 the current decision point: restore the ancestor with `verify: 'pending'` (H5), replay with
 `submitRecorded` semantics (H6), register the result as speculative, hand it back. Log-stripped
-snapshots are the default for speculative use (§2.3). Validation (`pendingSignature` **and**
-`stableStateOf`, H7) is available and sampled rather than always-on — G3 sets the rate; make the rate
-a parameter and record it.
+snapshots are the default for speculative use (§2.3).
+
+Validation is **three-way** (H7 as corrected by §2.3.1), split by cost: `pendingSignature` and
+`pendingModelSignature` are always on — the agent's correctness depends on the fork offering the
+decision it is about to answer, and the model check is the only one that can see that — while the
+expensive `stableStateOf` comparison is sampled at a rate G3 sets; make the rate a parameter and
+record it. The model check gates **ancestor adoption** as well as fork certification: adopting a
+point whose restore lands on a regenerated decision poisons every replay descended from it.
 
 Returns a typed "no fork available" result rather than throwing, so the agent can take its fallback.
 
@@ -688,6 +747,10 @@ Non-negotiable details, each with a wrong answer that works:
 - **Fallback:** when no fork is available, or the drain budget is exhausted, or a candidate throws,
   fall back to the random-legal move for that decision and **count it**. Never stall, never error
   (SRS FR-9). Keep `randomLegalAgent`'s existing conservative-resubmission behaviour intact.
+  **Treat this as a common path, not a rare one.** §2.3.1's third fidelity check makes the service
+  correctly refuse forks the original ~72% figure counted, and `ForkService` refuses rather than
+  hands back a fork on a different decision — so plan for a materially lower fork-availability rate
+  than §2.4 suggested, and make sure the fallback is as carefully tested as the greedy path.
 
 ### 2. Registry entry
 

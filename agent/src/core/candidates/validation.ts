@@ -18,6 +18,7 @@ import {
   snapshot,
 } from '../../engine/snapshot';
 import {stableStateOf} from '../../engine/stableState';
+import {pendingModelSignature} from '../../search/pendingModel';
 import {randomLegalAgent} from '../randomLegalAgent';
 import {createAgentRandom} from '../rng';
 import {IN_SCOPE_TYPES, InScopeModelType, candidates} from './index';
@@ -275,45 +276,15 @@ function buildFork(config: CandidateValidationConfig, ancestor: Ancestor, record
 }
 
 /**
- * The **contents** of every waiting player's pending decision, as the serialized model the Agent
- * actually reasons about (`waitingFor.toModel(player)`, the same construction `toDecisionPoint`
- * uses in both transports).
+ * The finer, third fidelity check - hazard H7's two-way check is **not sufficient** to certify a
+ * fork, which was the main finding of this unit's corpus run.
  *
- * **Why this exists, and it is the main finding of this unit's corpus run.** Hazard H7's two-way
- * check - `pendingSignature` **and** `stableStateOf` - is not sufficient to certify a fork for
- * candidate probing, and the first 2-game smoke run demonstrated it: 29 candidates were "rejected
- * by the Engine", every one of them an `or` whose branch response did not match the branch, some
- * with `Invalid index` - an index this module cannot generate for the decision it was looking at.
- * The forks had passed both checks and were nevertheless positioned at a *different* `or`.
- *
- * That follows from what each check can see. `pendingSignature` is deliberately coarse -
- * `` `${player.id}:${type}` `` - so a mid-action `OrOptions` sub-decision and the top-of-turn
- * "take your next action" `OrOptions` that `Game.deserialize` regenerates in its place are the
- * same string. And the pending decision is *not serialized at all* (`Game.serialize()` hardcodes
- * `deferredActions: []`), so `stableStateOf` is byte-identical across the substitution. This is
- * precisely bullet 4's "action-phase failures are 100% silent" population, seen from a new angle:
- * it is silent to the *validation* too.
- *
- * It matters here in a way it did not for `bench/forkCost.ts` (whose 26,026 forks reproduced
- * "exactly" under the same two checks) because that suite only ever asked whether the state came
- * back, while an agent forking to try a move must land on **the same decision** or its move is
- * answering a different question. So this module uses a third, strictly finer check for both
- * things it does with a restore: adopting an ancestor, and probing a candidate.
- *
- * Recorded for Unit A: `search/fork.ts`'s validation should carry this check too, and for Unit D:
- * the forkability rate under this definition is lower than §2.4's ~72%, and the gap is the number
- * to report.
+ * It now lives in `search/pendingModel.ts`, whose doc comment carries the full account, because
+ * Unit A's production fork service needs exactly the same check for exactly the same reason (it was
+ * written against the two-way check and corrected afterwards). Two copies of "are these two games
+ * at the same decision?" that could drift apart is precisely the kind of silent divergence this
+ * check exists to catch, so there is one definition and both callers import it.
  */
-function pendingModelSignature(game: IGame): string {
-  const parts: Array<string> = [];
-  for (const player of game.playersInGenerationOrder) {
-    const waitingFor = player.getWaitingFor();
-    if (waitingFor !== undefined) {
-      parts.push(JSON.stringify({id: player.id, model: toDecisionPoint(player, waitingFor).model}));
-    }
-  }
-  return parts.join('|');
-}
 
 /** The live position a fork has to reproduce, captured once per decision point. */
 type LiveSignature = {

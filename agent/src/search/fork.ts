@@ -15,6 +15,7 @@ import {
   snapshot,
 } from '../engine/snapshot';
 import {stableStateOf} from '../engine/stableState';
+import {pendingModelSignature} from './pendingModel';
 import {assertSpeculative, isSpeculative, registerSpeculative, withSpeculation} from './speculation';
 
 /**
@@ -42,9 +43,37 @@ import {assertSpeculative, isSpeculative, registerSpeculative, withSpeculation} 
  * | {@link submitInFork} | The replay counterpart of `applyDecision`: `player.process` plus the **guarded** deferred drain, deliberately *not* `applyDecision` - no `toModel`, no `enumerate`, and crucially no FR-9 fallback, so a rejected replay step surfaces as a divergence instead of being silently substituted (H6). |
  * | The guard on that drain | It is the fix for a real driver bug (an unconditional `runAll()` overwriting a freshly-set `waitingFor`, Running Notes 2026-07-22). A replay that drained differently from the original drive would diverge for reasons that have nothing to do with snapshot fidelity. |
  * | `verify: 'pending'` on every restore | Costs 0.0001 ms - free - and is the only thing that catches a silently regenerated pending decision. Never relaxed to buy speed (H5). |
- * | Both-ways validation | `pendingSignature` **and** `stableStateOf`. Milestone 1 bullet 4 spent a whole sub-task establishing that these fail independently (H7). |
+ * | Both-ways validation | `pendingSignature` **and** `stableStateOf`. Milestone 1 bullet 4 spent a whole sub-task establishing that these fail independently (H7). **Necessary but not sufficient** - see the section below. |
  * | One rolling ancestor, not a table | Cheaper, and it is exactly search's snapshot-once / restore-many access pattern. |
  * | {@link copyResponse} | Recorded responses are replayed into many independently restored games; never share one object. |
+ *
+ * ---
+ *
+ * ## Three-way validation: what `bench/forkCost.ts` could not have caught (the H7 correction)
+ *
+ * Hazard H7 as the plan states it - check `pendingSignature` **and** `stableStateOf`, because they
+ * fail independently - is **necessary and still not sufficient**, and this module was originally
+ * written believing it was. Unit B's G1a corpus run found the gap: forks that passed both checks
+ * were sitting on a *regenerated top-of-turn `OrOptions`* instead of the live mid-action one, and
+ * candidate responses aimed at the live decision came back as Engine rejections (`Invalid index`).
+ *
+ * Both checks are blind to that substitution by construction - `pendingSignature` is only
+ * `` `${player.id}:${type}` ``, and the pending decision is not serialized at all - so this is
+ * bullet 4's "action-phase failures are 100% silent" population, silent to the validation too.
+ * `bench/forkCost.ts`'s **"26,026 forks, 100% exact reproduction" carries the same blind spot**: it
+ * asked whether the *state* came back, which it did. An agent that forks in order to try a move
+ * needs the strictly stronger property that it landed on **the same decision**.
+ *
+ * So {@link pendingModelSignature} is a third, strictly finer check, and it is applied to **both**
+ * things this module does with a restore: adopting an ancestor ({@link ForkService.tryForkHere})
+ * and certifying a fork ({@link ForkService.finish}). On Unit B's corpus the finer check refused
+ * 1,017 restores as ancestors and skipped 281 probe points that the two-way check had accepted;
+ * with it, Engine rejections went to zero. {@link ForkStats.modelRefusedHere} counts the refusals
+ * so the rate is reported rather than assumed.
+ *
+ * **A consequence for the write-up:** §2.4's ~72% forkability is an overstatement for an agent that
+ * forks to try a move, because it was measured under the two-way definition. The honest figure is
+ * this module's `direct + replayed` against `attempts`, and the gap is a number Unit D reports.
  *
  * ---
  *
@@ -116,7 +145,11 @@ export type ForkUnavailableReason =
   /** The replay landed on a position that is not the live one - caught by the always-on pending check. */
   | 'validation-failed';
 
-/** Why a replay did not reproduce its target. Mirrors `bench/forkCost.ts`'s vocabulary. */
+/**
+ * Why a replay did not reproduce its target. Mirrors `bench/forkCost.ts`'s vocabulary, plus
+ * `pendingModelMismatch` - the failure that vocabulary had no name for because the two-way check
+ * could not see it (see the module doc's H7 correction).
+ */
 export type ReplayFailure =
   | 'playerMismatch'
   | 'processRejected'
@@ -124,7 +157,9 @@ export type ReplayFailure =
   | 'noWaitingPlayer'
   | 'pendingMismatch'
   | 'stateMismatch'
-  | 'bothMismatch';
+  | 'bothMismatch'
+  /** State and pending signature both matched, but the fork is on a *different decision*. */
+  | 'pendingModelMismatch';
 
 export type ForkAvailable = {
   readonly available: true;
@@ -175,6 +210,14 @@ export type ForkStats = {
   replaySubmissions: number;
   /** Forks whose `stableStateOf` was compared against the live game's (the sampled half of H7). */
   stateValidated: number;
+  /**
+   * Live points that restored cleanly - phase guard and `verify: 'pending'` both satisfied - and
+   * were still **refused as ancestors** because {@link pendingModelSignature} showed the restore
+   * sitting on a different decision (the module doc's H7 correction). These are the points the
+   * two-way check would have adopted; a non-zero count is this check earning its keep, and a zero
+   * count over a real corpus means it is not being exercised.
+   */
+  modelRefusedHere: number;
   /** Validation failures, by kind. **Any entry is a G3 failure**, not a rounding difference. */
   validationFailures: Partial<Record<ReplayFailure, number>>;
   /** The configured sampling rate, recorded so a reported figure carries its own denominator. */
@@ -298,6 +341,8 @@ export class ForkService {
   /** Accepted responses for every decision since {@link ancestor} was taken, in order. */
   private steps: Array<RecordedStep> = [];
   private open: OpenDecision | undefined;
+  /** {@link liveModelSignature}'s cache for the decision currently open. */
+  private liveModel: string | undefined;
 
   private counters: ForkStats;
 
@@ -378,6 +423,7 @@ export class ForkService {
     }
     this.counters.decisions++;
     this.open = {playerId: decision.player.id};
+    this.liveModel = undefined;
   }
 
   /**
@@ -387,6 +433,7 @@ export class ForkService {
    */
   private closeOpenDecision(): void {
     const open = this.open;
+    this.liveModel = undefined;
     if (open === undefined) {
       return;
     }
@@ -408,6 +455,7 @@ export class ForkService {
     this.ancestor = undefined;
     this.steps = [];
     this.open = undefined;
+    this.liveModel = undefined;
   }
 
   // -------------------------------------------------------------------------------------------
@@ -494,11 +542,16 @@ export class ForkService {
   }
 
   /**
-   * The live point's own fork, or `undefined` when this point is not forkable. Adopts the point as
-   * the ancestor on success - **on the strength of the restore verifying, and nothing else**, which
-   * is deliberately the same standard `bench/forkCost.ts` adopted ancestors by: a search has no
-   * original to compare a restore against, so the guards returning cleanly is the entire signal
-   * available to it.
+   * The live point's own fork, or `undefined` when this point is not forkable.
+   *
+   * **Adoption requires all three checks, not the restore verifying.** `bench/forkCost.ts` adopted
+   * ancestors on the strength of the guards returning cleanly, and this module originally copied
+   * that - on the reasoning that a search has no original to compare a restore against. That
+   * reasoning is wrong *here*: `tryForkHere` restores a snapshot of the **live game**, which is
+   * sitting right there, so the finer comparison is available and the bench's standard was simply
+   * the strongest one available to a suite measuring density. Adopting a point whose restore lands
+   * on a regenerated decision would poison every later replay descended from it, silently (the
+   * module doc's H7 correction).
    */
   private tryForkHere(game: IGame): IGame | undefined {
     let snap: GameSnapshot;
@@ -523,20 +576,47 @@ export class ForkService {
       throw error;
     }
 
+    if (pendingModelSignature(restored) !== this.liveModelSignature(game)) {
+      // Restored faithfully by both of H7's checks and still on a different decision. Not forkable
+      // here, and - the load-bearing half - **not adopted**, so no later replay starts from it.
+      this.counters.modelRefusedHere++;
+      return undefined;
+    }
+
     this.ancestor = snap;
     this.steps = [];
     return registerSpeculative(restored);
   }
 
   /**
+   * {@link pendingModelSignature} of the live game, computed once per decision.
+   *
+   * An agent scoring N candidates forks N times within one decision, and the live game is untouched
+   * throughout (it only ever touches forks), so the signature is invariant across those calls. The
+   * cache is cleared whenever a decision opens or closes, so the misuse case - forking between
+   * decisions - recomputes rather than serving a stale answer.
+   */
+  private liveModelSignature(live: IGame): string {
+    if (this.liveModel === undefined) {
+      this.liveModel = pendingModelSignature(live);
+    }
+    return this.liveModel;
+  }
+
+  /**
    * Validates a fork against the live game and packages the result.
    *
-   * **`pendingSignature` is checked on every fork, `stableStateOf` on a sample.** They fail
-   * independently (H7), so neither substitutes for the other - but they do not cost the same. The
-   * pending check is a player walk reading a plain property; the state check serializes both games
-   * and stringifies them, which is the same order of magnitude as the restore itself. So the cheap
-   * half is always on, because the agent's correctness depends on the fork actually offering the
-   * decision it is about to answer, and the expensive half is sampled at
+   * **`pendingSignature` and {@link pendingModelSignature} are checked on every fork,
+   * `stableStateOf` on a sample.** The three fail independently (H7 and the module doc's correction
+   * to it), so none substitutes for another - but they do not cost the same. The pending check is a
+   * player walk reading a plain property; the model check is one `toModel` per waiting player
+   * (~7% of a decision, against a ~1 ms fork), with the live side cached per decision; the state
+   * check serializes **both** games and stringifies them, which is the same order of magnitude as
+   * the restore itself.
+   *
+   * So the two cheap checks are always on - the agent's correctness depends on the fork offering
+   * *the decision it is about to answer*, which is exactly what the model check certifies and what
+   * the other two cannot see - and the expensive one is sampled at
    * {@link ForkServiceOptions.validateRate} for criterion G3.
    */
   private finish(live: IGame, forked: IGame, replayDistance: number): ForkOutcome {
@@ -553,6 +633,13 @@ export class ForkService {
       const kind: ReplayFailure = pendingOk ? 'stateMismatch' : stateOk === false ? 'bothMismatch' : 'pendingMismatch';
       this.counters.validationFailures[kind] = (this.counters.validationFailures[kind] ?? 0) + 1;
       return this.unavailable('validation-failed', kind);
+    }
+
+    // Both of H7's checks passed and the fork can still be on a different decision - the whole
+    // point of the correction. Checked last because it is the finest and the other two are cheaper.
+    if (pendingModelSignature(forked) !== this.liveModelSignature(live)) {
+      this.counters.validationFailures.pendingModelMismatch = (this.counters.validationFailures.pendingModelMismatch ?? 0) + 1;
+      return this.unavailable('validation-failed', 'pendingModelMismatch');
     }
 
     const player = nextWaitingPlayer(forked);
@@ -591,6 +678,7 @@ function emptyStats(validateRate: number): ForkStats {
     replayDistanceMax: 0,
     replaySubmissions: 0,
     stateValidated: 0,
+    modelRefusedHere: 0,
     validationFailures: {},
     validateRate,
     fallbacksOutsideDecision: 0,
@@ -611,6 +699,7 @@ export function mergeForkStats(parts: ReadonlyArray<ForkStats>): ForkStats {
     merged.replayDistanceMax = Math.max(merged.replayDistanceMax, part.replayDistanceMax);
     merged.replaySubmissions += part.replaySubmissions;
     merged.stateValidated += part.stateValidated;
+    merged.modelRefusedHere += part.modelRefusedHere;
     merged.fallbacksOutsideDecision += part.fallbacksOutsideDecision;
     for (const reason of Object.keys(part.unavailableByReason) as Array<ForkUnavailableReason>) {
       merged.unavailableByReason[reason] += part.unavailableByReason[reason];

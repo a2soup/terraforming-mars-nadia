@@ -11,6 +11,7 @@ import {createGame} from '../../src/engine/gameFactory';
 import {pendingSignature} from '../../src/engine/snapshot';
 import {stableStateOf} from '../../src/engine/stableState';
 import {ForkOutcome, ForkService, submitInFork} from '../../src/search/fork';
+import {pendingModelSignature} from '../../src/search/pendingModel';
 import {LiveSubmissionDuringSpeculationError, isSpeculative, withSpeculation} from '../../src/search/speculation';
 
 /**
@@ -265,6 +266,56 @@ describe('fork service (Unit A)', function() {
       // decisions where the responder's move and the accepted move are the same thing.
       expect(fallbacks, 'the FR-9 fallback fired, so accepted != returned really happened').to.be.greaterThan(0);
       expect(unavailable, 'game setup is unforkable, and that is expected').to.be.greaterThan(0);
+    });
+
+    /**
+     * The H7 correction (see `search/pendingModel.ts`). Two assertions, and the second is the one
+     * that matters:
+     *
+     * 1. **Soundness** - every fork handed out is on the live *decision*, not merely in the live
+     *    *state*. This is what an agent forking to try a move actually needs.
+     * 2. **The check is not vacuous** - it refuses points the two-way check would have adopted.
+     *    Without this, a `pendingModelSignature` that always returned `''` would pass assertion 1
+     *    perfectly, which is exactly the failure mode Unit B's corpus found in the two-way check
+     *    itself. `modelRefusedHere` is the negative control, in the same spirit as G2b.
+     */
+    it('refuses forks that reproduce the state but not the decision', () => {
+      let refusedHere = 0;
+      let forks = 0;
+
+      for (const seed of [7_101, 7_102, 7_103]) {
+        const game = createGame({players: 2, seed});
+        const service = new ForkService({validateRate: 1});
+        const agent = randomLegalAgent(createAgentRandom(seed + 7));
+        const responder = service.observeDecisions((decision) => {
+          withSpeculation(() => {
+            const outcome = service.fork();
+            if (outcome.available) {
+              forks++;
+              // Soundness: the fork offers the same decision, in full, that the live game does.
+              expect(
+                pendingModelSignature(outcome.game),
+                `seed ${seed}: fork is on a different decision than the live game`,
+              ).to.equal(pendingModelSignature(decision.game));
+            }
+          });
+          return agent(decision);
+        });
+
+        const originalWarn = console.warn;
+        console.warn = () => {};
+        try {
+          runGame(game, responder, {...service.driverOptions});
+        } finally {
+          console.warn = originalWarn;
+        }
+        refusedHere += service.stats.modelRefusedHere;
+      }
+
+      expect(forks, 'the corpus produced forks to check').to.be.greaterThan(100);
+      // Unit B measured 1,017 such refusals over its own corpus. If this ever reaches zero, the
+      // check has stopped doing anything and the reason needs finding before it is trusted.
+      expect(refusedHere, 'the finer check refused points the two-way check would have adopted').to.be.greaterThan(0);
     });
   });
 });
