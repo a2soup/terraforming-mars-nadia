@@ -2,6 +2,7 @@ import {InputResponse} from '@/common/inputs/InputResponse';
 import {Player} from '@/server/Player';
 import {EmbeddedDecisionPoint} from '../driver/decisionPoint';
 import {EmbeddedResponder} from '../driver/responder';
+import {speculativeSubmission} from '../search/speculation';
 import {causeSignature, errorClassName, representativeMessage} from './causes';
 import {CauseTally, SubmissionSource} from './types';
 
@@ -34,6 +35,16 @@ import {CauseTally, SubmissionSource} from './types';
  * is what marks that boundary - which is also how a responder that throws before producing a move
  * (class B - nothing submitted) is distinguished from one whose move was rejected (class A - an
  * illegal move).
+ *
+ * **The speculation guard** (Milestone 2 bullet 2, §3.2). Wrapping the prototype means this monitor
+ * sees every `Player` in the process, *including the players of every game a search forks* - so
+ * from the first forking agent onwards it would count speculative probes as real submissions in
+ * real games. The three-line early return in {@link SubmissionMonitor.install} consults
+ * `search/speculation.ts` and passes those straight through to the original `process`, counted
+ * nowhere. It is inert for an agent that never forks: nothing is ever registered, so the guard is
+ * one `WeakSet` lookup that always answers `false`, and criterion G2a re-runs the R8 equivalence
+ * against `runLegalityBatch` to prove that rather than assert it. **`legality/run.ts` is not
+ * touched** - it is R8's oracle.
  */
 
 type ProcessFn = (input: InputResponse) => void;
@@ -62,6 +73,16 @@ export class SubmissionMonitor {
     this.originalProcess = original;
     const monitor = this;
     Player.prototype.process = function(this: Player, input: InputResponse): void {
+      // A move submitted inside a search fork is not a move that was played, so it is counted
+      // nowhere - not in `submissions`, not in the rejection classes, not in the cause tallies. See
+      // `search/speculation.ts` for why this guard is keyed on object identity rather than the game
+      // id (a fork shares its original's id) and why it also throws when a submission reaches the
+      // *live* game mid-search. Without it, `--legality` would report a promoted agent's search
+      // probes - including the deliberately rejected ones - as illegal moves in real games.
+      if (speculativeSubmission(this.game)) {
+        original.call(this, input);
+        return;
+      }
       const source: SubmissionSource = monitor.responderMovePending ? 'responder' : 'fallback-probe';
       monitor.responderMovePending = false;
       const decisionType = this.getWaitingFor()?.type ?? '<none>';

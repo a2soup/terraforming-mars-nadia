@@ -1,5 +1,6 @@
 import {randomLegalAgent} from '../core/randomLegalAgent';
 import {createAgentRandom} from '../core/rng';
+import {EmbeddedDriverOptions} from '../driver/embeddedDriver';
 import {EmbeddedResponder} from '../driver/responder';
 
 /**
@@ -43,15 +44,66 @@ export type AgentIdentity = {
   version: string;
 };
 
+/**
+ * **An agent as the runner seats it** (Milestone 2 bullet 2, Unit A; hazard H4 of
+ * agent/docs/Milestone2_Bullet2_Prompts.md).
+ *
+ * Until this bullet an agent was exactly an {@link EmbeddedResponder}: a function from *its own*
+ * decision to a move. A searching agent needs two things that shape cannot express, and both are
+ * about the *game*, not about the seat:
+ *
+ * - **Driver options.** `search/fork.ts` records the response the Engine **accepted**, which is not
+ *   always the one the responder returned - when the FR-9 fallback fires the driver submits
+ *   something else entirely, and when the responder *throws* (~5.7 times per game, measured over
+ *   1,500 games) it returns nothing at all. `EmbeddedDriverOptions.onFallback` is the only hook that
+ *   reports the accepted response, and a responder has nowhere to hang one.
+ * - **Every seat's decisions, not just its own.** The replay-from-quiescent-ancestor mechanism
+ *   replays opponents' moves too, so the recorder has to observe the whole game.
+ *   {@link observeDecisions} wraps the runner's *router* - the single responder the driver sees,
+ *   dispatching on player id - so one wrapper covers every seat.
+ *
+ * **`agent/src/driver/` is not modified** to make this work (this bullet's §8: read and import
+ * freely, wrap freely, modify nothing). The extension is here and in `match/runner.ts`, and both are
+ * no-ops for an agent that supplies neither field - which is the whole of `random-legal@1`, so its
+ * artifacts are byte-identical before and after.
+ */
+export type SeatedAgent = {
+  /** Answers this seat's decisions. The old `create` return value, unchanged. */
+  respond: EmbeddedResponder;
+  /**
+   * Merged into the options `playMatchGame` passes to `runGame`. `onFallback` composes - the
+   * runner's own counters run first, then each agent's, in seat order.
+   */
+  driverOptions?: EmbeddedDriverOptions;
+  /**
+   * Wraps the driver's responder (in a match, the seat router) so this agent observes **every**
+   * decision in the game, including other seats'. Must forward the response unchanged and rethrow
+   * unchanged - the driver cannot be allowed to tell the difference.
+   */
+  observeDecisions?: (inner: EmbeddedResponder) => EmbeddedResponder;
+};
+
 export type AgentEntry = AgentIdentity & {
   description: string;
   /**
    * `seed` is this seat's own agent-RNG seed, kept separate from the Engine seed (SRS CON-5).
    * A deterministic agent is free to ignore it. Must not construct `SeededRandom` directly
    * (hazard H6) - go through {@link createAgentRandom}, as `random-legal` does below.
+   *
+   * Returning a bare {@link EmbeddedResponder} is the ordinary case and stays the whole contract
+   * for a non-searching agent. An agent that needs to observe the game returns a
+   * {@link SeatedAgent} instead; the two are told apart by `typeof`, so no existing entry changes.
+   *
+   * **Called once per game** (`playMatchGame`), so an agent may keep per-game state - a fork
+   * service, a recorded move list, a belief model - in the closure it returns.
    */
-  create: (seed: number) => EmbeddedResponder;
+  create: (seed: number) => EmbeddedResponder | SeatedAgent;
 };
+
+/** Normalizes either `create` return shape to a {@link SeatedAgent}. */
+export function asSeatedAgent(created: EmbeddedResponder | SeatedAgent): SeatedAgent {
+  return typeof created === 'function' ? {respond: created} : created;
+}
 
 const REGISTRY: Record<string, AgentEntry> = {
   'random-legal': {
@@ -124,8 +176,17 @@ export function agentIdentity(name: string): AgentIdentity {
   return {name: agentName, version};
 }
 
-export function createAgent(name: string, seed: number): EmbeddedResponder {
-  return lookupAgent(name).create(seed);
+/**
+ * Builds the agent registered as `name` for one seat of one game, normalized to a
+ * {@link SeatedAgent}.
+ *
+ * **Returns the seated shape rather than a bare responder deliberately.** A caller that took only
+ * the responder would silently discard a searching agent's driver options and its whole-game
+ * observer, and the symptom would be a fork service with an empty replay list - i.e. an agent that
+ * quietly stops being able to fork, not one that fails.
+ */
+export function createAgent(name: string, seed: number): SeatedAgent {
+  return asSeatedAgent(lookupAgent(name).create(seed));
 }
 
 /** `random-legal@1` - the form used in run ids, CLI output and log lines. */

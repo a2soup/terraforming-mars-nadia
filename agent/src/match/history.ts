@@ -12,6 +12,7 @@ import {firstDivergence, stableStringify} from '../determinism/replay';
 import {TraceStep} from '../determinism/types';
 import {causeSignature, errorClassName} from '../legality/causes';
 import {SubmissionSource} from '../legality/types';
+import {speculativeSubmission} from '../search/speculation';
 import {defaultOutputDir} from './artifact';
 import {MatchLegalityMode} from './legality';
 import {MatchCaptureOptions, MatchInstrument, playMatchGame, seatPlayerId} from './runner';
@@ -118,6 +119,15 @@ import {
  * the monitor is then the only wrapper in the process, byte-identically to the AC-1 runner's own
  * instrumentation. Criterion R8 compares both stacks against `runLegalityBatch` for exactly that
  * reason (`match/legality.ts`).
+ *
+ * ## Speculative submissions are not history (Milestone 2 bullet 2, §3.2)
+ *
+ * The prototype wrapper sees every `Player` in the process, so from the first forking agent onwards
+ * it would record moves submitted inside search forks as moves that were played. {@link
+ * MatchHistoryInstrument.observeSubmission} therefore takes the same three-line early return
+ * `legality/submissionMonitor.ts` takes, with the logic owned by `search/speculation.ts` - which
+ * keys on **object identity**, because `restore()` reproduces the game id and a fork and its
+ * original are two `IGame`s with the same `game.id`.
  *
  * ## A seed-addressed history is the primary reproduction mechanism
  *
@@ -696,6 +706,14 @@ export class MatchHistoryInstrument implements MatchInstrument {
    * submissions are the fallback's.
    */
   private observeSubmission(player: Player, input: InputResponse, original: ProcessFn): void {
+    // A move submitted inside a search fork was never played, so it never enters the history - not
+    // as an accepted move, not as a rejection, not as a stray call. Same guard as
+    // `legality/submissionMonitor.ts`, at the same boundary, with the logic owned by
+    // `search/speculation.ts` (Milestone 2 bullet 2, §3.2).
+    if (speculativeSubmission(player.game)) {
+      original.call(player, input);
+      return;
+    }
     const open = this.open;
     if (open === undefined) {
       // No decision is open. Does not happen in embedded play; counted rather than assumed away.

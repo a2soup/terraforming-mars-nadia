@@ -1,13 +1,13 @@
 import {Phase} from '@/common/Phase';
 import {PlayerId} from '@/common/Types';
 import {IGame} from '@/server/IGame';
-import {createAgent, lookupAgent} from '../agents/registry';
+import {SeatedAgent, createAgent, lookupAgent} from '../agents/registry';
 import {createGame} from '../engine/gameFactory';
 import {PLAYER_ORDER_COLORS} from '../engine/gameConfig';
 import {ensureHeadlessEngine} from '../engine/headlessEngine';
 import {EmbeddedDecisionPoint} from '../driver/decisionPoint';
 import {EmbeddedResponder} from '../driver/responder';
-import {runGame} from '../driver/embeddedDriver';
+import {EmbeddedDriverOptions, runGame} from '../driver/embeddedDriver';
 import {errorClassName} from '../legality/causes';
 import {percentiles} from '../legality/run';
 import {buildHeader} from '../determinism/corpus';
@@ -69,6 +69,14 @@ import {
  * **Per-seat routing** needs no driver change. `runGame` takes one responder; a match passes it a
  * *router* closing over the seat map and dispatching on `decision.player.id` - the technique
  * `demo/match.ts` already proved. `embeddedDriver.ts` is untouched by this bullet.
+ *
+ * **Agent contributions** (Milestone 2 bullet 2, hazard H4). A searching agent needs the game, not
+ * just its own seat: `EmbeddedDriverOptions.onFallback` to learn which response the Engine
+ * *accepted*, and a wrapper around the router to see every seat's decisions. `agents/registry.ts`
+ * lets an entry contribute both ({@link SeatedAgent}); this file merges them
+ * ({@link mergeDriverOptions}) and does **nothing** when none are supplied, so `random-legal@1`'s
+ * artifacts are byte-identical before and after the seam existed. `agent/src/driver/` is not
+ * modified.
  */
 
 // ---------------------------------------------------------------------------------------------
@@ -211,35 +219,57 @@ export function playMatchGame(config: MatchGameConfig, instrument?: MatchInstrum
     const created = createGame({players: config.players, seed: config.engineSeed});
     game = created;
 
-    const responders = new Map<PlayerId, EmbeddedResponder>(
+    // One agent per seat, built here and therefore **once per game**, which is what lets a
+    // searching agent keep per-game state (a fork service, a recorded move list) in its closure.
+    const agents = new Map<PlayerId, SeatedAgent>(
       seats.map((seat) => [seat.playerId, createAgent(seat.agent, seat.agentSeed)]),
     );
     // The router: one responder for the driver, dispatching on which player is being asked
     // (`demo/match.ts:53`'s precedent). This is the whole of "per-seat agents" - `runGame` and
     // `applyDecision` need no change.
     const router: EmbeddedResponder = (decision: EmbeddedDecisionPoint) => {
-      const responder = responders.get(decision.player.id);
-      if (responder === undefined) {
+      const agent = agents.get(decision.player.id);
+      if (agent === undefined) {
         throw new Error(`no agent is seated as player ${decision.player.id} in group ${config.groupIndex}.`);
       }
       decisions++;
-      return responder(decision);
+      return agent.respond(decision);
     };
 
-    const result = runGame(created, instrument?.beginGame(config, router) ?? router, {
-      onFallback: (event) => {
-        // `rejectedInput === undefined` means the responder threw without producing a move (class
-        // B - nothing was submitted); otherwise its move was submitted and rejected (class A - an
-        // illegal move under AC-1's definition). These two counters are the driver's view, and are
-        // *not* the strict accounting: `onFallback` cannot see the fallback's own rejected
-        // `'or'`-branch probes. That population needs legality mode (§4.6).
-        if (event.rejectedInput === undefined) {
-          fallbacksAfterThrow++;
-        } else {
-          fallbacksAfterRejection++;
-        }
+    // Hazard H4 (Milestone 2 bullet 2): an agent whose search replays opponents' moves has to see
+    // *every* decision, not only its own, and the driver takes one responder. Each contributing
+    // agent wraps the router in seat order, innermost first, so the wrappers are applied in an
+    // order fixed by the seating rather than by map iteration luck. An agent that contributes
+    // nothing leaves `observed === router`, so the instrument below and the driver see exactly the
+    // object they saw before this seam existed - criteria R2/R6 compare artifacts byte for byte.
+    let observed = router;
+    for (const seat of seats) {
+      const wrap = agents.get(seat.playerId)?.observeDecisions;
+      if (wrap !== undefined) {
+        observed = wrap(observed);
+      }
+    }
+
+    const result = runGame(created, instrument?.beginGame(config, observed) ?? observed, mergeDriverOptions([
+      {
+        onFallback: (event) => {
+          // `rejectedInput === undefined` means the responder threw without producing a move (class
+          // B - nothing was submitted); otherwise its move was submitted and rejected (class A - an
+          // illegal move under AC-1's definition). These two counters are the driver's view, and are
+          // *not* the strict accounting: `onFallback` cannot see the fallback's own rejected
+          // `'or'`-branch probes. That population needs legality mode (§4.6).
+          if (event.rejectedInput === undefined) {
+            fallbacksAfterThrow++;
+          } else {
+            fallbacksAfterRejection++;
+          }
+        },
       },
-    });
+      ...seats.flatMap((seat) => {
+        const options = agents.get(seat.playerId)?.driverOptions;
+        return options === undefined ? [] : [options];
+      }),
+    ]));
 
     const ranking = rankGame(created);
     const seatOf = new Map(seats.map((seat) => [seat.playerId, seat.seat]));
@@ -294,6 +324,37 @@ export function playMatchGame(config: MatchGameConfig, instrument?: MatchInstrum
     };
     return instrument?.endGame(config, record, game) ?? record;
   }
+}
+
+/**
+ * Combines the runner's own driver options with those any seated agent contributes (hazard H4).
+ *
+ * **Returns the single element unchanged when there is nothing to merge**, which is the whole of
+ * every run before this bullet and every run of `random-legal@1` after it. That is not an
+ * optimization: criteria R2 and R6 compare artifacts byte for byte, so the no-contribution path has
+ * to be *the same path*, not an equivalent one.
+ *
+ * `onFallback` **composes** rather than overriding - the runner's own counters run first, then each
+ * agent's in seat order - because both callers are observers and there is no sensible sense in
+ * which one of them wins. `maxDecisions` is the strictest value any party asked for, so an agent
+ * can tighten the driver's stall cap but never loosen the runner's.
+ */
+export function mergeDriverOptions(parts: ReadonlyArray<EmbeddedDriverOptions>): EmbeddedDriverOptions {
+  if (parts.length === 1) {
+    return parts[0];
+  }
+  const caps = parts.map((part) => part.maxDecisions).filter((cap): cap is number => cap !== undefined);
+  const hooks = parts.map((part) => part.onFallback).filter((hook): hook is NonNullable<EmbeddedDriverOptions['onFallback']> => hook !== undefined);
+  return {
+    ...(caps.length === 0 ? {} : {maxDecisions: Math.min(...caps)}),
+    ...(hooks.length === 0 ? {} : {
+      onFallback: (event) => {
+        for (const hook of hooks) {
+          hook(event);
+        }
+      },
+    }),
+  };
 }
 
 /** The in-scope subset of the Engine's `VictoryPointsBreakdown` (see `MatchVpBreakdown`). */
