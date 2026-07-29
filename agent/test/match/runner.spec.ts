@@ -13,8 +13,11 @@ import {
   stripTimingFields,
 } from '../../src/match/artifact';
 import {buildMatchConfigs} from '../../src/match/pairing';
-import {playMatchGame, runMatch, seatPlayerId, wilson95} from '../../src/match/runner';
-import {MatchSpec} from '../../src/match/types';
+import {mergeDriverOptions, playMatchGame, runMatch, seatPlayerId, wilson95} from '../../src/match/runner';
+import {MatchRunReport, MatchSpec} from '../../src/match/types';
+import {AgentEntry, withTemporaryAgent} from '../../src/agents/registry';
+import {randomLegalAgent} from '../../src/core/randomLegalAgent';
+import {createAgentRandom} from '../../src/core/rng';
 
 /**
  * The runner end to end, at a scale that keeps the suite fast. The large validation runs (R1's
@@ -177,6 +180,94 @@ describe('match runner', function() {
     it('resolves a bare filename against the tier\'s default directory', () => {
       expect(resolveOutputPath('run.json', 'summary')).to.match(/agent[/\\]docs[/\\]data[/\\]run\.json$/);
       expect(resolveOutputPath('run.json', 'moves')).to.match(/agent[/\\]runs[/\\]run\.json$/);
+    });
+  });
+
+  /**
+   * The seam a searching agent needs (Milestone 2 bullet 2, Unit A; hazard H4). Two separate
+   * claims, and the second is the one Unit A's prompt calls out: **no behaviour change when an
+   * agent supplies nothing.**
+   */
+  describe('agent contributions (hazard H4)', () => {
+    it('calls a contributed observer for every seat\'s decisions, and its driver options too', async () => {
+      const seen: Array<string> = [];
+      let fallbacks = 0;
+      const entry: AgentEntry = {
+        name: 'contribution-probe',
+        version: '0-probe',
+        description: 'registered only for the duration of one test.',
+        create: (seed) => {
+          const inner = randomLegalAgent(createAgentRandom(seed));
+          return {
+            respond: inner,
+            // Wraps the *router*, so it must see the other seat's decisions as well as its own -
+            // which is the entire reason this seam exists (the ancestor walk replays opponents'
+            // moves).
+            observeDecisions: (router) => (decision) => {
+              seen.push(decision.player.id);
+              return router(decision);
+            },
+            driverOptions: {onFallback: () => {
+              fallbacks++;
+            }},
+          };
+        },
+      };
+
+      await withTemporaryAgent(entry, async () => {
+        const report = await runMatch(
+          {players: 2, lineup: ['contribution-probe', 'random-legal'], groups: 1},
+          {silenceRoutineLogs: true});
+        expect(report.summary.completed).to.equal(report.summary.games);
+        // One seat contributes, and it sees every decision of every game, not only its own.
+        expect(seen.length).to.equal(report.summary.totalDecisions);
+        expect(new Set(seen).size, 'including the opponent\'s').to.equal(2);
+        // The runner's own counters still ran: composition, not replacement.
+        expect(fallbacks).to.equal(report.summary.fallbacksAfterRejection + report.summary.fallbacksAfterThrow);
+        expect(fallbacks, 'and there were fallbacks to observe').to.be.greaterThan(0);
+      });
+    });
+
+    it('leaves a run byte-identical when the agent contributes nothing', async () => {
+      // `random-legal@1` returns a bare responder; a seat-shaped entry that contributes only
+      // `respond` must be indistinguishable from it, or normalizing the two shapes has changed
+      // what a run is - and every Milestone 1 number, including AC-1, describes the other one.
+      const entry: AgentEntry = {
+        name: 'seat-shaped-random-legal',
+        version: '0-probe',
+        description: 'registered only for the duration of one test.',
+        create: (seed) => ({respond: randomLegalAgent(createAgentRandom(seed))}),
+      };
+
+      const baseline = await runMatch(twoPlayer, {silenceRoutineLogs: true});
+      await withTemporaryAgent(entry, async () => {
+        const seatShaped = await runMatch(
+          {...twoPlayer, lineup: ['seat-shaped-random-legal', 'seat-shaped-random-legal']},
+          {silenceRoutineLogs: true});
+        // The agent names differ by construction, so compare the game rows - which is where every
+        // number a strength claim rests on lives.
+        const rows = (report: MatchRunReport) => JSON.stringify((stripTimingFields(report) as {games: unknown}).games)
+          .split('seat-shaped-random-legal').join('random-legal')
+          .split('"agentVersion":"0-probe"').join('"agentVersion":"1"');
+        expect(rows(seatShaped)).to.equal(rows(baseline));
+      });
+    });
+
+    it('merges driver options without letting an agent silence the runner', () => {
+      const calls: Array<string> = [];
+      const merged = mergeDriverOptions([
+        {maxDecisions: 500, onFallback: () => calls.push('runner')},
+        {maxDecisions: 100, onFallback: () => calls.push('agent')},
+        {},
+      ]);
+      merged.onFallback?.({} as never);
+      expect(calls, 'both hooks run, the runner\'s first').to.deep.equal(['runner', 'agent']);
+      expect(merged.maxDecisions, 'the strictest cap wins').to.equal(100);
+
+      // The no-contribution path has to be *the same object*, not an equivalent one: criteria R2
+      // and R6 compare artifacts byte for byte.
+      const only = {maxDecisions: 7};
+      expect(mergeDriverOptions([only])).to.equal(only);
     });
   });
 

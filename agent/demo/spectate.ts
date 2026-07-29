@@ -37,7 +37,18 @@ function seatResponders(game: IGame, options: SpectateOptions): Map<PlayerId, Em
   game.players.forEach((player, seat) => {
     // Each seat gets its own agent-RNG stream, so two random-legal Nadias don't play the same
     // moves as each other. Still fully reproducible from --agent-seed.
-    responders.set(player.id, createAgent(options.agents[seat], options.agentSeed + seat));
+    const seated = createAgent(options.agents[seat], options.agentSeed + seat);
+    // `PacedMatch` drives with `applyDecision` per seat rather than through one router, so it has
+    // nowhere to hang the whole-game observer and the driver options a searching agent contributes
+    // (hazard H4, `src/agents/registry.ts`). Such an agent still plays legally - its fork service
+    // simply never sees a decision and it falls back - but it is not playing its real game, and
+    // that is worth saying out loud rather than letting the demo quietly misrepresent it.
+    if (seated.driverOptions !== undefined || seated.observeDecisions !== undefined) {
+      console.warn(
+        `[spectate] '${options.agents[seat]}' needs whole-game observation, which this paced demo driver ` +
+        `does not provide - it will play its fallback moves here. Use 'npm run match' for a faithful game.`);
+    }
+    responders.set(player.id, seated.respond);
   });
   return responders;
 }
