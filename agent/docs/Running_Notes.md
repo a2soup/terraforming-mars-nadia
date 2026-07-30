@@ -1042,3 +1042,63 @@ the previous run** and reported a clean pass with numbers identical to before. I
 because the full test suite failed on the same ordering bug. **Delete a phase artifact before
 re-running it, and confirm the phase's own completion line**, rather than trusting that a JSON file
 on disk came from the run you just did. The published numbers were re-taken that way.
+
+## 2026-07-29 — Fixed baselines: the greedy agent wins 99.2% while flipping a coin three times in four (Milestone 2, bullet 2)
+
+Full deliverable: [docs/Baselines.md](Baselines.md). All nine pre-committed criteria met over 3,700
+validation games. The findings worth not rediscovering:
+
+**Hazard H7's two-way fork check does not certify a fork, and `bench/forkCost.ts`'s "26,026 forks,
+100% exact reproduction" carries the same blind spot.** Unit B's first 2-game smoke run produced 29
+Engine rejections whose forks had passed **both** `pendingSignature` and `stableStateOf` and were
+still sitting on a regenerated top-of-turn `OrOptions` instead of the live mid-action one. Both
+checks are blind to that by construction: the signature is only `player:type`, so the two `OrOptions`
+are the same string, and the pending decision is not serialized at all, so the state is byte-identical
+across the substitution. This is bullet 4's "action-phase failures are 100% silent" population,
+silent to the *validation* too. The fix is a third, finer check comparing `waitingFor.toModel(player)`
+on both sides (`search/pendingModel.ts`), applied to **both** uses of a restore — certifying a fork
+*and* adopting an ancestor, the latter being the load-bearing half, since a poisoned ancestor
+silently corrupts every replay descended from it. **The production evidence is emphatic: of the 82 /
+7 / 1 / 145 validation failures across the four large runs, every single one was a
+`pendingModelMismatch`. Not one `pendingMismatch` or `stateMismatch` ever fired.** 100% of what the
+service refused, the old check would have handed to the agent.
+
+**Two plan estimates were wrong in opposite directions, and the correction only fixed one of them.**
+Section 2.4's ~72% forkability was measured under the weak definition; the true *direct* rate is
+**66.2%**, lower as predicted. But overall availability with ancestor replay is **99.7%** at a mean
+replay distance under 2 — so the warning that the random-legal fallback would become "a common path"
+was wrong: it fires on 2.0% of decisions, 97% of which are game setup, where no forkable ancestor
+exists at all. Replay's value landed in the mid-game, not in the opening it was partly justified by.
+
+**A points-now agent is mostly a random agent, and still wins 99.2%.** Tie-break fraction **75.9%**,
+median score spread across all candidates **exactly 0 VP** — for half of all decisions every legal
+move looked identical to the objective. Per type: research buys (`card`) are **99.8%** tie-broken,
+and all 1,000 `initialCards` decisions fell back to random-legal outright because game setup has no
+forkable ancestor. The 99.2% comes from the ~24% of decisions that *do* score — claiming milestones
+(2.2 per game against random's 0.6), funding awards, raising TR. **Report a win rate and a tie-break
+fraction together or neither means anything.**
+
+**The AC-1 battery costs 12.6x more against a forking agent, and M4 will be far worse.** G4 took
+13,827 s against the equivalent non-legality run's 1,093 s. `SubmissionMonitor` wraps
+`Player.prototype.process`; the speculation guard makes fork submissions *uncounted* but cannot make
+them *unwrapped*, so the wrapper was entered ~15 times per real submission. A one-ply agent forks ~7
+times per decision; an ISMCTS agent at M4's >=1,000-simulation target is three orders of magnitude
+past that. If it becomes prohibitive the fix is to short-circuit the guard *before* the wrapper body
+— **not** to cut the sample, which M1 proved unsafe (the `initialCards` defect appeared at ~1 per 25
+games and was invisible to a 20-game batch).
+
+**Greedy throws at the submission boundary once per 1,000 games; random-legal throws 5.7 times per
+game.** Same benign cause (`enumerateProjectCard: no actable, affordable standard project`). A search
+agent answers from an enumerated candidate set and only submits moves it has already constructed,
+where the random agent samples a branch and discovers afterwards that nothing in it is affordable.
+**Do not read FR-9 fallback counts as a health signal across different agent architectures.**
+
+**One prediction failed and is recorded as failed.** The plan predicted greedy would cluster
+greeneries adjacent to its own cities. It earns 2.6x the greenery VP and 2.4x the city-adjacency VP,
+but the *ratio* between them is 0.90 against random's 0.95 — slightly lower. Greedy does much more of
+both, which is not the same claim. The proxy is weak (city-adjacency VP counts cities beside *any*
+greenery); testing it properly needs board geometry the match record does not carry.
+
+**Host caveat, again.** The machine swapped throughout (4.5 GB of 6.1 GB; macOS resized the swap file
+mid-run) and **no throughput claim is made anywhere in the deliverable**. The 12.6x above is an
+order-of-magnitude observation, not a measurement.

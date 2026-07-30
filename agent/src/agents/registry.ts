@@ -1,5 +1,7 @@
+import {createGreedyOnePlyAgent} from '../core/greedyOnePlyAgent';
 import {randomLegalAgent} from '../core/randomLegalAgent';
 import {createAgentRandom} from '../core/rng';
+import {EmbeddedDriverOptions} from '../driver/embeddedDriver';
 import {EmbeddedResponder} from '../driver/responder';
 
 /**
@@ -30,11 +32,12 @@ import {EmbeddedResponder} from '../driver/responder';
  * incomparable runs look comparable. The registry cannot enforce this; it is a discipline, and
  * this paragraph is where it is written down.
  *
- * **Where the next entries go.** The greedy one-ply baseline (OSLA) is Milestone 2 bullet 2 and
- * belongs here as `'greedy-1ply'`; the M3 heuristic agent, the M4 search agent and every promoted
- * M6 network follow the same shape. Adding one is a single entry - nothing else in the runner
- * knows or cares which brain is in which seat, which is the whole point of the
- * `decide(observation) -> action` seam (agent/CLAUDE.md §4).
+ * **Where the next entries go.** `'greedy-1ply'` (Milestone 2 bullet 2, the OSLA equivalent) is the
+ * second entry and the first agent that searches; the M3 heuristic agent, the M4 search agent and
+ * every promoted M6 network follow the same shape. Adding one is a single entry - nothing else in
+ * the runner knows or cares which brain is in which seat, which is the whole point of the
+ * `decide(observation) -> action` seam (agent/CLAUDE.md §4). Note what `greedy-1ply` needed *beyond*
+ * a `create`: {@link SeatedAgent}'s two extra fields, which are the whole of hazard H4.
  */
 
 /** The recordable identity of an agent: what a match artifact carries per seat. */
@@ -43,15 +46,66 @@ export type AgentIdentity = {
   version: string;
 };
 
+/**
+ * **An agent as the runner seats it** (Milestone 2 bullet 2, Unit A; hazard H4 of
+ * agent/docs/Milestone2_Bullet2_Prompts.md).
+ *
+ * Until this bullet an agent was exactly an {@link EmbeddedResponder}: a function from *its own*
+ * decision to a move. A searching agent needs two things that shape cannot express, and both are
+ * about the *game*, not about the seat:
+ *
+ * - **Driver options.** `search/fork.ts` records the response the Engine **accepted**, which is not
+ *   always the one the responder returned - when the FR-9 fallback fires the driver submits
+ *   something else entirely, and when the responder *throws* (~5.7 times per game, measured over
+ *   1,500 games) it returns nothing at all. `EmbeddedDriverOptions.onFallback` is the only hook that
+ *   reports the accepted response, and a responder has nowhere to hang one.
+ * - **Every seat's decisions, not just its own.** The replay-from-quiescent-ancestor mechanism
+ *   replays opponents' moves too, so the recorder has to observe the whole game.
+ *   {@link observeDecisions} wraps the runner's *router* - the single responder the driver sees,
+ *   dispatching on player id - so one wrapper covers every seat.
+ *
+ * **`agent/src/driver/` is not modified** to make this work (this bullet's §8: read and import
+ * freely, wrap freely, modify nothing). The extension is here and in `match/runner.ts`, and both are
+ * no-ops for an agent that supplies neither field - which is the whole of `random-legal@1`, so its
+ * artifacts are byte-identical before and after.
+ */
+export type SeatedAgent = {
+  /** Answers this seat's decisions. The old `create` return value, unchanged. */
+  respond: EmbeddedResponder;
+  /**
+   * Merged into the options `playMatchGame` passes to `runGame`. `onFallback` composes - the
+   * runner's own counters run first, then each agent's, in seat order.
+   */
+  driverOptions?: EmbeddedDriverOptions;
+  /**
+   * Wraps the driver's responder (in a match, the seat router) so this agent observes **every**
+   * decision in the game, including other seats'. Must forward the response unchanged and rethrow
+   * unchanged - the driver cannot be allowed to tell the difference.
+   */
+  observeDecisions?: (inner: EmbeddedResponder) => EmbeddedResponder;
+};
+
 export type AgentEntry = AgentIdentity & {
   description: string;
   /**
    * `seed` is this seat's own agent-RNG seed, kept separate from the Engine seed (SRS CON-5).
    * A deterministic agent is free to ignore it. Must not construct `SeededRandom` directly
    * (hazard H6) - go through {@link createAgentRandom}, as `random-legal` does below.
+   *
+   * Returning a bare {@link EmbeddedResponder} is the ordinary case and stays the whole contract
+   * for a non-searching agent. An agent that needs to observe the game returns a
+   * {@link SeatedAgent} instead; the two are told apart by `typeof`, so no existing entry changes.
+   *
+   * **Called once per game** (`playMatchGame`), so an agent may keep per-game state - a fork
+   * service, a recorded move list, a belief model - in the closure it returns.
    */
-  create: (seed: number) => EmbeddedResponder;
+  create: (seed: number) => EmbeddedResponder | SeatedAgent;
 };
+
+/** Normalizes either `create` return shape to a {@link SeatedAgent}. */
+export function asSeatedAgent(created: EmbeddedResponder | SeatedAgent): SeatedAgent {
+  return typeof created === 'function' ? {respond: created} : created;
+}
 
 const REGISTRY: Record<string, AgentEntry> = {
   'random-legal': {
@@ -63,8 +117,25 @@ const REGISTRY: Record<string, AgentEntry> = {
     description: 'Uniformly random legal move at every decision (the Milestone 1 baseline).',
     create: (seed) => randomLegalAgent(createAgentRandom(seed)),
   },
-  // Milestone 2 bullet 2 adds the greedy one-ply baseline here:
-  //   'greedy-1ply': {name: 'greedy-1ply', version: '1', description: '...', create: (seed) => ...},
+  'greedy-1ply': {
+    name: 'greedy-1ply',
+    // Version 1 is the agent Milestone 2 bullet 2 adjudicated (docs/Baselines.md), against the
+    // candidate sets of `core/candidates/` and the fork service of `search/fork.ts` as they stand
+    // at that commit. Per the discipline above, **bump this whenever the move distribution can
+    // change** - and for this agent that includes changes it does not own: a reduction in
+    // `core/candidates/`, the drain boundary in `core/greedyOnePlyAgent.ts`, the 64-candidate cap,
+    // the 32-step drain budget, or anything that changes which decisions are forkable. It is a
+    // **frozen baseline**: AC-3's ">= 80% vs greedy one-ply" only measures the M3 heuristic's
+    // contribution if the yardstick does not move, so a change here is a new version, not an
+    // improvement to this one.
+    version: '1',
+    description:
+      'Greedy one-ply (the OSLA equivalent): scores every candidate move by its own victory points ' +
+      'in the position it reaches, plays the argmax, breaks ties at random. Deliberately myopic - ' +
+      'it values no production, no engine-building, no timing and no opponent, and it is indifferent ' +
+      'to every VP-neutral choice (corporation, initial cards, research buys).',
+    create: (seed) => createGreedyOnePlyAgent(seed),
+  },
 };
 
 /** The roster. A read-only view of {@link REGISTRY}, which {@link withTemporaryAgent} can add to. */
@@ -124,8 +195,17 @@ export function agentIdentity(name: string): AgentIdentity {
   return {name: agentName, version};
 }
 
-export function createAgent(name: string, seed: number): EmbeddedResponder {
-  return lookupAgent(name).create(seed);
+/**
+ * Builds the agent registered as `name` for one seat of one game, normalized to a
+ * {@link SeatedAgent}.
+ *
+ * **Returns the seated shape rather than a bare responder deliberately.** A caller that took only
+ * the responder would silently discard a searching agent's driver options and its whole-game
+ * observer, and the symptom would be a fork service with an empty replay list - i.e. an agent that
+ * quietly stops being able to fork, not one that fails.
+ */
+export function createAgent(name: string, seed: number): SeatedAgent {
+  return asSeatedAgent(lookupAgent(name).create(seed));
 }
 
 /** `random-legal@1` - the form used in run ids, CLI output and log lines. */
