@@ -281,6 +281,29 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'decision, a fingerprint or a seed.',
   },
   {
+    file: 'src/runner/ratingValidationCli.ts',
+    rule: 'date-now',
+    occurrences: 3,
+    reason:
+      'The Milestone 2 bullet 3 calibration study\'s per-phase elapsed line and the `wallClockMs` it writes into ' +
+      'each phase block (Unit C). Same category as `matchValidationCli.ts`\'s entry above - reported, never read ' +
+      'back - but with less surface than any of them, because this battery **plays no games at all**: it is pure ' +
+      'arithmetic over a seeded generator, so there is no game, no seed schedule and no decision for a clock read ' +
+      'to reach even in principle. Its own randomness is `createAgentRandom(cellSeed(analysisSeed, label))` and ' +
+      'nothing else, and every cell records the seed it used so one cell can be re-run in isolation. The figures ' +
+      'exist so a reader knows what a re-run of a ~7-minute study costs; they are explicitly **not** a performance ' +
+      'claim (hazard H10, and this host swaps).',
+  },
+  {
+    file: 'src/runner/ratingValidationCli.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      '`generatedAt` on `docs/data/rating_validation.json`: a provenance timestamp stamped once when the ' +
+      'calibration artifact is assembled. Identical in kind to `baselinesValidationCli.ts`\'s entry directly above ' +
+      'and to `corpus.ts`\'s `createdAt` at the top of this list.',
+  },
+  {
     file: 'src/core/candidates/validation.ts',
     rule: 'date-now',
     occurrences: 2,
