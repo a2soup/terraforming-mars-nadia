@@ -156,9 +156,54 @@ attempted only on a foundation that already works.
 | 6 | Reinforcement learning via self-play (Python+PyTorch, optional expert warm-start) | Learned agent beats M5 with significance; monotonic improvement |
 | 7 | Evaluation, tuning, acceptance | Primary AC (AC-1, AC-4, AC-6) met and documented |
 
-**Current status: Milestone 2 is IN PROGRESS — bullet 1 (the match runner, 28 Jul 2026) and bullet 2
-(the fixed baselines, 29 Jul 2026) are DONE.** Milestone 1 is complete (all seven bullets; see the
-build record below). `.nvmrc` pinned to Node 22, Engine commit pinned.
+**Current status: Milestone 2 is IN PROGRESS — bullet 1 (the match runner, 28 Jul 2026), bullet 2
+(the fixed baselines, 29 Jul 2026) and bullet 3 (the rating pipeline, 31 Jul 2026) are DONE.**
+Milestone 1 is complete (all seven bullets; see the build record below). `.nvmrc` pinned to Node 22,
+Engine commit pinned.
+
+### Milestone 2, bullet 3 — the rating pipeline (done)
+
+FR-14, and the measurement machinery every strength claim from here on is stated in. Lives in
+`agent/src/rating/` behind `npm run rate` (`report`, `design-effect`, `power`, `gate`, `elo`,
+`ladder`) and `npm run rate:validate`. Full results:
+[docs/Rating_Pipeline.md](docs/Rating_Pipeline.md); the design and the criteria were pre-committed in
+[docs/Milestone2_Bullet3_Prompts.md](docs/Milestone2_Bullet3_Prompts.md) before any code. **Six of
+nine criteria met; P2 (coverage) and P3 (power, narrowly) are not met and the reasons are the
+deliverable's most useful content.**
+
+Seven things worth knowing before touching this area:
+
+- **The unit of analysis is the pairing group, never the game.** Games in a group share an Engine
+  seed. Measured design effects: **1.033 / 1.252 / 1.293** at 2p/3p/4p on the win rate and
+  **1.043 / 1.516 / 1.184** on the VP margin — so an uncorrected 3p margin interval is 23% too
+  narrow, in the stratum where AC-5 lives, and an uncorrected test over-rejects at 7.6% against a
+  nominal 5%. **The correction changes intervals and never point estimates**, so every win rate
+  published in bullets 1 and 2 stands.
+- **A win rate is the gate; the Elo is a summary.** No acceptance criterion in the SRS is stated as a
+  rating. With two identities at 2p the Elo *is* the win rate transformed — but that statement is
+  2p-only: at 3p `greedy-1ply@1` holds two of three seats, so its 99.5% identity win rate maps to 920
+  Elo against a fitted 603. The ladder: **764 Elo [682, 862]** at 2p, 603 [538, 685] at 3p,
+  623 [499, 791] at 4p, anchored at `random-legal@1`.
+- **A statistics module cannot be validated by looking at its output.** All three defects the
+  coverage grid found ran without error and produced plausible numbers, including a bootstrap
+  interval that covered **60%** of the time at p = 0.99 — the regime the baselines occupy. It now
+  refuses there, so **above ~99% there is no cross-check on the primary interval**.
+- **The pre-committed coverage band was partly unattainable, and the analytic anchor is what showed
+  it.** Exact Wilson coverage at p = 0.99, n = 100 is **92.06%** by enumeration — no estimator, no
+  generator. P2 stands as not met rather than being rewritten to fit; the pipeline's own contribution
+  is within ±1.7 pp and mean coverage is 0.9503 where arithmetic allows.
+- **A correction that fixes one estimator can break another.** Bias correction is worth +2 pp on a
+  Bradley–Terry rating gap and **−0.4 pp** on a clustered proportion, measured on identical
+  replications. Applied where measured, computed-but-not-applied where not.
+- **Two guards had specs, passed them, and had never once refused a real run** — the seed-block
+  ledger was never being read, and once it was, a gate's own reservation blocked it. Both found by
+  *using* the CLI. Seed blocks: development 0–1,999, gate 2,000–5,999, regression 6,000–6,999,
+  harness 7,000–9,999, with all nine spent ranges in `docs/data/ladder.json`.
+- **Two numbers M3 must plan around.** 1,000 games resolves a **4.0 pp** edge and nothing finer;
+  certifying 53% takes 1,767 games (~4.7 days single-core at M4's budget). And testing at interim
+  looks turns a 4.9% test into **16.5%**, while reporting the games a variant was selected on
+  inflates its win rate by **+2.2 pp** — the latter is where nearly all the inflation lives, so
+  "never report the selection games" is the cheap discipline that buys most of it.
 
 ### Milestone 2, bullet 2 — the fixed baselines (done)
 
@@ -232,13 +277,14 @@ Five things worth knowing before touching this area:
   on argument, not measurement: over 1,000 games seat 0 won 52.6% with a 95% CI of [49.5%, 55.7%].
   Random-legal play is the weakest possible instrument for a tempo advantage. **Re-measure at M3.**
 
-**Next up: Milestone 2 bullets 3–5** — the rating pipeline (FR-14), the expert-distribution report
-(FR-DATA-1), and the regression seed set. Bullet 3 can now rate two genuinely different agents rather
-than one agent against itself. Two things Milestone 1 built to
-feed them: the determinism fingerprint corpus and the card-coverage census
-(`agent/docs/data/card_census.json`), plus the eight catalogued Engine-vs-print divergences
-([docs/Card_Coverage_Audit.md](docs/Card_Coverage_Audit.md)) the reconciliation must treat as known
-Engine-specific rules.
+**Next up: Milestone 2 bullets 4–5** — the expert-distribution report (FR-DATA-1) and the regression
+seed set. Two things Milestone 1 built to feed them: the determinism fingerprint corpus and the
+card-coverage census (`agent/docs/data/card_census.json`), plus the eight catalogued Engine-vs-print
+divergences ([docs/Card_Coverage_Audit.md](docs/Card_Coverage_Audit.md)) the reconciliation must
+treat as known Engine-specific rules. Bullet 5 inherits seed block `R` (6,000–6,999), of which
+6,000–6,029 is already recorded as spent. **One lesson from bullet 3 that bullet 4 should act on:
+commit the per-game rows, not the summary** — `baselines_validation.json` carries summaries only, so
+bullet 2's headline 99.2% cannot be re-analysed by anything, including the rating pipeline.
 
 ---
 

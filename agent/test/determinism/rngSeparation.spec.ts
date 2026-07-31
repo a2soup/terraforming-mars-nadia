@@ -219,6 +219,58 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'precisely so that nobody reads a throughput claim out of this artifact (agent/docs/Baselines.md §7, item 3).',
   },
   {
+    file: 'src/rating/report.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      'The rating report\'s own `timing.wallClockMs` (Milestone 2 bullet 3, Unit A): a `started` stamp and the ' +
+      'difference, on an analysis that reads committed artifacts and plays no games at all. Same category as ' +
+      '`match/runner.ts`\'s entry above, and structurally the same statement: these are declared in ' +
+      '`RATING_TIMING_FIELDS` (rating/types.ts) and stripped by `stripRatingTimingFields` before criterion P8 ' +
+      '(Milestone2_Bullet3_Prompts.md §5) requires two runs with the same inputs and the same `analysisSeed` to be ' +
+      'byte-identical - so the allowlist entry and the criterion are two statements of the same fact. Nothing here ' +
+      'can reach a game: this module never creates one. Its only randomness is the cluster bootstrap, which draws ' +
+      'from `createAgentRandom(analysisSeed)` with `analysisSeed` defaulting to a recorded constant (§2.6, hazard ' +
+      'H11) - and note the deliberate absence from this list of any third seed in `core/rng.ts`, which ' +
+      'agent/CLAUDE.md §6 forbids.',
+  },
+  {
+    file: 'src/rating/report.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      '`RatingReportHeader.createdAt`: a provenance timestamp stamped once when a rating report is assembled. ' +
+      'Identical in kind to `corpus.ts`\'s `createdAt` at the top of this list - it records when the analysis was ' +
+      'run, is never compared, and never reaches a decision, a fingerprint or a seed. It is also one of the three ' +
+      'entries in `RATING_TIMING_FIELDS`, so P8\'s reproducibility comparison strips it explicitly.',
+  },
+  {
+    file: 'src/rating/ladder.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      'The ladder\'s own `timing.wallClockMs` (Milestone 2 bullet 3, Unit B): a `started` stamp and the ' +
+      'difference, on an analysis that reads committed artifacts and plays no games. Identical in kind ' +
+      'to `src/rating/report.ts`\'s entry above, and covered by the same mechanism: it is one of the ' +
+      'three entries in `LADDER_TIMING_FIELDS`, which `stripLadderTimingFields` removes before two ' +
+      'builds of one ladder are required to be identical. Nothing here can reach a game - this module ' +
+      'never creates one - and its only randomness is the cluster bootstrap the rating fits refit on, ' +
+      'which draws from `createAgentRandom(analysisSeed)` (§2.6, hazard H11).',
+  },
+  {
+    file: 'src/rating/ladder.ts',
+    rule: 'new-date',
+    occurrences: 3,
+    reason:
+      'Two provenance stamps, both written once and never read back. `LadderHeader.createdAt` (twice: ' +
+      '`buildLadder` and `emptyLadder`) is identical in kind to `corpus.ts`\'s and `report.ts`\'s ' +
+      '`createdAt` above and is stripped by `LADDER_TIMING_FIELDS`. `SeedBlockAllocation.recordedAt` ' +
+      'is the date a seed-block sub-range was recorded as spent (§3.8) - it is *data*, deliberately ' +
+      'not stripped, because "recorded before the run" is the entire content of the commitment the ' +
+      'ledger makes; the CLI\'s `--recorded-at` overrides it so a retroactive entry can carry the ' +
+      'true date rather than today\'s. Neither reaches a decision, a fingerprint or a seed.',
+  },
+  {
     file: 'src/runner/baselinesValidationCli.ts',
     rule: 'new-date',
     occurrences: 1,
@@ -227,6 +279,29 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       '`docs/data/baselines_validation.json` is written. Identical in kind to `corpus.ts`\'s `createdAt` at the ' +
       'top of this list - it records when the evidence was produced, is never compared, and never reaches a ' +
       'decision, a fingerprint or a seed.',
+  },
+  {
+    file: 'src/runner/ratingValidationCli.ts',
+    rule: 'date-now',
+    occurrences: 3,
+    reason:
+      'The Milestone 2 bullet 3 calibration study\'s per-phase elapsed line and the `wallClockMs` it writes into ' +
+      'each phase block (Unit C). Same category as `matchValidationCli.ts`\'s entry above - reported, never read ' +
+      'back - but with less surface than any of them, because this battery **plays no games at all**: it is pure ' +
+      'arithmetic over a seeded generator, so there is no game, no seed schedule and no decision for a clock read ' +
+      'to reach even in principle. Its own randomness is `createAgentRandom(cellSeed(analysisSeed, label))` and ' +
+      'nothing else, and every cell records the seed it used so one cell can be re-run in isolation. The figures ' +
+      'exist so a reader knows what a re-run of a ~7-minute study costs; they are explicitly **not** a performance ' +
+      'claim (hazard H10, and this host swaps).',
+  },
+  {
+    file: 'src/runner/ratingValidationCli.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      '`generatedAt` on `docs/data/rating_validation.json`: a provenance timestamp stamped once when the ' +
+      'calibration artifact is assembled. Identical in kind to `baselinesValidationCli.ts`\'s entry directly above ' +
+      'and to `corpus.ts`\'s `createdAt` at the top of this list.',
   },
   {
     file: 'src/core/candidates/validation.ts',

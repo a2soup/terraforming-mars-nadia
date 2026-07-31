@@ -92,6 +92,16 @@ would hide whether the balancing was doing anything.
 rating pipeline are bullet 3; the expert-distribution report is bullet 4. This runner records their
 inputs.
 
+> **Annotation, 31 Jul 2026 — the intervals here are game-level, and bullet 3 restated them.** This
+> runner's `winRateCi95` treats each game as an independent draw, which the pairing design makes
+> slightly false: games in a group share an Engine seed. The measured design effects are 1.033 (2p),
+> 1.252 (3p) and 1.293 (4p), so these intervals are 1.6-12% too narrow, in the anti-conservative
+> direction. **No point estimate in this document changes** - over balanced groups the correction is
+> exactly zero on the estimate - and neither R1a's nor R1b's verdict changes either: slot 0 becomes
+> 51.60% [48.45%, 54.74%] against [48.50%, 54.69%], and seat 0's interval is unchanged to two
+> decimals. `npm run rate -- report docs/data/match_runner_validation.json` reproduces both. See
+> [Rating_Pipeline.md](Rating_Pipeline.md) §5.
+
 ---
 
 ## 3. The criteria, adjudicated
