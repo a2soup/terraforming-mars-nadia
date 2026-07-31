@@ -1,7 +1,7 @@
 {
  "what": "Milestone 2 bullet 3 (the rating pipeline) calibration study: evidence for criteria P2, P3 and P9, pre-committed in agent/docs/Milestone2_Bullet3_Prompts.md §5. Adjudicated in agent/docs/Rating_Pipeline.md.",
  "howToReadIt": "Coverage is empirical: generate from known parameters, run the shipped estimator, count how often the interval contains the truth. A cell passes inside the ±1.96 Monte-Carlo band computed from its replication count, is `marginal` inside the pre-committed [94.0%, 96.0%], and fails outside it. About 5% of cells are expected outside the band by chance, so read the pattern, not one cell.",
- "generatedAt": "2026-07-31T13:58:17.892Z",
+ "generatedAt": "2026-07-31T22:43:19.932Z",
  "machine": {
   "cpuModel": "Apple M2",
   "cores": 8,
@@ -17,7 +17,7 @@
   "requiredReplications": 2000,
   "stoppingReplications": 10000,
   "reuseReplications": 5000,
-  "bootstrapReplicates": 200,
+  "bootstrapReplicates": 2000,
   "band": {
    "replications": 2000,
    "nominal": 0.95,
@@ -35,17 +35,17 @@
   {
    "criterion": "P2",
    "met": false,
-   "statement": "160 coverage cells: 34 under-cover and 11 over-cover the pre-committed [94.0%, 96.0%]; 47 sit outside the ±1.96 Monte-Carlo band against 8.0 expected there by chance."
+   "statement": "160 coverage cells: 9 under-cover and 29 over-cover the pre-committed [94.0%, 96.0%]; 41 sit outside the ±1.96 Monte-Carlo band against 8.0 expected there by chance."
   },
   {
    "criterion": "P3",
    "met": false,
-   "statement": "0/48 threshold-test cells and 0/12 permutation-test cells exceed nominal size; power agrees with the calculator to 2.3 pp (tolerance 2 pp); the unclustered negative control reaches 13.2% against a nominal 5%."
+   "statement": "0/48 threshold-test cells and 0/12 permutation-test cells exceed nominal size; power agrees with the calculator to 2.4 pp (tolerance 2 pp); the unclustered negative control reaches 13.2% against a nominal 5%."
   },
   {
    "criterion": "P9",
    "met": true,
-   "statement": "optional stopping: 17.0% against a nominal 5% (predicted 15-30%, confirmed); best-of-8 seed reuse: +2.22 pp on the selection games and +0.01 pp on the same seeds replayed (predicted 1.5-3 pp, confirmed)."
+   "statement": "optional stopping: 16.5% against a nominal 5% (predicted 15-30%, confirmed); best-of-8 seed reuse: +2.22 pp on the selection games and +0.01 pp on the same seeds replayed (predicted 1.5-3 pp, confirmed)."
   }
  ],
  "p2": {
@@ -81,20 +81,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1892,
-      "coverage": 0.946,
-      "verdict": "pass",
-      "missedLow": 59,
-      "missedHigh": 49,
-      "meanWidth": 0.19173349851278787
-     },
-     "floored": {
       "covered": 1903,
       "coverage": 0.9515,
       "verdict": "pass",
       "missedLow": 55,
       "missedHigh": 42,
       "meanWidth": 0.19681997852891467
+     },
+     "unfloored": {
+      "covered": 1892,
+      "coverage": 0.946,
+      "verdict": "pass",
+      "missedLow": 59,
+      "missedHigh": 49,
+      "meanWidth": 0.19173349851278787
      },
      "flooredWithT": {
       "covered": 1927,
@@ -131,20 +131,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1894,
-      "coverage": 0.947,
-      "verdict": "pass",
-      "missedLow": 58,
-      "missedHigh": 48,
-      "meanWidth": 0.19159185966454598
-     },
-     "floored": {
       "covered": 1902,
       "coverage": 0.951,
       "verdict": "pass",
       "missedLow": 55,
       "missedHigh": 43,
       "meanWidth": 0.1969203391146044
+     },
+     "unfloored": {
+      "covered": 1894,
+      "coverage": 0.947,
+      "verdict": "pass",
+      "missedLow": 58,
+      "missedHigh": 48,
+      "meanWidth": 0.19159185966454598
      },
      "flooredWithT": {
       "covered": 1929,
@@ -181,20 +181,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1875,
-      "coverage": 0.9375,
-      "verdict": "fail",
-      "missedLow": 72,
-      "missedHigh": 53,
-      "meanWidth": 0.11200954701986031
-     },
-     "floored": {
       "covered": 1895,
       "coverage": 0.9475,
       "verdict": "pass",
       "missedLow": 58,
       "missedHigh": 47,
       "meanWidth": 0.11606141514180875
+     },
+     "unfloored": {
+      "covered": 1875,
+      "coverage": 0.9375,
+      "verdict": "fail",
+      "missedLow": 72,
+      "missedHigh": 53,
+      "meanWidth": 0.11200954701986031
      },
      "flooredWithT": {
       "covered": 1906,
@@ -231,20 +231,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1878,
-      "coverage": 0.939,
-      "verdict": "fail",
-      "missedLow": 62,
-      "missedHigh": 60,
-      "meanWidth": 0.11193131367353674
-     },
-     "floored": {
       "covered": 1891,
       "coverage": 0.9455,
       "verdict": "pass",
       "missedLow": 58,
       "missedHigh": 51,
       "meanWidth": 0.11622334753105944
+     },
+     "unfloored": {
+      "covered": 1878,
+      "coverage": 0.939,
+      "verdict": "fail",
+      "missedLow": 62,
+      "missedHigh": 60,
+      "meanWidth": 0.11193131367353674
      },
      "flooredWithT": {
       "covered": 1910,
@@ -281,20 +281,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1899,
-      "coverage": 0.9495,
-      "verdict": "pass",
-      "missedLow": 42,
-      "missedHigh": 59,
-      "meanWidth": 0.06182016643961892
-     },
-     "floored": {
       "covered": 1902,
       "coverage": 0.951,
       "verdict": "pass",
       "missedLow": 39,
       "missedHigh": 59,
       "meanWidth": 0.06237893361315554
+     },
+     "unfloored": {
+      "covered": 1899,
+      "coverage": 0.9495,
+      "verdict": "pass",
+      "missedLow": 42,
+      "missedHigh": 59,
+      "meanWidth": 0.06182016643961892
      },
      "flooredWithT": {
       "covered": 1912,
@@ -331,20 +331,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1906,
-      "coverage": 0.953,
-      "verdict": "pass",
-      "missedLow": 53,
-      "missedHigh": 41,
-      "meanWidth": 0.06184266114841318
-     },
-     "floored": {
       "covered": 1908,
       "coverage": 0.954,
       "verdict": "pass",
       "missedLow": 53,
       "missedHigh": 39,
       "meanWidth": 0.06239323103146098
+     },
+     "unfloored": {
+      "covered": 1906,
+      "coverage": 0.953,
+      "verdict": "pass",
+      "missedLow": 53,
+      "missedHigh": 41,
+      "meanWidth": 0.06184266114841318
      },
      "flooredWithT": {
       "covered": 1914,
@@ -381,20 +381,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1909,
-      "coverage": 0.9545,
-      "verdict": "pass",
-      "missedLow": 42,
-      "missedHigh": 49,
-      "meanWidth": 0.03574381783527855
-     },
-     "floored": {
       "covered": 1911,
       "coverage": 0.9555,
       "verdict": "pass",
       "missedLow": 41,
       "missedHigh": 48,
       "meanWidth": 0.03616589649501239
+     },
+     "unfloored": {
+      "covered": 1909,
+      "coverage": 0.9545,
+      "verdict": "pass",
+      "missedLow": 42,
+      "missedHigh": 49,
+      "meanWidth": 0.03574381783527855
      },
      "flooredWithT": {
       "covered": 1912,
@@ -431,20 +431,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1903,
-      "coverage": 0.9515,
-      "verdict": "pass",
-      "missedLow": 56,
-      "missedHigh": 41,
-      "meanWidth": 0.035717716122119554
-     },
-     "floored": {
       "covered": 1904,
       "coverage": 0.952,
       "verdict": "pass",
       "missedLow": 56,
       "missedHigh": 40,
       "meanWidth": 0.03614762724201744
+     },
+     "unfloored": {
+      "covered": 1903,
+      "coverage": 0.9515,
+      "verdict": "pass",
+      "missedLow": 56,
+      "missedHigh": 41,
+      "meanWidth": 0.035717716122119554
      },
      "flooredWithT": {
       "covered": 1905,
@@ -481,20 +481,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1897,
-      "coverage": 0.9485,
-      "verdict": "pass",
-      "missedLow": 53,
-      "missedHigh": 50,
-      "meanWidth": 0.1966838571837784
-     },
-     "floored": {
       "covered": 1904,
       "coverage": 0.952,
       "verdict": "pass",
       "missedLow": 48,
       "missedHigh": 48,
       "meanWidth": 0.19959824363149314
+     },
+     "unfloored": {
+      "covered": 1897,
+      "coverage": 0.9485,
+      "verdict": "pass",
+      "missedLow": 53,
+      "missedHigh": 50,
+      "meanWidth": 0.1966838571837784
      },
      "flooredWithT": {
       "covered": 1932,
@@ -531,20 +531,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1922,
-      "coverage": 0.961,
-      "verdict": "fail",
-      "missedLow": 33,
-      "missedHigh": 45,
-      "meanWidth": 0.19679045631452047
-     },
-     "floored": {
       "covered": 1924,
       "coverage": 0.962,
       "verdict": "fail",
       "missedLow": 32,
       "missedHigh": 44,
       "meanWidth": 0.19973133876910698
+     },
+     "unfloored": {
+      "covered": 1922,
+      "coverage": 0.961,
+      "verdict": "fail",
+      "missedLow": 33,
+      "missedHigh": 45,
+      "meanWidth": 0.19679045631452047
      },
      "flooredWithT": {
       "covered": 1940,
@@ -581,20 +581,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1901,
-      "coverage": 0.9505,
-      "verdict": "pass",
-      "missedLow": 38,
-      "missedHigh": 61,
-      "meanWidth": 0.1249179933831186
-     },
-     "floored": {
       "covered": 1904,
       "coverage": 0.952,
       "verdict": "pass",
       "missedLow": 37,
       "missedHigh": 59,
       "meanWidth": 0.12560035796487992
+     },
+     "unfloored": {
+      "covered": 1901,
+      "coverage": 0.9505,
+      "verdict": "pass",
+      "missedLow": 38,
+      "missedHigh": 61,
+      "meanWidth": 0.1249179933831186
      },
      "flooredWithT": {
       "covered": 1916,
@@ -631,20 +631,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1881,
-      "coverage": 0.9405,
-      "verdict": "pass",
-      "missedLow": 61,
-      "missedHigh": 58,
-      "meanWidth": 0.12542730162824353
-     },
-     "floored": {
       "covered": 1885,
       "coverage": 0.9425,
       "verdict": "pass",
       "missedLow": 59,
       "missedHigh": 56,
       "meanWidth": 0.12605251007761586
+     },
+     "unfloored": {
+      "covered": 1881,
+      "coverage": 0.9405,
+      "verdict": "pass",
+      "missedLow": 61,
+      "missedHigh": 58,
+      "meanWidth": 0.12542730162824353
      },
      "flooredWithT": {
       "covered": 1898,
@@ -686,15 +686,15 @@
       "verdict": "pass",
       "missedLow": 60,
       "missedHigh": 40,
-      "meanWidth": 0.06344918107023108
+      "meanWidth": 0.06352430238050073
      },
-     "floored": {
+     "unfloored": {
       "covered": 1900,
       "coverage": 0.95,
       "verdict": "pass",
       "missedLow": 60,
       "missedHigh": 40,
-      "meanWidth": 0.06352430238050073
+      "meanWidth": 0.06344918107023108
      },
      "flooredWithT": {
       "covered": 1906,
@@ -736,15 +736,15 @@
       "verdict": "pass",
       "missedLow": 50,
       "missedHigh": 63,
-      "meanWidth": 0.06338749430787068
+      "meanWidth": 0.06347979683653482
      },
-     "floored": {
+     "unfloored": {
       "covered": 1887,
       "coverage": 0.9435,
       "verdict": "pass",
       "missedLow": 50,
       "missedHigh": 63,
-      "meanWidth": 0.06347979683653482
+      "meanWidth": 0.06338749430787068
      },
      "flooredWithT": {
       "covered": 1891,
@@ -788,7 +788,7 @@
       "missedHigh": 56,
       "meanWidth": 0.03992478369090231
      },
-     "floored": {
+     "unfloored": {
       "covered": 1883,
       "coverage": 0.9415,
       "verdict": "pass",
@@ -838,7 +838,7 @@
       "missedHigh": 52,
       "meanWidth": 0.039969899251778206
      },
-     "floored": {
+     "unfloored": {
       "covered": 1900,
       "coverage": 0.95,
       "verdict": "pass",
@@ -886,15 +886,15 @@
       "verdict": "pass",
       "missedLow": 59,
       "missedHigh": 54,
-      "meanWidth": 0.2096300613696617
+      "meanWidth": 0.21000842489192395
      },
-     "floored": {
+     "unfloored": {
       "covered": 1887,
       "coverage": 0.9435,
       "verdict": "pass",
       "missedLow": 59,
       "missedHigh": 54,
-      "meanWidth": 0.21000842489192395
+      "meanWidth": 0.2096300613696617
      },
      "flooredWithT": {
       "covered": 1904,
@@ -936,15 +936,15 @@
       "verdict": "pass",
       "missedLow": 45,
       "missedHigh": 54,
-      "meanWidth": 0.209213264422105
+      "meanWidth": 0.20964029064120088
      },
-     "floored": {
+     "unfloored": {
       "covered": 1901,
       "coverage": 0.9505,
       "verdict": "pass",
       "missedLow": 45,
       "missedHigh": 54,
-      "meanWidth": 0.20964029064120088
+      "meanWidth": 0.209213264422105
      },
      "flooredWithT": {
       "covered": 1919,
@@ -988,7 +988,7 @@
       "missedHigh": 46,
       "meanWidth": 0.15763043882906935
      },
-     "floored": {
+     "unfloored": {
       "covered": 1897,
       "coverage": 0.9485,
       "verdict": "pass",
@@ -1038,7 +1038,7 @@
       "missedHigh": 67,
       "meanWidth": 0.157255323483969
      },
-     "floored": {
+     "unfloored": {
       "covered": 1888,
       "coverage": 0.944,
       "verdict": "pass",
@@ -1088,7 +1088,7 @@
       "missedHigh": 42,
       "meanWidth": 0.067762747582058
      },
-     "floored": {
+     "unfloored": {
       "covered": 1907,
       "coverage": 0.9535,
       "verdict": "pass",
@@ -1138,7 +1138,7 @@
       "missedHigh": 51,
       "meanWidth": 0.06774747527316896
      },
-     "floored": {
+     "unfloored": {
       "covered": 1893,
       "coverage": 0.9465,
       "verdict": "pass",
@@ -1188,7 +1188,7 @@
       "missedHigh": 51,
       "meanWidth": 0.05049753941292671
      },
-     "floored": {
+     "unfloored": {
       "covered": 1903,
       "coverage": 0.9515,
       "verdict": "pass",
@@ -1238,7 +1238,7 @@
       "missedHigh": 40,
       "meanWidth": 0.05053394323314939
      },
-     "floored": {
+     "unfloored": {
       "covered": 1904,
       "coverage": 0.952,
       "verdict": "pass",
@@ -1281,20 +1281,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1899,
-      "coverage": 0.9495,
-      "verdict": "pass",
-      "missedLow": 57,
-      "missedHigh": 44,
-      "meanWidth": 0.1834101088519792
-     },
-     "floored": {
       "covered": 1914,
       "coverage": 0.957,
       "verdict": "pass",
       "missedLow": 48,
       "missedHigh": 38,
       "meanWidth": 0.1883128989123055
+     },
+     "unfloored": {
+      "covered": 1899,
+      "coverage": 0.9495,
+      "verdict": "pass",
+      "missedLow": 57,
+      "missedHigh": 44,
+      "meanWidth": 0.1834101088519792
      },
      "flooredWithT": {
       "covered": 1924,
@@ -1331,20 +1331,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1882,
-      "coverage": 0.941,
-      "verdict": "pass",
-      "missedLow": 53,
-      "missedHigh": 65,
-      "meanWidth": 0.18230723648606664
-     },
-     "floored": {
       "covered": 1903,
       "coverage": 0.9515,
       "verdict": "pass",
       "missedLow": 45,
       "missedHigh": 52,
       "meanWidth": 0.18748251931072718
+     },
+     "unfloored": {
+      "covered": 1882,
+      "coverage": 0.941,
+      "verdict": "pass",
+      "missedLow": 53,
+      "missedHigh": 65,
+      "meanWidth": 0.18230723648606664
      },
      "flooredWithT": {
       "covered": 1909,
@@ -1381,20 +1381,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1900,
-      "coverage": 0.95,
-      "verdict": "pass",
-      "missedLow": 57,
-      "missedHigh": 43,
-      "meanWidth": 0.10701589658780608
-     },
-     "floored": {
       "covered": 1924,
       "coverage": 0.962,
       "verdict": "fail",
       "missedLow": 42,
       "missedHigh": 34,
       "meanWidth": 0.11101372678914996
+     },
+     "unfloored": {
+      "covered": 1900,
+      "coverage": 0.95,
+      "verdict": "pass",
+      "missedLow": 57,
+      "missedHigh": 43,
+      "meanWidth": 0.10701589658780608
      },
      "flooredWithT": {
       "covered": 1930,
@@ -1431,20 +1431,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1903,
-      "coverage": 0.9515,
-      "verdict": "pass",
-      "missedLow": 49,
-      "missedHigh": 48,
-      "meanWidth": 0.10669364987290068
-     },
-     "floored": {
       "covered": 1928,
       "coverage": 0.964,
       "verdict": "fail",
       "missedLow": 42,
       "missedHigh": 30,
       "meanWidth": 0.11085320936698491
+     },
+     "unfloored": {
+      "covered": 1903,
+      "coverage": 0.9515,
+      "verdict": "pass",
+      "missedLow": 49,
+      "missedHigh": 48,
+      "meanWidth": 0.10669364987290068
      },
      "flooredWithT": {
       "covered": 1931,
@@ -1481,20 +1481,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1883,
-      "coverage": 0.9415,
-      "verdict": "pass",
-      "missedLow": 53,
-      "missedHigh": 64,
-      "meanWidth": 0.058957637266245165
-     },
-     "floored": {
       "covered": 1890,
       "coverage": 0.945,
       "verdict": "pass",
       "missedLow": 50,
       "missedHigh": 60,
       "meanWidth": 0.059493275044933444
+     },
+     "unfloored": {
+      "covered": 1883,
+      "coverage": 0.9415,
+      "verdict": "pass",
+      "missedLow": 53,
+      "missedHigh": 64,
+      "meanWidth": 0.058957637266245165
      },
      "flooredWithT": {
       "covered": 1893,
@@ -1531,20 +1531,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1901,
-      "coverage": 0.9505,
-      "verdict": "pass",
-      "missedLow": 51,
-      "missedHigh": 48,
-      "meanWidth": 0.059038981312886714
-     },
-     "floored": {
       "covered": 1907,
       "coverage": 0.9535,
       "verdict": "pass",
       "missedLow": 47,
       "missedHigh": 46,
       "meanWidth": 0.059533861689669634
+     },
+     "unfloored": {
+      "covered": 1901,
+      "coverage": 0.9505,
+      "verdict": "pass",
+      "missedLow": 51,
+      "missedHigh": 48,
+      "meanWidth": 0.059038981312886714
      },
      "flooredWithT": {
       "covered": 1912,
@@ -1581,20 +1581,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1900,
-      "coverage": 0.95,
-      "verdict": "pass",
-      "missedLow": 58,
-      "missedHigh": 42,
-      "meanWidth": 0.034128636361491355
-     },
-     "floored": {
       "covered": 1903,
       "coverage": 0.9515,
       "verdict": "pass",
       "missedLow": 56,
       "missedHigh": 41,
       "meanWidth": 0.03451914415643588
+     },
+     "unfloored": {
+      "covered": 1900,
+      "coverage": 0.95,
+      "verdict": "pass",
+      "missedLow": 58,
+      "missedHigh": 42,
+      "meanWidth": 0.034128636361491355
      },
      "flooredWithT": {
       "covered": 1904,
@@ -1631,20 +1631,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1911,
-      "coverage": 0.9555,
-      "verdict": "pass",
-      "missedLow": 47,
-      "missedHigh": 42,
-      "meanWidth": 0.03411484430957108
-     },
-     "floored": {
       "covered": 1920,
       "coverage": 0.96,
       "verdict": "marginal",
       "missedLow": 42,
       "missedHigh": 38,
       "meanWidth": 0.034507725185451
+     },
+     "unfloored": {
+      "covered": 1911,
+      "coverage": 0.9555,
+      "verdict": "pass",
+      "missedLow": 47,
+      "missedHigh": 42,
+      "meanWidth": 0.03411484430957108
      },
      "flooredWithT": {
       "covered": 1920,
@@ -1681,20 +1681,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1905,
-      "coverage": 0.9525,
-      "verdict": "pass",
-      "missedLow": 56,
-      "missedHigh": 39,
-      "meanWidth": 0.18772482450015582
-     },
-     "floored": {
       "covered": 1913,
       "coverage": 0.9565,
       "verdict": "pass",
       "missedLow": 52,
       "missedHigh": 35,
       "meanWidth": 0.19069994657666034
+     },
+     "unfloored": {
+      "covered": 1905,
+      "coverage": 0.9525,
+      "verdict": "pass",
+      "missedLow": 56,
+      "missedHigh": 39,
+      "meanWidth": 0.18772482450015582
      },
      "flooredWithT": {
       "covered": 1922,
@@ -1731,20 +1731,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1909,
-      "coverage": 0.9545,
-      "verdict": "pass",
-      "missedLow": 46,
-      "missedHigh": 45,
-      "meanWidth": 0.18763514207150483
-     },
-     "floored": {
       "covered": 1921,
       "coverage": 0.9605,
       "verdict": "fail",
       "missedLow": 42,
       "missedHigh": 37,
       "meanWidth": 0.1906105865761849
+     },
+     "unfloored": {
+      "covered": 1909,
+      "coverage": 0.9545,
+      "verdict": "pass",
+      "missedLow": 46,
+      "missedHigh": 45,
+      "meanWidth": 0.18763514207150483
      },
      "flooredWithT": {
       "covered": 1927,
@@ -1781,20 +1781,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1882,
-      "coverage": 0.941,
-      "verdict": "pass",
-      "missedLow": 65,
-      "missedHigh": 53,
-      "meanWidth": 0.11939914752187326
-     },
-     "floored": {
       "covered": 1887,
       "coverage": 0.9435,
       "verdict": "pass",
       "missedLow": 62,
       "missedHigh": 51,
       "meanWidth": 0.12000821558813451
+     },
+     "unfloored": {
+      "covered": 1882,
+      "coverage": 0.941,
+      "verdict": "pass",
+      "missedLow": 65,
+      "missedHigh": 53,
+      "meanWidth": 0.11939914752187326
      },
      "flooredWithT": {
       "covered": 1896,
@@ -1831,20 +1831,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1899,
-      "coverage": 0.9495,
-      "verdict": "pass",
-      "missedLow": 54,
-      "missedHigh": 47,
-      "meanWidth": 0.11932126108374831
-     },
-     "floored": {
       "covered": 1904,
       "coverage": 0.952,
       "verdict": "pass",
       "missedLow": 53,
       "missedHigh": 43,
       "meanWidth": 0.11996747262378836
+     },
+     "unfloored": {
+      "covered": 1899,
+      "coverage": 0.9495,
+      "verdict": "pass",
+      "missedLow": 54,
+      "missedHigh": 47,
+      "meanWidth": 0.11932126108374831
      },
      "flooredWithT": {
       "covered": 1914,
@@ -1886,15 +1886,15 @@
       "verdict": "pass",
       "missedLow": 54,
       "missedHigh": 39,
-      "meanWidth": 0.06043483527926502
+      "meanWidth": 0.060527290371512235
      },
-     "floored": {
+     "unfloored": {
       "covered": 1907,
       "coverage": 0.9535,
       "verdict": "pass",
       "missedLow": 54,
       "missedHigh": 39,
-      "meanWidth": 0.060527290371512235
+      "meanWidth": 0.06043483527926502
      },
      "flooredWithT": {
       "covered": 1909,
@@ -1936,15 +1936,15 @@
       "verdict": "pass",
       "missedLow": 56,
       "missedHigh": 39,
-      "meanWidth": 0.060434228556063195
+      "meanWidth": 0.06052928185617143
      },
-     "floored": {
+     "unfloored": {
       "covered": 1905,
       "coverage": 0.9525,
       "verdict": "pass",
       "missedLow": 56,
       "missedHigh": 39,
-      "meanWidth": 0.06052928185617143
+      "meanWidth": 0.060434228556063195
      },
      "flooredWithT": {
       "covered": 1909,
@@ -1988,7 +1988,7 @@
       "missedHigh": 40,
       "meanWidth": 0.03812743923325822
      },
-     "floored": {
+     "unfloored": {
       "covered": 1901,
       "coverage": 0.9505,
       "verdict": "pass",
@@ -2038,7 +2038,7 @@
       "missedHigh": 52,
       "meanWidth": 0.03819007583506851
      },
-     "floored": {
+     "unfloored": {
       "covered": 1891,
       "coverage": 0.9455,
       "verdict": "pass",
@@ -2081,20 +2081,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1891,
-      "coverage": 0.9455,
-      "verdict": "pass",
-      "missedLow": 50,
-      "missedHigh": 59,
-      "meanWidth": 0.20008257916705416
-     },
-     "floored": {
       "covered": 1892,
       "coverage": 0.946,
       "verdict": "pass",
       "missedLow": 50,
       "missedHigh": 58,
       "meanWidth": 0.20044776605339928
+     },
+     "unfloored": {
+      "covered": 1891,
+      "coverage": 0.9455,
+      "verdict": "pass",
+      "missedLow": 50,
+      "missedHigh": 59,
+      "meanWidth": 0.20008257916705416
      },
      "flooredWithT": {
       "covered": 1908,
@@ -2131,20 +2131,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1905,
-      "coverage": 0.9525,
-      "verdict": "pass",
-      "missedLow": 43,
-      "missedHigh": 52,
-      "meanWidth": 0.1997508890355622
-     },
-     "floored": {
       "covered": 1909,
       "coverage": 0.9545,
       "verdict": "pass",
       "missedLow": 42,
       "missedHigh": 49,
       "meanWidth": 0.20025878802014674
+     },
+     "unfloored": {
+      "covered": 1905,
+      "coverage": 0.9525,
+      "verdict": "pass",
+      "missedLow": 43,
+      "missedHigh": 52,
+      "meanWidth": 0.1997508890355622
      },
      "flooredWithT": {
       "covered": 1921,
@@ -2188,7 +2188,7 @@
       "missedHigh": 58,
       "meanWidth": 0.15043137120972386
      },
-     "floored": {
+     "unfloored": {
       "covered": 1900,
       "coverage": 0.95,
       "verdict": "pass",
@@ -2238,7 +2238,7 @@
       "missedHigh": 52,
       "meanWidth": 0.15022267149844926
      },
-     "floored": {
+     "unfloored": {
       "covered": 1891,
       "coverage": 0.9455,
       "verdict": "pass",
@@ -2288,7 +2288,7 @@
       "missedHigh": 50,
       "meanWidth": 0.06461030637657285
      },
-     "floored": {
+     "unfloored": {
       "covered": 1904,
       "coverage": 0.952,
       "verdict": "pass",
@@ -2338,7 +2338,7 @@
       "missedHigh": 53,
       "meanWidth": 0.06461405262219377
      },
-     "floored": {
+     "unfloored": {
       "covered": 1889,
       "coverage": 0.9445,
       "verdict": "pass",
@@ -2388,7 +2388,7 @@
       "missedHigh": 45,
       "meanWidth": 0.04821561289047744
      },
-     "floored": {
+     "unfloored": {
       "covered": 1917,
       "coverage": 0.9585,
       "verdict": "pass",
@@ -2438,7 +2438,7 @@
       "missedHigh": 58,
       "meanWidth": 0.04816591299052608
      },
-     "floored": {
+     "unfloored": {
       "covered": 1896,
       "coverage": 0.948,
       "verdict": "pass",
@@ -2486,15 +2486,15 @@
       "verdict": "fail",
       "missedLow": 69,
       "missedHigh": 55,
-      "meanWidth": 0.11764039745959724
+      "meanWidth": 0.12080788694030792
      },
-     "floored": {
+     "unfloored": {
       "covered": 1876,
       "coverage": 0.938,
       "verdict": "fail",
       "missedLow": 69,
       "missedHigh": 55,
-      "meanWidth": 0.12080788694030792
+      "meanWidth": 0.11764039745959724
      },
      "flooredWithT": {
       "covered": 1935,
@@ -2536,15 +2536,15 @@
       "verdict": "pass",
       "missedLow": 67,
       "missedHigh": 40,
-      "meanWidth": 0.1182115035186786
+      "meanWidth": 0.12141238924845474
      },
-     "floored": {
+     "unfloored": {
       "covered": 1893,
       "coverage": 0.9465,
       "verdict": "pass",
       "missedLow": 67,
       "missedHigh": 40,
-      "meanWidth": 0.12141238924845474
+      "meanWidth": 0.1182115035186786
      },
      "flooredWithT": {
       "covered": 1944,
@@ -2581,20 +2581,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1894,
-      "coverage": 0.947,
-      "verdict": "pass",
-      "missedLow": 64,
-      "missedHigh": 42,
-      "meanWidth": 0.06788139638436656
-     },
-     "floored": {
       "covered": 1916,
       "coverage": 0.958,
       "verdict": "pass",
       "missedLow": 53,
       "missedHigh": 31,
       "meanWidth": 0.07040511478185782
+     },
+     "unfloored": {
+      "covered": 1894,
+      "coverage": 0.947,
+      "verdict": "pass",
+      "missedLow": 64,
+      "missedHigh": 42,
+      "meanWidth": 0.06788139638436656
      },
      "flooredWithT": {
       "covered": 1920,
@@ -2631,20 +2631,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1894,
-      "coverage": 0.947,
-      "verdict": "pass",
-      "missedLow": 62,
-      "missedHigh": 44,
-      "meanWidth": 0.06790503683020768
-     },
-     "floored": {
       "covered": 1919,
       "coverage": 0.9595,
       "verdict": "pass",
       "missedLow": 50,
       "missedHigh": 31,
       "meanWidth": 0.07039961377592131
+     },
+     "unfloored": {
+      "covered": 1894,
+      "coverage": 0.947,
+      "verdict": "pass",
+      "missedLow": 62,
+      "missedHigh": 44,
+      "meanWidth": 0.06790503683020768
      },
      "flooredWithT": {
       "covered": 1922,
@@ -2686,15 +2686,15 @@
       "verdict": "pass",
       "missedLow": 54,
       "missedHigh": 40,
-      "meanWidth": 0.03721641023268677
+      "meanWidth": 0.03754729364963824
      },
-     "floored": {
+     "unfloored": {
       "covered": 1906,
       "coverage": 0.953,
       "verdict": "pass",
       "missedLow": 54,
       "missedHigh": 40,
-      "meanWidth": 0.03754729364963824
+      "meanWidth": 0.03721641023268677
      },
      "flooredWithT": {
       "covered": 1906,
@@ -2736,15 +2736,15 @@
       "verdict": "pass",
       "missedLow": 59,
       "missedHigh": 35,
-      "meanWidth": 0.03714278321386136
+      "meanWidth": 0.03747536157130775
      },
-     "floored": {
+     "unfloored": {
       "covered": 1906,
       "coverage": 0.953,
       "verdict": "pass",
       "missedLow": 59,
       "missedHigh": 35,
-      "meanWidth": 0.03747536157130775
+      "meanWidth": 0.03714278321386136
      },
      "flooredWithT": {
       "covered": 1906,
@@ -2781,20 +2781,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1919,
-      "coverage": 0.9595,
-      "verdict": "pass",
-      "missedLow": 44,
-      "missedHigh": 37,
-      "meanWidth": 0.02148648293258117
-     },
-     "floored": {
       "covered": 1928,
       "coverage": 0.964,
       "verdict": "fail",
       "missedLow": 41,
       "missedHigh": 31,
       "meanWidth": 0.021722958011553387
+     },
+     "unfloored": {
+      "covered": 1919,
+      "coverage": 0.9595,
+      "verdict": "pass",
+      "missedLow": 44,
+      "missedHigh": 37,
+      "meanWidth": 0.02148648293258117
      },
      "flooredWithT": {
       "covered": 1929,
@@ -2831,20 +2831,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1890,
-      "coverage": 0.945,
-      "verdict": "pass",
-      "missedLow": 54,
-      "missedHigh": 56,
-      "meanWidth": 0.021465750474990032
-     },
-     "floored": {
       "covered": 1897,
       "coverage": 0.9485,
       "verdict": "pass",
       "missedLow": 52,
       "missedHigh": 51,
       "meanWidth": 0.0217231875367603
+     },
+     "unfloored": {
+      "covered": 1890,
+      "coverage": 0.945,
+      "verdict": "pass",
+      "missedLow": 54,
+      "missedHigh": 56,
+      "meanWidth": 0.021465750474990032
      },
      "flooredWithT": {
       "covered": 1898,
@@ -2886,15 +2886,15 @@
       "verdict": "pass",
       "missedLow": 57,
       "missedHigh": 49,
-      "meanWidth": 0.12070464014154537
+      "meanWidth": 0.12308587818433682
      },
-     "floored": {
+     "unfloored": {
       "covered": 1894,
       "coverage": 0.947,
       "verdict": "pass",
       "missedLow": 57,
       "missedHigh": 49,
-      "meanWidth": 0.12308587818433682
+      "meanWidth": 0.12070464014154537
      },
      "flooredWithT": {
       "covered": 1948,
@@ -2936,15 +2936,15 @@
       "verdict": "pass",
       "missedLow": 69,
       "missedHigh": 47,
-      "meanWidth": 0.12137643397279957
+      "meanWidth": 0.12379118845113392
      },
-     "floored": {
+     "unfloored": {
       "covered": 1884,
       "coverage": 0.942,
       "verdict": "pass",
       "missedLow": 69,
       "missedHigh": 47,
-      "meanWidth": 0.12379118845113392
+      "meanWidth": 0.12137643397279957
      },
      "flooredWithT": {
       "covered": 1938,
@@ -2981,20 +2981,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1885,
-      "coverage": 0.9425,
-      "verdict": "pass",
-      "missedLow": 75,
-      "missedHigh": 40,
-      "meanWidth": 0.07620180908671986
-     },
-     "floored": {
       "covered": 1893,
       "coverage": 0.9465,
       "verdict": "pass",
       "missedLow": 73,
       "missedHigh": 34,
       "meanWidth": 0.07670269545993771
+     },
+     "unfloored": {
+      "covered": 1885,
+      "coverage": 0.9425,
+      "verdict": "pass",
+      "missedLow": 75,
+      "missedHigh": 40,
+      "meanWidth": 0.07620180908671986
      },
      "flooredWithT": {
       "covered": 1906,
@@ -3031,20 +3031,20 @@
       "degenerate": 0
      },
      "primary": {
-      "covered": 1885,
-      "coverage": 0.9425,
-      "verdict": "pass",
-      "missedLow": 65,
-      "missedHigh": 50,
-      "meanWidth": 0.07531266321901704
-     },
-     "floored": {
       "covered": 1897,
       "coverage": 0.9485,
       "verdict": "pass",
       "missedLow": 62,
       "missedHigh": 41,
       "meanWidth": 0.07593788503687286
+     },
+     "unfloored": {
+      "covered": 1885,
+      "coverage": 0.9425,
+      "verdict": "pass",
+      "missedLow": 65,
+      "missedHigh": 50,
+      "meanWidth": 0.07531266321901704
      },
      "flooredWithT": {
       "covered": 1906,
@@ -3086,15 +3086,15 @@
       "verdict": "pass",
       "missedLow": 48,
       "missedHigh": 43,
-      "meanWidth": 0.038142758068792415
+      "meanWidth": 0.03821311573087792
      },
-     "floored": {
+     "unfloored": {
       "covered": 1909,
       "coverage": 0.9545,
       "verdict": "pass",
       "missedLow": 48,
       "missedHigh": 43,
-      "meanWidth": 0.03821311573087792
+      "meanWidth": 0.038142758068792415
      },
      "flooredWithT": {
       "covered": 1909,
@@ -3136,15 +3136,15 @@
       "verdict": "pass",
       "missedLow": 68,
       "missedHigh": 42,
-      "meanWidth": 0.03814429478560266
+      "meanWidth": 0.03822612666948478
      },
-     "floored": {
+     "unfloored": {
       "covered": 1890,
       "coverage": 0.945,
       "verdict": "pass",
       "missedLow": 68,
       "missedHigh": 42,
-      "meanWidth": 0.03822612666948478
+      "meanWidth": 0.03814429478560266
      },
      "flooredWithT": {
       "covered": 1890,
@@ -3188,7 +3188,7 @@
       "missedHigh": 45,
       "meanWidth": 0.02399838732333716
      },
-     "floored": {
+     "unfloored": {
       "covered": 1911,
       "coverage": 0.9555,
       "verdict": "pass",
@@ -3236,15 +3236,15 @@
       "verdict": "pass",
       "missedLow": 58,
       "missedHigh": 46,
-      "meanWidth": 0.02400679403593006
+      "meanWidth": 0.02400680140125915
      },
-     "floored": {
+     "unfloored": {
       "covered": 1896,
       "coverage": 0.948,
       "verdict": "pass",
       "missedLow": 58,
       "missedHigh": 46,
-      "meanWidth": 0.02400680140125915
+      "meanWidth": 0.02400679403593006
      },
      "flooredWithT": {
       "covered": 1897,
@@ -3286,15 +3286,15 @@
       "verdict": "fail",
       "missedLow": 62,
       "missedHigh": 71,
-      "meanWidth": 0.1286459452763069
+      "meanWidth": 0.12946089957776605
      },
-     "floored": {
+     "unfloored": {
       "covered": 1867,
       "coverage": 0.9335,
       "verdict": "fail",
       "missedLow": 62,
       "missedHigh": 71,
-      "meanWidth": 0.12946089957776605
+      "meanWidth": 0.1286459452763069
      },
      "flooredWithT": {
       "covered": 1916,
@@ -3336,15 +3336,15 @@
       "verdict": "marginal",
       "missedLow": 62,
       "missedHigh": 58,
-      "meanWidth": 0.12911935365250626
+      "meanWidth": 0.1300103964883318
      },
-     "floored": {
+     "unfloored": {
       "covered": 1880,
       "coverage": 0.94,
       "verdict": "marginal",
       "missedLow": 62,
       "missedHigh": 58,
-      "meanWidth": 0.1300103964883318
+      "meanWidth": 0.12911935365250626
      },
      "flooredWithT": {
       "covered": 1925,
@@ -3386,15 +3386,15 @@
       "verdict": "fail",
       "missedLow": 54,
       "missedHigh": 74,
-      "meanWidth": 0.09544954494092762
+      "meanWidth": 0.09546040122856861
      },
-     "floored": {
+     "unfloored": {
       "covered": 1872,
       "coverage": 0.936,
       "verdict": "fail",
       "missedLow": 54,
       "missedHigh": 74,
-      "meanWidth": 0.09546040122856861
+      "meanWidth": 0.09544954494092762
      },
      "flooredWithT": {
       "covered": 1887,
@@ -3436,15 +3436,15 @@
       "verdict": "pass",
       "missedLow": 48,
       "missedHigh": 64,
-      "meanWidth": 0.09514079315179233
+      "meanWidth": 0.0951571818264729
      },
-     "floored": {
+     "unfloored": {
       "covered": 1888,
       "coverage": 0.944,
       "verdict": "pass",
       "missedLow": 48,
       "missedHigh": 64,
-      "meanWidth": 0.0951571818264729
+      "meanWidth": 0.09514079315179233
      },
      "flooredWithT": {
       "covered": 1902,
@@ -3486,15 +3486,15 @@
       "verdict": "pass",
       "missedLow": 47,
       "missedHigh": 48,
-      "meanWidth": 0.040677005972221306
+      "meanWidth": 0.040677057676070674
      },
-     "floored": {
+     "unfloored": {
       "covered": 1905,
       "coverage": 0.9525,
       "verdict": "pass",
       "missedLow": 47,
       "missedHigh": 48,
-      "meanWidth": 0.040677057676070674
+      "meanWidth": 0.040677005972221306
      },
      "flooredWithT": {
       "covered": 1907,
@@ -3536,15 +3536,15 @@
       "verdict": "fail",
       "missedLow": 38,
       "missedHigh": 40,
-      "meanWidth": 0.04075117621065752
+      "meanWidth": 0.040751311629090424
      },
-     "floored": {
+     "unfloored": {
       "covered": 1922,
       "coverage": 0.961,
       "verdict": "fail",
       "missedLow": 38,
       "missedHigh": 40,
-      "meanWidth": 0.040751311629090424
+      "meanWidth": 0.04075117621065752
      },
      "flooredWithT": {
       "covered": 1923,
@@ -3588,7 +3588,7 @@
       "missedHigh": 54,
       "meanWidth": 0.030336024471568815
      },
-     "floored": {
+     "unfloored": {
       "covered": 1898,
       "coverage": 0.949,
       "verdict": "pass",
@@ -3638,7 +3638,7 @@
       "missedHigh": 56,
       "meanWidth": 0.030323122858749614
      },
-     "floored": {
+     "unfloored": {
       "covered": 1901,
       "coverage": 0.9505,
       "verdict": "pass",
@@ -3686,15 +3686,15 @@
       "verdict": "fail",
       "missedLow": 170,
       "missedHigh": 0,
-      "meanWidth": 0.06399893891645478
+      "meanWidth": 0.06405611843051022
      },
-     "floored": {
+     "unfloored": {
       "covered": 1830,
       "coverage": 0.915,
       "verdict": "fail",
       "missedLow": 170,
       "missedHigh": 0,
-      "meanWidth": 0.06405611843051022
+      "meanWidth": 0.06399893891645478
      },
      "flooredWithT": {
       "covered": 1830,
@@ -3736,15 +3736,15 @@
       "verdict": "fail",
       "missedLow": 169,
       "missedHigh": 0,
-      "meanWidth": 0.06418909354610831
+      "meanWidth": 0.06424428052197521
      },
-     "floored": {
+     "unfloored": {
       "covered": 1831,
       "coverage": 0.9155,
       "verdict": "fail",
       "missedLow": 169,
       "missedHigh": 0,
-      "meanWidth": 0.06424428052197521
+      "meanWidth": 0.06418909354610831
      },
      "flooredWithT": {
       "covered": 1831,
@@ -3786,15 +3786,15 @@
       "verdict": "fail",
       "missedLow": 68,
       "missedHigh": 0,
-      "meanWidth": 0.027522665859483226
+      "meanWidth": 0.028019193532222035
      },
-     "floored": {
+     "unfloored": {
       "covered": 1932,
       "coverage": 0.966,
       "verdict": "fail",
       "missedLow": 68,
       "missedHigh": 0,
-      "meanWidth": 0.028019193532222035
+      "meanWidth": 0.027522665859483226
      },
      "flooredWithT": {
       "covered": 1932,
@@ -3836,15 +3836,15 @@
       "verdict": "fail",
       "missedLow": 62,
       "missedHigh": 0,
-      "meanWidth": 0.02761392954569963
+      "meanWidth": 0.028091849653726013
      },
-     "floored": {
+     "unfloored": {
       "covered": 1938,
       "coverage": 0.969,
       "verdict": "fail",
       "missedLow": 62,
       "missedHigh": 0,
-      "meanWidth": 0.028091849653726013
+      "meanWidth": 0.02761392954569963
      },
      "flooredWithT": {
       "covered": 1938,
@@ -3886,15 +3886,15 @@
       "verdict": "fail",
       "missedLow": 48,
       "missedHigh": 22,
-      "meanWidth": 0.012800390976062956
+      "meanWidth": 0.012856610118521801
      },
-     "floored": {
+     "unfloored": {
       "covered": 1930,
       "coverage": 0.965,
       "verdict": "fail",
       "missedLow": 48,
       "missedHigh": 22,
-      "meanWidth": 0.012856610118521801
+      "meanWidth": 0.012800390976062956
      },
      "flooredWithT": {
       "covered": 1930,
@@ -3936,15 +3936,15 @@
       "verdict": "fail",
       "missedLow": 56,
       "missedHigh": 19,
-      "meanWidth": 0.012768232459286093
+      "meanWidth": 0.012824645380680568
      },
-     "floored": {
+     "unfloored": {
       "covered": 1925,
       "coverage": 0.9625,
       "verdict": "fail",
       "missedLow": 56,
       "missedHigh": 19,
-      "meanWidth": 0.012824645380680568
+      "meanWidth": 0.012768232459286093
      },
      "flooredWithT": {
       "covered": 1925,
@@ -3986,15 +3986,15 @@
       "verdict": "pass",
       "missedLow": 74,
       "missedHigh": 37,
-      "meanWidth": 0.007205261374458249
+      "meanWidth": 0.00729035851107623
      },
-     "floored": {
+     "unfloored": {
       "covered": 1889,
       "coverage": 0.9445,
       "verdict": "pass",
       "missedLow": 74,
       "missedHigh": 37,
-      "meanWidth": 0.00729035851107623
+      "meanWidth": 0.007205261374458249
      },
      "flooredWithT": {
       "covered": 1889,
@@ -4036,15 +4036,15 @@
       "verdict": "pass",
       "missedLow": 74,
       "missedHigh": 38,
-      "meanWidth": 0.007192640506816496
+      "meanWidth": 0.0072796299051156345
      },
-     "floored": {
+     "unfloored": {
       "covered": 1888,
       "coverage": 0.944,
       "verdict": "pass",
       "missedLow": 74,
       "missedHigh": 38,
-      "meanWidth": 0.0072796299051156345
+      "meanWidth": 0.007192640506816496
      },
      "flooredWithT": {
       "covered": 1888,
@@ -4086,15 +4086,15 @@
       "verdict": "fail",
       "missedLow": 147,
       "missedHigh": 0,
-      "meanWidth": 0.0649960038417591
+      "meanWidth": 0.06503868812689252
      },
-     "floored": {
+     "unfloored": {
       "covered": 1853,
       "coverage": 0.9265,
       "verdict": "fail",
       "missedLow": 147,
       "missedHigh": 0,
-      "meanWidth": 0.06503868812689252
+      "meanWidth": 0.0649960038417591
      },
      "flooredWithT": {
       "covered": 1853,
@@ -4136,15 +4136,15 @@
       "verdict": "fail",
       "missedLow": 154,
       "missedHigh": 0,
-      "meanWidth": 0.06504037297636671
+      "meanWidth": 0.06508567435485067
      },
-     "floored": {
+     "unfloored": {
       "covered": 1846,
       "coverage": 0.923,
       "verdict": "fail",
       "missedLow": 154,
       "missedHigh": 0,
-      "meanWidth": 0.06508567435485067
+      "meanWidth": 0.06504037297636671
      },
      "flooredWithT": {
       "covered": 1846,
@@ -4186,15 +4186,15 @@
       "verdict": "fail",
       "missedLow": 59,
       "missedHigh": 0,
-      "meanWidth": 0.03143347834164633
+      "meanWidth": 0.03167489987861306
      },
-     "floored": {
+     "unfloored": {
       "covered": 1941,
       "coverage": 0.9705,
       "verdict": "fail",
       "missedLow": 59,
       "missedHigh": 0,
-      "meanWidth": 0.03167489987861306
+      "meanWidth": 0.03143347834164633
      },
      "flooredWithT": {
       "covered": 1941,
@@ -4236,15 +4236,15 @@
       "verdict": "fail",
       "missedLow": 57,
       "missedHigh": 0,
-      "meanWidth": 0.030861014674076877
+      "meanWidth": 0.03114099300321123
      },
-     "floored": {
+     "unfloored": {
       "covered": 1943,
       "coverage": 0.9715,
       "verdict": "fail",
       "missedLow": 57,
       "missedHigh": 0,
-      "meanWidth": 0.03114099300321123
+      "meanWidth": 0.030861014674076877
      },
      "flooredWithT": {
       "covered": 1943,
@@ -4286,15 +4286,15 @@
       "verdict": "pass",
       "missedLow": 59,
       "missedHigh": 23,
-      "meanWidth": 0.012975927248009193
+      "meanWidth": 0.013015466032569851
      },
-     "floored": {
+     "unfloored": {
       "covered": 1918,
       "coverage": 0.959,
       "verdict": "pass",
       "missedLow": 59,
       "missedHigh": 23,
-      "meanWidth": 0.013015466032569851
+      "meanWidth": 0.012975927248009193
      },
      "flooredWithT": {
       "covered": 1918,
@@ -4336,15 +4336,15 @@
       "verdict": "fail",
       "missedLow": 55,
       "missedHigh": 23,
-      "meanWidth": 0.013012339029282408
+      "meanWidth": 0.013052688377649974
      },
-     "floored": {
+     "unfloored": {
       "covered": 1922,
       "coverage": 0.961,
       "verdict": "fail",
       "missedLow": 55,
       "missedHigh": 23,
-      "meanWidth": 0.013052688377649974
+      "meanWidth": 0.013012339029282408
      },
      "flooredWithT": {
       "covered": 1922,
@@ -4386,15 +4386,15 @@
       "verdict": "pass",
       "missedLow": 50,
       "missedHigh": 43,
-      "meanWidth": 0.008014093998240095
+      "meanWidth": 0.008017975762485838
      },
-     "floored": {
+     "unfloored": {
       "covered": 1907,
       "coverage": 0.9535,
       "verdict": "pass",
       "missedLow": 50,
       "missedHigh": 43,
-      "meanWidth": 0.008017975762485838
+      "meanWidth": 0.008014093998240095
      },
      "flooredWithT": {
       "covered": 1907,
@@ -4436,15 +4436,15 @@
       "verdict": "pass",
       "missedLow": 51,
       "missedHigh": 36,
-      "meanWidth": 0.007998327767021078
+      "meanWidth": 0.008004387154515229
      },
-     "floored": {
+     "unfloored": {
       "covered": 1913,
       "coverage": 0.9565,
       "verdict": "pass",
       "missedLow": 51,
       "missedHigh": 36,
-      "meanWidth": 0.008004387154515229
+      "meanWidth": 0.007998327767021078
      },
      "flooredWithT": {
       "covered": 1913,
@@ -4486,15 +4486,15 @@
       "verdict": "pass",
       "missedLow": 115,
       "missedHigh": 0,
-      "meanWidth": 0.06809319372211918
+      "meanWidth": 0.06811228440072437
      },
-     "floored": {
+     "unfloored": {
       "covered": 1885,
       "coverage": 0.9425,
       "verdict": "pass",
       "missedLow": 115,
       "missedHigh": 0,
-      "meanWidth": 0.06811228440072437
+      "meanWidth": 0.06809319372211918
      },
      "flooredWithT": {
       "covered": 1885,
@@ -4536,15 +4536,15 @@
       "verdict": "fail",
       "missedLow": 133,
       "missedHigh": 0,
-      "meanWidth": 0.06824714019708124
+      "meanWidth": 0.06827517475246929
      },
-     "floored": {
+     "unfloored": {
       "covered": 1867,
       "coverage": 0.9335,
       "verdict": "fail",
       "missedLow": 133,
       "missedHigh": 0,
-      "meanWidth": 0.06827517475246929
+      "meanWidth": 0.06824714019708124
      },
      "flooredWithT": {
       "covered": 1867,
@@ -4586,15 +4586,15 @@
       "verdict": "pass",
       "missedLow": 84,
       "missedHigh": 0,
-      "meanWidth": 0.04193790193126209
+      "meanWidth": 0.042003324288651354
      },
-     "floored": {
+     "unfloored": {
       "covered": 1916,
       "coverage": 0.958,
       "verdict": "pass",
       "missedLow": 84,
       "missedHigh": 0,
-      "meanWidth": 0.042003324288651354
+      "meanWidth": 0.04193790193126209
      },
      "flooredWithT": {
       "covered": 1924,
@@ -4636,15 +4636,15 @@
       "verdict": "fail",
       "missedLow": 67,
       "missedHigh": 0,
-      "meanWidth": 0.04043600058876337
+      "meanWidth": 0.0405406926087259
      },
-     "floored": {
+     "unfloored": {
       "covered": 1933,
       "coverage": 0.9665,
       "verdict": "fail",
       "missedLow": 67,
       "missedHigh": 0,
-      "meanWidth": 0.0405406926087259
+      "meanWidth": 0.04043600058876337
      },
      "flooredWithT": {
       "covered": 1937,
@@ -4686,15 +4686,15 @@
       "verdict": "pass",
       "missedLow": 68,
       "missedHigh": 29,
-      "meanWidth": 0.013931999075318027
+      "meanWidth": 0.013947009531224566
      },
-     "floored": {
+     "unfloored": {
       "covered": 1903,
       "coverage": 0.9515,
       "verdict": "pass",
       "missedLow": 68,
       "missedHigh": 29,
-      "meanWidth": 0.013947009531224566
+      "meanWidth": 0.013931999075318027
      },
      "flooredWithT": {
       "covered": 1903,
@@ -4736,15 +4736,15 @@
       "verdict": "pass",
       "missedLow": 52,
       "missedHigh": 31,
-      "meanWidth": 0.013972537308747581
+      "meanWidth": 0.013986437002241978
      },
-     "floored": {
+     "unfloored": {
       "covered": 1917,
       "coverage": 0.9585,
       "verdict": "pass",
       "missedLow": 52,
       "missedHigh": 31,
-      "meanWidth": 0.013986437002241978
+      "meanWidth": 0.013972537308747581
      },
      "flooredWithT": {
       "covered": 1917,
@@ -4786,15 +4786,15 @@
       "verdict": "pass",
       "missedLow": 46,
       "missedHigh": 55,
-      "meanWidth": 0.010207962592319377
+      "meanWidth": 0.010208093361447372
      },
-     "floored": {
+     "unfloored": {
       "covered": 1899,
       "coverage": 0.9495,
       "verdict": "pass",
       "missedLow": 46,
       "missedHigh": 55,
-      "meanWidth": 0.010208093361447372
+      "meanWidth": 0.010207962592319377
      },
      "flooredWithT": {
       "covered": 1901,
@@ -4836,15 +4836,15 @@
       "verdict": "fail",
       "missedLow": 55,
       "missedHigh": 77,
-      "meanWidth": 0.010122638399754327
+      "meanWidth": 0.01012312247404141
      },
-     "floored": {
+     "unfloored": {
       "covered": 1868,
       "coverage": 0.934,
       "verdict": "fail",
       "missedLow": 55,
       "missedHigh": 77,
-      "meanWidth": 0.01012312247404141
+      "meanWidth": 0.010122638399754327
      },
      "flooredWithT": {
       "covered": 1868,
@@ -4866,13 +4866,13 @@
    ],
    "summary": {
     "cells": 96,
-    "pass": 74,
-    "marginal": 1,
-    "fail": 21,
-    "failUnder": 11,
-    "failOver": 10,
+    "pass": 71,
+    "marginal": 2,
+    "fail": 23,
+    "failUnder": 9,
+    "failOver": 14,
     "expectedOutsideBand": 4.800000000000004,
-    "observedOutsideBand": 22,
+    "observedOutsideBand": 25,
     "worst": {
      "label": "p=0.99 icc=0 G=50 m=2 beta-binomial",
      "coverage": 0.915,
@@ -4886,17 +4886,7 @@
    "variants": [
     {
      "variant": "primary",
-     "what": "the shipped estimator: effective-n Wilson, design effect unfloored, z = 1.96",
-     "meanCoverage": 0.9486302083333339,
-     "failUnder": 11,
-     "failOver": 10,
-     "meanCoverageBelow99": 0.9482152777777784,
-     "failUnderBelow99": 5,
-     "meanWidth": 0.07758429452984102
-    },
-    {
-     "variant": "floored",
-     "what": "design effect floored at 1 (§3.1's open question), z = 1.96",
+     "what": "the shipped estimator: effective-n Wilson, design effect floored at 1, z = 1.96",
      "meanCoverage": 0.9502135416666669,
      "failUnder": 9,
      "failOver": 14,
@@ -4905,8 +4895,18 @@
      "meanWidth": 0.07841597095958372
     },
     {
+     "variant": "unfloored",
+     "what": "design effect left unfloored - what shipped before 31 Jul 2026, retired by this grid",
+     "meanCoverage": 0.9486302083333339,
+     "failUnder": 11,
+     "failOver": 10,
+     "meanCoverageBelow99": 0.9482152777777784,
+     "failUnderBelow99": 5,
+     "meanWidth": 0.07758429452984102
+    },
+    {
      "variant": "flooredWithT",
-     "what": "design effect floored at 1 and z replaced by t on groups - 1 df - a candidate fix, not shipped",
+     "what": "floored and z replaced by t on groups - 1 df - considered, over-corrects, not shipped",
      "meanCoverage": 0.9542552083333337,
      "failUnder": 6,
      "failOver": 27,
@@ -4927,7 +4927,7 @@
    ]
   },
   "bootstrap": {
-   "what": "P2: the percentile cluster bootstrap's own coverage, on a reduced grid (G = 50, B = 200) for the cost reason in the function doc. The Wilson column is computed on the same replications, so the two columns are a like-for-like comparison rather than two separate studies.",
+   "what": "P2: the cluster bootstrap's own coverage, on a reduced grid (G = 50, B = 2000). The Wilson column is computed on the same simulated samples, so the two are a like-for-like comparison rather than two separate studies - but each carries its own estimable count, because the bootstrap refuses at the boundary and Wilson does not. Read `estimable` beside every coverage figure here: at p = 0.99 the bootstrap declines on roughly a third of samples, and that refusal is the finding, not a gap in the grid.",
    "band": {
     "replications": 2000,
     "nominal": 0.95,
@@ -4945,26 +4945,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1359821441,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1901,
-      "coverage": 0.9505,
+      "covered": 1895,
+      "coverage": 0.9475,
       "verdict": "pass",
-      "missedLow": 43,
-      "missedHigh": 56,
-      "meanWidth": 0.18890149999999956
+      "missedLow": 74,
+      "missedHigh": 31,
+      "meanWidth": 0.1923543197883441
+     },
+     "percentile": {
+      "covered": 1902,
+      "coverage": 0.951,
+      "verdict": "pass",
+      "missedLow": 50,
+      "missedHigh": 48,
+      "meanWidth": 0.19252187499999926
      },
      "wilson": {
-      "covered": 1896,
-      "coverage": 0.948,
+      "covered": 1894,
+      "coverage": 0.947,
       "verdict": "pass",
-      "missedLow": 44,
-      "missedHigh": 60,
-      "meanWidth": 0.19203661597525695
+      "missedLow": 54,
+      "missedHigh": 52,
+      "meanWidth": 0.19694522148552873
      },
-     "meanDisagreement": 0.010877856553732274
+     "meanDisagreement": 0.013918260980090769
     },
     {
      "label": "bootstrap p=0.5 icc=0 G=50 m=2 latent-difficulty",
@@ -4975,26 +4985,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 1265502267,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1891,
-      "coverage": 0.9455,
+      "covered": 1905,
+      "coverage": 0.9525,
       "verdict": "pass",
-      "missedLow": 58,
-      "missedHigh": 51,
-      "meanWidth": 0.18898674999999945
+      "missedLow": 65,
+      "missedHigh": 30,
+      "meanWidth": 0.19267274412658653
+     },
+     "percentile": {
+      "covered": 1904,
+      "coverage": 0.952,
+      "verdict": "pass",
+      "missedLow": 48,
+      "missedHigh": 48,
+      "meanWidth": 0.192781124999999
      },
      "wilson": {
-      "covered": 1887,
-      "coverage": 0.9435,
+      "covered": 1912,
+      "coverage": 0.956,
       "verdict": "pass",
-      "missedLow": 57,
-      "missedHigh": 56,
-      "meanWidth": 0.1922909262015516
+      "missedLow": 43,
+      "missedHigh": 45,
+      "meanWidth": 0.1969689187276701
      },
-     "meanDisagreement": 0.010529171122777434
+     "meanDisagreement": 0.01380128208397751
     },
     {
      "label": "bootstrap p=0.5 icc=0 G=50 m=6 beta-binomial",
@@ -5005,26 +5025,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1637082111,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1859,
-      "coverage": 0.9295,
-      "verdict": "fail",
-      "missedLow": 60,
-      "missedHigh": 81,
-      "meanWidth": 0.10889462500000027
+      "covered": 1899,
+      "coverage": 0.9495,
+      "verdict": "pass",
+      "missedLow": 71,
+      "missedHigh": 30,
+      "meanWidth": 0.11154010469121181
+     },
+     "percentile": {
+      "covered": 1899,
+      "coverage": 0.9495,
+      "verdict": "pass",
+      "missedLow": 58,
+      "missedHigh": 43,
+      "meanWidth": 0.1114918750000004
      },
      "wilson": {
-      "covered": 1873,
-      "coverage": 0.9365,
-      "verdict": "fail",
-      "missedLow": 54,
-      "missedHigh": 73,
-      "meanWidth": 0.11208659315559993
+      "covered": 1914,
+      "coverage": 0.957,
+      "verdict": "pass",
+      "missedLow": 50,
+      "missedHigh": 36,
+      "meanWidth": 0.116453976796708
      },
-     "meanDisagreement": 0.006152152781252597
+     "meanDisagreement": 0.006378743260409476
     },
     {
      "label": "bootstrap p=0.5 icc=0 G=50 m=6 latent-difficulty",
@@ -5035,26 +5065,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 838087565,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1864,
-      "coverage": 0.932,
-      "verdict": "fail",
-      "missedLow": 72,
-      "missedHigh": 64,
-      "meanWidth": 0.10946491666666654
+      "covered": 1907,
+      "coverage": 0.9535,
+      "verdict": "pass",
+      "missedLow": 51,
+      "missedHigh": 42,
+      "meanWidth": 0.11170762954652871
+     },
+     "percentile": {
+      "covered": 1908,
+      "coverage": 0.954,
+      "verdict": "pass",
+      "missedLow": 36,
+      "missedHigh": 56,
+      "meanWidth": 0.1117650000000002
      },
      "wilson": {
-      "covered": 1862,
-      "coverage": 0.931,
-      "verdict": "fail",
-      "missedLow": 68,
-      "missedHigh": 70,
-      "meanWidth": 0.1122153650665856
+      "covered": 1911,
+      "coverage": 0.9555,
+      "verdict": "pass",
+      "missedLow": 36,
+      "missedHigh": 53,
+      "meanWidth": 0.1164092318809096
      },
-     "meanDisagreement": 0.00630309778266694
+     "meanDisagreement": 0.006249967041152679
     },
     {
      "label": "bootstrap p=0.5 icc=0.05 G=50 m=2 beta-binomial",
@@ -5065,26 +5105,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 706080112,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1902,
-      "coverage": 0.951,
+      "covered": 1891,
+      "coverage": 0.9455,
       "verdict": "pass",
-      "missedLow": 49,
-      "missedHigh": 49,
-      "meanWidth": 0.1927792499999991
+      "missedLow": 77,
+      "missedHigh": 32,
+      "meanWidth": 0.19755556900855167
+     },
+     "percentile": {
+      "covered": 1894,
+      "coverage": 0.947,
+      "verdict": "pass",
+      "missedLow": 51,
+      "missedHigh": 55,
+      "meanWidth": 0.19745762499999844
      },
      "wilson": {
-      "covered": 1897,
-      "coverage": 0.9485,
-      "verdict": "pass",
-      "missedLow": 48,
-      "missedHigh": 55,
-      "meanWidth": 0.1959908268878475
+      "covered": 1876,
+      "coverage": 0.938,
+      "verdict": "fail",
+      "missedLow": 59,
+      "missedHigh": 65,
+      "meanWidth": 0.1994819432566221
      },
-     "meanDisagreement": 0.011017686118364433
+     "meanDisagreement": 0.013151262028821595
     },
     {
      "label": "bootstrap p=0.5 icc=0.05 G=50 m=2 latent-difficulty",
@@ -5095,26 +5145,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 1696307520,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1894,
-      "coverage": 0.947,
+      "covered": 1896,
+      "coverage": 0.948,
       "verdict": "pass",
-      "missedLow": 54,
-      "missedHigh": 52,
-      "meanWidth": 0.19367249999999897
+      "missedLow": 79,
+      "missedHigh": 25,
+      "meanWidth": 0.1972079748258505
+     },
+     "percentile": {
+      "covered": 1910,
+      "coverage": 0.955,
+      "verdict": "pass",
+      "missedLow": 57,
+      "missedHigh": 33,
+      "meanWidth": 0.19742324999999852
      },
      "wilson": {
-      "covered": 1903,
-      "coverage": 0.9515,
+      "covered": 1904,
+      "coverage": 0.952,
       "verdict": "pass",
-      "missedLow": 51,
-      "missedHigh": 46,
-      "meanWidth": 0.19700147855875022
+      "missedLow": 60,
+      "missedHigh": 36,
+      "meanWidth": 0.19949201068266853
      },
-     "meanDisagreement": 0.011056804480952882
+     "meanDisagreement": 0.013179899437437801
     },
     {
      "label": "bootstrap p=0.5 icc=0.05 G=50 m=6 beta-binomial",
@@ -5125,26 +5185,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1323370022,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1876,
-      "coverage": 0.938,
-      "verdict": "fail",
-      "missedLow": 65,
-      "missedHigh": 59,
-      "meanWidth": 0.12141845833333334
+      "covered": 1899,
+      "coverage": 0.9495,
+      "verdict": "pass",
+      "missedLow": 49,
+      "missedHigh": 52,
+      "meanWidth": 0.1244762795557163
+     },
+     "percentile": {
+      "covered": 1907,
+      "coverage": 0.9535,
+      "verdict": "pass",
+      "missedLow": 35,
+      "missedHigh": 58,
+      "meanWidth": 0.1243985
      },
      "wilson": {
-      "covered": 1896,
-      "coverage": 0.948,
+      "covered": 1906,
+      "coverage": 0.953,
       "verdict": "pass",
-      "missedLow": 56,
-      "missedHigh": 48,
-      "meanWidth": 0.12462356728297742
+      "missedLow": 37,
+      "missedHigh": 57,
+      "meanWidth": 0.1257055658331071
      },
-     "meanDisagreement": 0.006873351142536353
+     "meanDisagreement": 0.004829427815562639
     },
     {
      "label": "bootstrap p=0.5 icc=0.05 G=50 m=6 latent-difficulty",
@@ -5155,26 +5225,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 775043290,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1880,
-      "coverage": 0.94,
-      "verdict": "marginal",
-      "missedLow": 61,
-      "missedHigh": 59,
-      "meanWidth": 0.12206254166666669
+      "covered": 1886,
+      "coverage": 0.943,
+      "verdict": "pass",
+      "missedLow": 80,
+      "missedHigh": 34,
+      "meanWidth": 0.12444664961316003
+     },
+     "percentile": {
+      "covered": 1890,
+      "coverage": 0.945,
+      "verdict": "pass",
+      "missedLow": 66,
+      "missedHigh": 44,
+      "meanWidth": 0.12435708333333337
      },
      "wilson": {
-      "covered": 1897,
-      "coverage": 0.9485,
+      "covered": 1891,
+      "coverage": 0.9455,
       "verdict": "pass",
-      "missedLow": 53,
-      "missedHigh": 50,
-      "meanWidth": 0.12518760610819438
+      "missedLow": 69,
+      "missedHigh": 40,
+      "meanWidth": 0.1257120503720013
      },
-     "meanDisagreement": 0.006904920394561583
+     "meanDisagreement": 0.004912322700294644
     },
     {
      "label": "bootstrap p=0.5 icc=0.2 G=50 m=2 beta-binomial",
@@ -5185,26 +5265,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1969094321,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1893,
-      "coverage": 0.9465,
+      "covered": 1898,
+      "coverage": 0.949,
       "verdict": "pass",
-      "missedLow": 51,
-      "missedHigh": 56,
-      "meanWidth": 0.2065439999999993
+      "missedLow": 77,
+      "missedHigh": 25,
+      "meanWidth": 0.21118559177539842
+     },
+     "percentile": {
+      "covered": 1900,
+      "coverage": 0.95,
+      "verdict": "pass",
+      "missedLow": 58,
+      "missedHigh": 42,
+      "meanWidth": 0.21098362499999998
      },
      "wilson": {
-      "covered": 1909,
-      "coverage": 0.9545,
+      "covered": 1894,
+      "coverage": 0.947,
       "verdict": "pass",
-      "missedLow": 39,
-      "missedHigh": 52,
-      "meanWidth": 0.20961552863444582
+      "missedLow": 63,
+      "missedHigh": 43,
+      "meanWidth": 0.20990596679246246
      },
-     "meanDisagreement": 0.01169569700110539
+     "meanDisagreement": 0.0124338805355404
     },
     {
      "label": "bootstrap p=0.5 icc=0.2 G=50 m=2 latent-difficulty",
@@ -5215,26 +5305,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 2127095723,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1888,
-      "coverage": 0.944,
-      "verdict": "pass",
-      "missedLow": 54,
-      "missedHigh": 58,
-      "meanWidth": 0.20715374999999933
-     },
-     "wilson": {
       "covered": 1893,
       "coverage": 0.9465,
       "verdict": "pass",
-      "missedLow": 51,
-      "missedHigh": 56,
-      "meanWidth": 0.20992946255461647
+      "missedLow": 81,
+      "missedHigh": 26,
+      "meanWidth": 0.2104903497811917
      },
-     "meanDisagreement": 0.01157849514883677
+     "percentile": {
+      "covered": 1899,
+      "coverage": 0.9495,
+      "verdict": "pass",
+      "missedLow": 59,
+      "missedHigh": 42,
+      "meanWidth": 0.21069812500000043
+     },
+     "wilson": {
+      "covered": 1888,
+      "coverage": 0.944,
+      "verdict": "pass",
+      "missedLow": 66,
+      "missedHigh": 46,
+      "meanWidth": 0.20950407866885462
+     },
+     "meanDisagreement": 0.012456366384178732
     },
     {
      "label": "bootstrap p=0.5 icc=0.2 G=50 m=6 beta-binomial",
@@ -5245,26 +5345,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 772024367,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1875,
-      "coverage": 0.9375,
-      "verdict": "fail",
-      "missedLow": 61,
-      "missedHigh": 64,
-      "meanWidth": 0.15425266666666665
+      "covered": 1901,
+      "coverage": 0.9505,
+      "verdict": "pass",
+      "missedLow": 62,
+      "missedHigh": 37,
+      "meanWidth": 0.1576246030183547
      },
-     "wilson": {
-      "covered": 1897,
-      "coverage": 0.9485,
+     "percentile": {
+      "covered": 1904,
+      "coverage": 0.952,
       "verdict": "pass",
       "missedLow": 52,
-      "missedHigh": 51,
-      "meanWidth": 0.15738207911496
+      "missedHigh": 44,
+      "meanWidth": 0.15752350000000018
      },
-     "meanDisagreement": 0.00849779042517422
+     "wilson": {
+      "covered": 1902,
+      "coverage": 0.951,
+      "verdict": "pass",
+      "missedLow": 54,
+      "missedHigh": 44,
+      "meanWidth": 0.15764639879675982
+     },
+     "meanDisagreement": 0.004947195866234288
     },
     {
      "label": "bootstrap p=0.5 icc=0.2 G=50 m=6 latent-difficulty",
@@ -5275,26 +5385,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 2024182909,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1853,
-      "coverage": 0.9265,
-      "verdict": "fail",
-      "missedLow": 68,
-      "missedHigh": 79,
-      "meanWidth": 0.15461979166666698
+      "covered": 1893,
+      "coverage": 0.9465,
+      "verdict": "pass",
+      "missedLow": 54,
+      "missedHigh": 53,
+      "meanWidth": 0.157371025991628
+     },
+     "percentile": {
+      "covered": 1896,
+      "coverage": 0.948,
+      "verdict": "pass",
+      "missedLow": 48,
+      "missedHigh": 56,
+      "meanWidth": 0.15737316666666679
      },
      "wilson": {
-      "covered": 1870,
-      "coverage": 0.935,
-      "verdict": "fail",
-      "missedLow": 60,
-      "missedHigh": 70,
-      "meanWidth": 0.15773464237627904
+      "covered": 1897,
+      "coverage": 0.9485,
+      "verdict": "pass",
+      "missedLow": 47,
+      "missedHigh": 56,
+      "meanWidth": 0.15738774462882676
      },
-     "meanDisagreement": 0.008518623868697513
+     "meanDisagreement": 0.005046868558069398
     },
     {
      "label": "bootstrap p=0.65 icc=0 G=50 m=2 beta-binomial",
@@ -5305,26 +5425,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 651151603,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1901,
-      "coverage": 0.9505,
+      "covered": 1913,
+      "coverage": 0.9565,
       "verdict": "pass",
-      "missedLow": 34,
-      "missedHigh": 65,
-      "meanWidth": 0.17994800000000058
+      "missedLow": 51,
+      "missedHigh": 36,
+      "meanWidth": 0.1840496349652209
+     },
+     "percentile": {
+      "covered": 1914,
+      "coverage": 0.957,
+      "verdict": "pass",
+      "missedLow": 36,
+      "missedHigh": 50,
+      "meanWidth": 0.1831462500000007
      },
      "wilson": {
-      "covered": 1910,
-      "coverage": 0.955,
+      "covered": 1919,
+      "coverage": 0.9595,
       "verdict": "pass",
-      "missedLow": 44,
-      "missedHigh": 46,
-      "meanWidth": 0.18302163346627862
+      "missedLow": 40,
+      "missedHigh": 41,
+      "meanWidth": 0.18800586362310182
      },
-     "meanDisagreement": 0.01142585368641168
+     "meanDisagreement": 0.010206382802123132
     },
     {
      "label": "bootstrap p=0.65 icc=0 G=50 m=2 latent-difficulty",
@@ -5335,26 +5465,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 1059097121,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1893,
-      "coverage": 0.9465,
+      "covered": 1901,
+      "coverage": 0.9505,
       "verdict": "pass",
-      "missedLow": 46,
-      "missedHigh": 61,
-      "meanWidth": 0.17959337500000042
+      "missedLow": 77,
+      "missedHigh": 22,
+      "meanWidth": 0.18424179617777287
+     },
+     "percentile": {
+      "covered": 1900,
+      "coverage": 0.95,
+      "verdict": "pass",
+      "missedLow": 51,
+      "missedHigh": 49,
+      "meanWidth": 0.1835400000000007
      },
      "wilson": {
-      "covered": 1889,
-      "coverage": 0.9445,
+      "covered": 1910,
+      "coverage": 0.955,
       "verdict": "pass",
-      "missedLow": 59,
-      "missedHigh": 52,
-      "meanWidth": 0.18325680831585586
+      "missedLow": 56,
+      "missedHigh": 34,
+      "meanWidth": 0.18819546420378294
      },
-     "meanDisagreement": 0.011291195452603571
+     "meanDisagreement": 0.010180642151921182
     },
     {
      "label": "bootstrap p=0.65 icc=0 G=50 m=6 beta-binomial",
@@ -5365,26 +5505,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1701946485,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1889,
-      "coverage": 0.9445,
+      "covered": 1892,
+      "coverage": 0.946,
       "verdict": "pass",
-      "missedLow": 54,
-      "missedHigh": 57,
-      "meanWidth": 0.10375687499999992
+      "missedLow": 66,
+      "missedHigh": 42,
+      "meanWidth": 0.1067275080345865
+     },
+     "percentile": {
+      "covered": 1894,
+      "coverage": 0.947,
+      "verdict": "pass",
+      "missedLow": 53,
+      "missedHigh": 53,
+      "meanWidth": 0.1065072083333334
      },
      "wilson": {
-      "covered": 1896,
-      "coverage": 0.948,
+      "covered": 1911,
+      "coverage": 0.9555,
       "verdict": "pass",
-      "missedLow": 59,
-      "missedHigh": 45,
-      "meanWidth": 0.10690129141396962
+      "missedLow": 48,
+      "missedHigh": 41,
+      "meanWidth": 0.11105329047651206
      },
-     "meanDisagreement": 0.006147131838364129
+     "meanDisagreement": 0.005082989861619905
     },
     {
      "label": "bootstrap p=0.65 icc=0 G=50 m=6 latent-difficulty",
@@ -5395,26 +5545,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 1531883599,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1875,
-      "coverage": 0.9375,
-      "verdict": "fail",
-      "missedLow": 55,
-      "missedHigh": 70,
-      "meanWidth": 0.10350374999999991
+      "covered": 1896,
+      "coverage": 0.948,
+      "verdict": "pass",
+      "missedLow": 59,
+      "missedHigh": 45,
+      "meanWidth": 0.1067067666710267
+     },
+     "percentile": {
+      "covered": 1896,
+      "coverage": 0.948,
+      "verdict": "pass",
+      "missedLow": 46,
+      "missedHigh": 58,
+      "meanWidth": 0.10646325000000016
      },
      "wilson": {
-      "covered": 1886,
-      "coverage": 0.943,
+      "covered": 1916,
+      "coverage": 0.958,
       "verdict": "pass",
-      "missedLow": 52,
-      "missedHigh": 62,
-      "meanWidth": 0.10663614853526696
+      "missedLow": 39,
+      "missedHigh": 45,
+      "meanWidth": 0.1110370885339484
      },
-     "meanDisagreement": 0.006133541146247493
+     "meanDisagreement": 0.005010772118893194
     },
     {
      "label": "bootstrap p=0.65 icc=0.05 G=50 m=2 beta-binomial",
@@ -5425,26 +5585,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 938686510,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1898,
-      "coverage": 0.949,
+      "covered": 1909,
+      "coverage": 0.9545,
       "verdict": "pass",
-      "missedLow": 39,
-      "missedHigh": 63,
-      "meanWidth": 0.18396675000000037
+      "missedLow": 64,
+      "missedHigh": 27,
+      "meanWidth": 0.18958007696253532
+     },
+     "percentile": {
+      "covered": 1918,
+      "coverage": 0.959,
+      "verdict": "pass",
+      "missedLow": 37,
+      "missedHigh": 45,
+      "meanWidth": 0.18863074999999957
      },
      "wilson": {
-      "covered": 1899,
-      "coverage": 0.9495,
+      "covered": 1915,
+      "coverage": 0.9575,
       "verdict": "pass",
-      "missedLow": 52,
-      "missedHigh": 49,
-      "meanWidth": 0.1873886479760223
+      "missedLow": 49,
+      "missedHigh": 36,
+      "meanWidth": 0.19107608473264748
      },
-     "meanDisagreement": 0.011852454673948038
+     "meanDisagreement": 0.009780867605716956
     },
     {
      "label": "bootstrap p=0.65 icc=0.05 G=50 m=2 latent-difficulty",
@@ -5455,26 +5625,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 185902658,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1873,
-      "coverage": 0.9365,
+      "covered": 1929,
+      "coverage": 0.9645,
       "verdict": "fail",
-      "missedLow": 56,
-      "missedHigh": 71,
-      "meanWidth": 0.18402587500000023
+      "missedLow": 48,
+      "missedHigh": 23,
+      "meanWidth": 0.18838080888924727
+     },
+     "percentile": {
+      "covered": 1925,
+      "coverage": 0.9625,
+      "verdict": "fail",
+      "missedLow": 31,
+      "missedHigh": 44,
+      "meanWidth": 0.187702
      },
      "wilson": {
-      "covered": 1886,
-      "coverage": 0.943,
-      "verdict": "pass",
-      "missedLow": 58,
-      "missedHigh": 56,
-      "meanWidth": 0.18755012262385826
+      "covered": 1939,
+      "coverage": 0.9695,
+      "verdict": "fail",
+      "missedLow": 31,
+      "missedHigh": 30,
+      "meanWidth": 0.19036349118041607
      },
-     "meanDisagreement": 0.011878261726929696
+     "meanDisagreement": 0.009589214107564479
     },
     {
      "label": "bootstrap p=0.65 icc=0.05 G=50 m=6 beta-binomial",
@@ -5485,26 +5665,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 450529816,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1894,
-      "coverage": 0.947,
+      "covered": 1902,
+      "coverage": 0.951,
       "verdict": "pass",
-      "missedLow": 54,
-      "missedHigh": 52,
-      "meanWidth": 0.11719479166666669
+      "missedLow": 61,
+      "missedHigh": 37,
+      "meanWidth": 0.1186792683161683
+     },
+     "percentile": {
+      "covered": 1907,
+      "coverage": 0.9535,
+      "verdict": "pass",
+      "missedLow": 46,
+      "missedHigh": 47,
+      "meanWidth": 0.11857812500000027
      },
      "wilson": {
-      "covered": 1901,
-      "coverage": 0.9505,
+      "covered": 1907,
+      "coverage": 0.9535,
       "verdict": "pass",
-      "missedLow": 57,
-      "missedHigh": 42,
-      "meanWidth": 0.1200646458086872
+      "missedLow": 53,
+      "missedHigh": 40,
+      "meanWidth": 0.11992432720552772
      },
-     "meanDisagreement": 0.006874552889370616
+     "meanDisagreement": 0.0038837084130079963
     },
     {
      "label": "bootstrap p=0.65 icc=0.05 G=50 m=6 latent-difficulty",
@@ -5515,26 +5705,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 1593253672,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1886,
-      "coverage": 0.943,
+      "covered": 1904,
+      "coverage": 0.952,
       "verdict": "pass",
       "missedLow": 50,
-      "missedHigh": 64,
-      "meanWidth": 0.11607933333333328
+      "missedHigh": 46,
+      "meanWidth": 0.11864375680432789
+     },
+     "percentile": {
+      "covered": 1901,
+      "coverage": 0.9505,
+      "verdict": "pass",
+      "missedLow": 38,
+      "missedHigh": 61,
+      "meanWidth": 0.11839979166666684
      },
      "wilson": {
-      "covered": 1894,
-      "coverage": 0.947,
+      "covered": 1902,
+      "coverage": 0.951,
       "verdict": "pass",
-      "missedLow": 54,
-      "missedHigh": 52,
-      "meanWidth": 0.11934282394171557
+      "missedLow": 43,
+      "missedHigh": 55,
+      "meanWidth": 0.11988552683306511
      },
-     "meanDisagreement": 0.006753975537583064
+     "meanDisagreement": 0.003768733937167273
     },
     {
      "label": "bootstrap p=0.65 icc=0.2 G=50 m=2 beta-binomial",
@@ -5545,26 +5745,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 2031938623,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1904,
-      "coverage": 0.952,
+      "covered": 1911,
+      "coverage": 0.9555,
       "verdict": "pass",
-      "missedLow": 47,
-      "missedHigh": 49,
-      "meanWidth": 0.1966653749999991
+      "missedLow": 55,
+      "missedHigh": 34,
+      "meanWidth": 0.20244291585245122
+     },
+     "percentile": {
+      "covered": 1920,
+      "coverage": 0.96,
+      "verdict": "marginal",
+      "missedLow": 27,
+      "missedHigh": 53,
+      "meanWidth": 0.2014616249999987
      },
      "wilson": {
-      "covered": 1898,
-      "coverage": 0.949,
+      "covered": 1902,
+      "coverage": 0.951,
       "verdict": "pass",
-      "missedLow": 61,
-      "missedHigh": 41,
-      "meanWidth": 0.20009802977522728
+      "missedLow": 47,
+      "missedHigh": 51,
+      "meanWidth": 0.20084972199416404
      },
-     "meanDisagreement": 0.012674644685529531
+     "meanDisagreement": 0.008928529019279685
     },
     {
      "label": "bootstrap p=0.65 icc=0.2 G=50 m=2 latent-difficulty",
@@ -5575,26 +5785,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 1712685005,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1894,
-      "coverage": 0.947,
+      "covered": 1904,
+      "coverage": 0.952,
       "verdict": "pass",
-      "missedLow": 46,
-      "missedHigh": 60,
-      "meanWidth": 0.19784324999999917
+      "missedLow": 71,
+      "missedHigh": 25,
+      "meanWidth": 0.20290019436700135
+     },
+     "percentile": {
+      "covered": 1919,
+      "coverage": 0.9595,
+      "verdict": "pass",
+      "missedLow": 36,
+      "missedHigh": 45,
+      "meanWidth": 0.20197524999999886
      },
      "wilson": {
-      "covered": 1898,
-      "coverage": 0.949,
+      "covered": 1903,
+      "coverage": 0.9515,
       "verdict": "pass",
-      "missedLow": 53,
-      "missedHigh": 49,
-      "meanWidth": 0.20027718899965238
+      "missedLow": 57,
+      "missedHigh": 40,
+      "meanWidth": 0.2011446735694439
      },
-     "meanDisagreement": 0.012362442317927803
+     "meanDisagreement": 0.00904263899786016
     },
     {
      "label": "bootstrap p=0.65 icc=0.2 G=50 m=6 beta-binomial",
@@ -5605,26 +5825,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1754677953,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1871,
-      "coverage": 0.9355,
-      "verdict": "fail",
+      "covered": 1907,
+      "coverage": 0.9535,
+      "verdict": "pass",
       "missedLow": 55,
-      "missedHigh": 74,
-      "meanWidth": 0.1469457916666662
+      "missedHigh": 38,
+      "meanWidth": 0.15042791521396556
+     },
+     "percentile": {
+      "covered": 1908,
+      "coverage": 0.954,
+      "verdict": "pass",
+      "missedLow": 46,
+      "missedHigh": 46,
+      "meanWidth": 0.1500118333333328
      },
      "wilson": {
-      "covered": 1888,
-      "coverage": 0.944,
+      "covered": 1906,
+      "coverage": 0.953,
       "verdict": "pass",
-      "missedLow": 49,
-      "missedHigh": 63,
-      "meanWidth": 0.1504150829994433
+      "missedLow": 52,
+      "missedHigh": 42,
+      "meanWidth": 0.15032223430931016
      },
-     "meanDisagreement": 0.008750976581068642
+     "meanDisagreement": 0.0038710374824535323
     },
     {
      "label": "bootstrap p=0.65 icc=0.2 G=50 m=6 latent-difficulty",
@@ -5635,26 +5865,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 2140099707,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1888,
-      "coverage": 0.944,
+      "covered": 1918,
+      "coverage": 0.959,
       "verdict": "pass",
-      "missedLow": 49,
-      "missedHigh": 63,
-      "meanWidth": 0.14759362499999992
+      "missedLow": 50,
+      "missedHigh": 32,
+      "meanWidth": 0.15051841757926424
+     },
+     "percentile": {
+      "covered": 1920,
+      "coverage": 0.96,
+      "verdict": "marginal",
+      "missedLow": 37,
+      "missedHigh": 43,
+      "meanWidth": 0.15012524999999968
      },
      "wilson": {
-      "covered": 1903,
-      "coverage": 0.9515,
+      "covered": 1918,
+      "coverage": 0.959,
       "verdict": "pass",
-      "missedLow": 46,
-      "missedHigh": 51,
-      "meanWidth": 0.1506704459075408
+      "missedLow": 44,
+      "missedHigh": 38,
+      "meanWidth": 0.15042292205943114
      },
-     "meanDisagreement": 0.008683542306099672
+     "meanDisagreement": 0.003906635559763599
     },
     {
      "label": "bootstrap p=0.9 icc=0 G=50 m=2 beta-binomial",
@@ -5665,26 +5905,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1492285923,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1896,
-      "coverage": 0.948,
-      "verdict": "pass",
-      "missedLow": 26,
-      "missedHigh": 78,
-      "meanWidth": 0.1110902500000004
-     },
-     "wilson": {
-      "covered": 1899,
-      "coverage": 0.9495,
+      "covered": 1912,
+      "coverage": 0.956,
       "verdict": "pass",
       "missedLow": 60,
-      "missedHigh": 41,
-      "meanWidth": 0.11781575888402536
+      "missedHigh": 28,
+      "meanWidth": 0.11788623897266137
      },
-     "meanDisagreement": 0.015900975414848723
+     "percentile": {
+      "covered": 1893,
+      "coverage": 0.9465,
+      "verdict": "pass",
+      "missedLow": 19,
+      "missedHigh": 88,
+      "meanWidth": 0.11377712500000112
+     },
+     "wilson": {
+      "covered": 1885,
+      "coverage": 0.9425,
+      "verdict": "pass",
+      "missedLow": 73,
+      "missedHigh": 42,
+      "meanWidth": 0.12112243264647553
+     },
+     "meanDisagreement": 0.005200740481854078
     },
     {
      "label": "bootstrap p=0.9 icc=0 G=50 m=2 latent-difficulty",
@@ -5695,26 +5945,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 1659032273,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1879,
-      "coverage": 0.9395,
+      "covered": 1923,
+      "coverage": 0.9615,
       "verdict": "fail",
-      "missedLow": 33,
-      "missedHigh": 88,
-      "meanWidth": 0.11134125000000018
+      "missedLow": 49,
+      "missedHigh": 28,
+      "meanWidth": 0.11801147322011345
+     },
+     "percentile": {
+      "covered": 1895,
+      "coverage": 0.9475,
+      "verdict": "pass",
+      "missedLow": 19,
+      "missedHigh": 86,
+      "meanWidth": 0.11393075000000101
      },
      "wilson": {
-      "covered": 1881,
-      "coverage": 0.9405,
+      "covered": 1893,
+      "coverage": 0.9465,
       "verdict": "pass",
-      "missedLow": 76,
-      "missedHigh": 43,
-      "meanWidth": 0.11794765877088573
+      "missedLow": 60,
+      "missedHigh": 47,
+      "meanWidth": 0.1212849902939338
      },
-     "meanDisagreement": 0.01580803058132267
+     "meanDisagreement": 0.005130090994384559
     },
     {
      "label": "bootstrap p=0.9 icc=0 G=50 m=6 beta-binomial",
@@ -5725,26 +5985,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1138028645,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1886,
-      "coverage": 0.943,
+      "covered": 1914,
+      "coverage": 0.957,
       "verdict": "pass",
-      "missedLow": 42,
-      "missedHigh": 72,
-      "meanWidth": 0.06522049999999972
+      "missedLow": 50,
+      "missedHigh": 36,
+      "meanWidth": 0.06712492298770195
+     },
+     "percentile": {
+      "covered": 1903,
+      "coverage": 0.9515,
+      "verdict": "pass",
+      "missedLow": 30,
+      "missedHigh": 67,
+      "meanWidth": 0.06635195833333286
      },
      "wilson": {
-      "covered": 1888,
-      "coverage": 0.944,
-      "verdict": "pass",
-      "missedLow": 76,
-      "missedHigh": 36,
-      "meanWidth": 0.06790999399020851
+      "covered": 1925,
+      "coverage": 0.9625,
+      "verdict": "fail",
+      "missedLow": 44,
+      "missedHigh": 31,
+      "meanWidth": 0.07029774695396139
      },
-     "meanDisagreement": 0.006189106052590236
+     "meanDisagreement": 0.0029681632296653907
     },
     {
      "label": "bootstrap p=0.9 icc=0 G=50 m=6 latent-difficulty",
@@ -5755,26 +6025,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 2085262719,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1885,
-      "coverage": 0.9425,
+      "covered": 1898,
+      "coverage": 0.949,
       "verdict": "pass",
-      "missedLow": 39,
-      "missedHigh": 76,
-      "meanWidth": 0.06513954166666636
+      "missedLow": 62,
+      "missedHigh": 40,
+      "meanWidth": 0.06708983883175956
+     },
+     "percentile": {
+      "covered": 1901,
+      "coverage": 0.9505,
+      "verdict": "pass",
+      "missedLow": 31,
+      "missedHigh": 68,
+      "meanWidth": 0.06632595833333285
      },
      "wilson": {
-      "covered": 1897,
-      "coverage": 0.9485,
+      "covered": 1918,
+      "coverage": 0.959,
       "verdict": "pass",
-      "missedLow": 59,
-      "missedHigh": 44,
-      "meanWidth": 0.06795686543882938
+      "missedLow": 52,
+      "missedHigh": 30,
+      "meanWidth": 0.0703025072748336
      },
-     "meanDisagreement": 0.006273998954537723
+     "meanDisagreement": 0.0030110881292238125
     },
     {
      "label": "bootstrap p=0.9 icc=0.05 G=50 m=2 beta-binomial",
@@ -5785,26 +6065,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 67819166,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1906,
-      "coverage": 0.953,
-      "verdict": "pass",
-      "missedLow": 16,
-      "missedHigh": 78,
-      "meanWidth": 0.11482225000000008
+      "covered": 1920,
+      "coverage": 0.96,
+      "verdict": "marginal",
+      "missedLow": 51,
+      "missedHigh": 29,
+      "meanWidth": 0.12105113610455825
+     },
+     "percentile": {
+      "covered": 1879,
+      "coverage": 0.9395,
+      "verdict": "fail",
+      "missedLow": 20,
+      "missedHigh": 101,
+      "meanWidth": 0.11660925000000083
      },
      "wilson": {
-      "covered": 1910,
-      "coverage": 0.955,
-      "verdict": "pass",
-      "missedLow": 46,
-      "missedHigh": 44,
-      "meanWidth": 0.12151245640495668
+      "covered": 1872,
+      "coverage": 0.936,
+      "verdict": "fail",
+      "missedLow": 77,
+      "missedHigh": 51,
+      "meanWidth": 0.12330571043295484
      },
-     "meanDisagreement": 0.016504906020842827
+     "meanDisagreement": 0.004857076076366604
     },
     {
      "label": "bootstrap p=0.9 icc=0.05 G=50 m=2 latent-difficulty",
@@ -5815,26 +6105,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 386796402,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1879,
-      "coverage": 0.9395,
+      "covered": 1919,
+      "coverage": 0.9595,
+      "verdict": "pass",
+      "missedLow": 53,
+      "missedHigh": 28,
+      "meanWidth": 0.12095596849424124
+     },
+     "percentile": {
+      "covered": 1878,
+      "coverage": 0.939,
       "verdict": "fail",
-      "missedLow": 27,
-      "missedHigh": 94,
-      "meanWidth": 0.11418075
+      "missedLow": 16,
+      "missedHigh": 106,
+      "meanWidth": 0.11658275000000078
      },
      "wilson": {
-      "covered": 1877,
-      "coverage": 0.9385,
+      "covered": 1869,
+      "coverage": 0.9345,
       "verdict": "fail",
-      "missedLow": 69,
-      "missedHigh": 54,
-      "meanWidth": 0.12135993812776814
+      "missedLow": 70,
+      "missedHigh": 61,
+      "meanWidth": 0.1233484239637967
      },
-     "meanDisagreement": 0.016628976879210847
+     "meanDisagreement": 0.004879631397587397
     },
     {
      "label": "bootstrap p=0.9 icc=0.05 G=50 m=6 beta-binomial",
@@ -5845,26 +6145,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1717623368,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1881,
-      "coverage": 0.9405,
+      "covered": 1898,
+      "coverage": 0.949,
       "verdict": "pass",
-      "missedLow": 34,
-      "missedHigh": 85,
-      "meanWidth": 0.0726199999999999
+      "missedLow": 52,
+      "missedHigh": 50,
+      "meanWidth": 0.07517055359063987
+     },
+     "percentile": {
+      "covered": 1891,
+      "coverage": 0.9455,
+      "verdict": "pass",
+      "missedLow": 32,
+      "missedHigh": 77,
+      "meanWidth": 0.07413008333333293
      },
      "wilson": {
-      "covered": 1893,
-      "coverage": 0.9465,
+      "covered": 1890,
+      "coverage": 0.945,
       "verdict": "pass",
-      "missedLow": 58,
-      "missedHigh": 49,
-      "meanWidth": 0.0756271211965257
+      "missedLow": 59,
+      "missedHigh": 51,
+      "meanWidth": 0.07619351298234481
      },
-     "meanDisagreement": 0.007004803653034877
+     "meanDisagreement": 0.0023315728612133073
     },
     {
      "label": "bootstrap p=0.9 icc=0.05 G=50 m=6 latent-difficulty",
@@ -5875,26 +6185,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 266452632,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1877,
-      "coverage": 0.9385,
-      "verdict": "fail",
-      "missedLow": 40,
-      "missedHigh": 83,
-      "meanWidth": 0.07210083333333321
+      "covered": 1910,
+      "coverage": 0.955,
+      "verdict": "pass",
+      "missedLow": 51,
+      "missedHigh": 39,
+      "meanWidth": 0.07499362546225266
+     },
+     "percentile": {
+      "covered": 1892,
+      "coverage": 0.946,
+      "verdict": "pass",
+      "missedLow": 33,
+      "missedHigh": 75,
+      "meanWidth": 0.07386479166666635
      },
      "wilson": {
-      "covered": 1900,
-      "coverage": 0.95,
+      "covered": 1901,
+      "coverage": 0.9505,
       "verdict": "pass",
-      "missedLow": 59,
-      "missedHigh": 41,
-      "meanWidth": 0.07551948500437128
+      "missedLow": 60,
+      "missedHigh": 39,
+      "meanWidth": 0.0760939522676212
      },
-     "meanDisagreement": 0.007233002924468346
+     "meanDisagreement": 0.0022875589770646344
     },
     {
      "label": "bootstrap p=0.9 icc=0.2 G=50 m=2 beta-binomial",
@@ -5905,26 +6225,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 415161903,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1887,
-      "coverage": 0.9435,
+      "covered": 1908,
+      "coverage": 0.954,
       "verdict": "pass",
-      "missedLow": 25,
-      "missedHigh": 88,
-      "meanWidth": 0.12134962499999973
+      "missedLow": 46,
+      "missedHigh": 46,
+      "meanWidth": 0.1287833545577773
+     },
+     "percentile": {
+      "covered": 1874,
+      "coverage": 0.937,
+      "verdict": "fail",
+      "missedLow": 22,
+      "missedHigh": 104,
+      "meanWidth": 0.12338262500000055
      },
      "wilson": {
-      "covered": 1890,
-      "coverage": 0.945,
-      "verdict": "pass",
-      "missedLow": 63,
-      "missedHigh": 47,
-      "meanWidth": 0.12911947464427687
+      "covered": 1875,
+      "coverage": 0.9375,
+      "verdict": "fail",
+      "missedLow": 65,
+      "missedHigh": 60,
+      "meanWidth": 0.12928080150253612
      },
-     "meanDisagreement": 0.018057269140686633
+     "meanDisagreement": 0.004761667624285807
     },
     {
      "label": "bootstrap p=0.9 icc=0.2 G=50 m=2 latent-difficulty",
@@ -5935,26 +6265,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 1238805117,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1854,
-      "coverage": 0.927,
-      "verdict": "fail",
+      "covered": 1917,
+      "coverage": 0.9585,
+      "verdict": "pass",
+      "missedLow": 56,
+      "missedHigh": 27,
+      "meanWidth": 0.1289662485213632
+     },
+     "percentile": {
+      "covered": 1880,
+      "coverage": 0.94,
+      "verdict": "marginal",
       "missedLow": 22,
-      "missedHigh": 124,
-      "meanWidth": 0.12172387499999993
+      "missedHigh": 98,
+      "meanWidth": 0.12350462500000048
      },
      "wilson": {
-      "covered": 1866,
-      "coverage": 0.933,
-      "verdict": "fail",
-      "missedLow": 58,
-      "missedHigh": 76,
-      "meanWidth": 0.12937499488541193
+      "covered": 1885,
+      "coverage": 0.9425,
+      "verdict": "pass",
+      "missedLow": 71,
+      "missedHigh": 44,
+      "meanWidth": 0.12960948655769444
      },
-     "meanDisagreement": 0.01797539909978941
+     "meanDisagreement": 0.004721427802082648
     },
     {
      "label": "bootstrap p=0.9 icc=0.2 G=50 m=6 beta-binomial",
@@ -5965,26 +6305,36 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1612231857,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1867,
-      "coverage": 0.9335,
+      "covered": 1895,
+      "coverage": 0.9475,
+      "verdict": "pass",
+      "missedLow": 45,
+      "missedHigh": 60,
+      "meanWidth": 0.09486036400480223
+     },
+     "percentile": {
+      "covered": 1879,
+      "coverage": 0.9395,
       "verdict": "fail",
-      "missedLow": 38,
-      "missedHigh": 95,
-      "meanWidth": 0.09192766666666664
+      "missedLow": 27,
+      "missedHigh": 94,
+      "meanWidth": 0.0929227083333333
      },
      "wilson": {
-      "covered": 1877,
-      "coverage": 0.9385,
-      "verdict": "fail",
-      "missedLow": 67,
-      "missedHigh": 56,
-      "meanWidth": 0.09615126792763719
+      "covered": 1883,
+      "coverage": 0.9415,
+      "verdict": "pass",
+      "missedLow": 56,
+      "missedHigh": 61,
+      "meanWidth": 0.09537379583146621
      },
-     "meanDisagreement": 0.010106817799115658
+     "meanDisagreement": 0.0030116549202910685
     },
     {
      "label": "bootstrap p=0.9 icc=0.2 G=50 m=6 latent-difficulty",
@@ -5995,26 +6345,36 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 1341717931,
      "replications": 2000,
-     "bootstrapReplicates": 200,
+     "bootstrapReplicates": 2000,
      "estimable": 2000,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 2000,
      "unestimableReasons": {},
      "primary": {
-      "covered": 1870,
-      "coverage": 0.935,
+      "covered": 1900,
+      "coverage": 0.95,
+      "verdict": "pass",
+      "missedLow": 34,
+      "missedHigh": 66,
+      "meanWidth": 0.0950105720287057
+     },
+     "percentile": {
+      "covered": 1877,
+      "coverage": 0.9385,
       "verdict": "fail",
-      "missedLow": 28,
-      "missedHigh": 102,
-      "meanWidth": 0.09117741666666666
+      "missedLow": 20,
+      "missedHigh": 103,
+      "meanWidth": 0.09278987499999981
      },
      "wilson": {
-      "covered": 1889,
-      "coverage": 0.9445,
-      "verdict": "pass",
-      "missedLow": 47,
-      "missedHigh": 64,
-      "meanWidth": 0.09541153496471778
+      "covered": 1878,
+      "coverage": 0.939,
+      "verdict": "fail",
+      "missedLow": 52,
+      "missedHigh": 70,
+      "meanWidth": 0.09532670511025888
      },
-     "meanDisagreement": 0.00980553660934801
+     "meanDisagreement": 0.0028518463085092072
     },
     {
      "label": "bootstrap p=0.99 icc=0 G=50 m=2 beta-binomial",
@@ -6025,26 +6385,38 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1370045083,
      "replications": 2000,
-     "bootstrapReplicates": 200,
-     "estimable": 2000,
-     "unestimableReasons": {},
+     "bootstrapReplicates": 2000,
+     "estimable": 1266,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 1266,
+     "unestimableReasons": {
+      "all 2000 bootstrap resamples returned the identical value 1:": 734
+     },
      "primary": {
-      "covered": 1274,
-      "coverage": 0.637,
+      "covered": 1221,
+      "coverage": 0.9644549763033176,
       "verdict": "fail",
-      "missedLow": 1,
-      "missedHigh": 725,
-      "meanWidth": 0.026351375000000076
+      "missedLow": 45,
+      "missedHigh": 0,
+      "meanWidth": 0.05736807964127886
+     },
+     "percentile": {
+      "covered": 1263,
+      "coverage": 0.9976303317535545,
+      "verdict": "fail",
+      "missedLow": 3,
+      "missedHigh": 0,
+      "meanWidth": 0.04117910742496069
      },
      "wilson": {
-      "covered": 1834,
-      "coverage": 0.917,
+      "covered": 1846,
+      "coverage": 0.923,
       "verdict": "fail",
-      "missedLow": 166,
+      "missedLow": 154,
       "missedHigh": 0,
-      "meanWidth": 0.06374195315123334
+      "meanWidth": 0.06408936851946323
      },
-     "meanDisagreement": 0.03979397549765046
+     "meanDisagreement": 0.004987640597214049
     },
     {
      "label": "bootstrap p=0.99 icc=0 G=50 m=2 latent-difficulty",
@@ -6055,26 +6427,38 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 1294830935,
      "replications": 2000,
-     "bootstrapReplicates": 200,
-     "estimable": 2000,
-     "unestimableReasons": {},
+     "bootstrapReplicates": 2000,
+     "estimable": 1250,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 1250,
+     "unestimableReasons": {
+      "all 2000 bootstrap resamples returned the identical value 1:": 750
+     },
      "primary": {
-      "covered": 1280,
-      "coverage": 0.64,
+      "covered": 1224,
+      "coverage": 0.9792,
       "verdict": "fail",
-      "missedLow": 2,
-      "missedHigh": 718,
-      "meanWidth": 0.02652725000000007
+      "missedLow": 26,
+      "missedHigh": 0,
+      "meanWidth": 0.05726800052288675
+     },
+     "percentile": {
+      "covered": 1249,
+      "coverage": 0.9992,
+      "verdict": "fail",
+      "missedLow": 1,
+      "missedHigh": 0,
+      "meanWidth": 0.0411132000000002
      },
      "wilson": {
-      "covered": 1848,
-      "coverage": 0.924,
+      "covered": 1854,
+      "coverage": 0.927,
       "verdict": "fail",
-      "missedLow": 152,
+      "missedLow": 146,
       "missedHigh": 0,
-      "meanWidth": 0.06366522026278519
+      "meanWidth": 0.0640981691331817
      },
-     "meanDisagreement": 0.03950734038374264
+     "meanDisagreement": 0.005033690810868067
     },
     {
      "label": "bootstrap p=0.99 icc=0 G=50 m=6 beta-binomial",
@@ -6085,26 +6469,38 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1179818797,
      "replications": 2000,
-     "bootstrapReplicates": 200,
-     "estimable": 2000,
-     "unestimableReasons": {},
+     "bootstrapReplicates": 2000,
+     "estimable": 1906,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 1906,
+     "unestimableReasons": {
+      "all 2000 bootstrap resamples returned the identical value 1:": 94
+     },
      "primary": {
-      "covered": 1890,
-      "coverage": 0.945,
-      "verdict": "pass",
-      "missedLow": 12,
-      "missedHigh": 98,
-      "meanWidth": 0.019756124999999992
+      "covered": 1857,
+      "coverage": 0.9742917103882477,
+      "verdict": "fail",
+      "missedLow": 49,
+      "missedHigh": 0,
+      "meanWidth": 0.02411824286946685
+     },
+     "percentile": {
+      "covered": 1896,
+      "coverage": 0.9947534102833159,
+      "verdict": "fail",
+      "missedLow": 10,
+      "missedHigh": 0,
+      "meanWidth": 0.021003847499125556
      },
      "wilson": {
-      "covered": 1931,
-      "coverage": 0.9655,
+      "covered": 1928,
+      "coverage": 0.964,
       "verdict": "fail",
-      "missedLow": 69,
+      "missedLow": 72,
       "missedHigh": 0,
-      "meanWidth": 0.027739275491939015
+      "meanWidth": 0.02818498992043027
      },
-     "meanDisagreement": 0.010157797729286253
+     "meanDisagreement": 0.0020783436580327267
     },
     {
      "label": "bootstrap p=0.99 icc=0 G=50 m=6 latent-difficulty",
@@ -6115,26 +6511,38 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 33079621,
      "replications": 2000,
-     "bootstrapReplicates": 200,
-     "estimable": 2000,
-     "unestimableReasons": {},
+     "bootstrapReplicates": 2000,
+     "estimable": 1918,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 1918,
+     "unestimableReasons": {
+      "all 2000 bootstrap resamples returned the identical value 1:": 82
+     },
      "primary": {
-      "covered": 1898,
-      "coverage": 0.949,
-      "verdict": "pass",
-      "missedLow": 12,
-      "missedHigh": 90,
-      "meanWidth": 0.020055124999999965
+      "covered": 1870,
+      "coverage": 0.9749739311783108,
+      "verdict": "fail",
+      "missedLow": 48,
+      "missedHigh": 0,
+      "meanWidth": 0.024297415345187496
+     },
+     "percentile": {
+      "covered": 1912,
+      "coverage": 0.9968717413972888,
+      "verdict": "fail",
+      "missedLow": 6,
+      "missedHigh": 0,
+      "meanWidth": 0.021209593326381653
      },
      "wilson": {
-      "covered": 1939,
-      "coverage": 0.9695,
+      "covered": 1926,
+      "coverage": 0.963,
       "verdict": "fail",
-      "missedLow": 61,
+      "missedLow": 74,
       "missedHigh": 0,
-      "meanWidth": 0.027847321290694463
+      "meanWidth": 0.027989040497591197
      },
-     "meanDisagreement": 0.010021612495367494
+     "meanDisagreement": 0.0020550193794786646
     },
     {
      "label": "bootstrap p=0.99 icc=0.05 G=50 m=2 beta-binomial",
@@ -6145,26 +6553,38 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 2053071257,
      "replications": 2000,
-     "bootstrapReplicates": 200,
-     "estimable": 2000,
-     "unestimableReasons": {},
+     "bootstrapReplicates": 2000,
+     "estimable": 1275,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 1275,
+     "unestimableReasons": {
+      "all 2000 bootstrap resamples returned the identical value 1:": 725
+     },
      "primary": {
-      "covered": 1252,
-      "coverage": 0.626,
+      "covered": 1243,
+      "coverage": 0.9749019607843137,
+      "verdict": "fail",
+      "missedLow": 32,
+      "missedHigh": 0,
+      "meanWidth": 0.05835099223332832
+     },
+     "percentile": {
+      "covered": 1274,
+      "coverage": 0.9992156862745099,
       "verdict": "fail",
       "missedLow": 1,
-      "missedHigh": 747,
-      "meanWidth": 0.02656000000000005
+      "missedHigh": 0,
+      "meanWidth": 0.041350196078431586
      },
      "wilson": {
-      "covered": 1864,
-      "coverage": 0.932,
+      "covered": 1857,
+      "coverage": 0.9285,
       "verdict": "fail",
-      "missedLow": 136,
+      "missedLow": 143,
       "missedHigh": 0,
-      "meanWidth": 0.06488590301060117
+      "meanWidth": 0.06456995051511352
      },
-     "meanDisagreement": 0.04071202772049616
+     "meanDisagreement": 0.005056265832377423
     },
     {
      "label": "bootstrap p=0.99 icc=0.05 G=50 m=2 latent-difficulty",
@@ -6175,26 +6595,38 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 919636787,
      "replications": 2000,
-     "bootstrapReplicates": 200,
-     "estimable": 2000,
-     "unestimableReasons": {},
+     "bootstrapReplicates": 2000,
+     "estimable": 1259,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 1259,
+     "unestimableReasons": {
+      "all 2000 bootstrap resamples returned the identical value 1:": 741
+     },
      "primary": {
-      "covered": 1274,
-      "coverage": 0.637,
+      "covered": 1233,
+      "coverage": 0.9793486894360603,
+      "verdict": "fail",
+      "missedLow": 26,
+      "missedHigh": 0,
+      "meanWidth": 0.058574881494438825
+     },
+     "percentile": {
+      "covered": 1258,
+      "coverage": 0.9992057188244639,
       "verdict": "fail",
       "missedLow": 1,
-      "missedHigh": 725,
-      "meanWidth": 0.026528625000000076
+      "missedHigh": 0,
+      "meanWidth": 0.04175694996028619
      },
      "wilson": {
-      "covered": 1867,
-      "coverage": 0.9335,
+      "covered": 1852,
+      "coverage": 0.926,
       "verdict": "fail",
-      "missedLow": 133,
+      "missedLow": 148,
       "missedHigh": 0,
-      "meanWidth": 0.0643345283853193
+      "meanWidth": 0.06484283628815771
      },
-     "meanDisagreement": 0.04011458936111029
+     "meanDisagreement": 0.005122774893350278
     },
     {
      "label": "bootstrap p=0.99 icc=0.05 G=50 m=6 beta-binomial",
@@ -6205,26 +6637,38 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1140565687,
      "replications": 2000,
-     "bootstrapReplicates": 200,
-     "estimable": 2000,
-     "unestimableReasons": {},
+     "bootstrapReplicates": 2000,
+     "estimable": 1860,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 1860,
+     "unestimableReasons": {
+      "all 2000 bootstrap resamples returned the identical value 1:": 140
+     },
      "primary": {
-      "covered": 1844,
-      "coverage": 0.922,
+      "covered": 1835,
+      "coverage": 0.9865591397849462,
       "verdict": "fail",
-      "missedLow": 9,
-      "missedHigh": 147,
-      "meanWidth": 0.0210815
+      "missedLow": 25,
+      "missedHigh": 0,
+      "meanWidth": 0.026879254323464934
+     },
+     "percentile": {
+      "covered": 1856,
+      "coverage": 0.9978494623655914,
+      "verdict": "fail",
+      "missedLow": 4,
+      "missedHigh": 0,
+      "meanWidth": 0.02269825268817204
      },
      "wilson": {
-      "covered": 1925,
-      "coverage": 0.9625,
+      "covered": 1931,
+      "coverage": 0.9655,
       "verdict": "fail",
-      "missedLow": 75,
+      "missedLow": 69,
       "missedHigh": 0,
-      "meanWidth": 0.03178864358141571
+      "meanWidth": 0.031632800599658006
      },
-     "meanDisagreement": 0.013002005359427174
+     "meanDisagreement": 0.0023427628819790917
     },
     {
      "label": "bootstrap p=0.99 icc=0.05 G=50 m=6 latent-difficulty",
@@ -6235,26 +6679,38 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 539134917,
      "replications": 2000,
-     "bootstrapReplicates": 200,
-     "estimable": 2000,
-     "unestimableReasons": {},
+     "bootstrapReplicates": 2000,
+     "estimable": 1860,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 1860,
+     "unestimableReasons": {
+      "all 2000 bootstrap resamples returned the identical value 1:": 140
+     },
      "primary": {
-      "covered": 1884,
-      "coverage": 0.942,
-      "verdict": "pass",
+      "covered": 1830,
+      "coverage": 0.9838709677419355,
+      "verdict": "fail",
+      "missedLow": 30,
+      "missedHigh": 0,
+      "meanWidth": 0.026496307332971182
+     },
+     "percentile": {
+      "covered": 1854,
+      "coverage": 0.9967741935483871,
+      "verdict": "fail",
       "missedLow": 6,
-      "missedHigh": 110,
-      "meanWidth": 0.021055666666666643
+      "missedHigh": 0,
+      "meanWidth": 0.022332974910394304
      },
      "wilson": {
-      "covered": 1931,
-      "coverage": 0.9655,
+      "covered": 1941,
+      "coverage": 0.9705,
       "verdict": "fail",
-      "missedLow": 69,
+      "missedLow": 59,
       "missedHigh": 0,
-      "meanWidth": 0.030503783312041195
+      "meanWidth": 0.031245367784696283
      },
-     "meanDisagreement": 0.011694064992237742
+     "meanDisagreement": 0.002312718273535788
     },
     {
      "label": "bootstrap p=0.99 icc=0.2 G=50 m=2 beta-binomial",
@@ -6265,26 +6721,38 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 621453809,
      "replications": 2000,
-     "bootstrapReplicates": 200,
-     "estimable": 2000,
-     "unestimableReasons": {},
+     "bootstrapReplicates": 2000,
+     "estimable": 1209,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 1209,
+     "unestimableReasons": {
+      "all 2000 bootstrap resamples returned the identical value 1:": 791
+     },
      "primary": {
-      "covered": 1190,
-      "coverage": 0.595,
+      "covered": 1175,
+      "coverage": 0.9718775847808105,
       "verdict": "fail",
-      "missedLow": 1,
-      "missedHigh": 809,
-      "meanWidth": 0.026825500000000092
+      "missedLow": 34,
+      "missedHigh": 0,
+      "meanWidth": 0.06387086589700093
+     },
+     "percentile": {
+      "covered": 1209,
+      "coverage": 1,
+      "verdict": "fail",
+      "missedLow": 0,
+      "missedHigh": 0,
+      "meanWidth": 0.04491397849462394
      },
      "wilson": {
-      "covered": 1869,
-      "coverage": 0.9345,
+      "covered": 1860,
+      "coverage": 0.93,
       "verdict": "fail",
-      "missedLow": 131,
+      "missedLow": 140,
       "missedHigh": 0,
-      "meanWidth": 0.06758355025886549
+      "meanWidth": 0.06807989314945037
      },
-     "meanDisagreement": 0.04311579895691692
+     "meanDisagreement": 0.005427911149238597
     },
     {
      "label": "bootstrap p=0.99 icc=0.2 G=50 m=2 latent-difficulty",
@@ -6295,26 +6763,38 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 913794473,
      "replications": 2000,
-     "bootstrapReplicates": 200,
-     "estimable": 2000,
-     "unestimableReasons": {},
+     "bootstrapReplicates": 2000,
+     "estimable": 1203,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 1203,
+     "unestimableReasons": {
+      "all 2000 bootstrap resamples returned the identical value 1:": 797
+     },
      "primary": {
-      "covered": 1227,
-      "coverage": 0.6135,
+      "covered": 1176,
+      "coverage": 0.9775561097256857,
       "verdict": "fail",
-      "missedLow": 3,
-      "missedHigh": 770,
-      "meanWidth": 0.02767850000000007
+      "missedLow": 27,
+      "missedHigh": 0,
+      "meanWidth": 0.06350423368902561
+     },
+     "percentile": {
+      "covered": 1202,
+      "coverage": 0.999168744804655,
+      "verdict": "fail",
+      "missedLow": 1,
+      "missedHigh": 0,
+      "meanWidth": 0.044548420615129126
      },
      "wilson": {
-      "covered": 1858,
-      "coverage": 0.929,
+      "covered": 1860,
+      "coverage": 0.93,
       "verdict": "fail",
-      "missedLow": 142,
+      "missedLow": 140,
       "missedHigh": 0,
-      "meanWidth": 0.06757516940166111
+      "meanWidth": 0.06782396896487783
      },
-     "meanDisagreement": 0.042302925782833185
+     "meanDisagreement": 0.005420459097801776
     },
     {
      "label": "bootstrap p=0.99 icc=0.2 G=50 m=6 beta-binomial",
@@ -6325,26 +6805,38 @@
      "mechanism": "beta-binomial",
      "analysisSeed": 1017631951,
      "replications": 2000,
-     "bootstrapReplicates": 200,
-     "estimable": 2000,
-     "unestimableReasons": {},
+     "bootstrapReplicates": 2000,
+     "estimable": 1719,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 1719,
+     "unestimableReasons": {
+      "all 2000 bootstrap resamples returned the identical value 1:": 281
+     },
      "primary": {
-      "covered": 1703,
-      "coverage": 0.8515,
+      "covered": 1699,
+      "coverage": 0.9883653286794648,
       "verdict": "fail",
-      "missedLow": 7,
-      "missedHigh": 290,
-      "meanWidth": 0.024007583333333332
+      "missedLow": 20,
+      "missedHigh": 0,
+      "meanWidth": 0.03566926504632258
+     },
+     "percentile": {
+      "covered": 1713,
+      "coverage": 0.9965095986038395,
+      "verdict": "fail",
+      "missedLow": 6,
+      "missedHigh": 0,
+      "meanWidth": 0.028411576497963897
      },
      "wilson": {
-      "covered": 1931,
-      "coverage": 0.9655,
+      "covered": 1928,
+      "coverage": 0.964,
       "verdict": "fail",
-      "missedLow": 69,
+      "missedLow": 72,
       "missedHigh": 0,
-      "meanWidth": 0.042290005537680496
+      "meanWidth": 0.04230503606744133
      },
-     "meanDisagreement": 0.020665033824414508
+     "meanDisagreement": 0.0035219097309079107
     },
     {
      "label": "bootstrap p=0.99 icc=0.2 G=50 m=6 latent-difficulty",
@@ -6355,16 +6847,28 @@
      "mechanism": "latent-difficulty",
      "analysisSeed": 212512475,
      "replications": 2000,
-     "bootstrapReplicates": 200,
-     "estimable": 2000,
-     "unestimableReasons": {},
+     "bootstrapReplicates": 2000,
+     "estimable": 1738,
+     "wilsonEstimable": 2000,
+     "bothEstimable": 1738,
+     "unestimableReasons": {
+      "all 2000 bootstrap resamples returned the identical value 1:": 262
+     },
      "primary": {
-      "covered": 1754,
-      "coverage": 0.877,
+      "covered": 1717,
+      "coverage": 0.9879171461449943,
       "verdict": "fail",
-      "missedLow": 7,
-      "missedHigh": 239,
-      "meanWidth": 0.024040041666666675
+      "missedLow": 21,
+      "missedHigh": 0,
+      "meanWidth": 0.033590180359547306
+     },
+     "percentile": {
+      "covered": 1733,
+      "coverage": 0.9971231300345225,
+      "verdict": "fail",
+      "missedLow": 5,
+      "missedHigh": 0,
+      "meanWidth": 0.026950565784426412
      },
      "wilson": {
       "covered": 1930,
@@ -6372,28 +6876,28 @@
       "verdict": "fail",
       "missedLow": 70,
       "missedHigh": 0,
-      "meanWidth": 0.040187293764835465
+      "meanWidth": 0.04020332329994622
      },
-     "meanDisagreement": 0.018567450057226088
+     "meanDisagreement": 0.0032936798777690357
     }
    ],
    "summary": {
     "cells": 48,
-    "pass": 24,
+    "pass": 33,
     "marginal": 1,
-    "fail": 23,
-    "failUnder": 23,
-    "failOver": 0,
+    "fail": 14,
+    "failUnder": 0,
+    "failOver": 14,
     "expectedOutsideBand": 2.400000000000002,
-    "observedOutsideBand": 24,
+    "observedOutsideBand": 15,
     "worst": {
-     "label": "bootstrap p=0.99 icc=0.2 G=50 m=2 beta-binomial",
-     "coverage": 0.595,
+     "label": "bootstrap p=0.99 icc=0.2 G=50 m=6 beta-binomial",
+     "coverage": 0.9883653286794648,
      "verdict": "fail"
     },
     "worstUnderCoverage": {
-     "label": "bootstrap p=0.99 icc=0.2 G=50 m=2 beta-binomial",
-     "coverage": 0.595
+     "label": "bootstrap p=0.5 icc=0.05 G=50 m=6 latent-difficulty",
+     "coverage": 0.943
     }
    }
   },
@@ -6954,12 +7458,12 @@
       "clopperPearson": 0.9647997997823019
      },
      "simulated": {
-      "pipeline": 0.936,
+      "pipeline": 0.9405,
       "replications": 2000,
       "estimable": 2000,
       "mechanism": "beta-binomial"
      },
-     "estimationCost": -0.007112066359025615
+     "estimationCost": -0.0026120663590256665
     },
     {
      "label": "p=0.5 n=300 (G=50 x m=6)",
@@ -6972,12 +7476,12 @@
       "clopperPearson": 0.9568715007226966
      },
      "simulated": {
-      "pipeline": 0.9485,
+      "pipeline": 0.959,
       "replications": 2000,
       "estimable": 2000,
       "mechanism": "beta-binomial"
      },
-     "estimationCost": 0.00506565125437386
+     "estimationCost": 0.015565651254373813
     },
     {
      "label": "p=0.5 n=1000 (G=500 x m=2)",
@@ -6990,12 +7494,12 @@
       "clopperPearson": 0.953708802639392
      },
      "simulated": {
-      "pipeline": 0.9415,
+      "pipeline": 0.9425,
       "replications": 2000,
       "estimable": 2000,
       "mechanism": "beta-binomial"
      },
-     "estimationCost": -0.004822150354875321
+     "estimationCost": -0.00382215035487532
     },
     {
      "label": "p=0.5 n=3000 (G=500 x m=6)",
@@ -7008,12 +7512,12 @@
       "clopperPearson": 0.953433550617257
      },
      "simulated": {
-      "pipeline": 0.9505,
+      "pipeline": 0.9535,
       "replications": 2000,
       "estimable": 2000,
       "mechanism": "beta-binomial"
      },
-     "estimationCost": 0.0012371004046655143
+     "estimationCost": 0.004237100404665517
     },
     {
      "label": "p=0.65 n=100 (G=50 x m=2)",
@@ -7026,12 +7530,12 @@
       "clopperPearson": 0.9542558153896379
      },
      "simulated": {
-      "pipeline": 0.9485,
+      "pipeline": 0.959,
       "replications": 2000,
       "estimable": 2000,
       "mechanism": "beta-binomial"
      },
-     "estimationCost": -0.005755815389637875
+     "estimationCost": 0.004744184610362079
     },
     {
      "label": "p=0.65 n=300 (G=50 x m=6)",
@@ -7044,12 +7548,12 @@
       "clopperPearson": 0.9544185770818305
      },
      "simulated": {
-      "pipeline": 0.9395,
+      "pipeline": 0.9505,
       "replications": 2000,
       "estimable": 2000,
       "mechanism": "beta-binomial"
      },
-     "estimationCost": -0.01491857708183053
+     "estimationCost": -0.003918577081830521
     },
     {
      "label": "p=0.65 n=1000 (G=500 x m=2)",
@@ -7080,12 +7584,12 @@
       "clopperPearson": 0.9513339066188908
      },
      "simulated": {
-      "pipeline": 0.945,
+      "pipeline": 0.948,
       "replications": 2000,
       "estimable": 2000,
       "mechanism": "beta-binomial"
      },
-     "estimationCost": -0.006333906618890883
+     "estimationCost": -0.0033339066188908806
     },
     {
      "label": "p=0.9 n=100 (G=50 x m=2)",
@@ -7116,12 +7620,12 @@
       "clopperPearson": 0.9662426642744406
      },
      "simulated": {
-      "pipeline": 0.9505,
+      "pipeline": 0.963,
       "replications": 2000,
       "estimable": 2000,
       "mechanism": "beta-binomial"
      },
-     "estimationCost": -0.006994107208170841
+     "estimationCost": 0.0055058927918291145
     },
     {
      "label": "p=0.9 n=1000 (G=500 x m=2)",
@@ -7134,12 +7638,12 @@
       "clopperPearson": 0.9549071811146036
      },
      "simulated": {
-      "pipeline": 0.947,
+      "pipeline": 0.948,
       "replications": 2000,
       "estimable": 2000,
       "mechanism": "beta-binomial"
      },
-     "estimationCost": -0.0020978421880322173
+     "estimationCost": -0.0010978421880322164
     },
     {
      "label": "p=0.9 n=3000 (G=500 x m=6)",
@@ -7152,12 +7656,12 @@
       "clopperPearson": 0.9554270227389748
      },
      "simulated": {
-      "pipeline": 0.9565,
+      "pipeline": 0.9615,
       "replications": 2000,
       "estimable": 2000,
       "mechanism": "beta-binomial"
      },
-     "estimationCost": 0.004356583795132041
+     "estimationCost": 0.009356583795132045
     },
     {
      "label": "p=0.99 n=100 (G=50 x m=2)",
@@ -7236,9 +7740,9 @@
   "verdict": {
    "criterion": "P2",
    "met": false,
-   "statement": "160 coverage cells: 34 under-cover and 11 over-cover the pre-committed [94.0%, 96.0%]; 47 sit outside the ±1.96 Monte-Carlo band against 8.0 expected there by chance."
+   "statement": "160 coverage cells: 9 under-cover and 29 over-cover the pre-committed [94.0%, 96.0%]; 41 sit outside the ±1.96 Monte-Carlo band against 8.0 expected there by chance."
   },
-  "wallClockMs": 217790
+  "wallClockMs": 930350
  },
  "p3": {
   "size": {
@@ -7256,14 +7760,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 99,
-      "size": 0.0495,
+      "rejections": 89,
+      "size": 0.0445,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 90,
       "size": 0.045,
-      "inflationFactor": 0.9090909090909091
+      "inflationFactor": 1.0112359550561798
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7279,14 +7783,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 110,
-      "size": 0.055,
+      "rejections": 104,
+      "size": 0.052,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 104,
       "size": 0.052,
-      "inflationFactor": 0.9454545454545454
+      "inflationFactor": 1
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7302,14 +7806,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 111,
-      "size": 0.0555,
+      "rejections": 107,
+      "size": 0.0535,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 108,
       "size": 0.054,
-      "inflationFactor": 0.9729729729729729
+      "inflationFactor": 1.0093457943925235
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7325,14 +7829,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 96,
-      "size": 0.048,
+      "rejections": 88,
+      "size": 0.044,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 89,
       "size": 0.0445,
-      "inflationFactor": 0.9270833333333333
+      "inflationFactor": 1.0113636363636365
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7348,14 +7852,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 97,
-      "size": 0.0485,
+      "rejections": 95,
+      "size": 0.0475,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 97,
       "size": 0.0485,
-      "inflationFactor": 1
+      "inflationFactor": 1.0210526315789474
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7371,14 +7875,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 103,
-      "size": 0.0515,
+      "rejections": 101,
+      "size": 0.0505,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 107,
       "size": 0.0535,
-      "inflationFactor": 1.0388349514563107
+      "inflationFactor": 1.0594059405940592
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7532,14 +8036,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 86,
-      "size": 0.043,
+      "rejections": 85,
+      "size": 0.0425,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 89,
       "size": 0.0445,
-      "inflationFactor": 1.0348837209302326
+      "inflationFactor": 1.0470588235294116
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7555,14 +8059,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 94,
-      "size": 0.047,
+      "rejections": 93,
+      "size": 0.0465,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 101,
       "size": 0.0505,
-      "inflationFactor": 1.074468085106383
+      "inflationFactor": 1.0860215053763442
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7578,14 +8082,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 106,
-      "size": 0.053,
+      "rejections": 104,
+      "size": 0.052,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 111,
       "size": 0.0555,
-      "inflationFactor": 1.0471698113207548
+      "inflationFactor": 1.0673076923076923
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7601,14 +8105,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 116,
-      "size": 0.058,
+      "rejections": 112,
+      "size": 0.056,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 116,
       "size": 0.058,
-      "inflationFactor": 1
+      "inflationFactor": 1.0357142857142858
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7647,14 +8151,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 109,
-      "size": 0.0545,
+      "rejections": 108,
+      "size": 0.054,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 118,
       "size": 0.059,
-      "inflationFactor": 1.0825688073394495
+      "inflationFactor": 1.0925925925925926
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7808,14 +8312,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 105,
-      "size": 0.0525,
+      "rejections": 104,
+      "size": 0.052,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 109,
       "size": 0.0545,
-      "inflationFactor": 1.0380952380952382
+      "inflationFactor": 1.0480769230769231
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7854,14 +8358,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 101,
-      "size": 0.0505,
+      "rejections": 97,
+      "size": 0.0485,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 99,
       "size": 0.0495,
-      "inflationFactor": 0.9801980198019802
+      "inflationFactor": 1.0206185567010309
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -7877,14 +8381,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 107,
-      "size": 0.0535,
+      "rejections": 100,
+      "size": 0.05,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 103,
       "size": 0.0515,
-      "inflationFactor": 0.9626168224299065
+      "inflationFactor": 1.0299999999999998
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -8084,14 +8588,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 104,
-      "size": 0.052,
+      "rejections": 103,
+      "size": 0.0515,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 109,
       "size": 0.0545,
-      "inflationFactor": 1.0480769230769231
+      "inflationFactor": 1.058252427184466
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -8107,14 +8611,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 87,
-      "size": 0.0435,
+      "rejections": 86,
+      "size": 0.043,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 93,
       "size": 0.0465,
-      "inflationFactor": 1.0689655172413794
+      "inflationFactor": 1.0813953488372094
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -8130,14 +8634,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 110,
-      "size": 0.055,
+      "rejections": 101,
+      "size": 0.0505,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 102,
       "size": 0.051,
-      "inflationFactor": 0.9272727272727272
+      "inflationFactor": 1.0099009900990097
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -8153,14 +8657,14 @@
      "estimable": 2000,
      "alpha": 0.05,
      "clustered": {
-      "rejections": 91,
-      "size": 0.0455,
+      "rejections": 79,
+      "size": 0.0395,
       "withinNominal": true
      },
      "unclustered": {
       "rejections": 81,
       "size": 0.0405,
-      "inflationFactor": 0.8901098901098902
+      "inflationFactor": 1.0253164556962024
      },
      "sizeUpperBound": 0.05955168301561458
     },
@@ -8353,8 +8857,8 @@
     "cells": 48,
     "withinNominal": 48,
     "worst": {
-     "label": "size p0=0.65 icc=0 G=500 m=6 latent-difficulty",
-     "size": 0.058
+     "label": "size p0=0.5 icc=0.05 G=500 m=6 beta-binomial",
+     "size": 0.0565
     },
     "meanUnclusteredInflation": 0.07634375
    }
@@ -8549,9 +9053,9 @@
      "analysisSeed": 372978600,
      "replications": 2000,
      "estimable": 2000,
-     "empiricalPower": 0.7845,
+     "empiricalPower": 0.783,
      "calculatorPower": 0.8073843148411086,
-     "gap": -0.022884314841108644,
+     "gap": -0.02438431484110859,
      "withinTolerance": false
     },
     {
@@ -8567,9 +9071,9 @@
      "analysisSeed": 1056077545,
      "replications": 2000,
      "estimable": 2000,
-     "empiricalPower": 0.8015,
+     "empiricalPower": 0.7935,
      "calculatorPower": 0.8021669710130501,
-     "gap": -0.0006669710130501327,
+     "gap": -0.00866697101305014,
      "withinTolerance": true
     },
     {
@@ -8585,9 +9089,9 @@
      "analysisSeed": 1967875377,
      "replications": 2000,
      "estimable": 2000,
-     "empiricalPower": 0.796,
+     "empiricalPower": 0.7945,
      "calculatorPower": 0.800744718925054,
-     "gap": -0.0047447189250540145,
+     "gap": -0.006244718925054071,
      "withinTolerance": true
     },
     {
@@ -8630,15 +9134,15 @@
    "summary": {
     "cells": 5,
     "withinTolerance": 4,
-    "worstGap": 0.022884314841108644
+    "worstGap": 0.02438431484110859
    }
   },
   "verdict": {
    "criterion": "P3",
    "met": false,
-   "statement": "0/48 threshold-test cells and 0/12 permutation-test cells exceed nominal size; power agrees with the calculator to 2.3 pp (tolerance 2 pp); the unclustered negative control reaches 13.2% against a nominal 5%."
+   "statement": "0/48 threshold-test cells and 0/12 permutation-test cells exceed nominal size; power agrees with the calculator to 2.4 pp (tolerance 2 pp); the unclustered negative control reaches 13.2% against a nominal 5%."
   },
-  "wallClockMs": 171304
+  "wallClockMs": 43357
  },
  "p9": {
   "stopping": {
@@ -8652,20 +9156,20 @@
    "alpha": 0.05,
    "analysisSeed": 1154695317,
    "replications": 10000,
-   "singleLookSize": 0.0507,
-   "anyLookSize": 0.1703,
-   "inflationFactor": 3.358974358974359,
+   "singleLookSize": 0.0487,
+   "anyLookSize": 0.1647,
+   "inflationFactor": 3.3819301848049284,
    "cumulativeByLook": [
-    0.0486,
-    0.0765,
-    0.0984,
-    0.1128,
-    0.126,
-    0.1362,
-    0.1453,
-    0.1536,
-    0.164,
-    0.1703
+    0.0445,
+    0.0731,
+    0.0937,
+    0.1084,
+    0.1215,
+    0.1309,
+    0.1405,
+    0.1486,
+    0.159,
+    0.1647
    ],
    "predictedRange": {
     "low": 0.15,
@@ -8798,8 +9302,8 @@
   "verdict": {
    "criterion": "P9",
    "met": true,
-   "statement": "optional stopping: 17.0% against a nominal 5% (predicted 15-30%, confirmed); best-of-8 seed reuse: +2.22 pp on the selection games and +0.01 pp on the same seeds replayed (predicted 1.5-3 pp, confirmed)."
+   "statement": "optional stopping: 16.5% against a nominal 5% (predicted 15-30%, confirmed); best-of-8 seed reuse: +2.22 pp on the selection games and +0.01 pp on the same seeds replayed (predicted 1.5-3 pp, confirmed)."
   },
-  "wallClockMs": 114978
+  "wallClockMs": 17363
  }
 }

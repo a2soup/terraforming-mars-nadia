@@ -1,6 +1,6 @@
 import {AgentRandom} from '../core/rng';
+import {biasCorrectedQuantiles} from './bootstrap';
 import {ELO_PER_LOGIT} from './simulate';
-import {normalCdf, normalQuantile} from './stats';
 import {
   DEFAULT_BOOTSTRAP_REPLICATES,
   Identity,
@@ -959,16 +959,15 @@ function clamp01(value: number): number {
 }
 
 /**
- * The **bias-corrected** percentile pair for a 95% interval: `Phi(2 z0 -/+ 1.96)`, where
- * `z0 = Phi^-1( #{draw < point} / B )`.
+ * The **bias-corrected** percentile pair for a 95% interval, re-exported from `bootstrap.ts`.
  *
  * ## Why the plain percentile interval was not good enough, measured rather than argued
  *
- * §3.1 specifies the percentile method for the *proportions* in `stats.ts`, and there it is fine.
- * For a **rating gap** it under-covers, because a Bradley-Terry gap estimated near the edge of the
- * probability scale has a skewed sampling distribution and a small upward bias, and the plain
- * percentile method inherits both. Measured on a five-identity round robin with 30 pairing groups
- * per pair and a true extreme gap of 486 Elo, over 200 replications at 600 resamples each:
+ * §3.1 specifies the percentile method for the *proportions* in `stats.ts`. For a **rating gap** it
+ * under-covers, because a Bradley-Terry gap estimated near the edge of the probability scale has a
+ * skewed sampling distribution and a small upward bias, and the plain percentile method inherits
+ * both. Measured on a five-identity round robin with 30 pairing groups per pair and a true extreme
+ * gap of 486 Elo, over 200 replications at 600 resamples each:
  *
  * | method | coverage | mean width |
  * | --- | --- | --- |
@@ -976,33 +975,14 @@ function clamp01(value: number): number {
  * | bias-corrected | **94.5%** | 167.4 |
  * | bias-corrected and accelerated (BCa) | **94.5%** | 167.1 |
  *
- * Three things to read off that table, all of which matter for whoever touches this next:
- *
- * - **The interval was mis-placed, not too narrow.** The widths are the same to within 1%; only the
- *   position moved. Widening the interval would have bought the coverage without fixing the defect,
- *   which is precisely the shortcut §3.9 and Unit D's brief are written against.
- * - **The acceleration term earned nothing here**, so it is not implemented. `a` costs a jackknife -
- *   one refit per pairing group, 500 extra fits on the 2p corpus and 300 per replication in the
- *   coverage study above - for a difference of 0.3 Elo on a 167 Elo interval. If a later pool finds
- *   a regime where the skew is worse (a deep ladder with very unequal sample sizes is the obvious
- *   candidate), the jackknife goes here, behind this same function.
- * - **The resample count matters for the tails.** The same study at 200 resamples covered 88-90%:
- *   a 2.5% quantile from 200 draws is the fifth order statistic, and its own noise dominates. Do not
- *   quote a rating interval from a few hundred resamples; {@link DEFAULT_BOOTSTRAP_REPLICATES} is
- *   2,000 for this reason.
+ * The interval was **mis-placed, not too narrow** - the widths agree to within 1%, so widening it
+ * would have bought the coverage without fixing the defect. Unit C's coverage grid then found the
+ * proportion cross-check needed the same correction for the same reason, so **the implementation
+ * moved to `bootstrap.ts`** and is re-exported here: two copies of one correction is two things to
+ * get out of step. The full note - including why the acceleration term is not implemented, and why
+ * 200 resamples is not enough - is on the function there.
  */
-export function biasCorrectedQuantiles(sortedDraws: ReadonlyArray<number>, point: number): [number, number] {
-  const below = sortedDraws.filter((draw) => draw < point).length;
-  // Clamped to the half-integer positions the sample can actually resolve, so an all-above or
-  // all-below bootstrap gives a large finite correction rather than an infinite one.
-  const fraction = Math.min(Math.max(below / sortedDraws.length, 0.5 / sortedDraws.length),
-    1 - 0.5 / sortedDraws.length);
-  const z0 = normalQuantile(fraction);
-  const adjust = (z: number): number => Math.min(Math.max(normalCdf(2 * z0 + z), 1e-4), 1 - 1e-4);
-  return [adjust(-Z_975), adjust(Z_975)];
-}
-
-const Z_975 = 1.959964;
+export {biasCorrectedQuantiles};
 
 /** Linear-interpolated quantile of a sorted array - `bootstrap.ts`'s convention, for the same reason. */
 export function percentile(sorted: ReadonlyArray<number>, q: number): number {

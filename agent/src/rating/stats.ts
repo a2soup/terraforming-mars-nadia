@@ -33,12 +33,16 @@ import {
  * and a directed agent should show a larger ICC because which cards the seed deals starts to
  * matter.
  *
- * **The design effect is not floored at 1** (§3.1). A blocked design legitimately produces
- * `deff < 1`, and flooring it without evidence hides that. A `deff` estimated below 1 from noise
- * *does* narrow the interval anti-conservatively, so this is not a free choice - it is a bet that
- * criterion P2's coverage grid settles. **P2's coverage at ICC = 0 is what decides whether
- * flooring is needed**; if it under-covers there, the fix is to floor and to record that as a
- * measured decision rather than a precaution. Unit C owns that measurement.
+ * **The design effect is estimated unfloored and applied floored at 1** (§3.1, settled by
+ * measurement - Unit D, 31 Jul 2026). §3.1 left the question open and named P2's coverage at
+ * ICC = 0 as what would decide it. The measurement: `deff` lands below 1 on 17-34% of replications
+ * at ICC = 0 from estimation noise alone, and letting those narrow the interval costs coverage.
+ * Flooring lifts mean coverage 0.9482 -> 0.9503 and cuts under-covering cells 5 -> 3 for 0.1% more
+ * width, on the same replications. So {@link ClusterDesign.designEffect} keeps the estimate - two
+ * of the six committed corpora genuinely report one below 1, and a floored field would have hidden
+ * that - and {@link ClusterDesign.appliedDesignEffect} is what the interval and every test's null
+ * variance use. Reporting the estimate and applying the floor are different questions and this
+ * pipeline answers them differently.
  *
  * **Nothing here ever returns `NaN`** (hazard H9). A quantity that cannot be estimated comes back
  * as {@link Unestimable} with the reason, because `NaN` serializes to `null` and a `null` in a
@@ -118,6 +122,7 @@ export function clusterDesign(
       groups,
       meanClusterSize,
       designEffect,
+      appliedDesignEffect: Math.max(1, designEffect),
       icc: 1,
       effectiveN: groups,
       note: 'every observation identical, so the intra-cluster correlation is unidentified; ' +
@@ -138,14 +143,16 @@ export function clusterDesign(
   }
 
   const designEffect = clusterVariance / independent;
+  const appliedDesignEffect = Math.max(1, designEffect);
   return {
     rows,
     groups,
     meanClusterSize,
     designEffect,
+    appliedDesignEffect,
     // With a mean cluster size of 1 there is no within-cluster pair for a correlation to describe.
     icc: meanClusterSize > 1 ? (designEffect - 1) / (meanClusterSize - 1) : 0,
-    effectiveN: rows / designEffect,
+    effectiveN: rows / appliedDesignEffect,
   };
 }
 
@@ -288,6 +295,11 @@ export function marginDistribution(values: ReadonlyArray<number>): MarginDistrib
  * rate. That is what makes this test the exact inverse of {@link requiredGames}: the power
  * calculator's `z_α √(p0 q0)` term is this denominator, so criterion P3's "power agrees with the
  * calculator to within 2 pp" is a real check on both rather than a tautology on neither.
+ *
+ * The `deff` here is {@link ClusterDesign.appliedDesignEffect}, i.e. floored at 1, and it is floored
+ * for the same reason the interval is: an estimate below 1 drawn from noise would shrink the null
+ * variance and make the test reject too often. The interval and the test must be computed on one
+ * variance or a run can report a 95% interval excluding the null beside a test that fails to reject.
  */
 export function thresholdTest(
   clusters: ReadonlyArray<ReadonlyArray<number>>,
@@ -302,7 +314,8 @@ export function thresholdTest(
   if (threshold <= 0 || threshold >= 1) {
     return unestimable(`threshold ${threshold} is outside (0, 1), so the null variance is degenerate`);
   }
-  const standardError = Math.sqrt(threshold * (1 - threshold) * estimate.design.designEffect / estimate.trials);
+  const standardError = Math.sqrt(
+    threshold * (1 - threshold) * estimate.design.appliedDesignEffect / estimate.trials);
   const z = (estimate.rate - threshold) / standardError;
   const pValue = normalUpperTail(z);
   return {
@@ -423,6 +436,18 @@ export type PowerInputs = {
  * sample size down is wrong in the direction that matters - 157 games gives 79.9% power, not 80% -
  * so the discrepancy is recorded here rather than reproduced. Everything else in both of §2.5's
  * tables reproduces exactly.
+ *
+ * **It is a normal approximation, and below ~150 games it overstates power** (measured, criterion
+ * P3). Against the shipped test at the sample sizes this function itself prescribes, empirical power
+ * matched the prediction to under 1.7 pp from n = 158 upward - and missed by **2.4 pp at n = 70**,
+ * the 65%-detection row, where empirical power is 78.5% against a predicted 80.7%. The cause is the
+ * approximation, not the test: at 35 pairing groups the binomial is too discrete for a continuous
+ * normal to place the rejection boundary exactly, and the discreteness costs power rather than size
+ * (P3's size cells are clean at 48/48). **So treat the returned number as a floor at that scale**,
+ * and prefer {@link SMALL_SAMPLE_FLOOR} as the point below which a caller should be told so - the
+ * `power` subcommand prints the caveat rather than leaving it in this comment. Adding a continuity
+ * correction was considered and not done: it would move one row of one table by a few games and
+ * would put a second, differently-parameterized formula in the path of every gate.
  */
 export function requiredGames(inputs: PowerInputs): number | Unestimable {
   const alpha = inputs.alpha ?? 0.05;
@@ -437,6 +462,14 @@ export function requiredGames(inputs: PowerInputs): number | Unestimable {
   const numerator = (zAlpha * Math.sqrt(nullRate * (1 - nullRate)) + zBeta * Math.sqrt(rate * (1 - rate))) ** 2;
   return Math.ceil(designEffect * numerator / (rate - nullRate) ** 2);
 }
+
+/**
+ * The sample size below which {@link requiredGames} and {@link powerAt} are known to overstate power,
+ * measured by criterion P3: 2.4 pp at n = 70, under 1.7 pp from n = 158 up. A caller reporting a
+ * power figure at or below this should say it is a normal approximation at a scale where the
+ * binomial's discreteness costs a couple of points.
+ */
+export const SMALL_SAMPLE_FLOOR = 150;
 
 /** Games rounded up to a whole number of pairing groups - a partly-played group is not a balanced sample. */
 export function requiredGroups(games: number, permutationsPerGroup: number): number {

@@ -243,6 +243,15 @@ a `pendingModelMismatch`**, again with none of the two-way kinds firing.
 | | Win rate | 95% Wilson CI |
 | --- | --- | --- |
 | `greedy-1ply@1` | **99.2%** | **[98.4%, 99.6%]** |
+
+> **Annotation, 31 Jul 2026 — this figure cannot be restated, and that is the finding.** Milestone 2
+> bullet 3 corrects win-rate intervals for the pairing design (games in a group share an Engine
+> seed). It cannot correct this one: `docs/data/baselines_validation.json` carries **summaries only,
+> with no per-game rows**, so the 99.2% is not re-analysable by anything. Bullet 3 played its own
+> 2p corpus on a different seed block (groups 1,000-1,499) and got **98.80% (988/1,000), 95%
+> [97.91%, 99.31%]** - overlapping this interval substantially, a difference of 4 games, and a second
+> sample rather than a correction. The lesson for every later bullet: **commit the rows, not the
+> summary.** See [Rating_Pipeline.md](Rating_Pipeline.md) §5.
 | `random-legal@1` | 0.8% | [0.4%, 1.6%] |
 
 The interval lies entirely above 50%, so the criterion is met. By seat, over the same games: seat 0

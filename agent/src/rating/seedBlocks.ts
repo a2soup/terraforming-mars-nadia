@@ -20,15 +20,26 @@ import {LadderLedger, SEED_BLOCKS, SeedBlockAllocation, SeedBlockName} from './t
  * | **D - development** | 0 - 1,999 | Tuning, debugging, smoke runs, anything iterated on |
  * | **G - gate** | 2,000 - 5,999 | Promotion gates only, one fresh disjoint sub-range each |
  * | **R - regression** | 6,000 - 6,999 | Bullet 5's fixed reference games; never a strength estimate |
+ * | **H - harness** | 7,000 - 9,999 | The harness's own self-tests; added by Unit D, see below |
  *
- * **A finding, recorded here because it is where someone will look for it.** The allocation is
- * being introduced retroactively, and Milestone 2 bullet 1's own validation battery already spent
- * group ranges that fall inside G and R: `matchValidationCli.ts` uses 5,000-5,019 (R2), 6,000-6,029
- * (R3), 7,000-7,039 (R6), 8,000-8,999 (R7) and 9,000-9,009 (R8). Those were `random-legal`
- * self-play development runs, so nothing was certified on them - but the ranges are used, and a
- * future gate allocated over them would be reusing seeds without knowing it. Unit D seeds the
- * ledger with these as spent; {@link assertBlockAvailable} then refuses them, which is exactly the
- * behaviour §3.8 asks for.
+ * **A finding, recorded here because it is where someone will look for it.** The allocation was
+ * introduced retroactively, and Milestone 2 bullet 1's own validation battery already spent group
+ * ranges that do not fit it: `matchValidationCli.ts` uses 5,000-5,019 (R2) inside G, 6,000-6,029
+ * (R3) inside R, and 7,000-7,039 (R6), 8,000-8,999 (R7) and 9,000-9,009 (R8) **past the end of the
+ * three-block allocation entirely**. Those were `random-legal` self-play development runs, so
+ * nothing was certified on them - but the ranges are used, a future gate allocated over 5,000-5,019
+ * would have been reusing seeds without knowing it, and three of the five could not be recorded as
+ * spent at all. Unit D added the `harness` block for the last three and seeded the ledger with all
+ * five; {@link assertBlockAvailable} now refuses them, which is what §3.8 asks for.
+ *
+ * **The workflow, in the order it has to happen** (and the second step is the one that was broken
+ * until it was run end to end - see {@link assertBlockAvailable}):
+ *
+ * 1. `npm run rate -- ladder allocate --block gate --groups N --spent-by "<claim>"
+ *    --preregistered-games N` — reserve the range **before** playing anything.
+ * 2. Play the games into that range (`npm run match -- --start-group <from> --groups N`).
+ * 3. `npm run rate -- gate ... --claim "<claim>"` — the claim string must match the `--spent-by`
+ *    exactly, which is what lets a gate run on its own reservation and on nobody else's.
  */
 
 /** The block a group index falls in, or `undefined` past the end of the allocation. */
@@ -74,6 +85,7 @@ export function assertBlockAvailable(
   to: number,
   ledger: LadderLedger | undefined,
   warn: (message: string) => void = console.warn,
+  claim?: string,
 ): void {
   assertWithinBlock(block, from, to);
 
@@ -88,12 +100,34 @@ export function assertBlockAvailable(
 
   const overlapping = ledger.allocations.filter((allocation) =>
     allocation.block === block && allocation.from <= to && allocation.to >= from);
-  if (overlapping.length > 0) {
-    throw new Error(
-      `group range ${from}-${to} overlaps ${overlapping.length} range(s) the ladder already records ` +
-      `as spent: ${overlapping.map(describeAllocation).join('; ')}. ` +
-      'Allocate a fresh, disjoint sub-range (§3.8) - re-running a gate on its own seeds is not a gate.');
+  if (overlapping.length === 0) {
+    return;
   }
+
+  // A gate's own pre-registration is not a collision - it is the thing §3.8 asks for.
+  //
+  // **Found by running the workflow end to end** (Unit D, 31 Jul 2026), and it made the discipline
+  // unusable rather than merely awkward. §3.8 says each gate is allocated a sub-range "recorded in
+  // the ladder *before* the run"; that allocation then sat in the ledger, and the gate that the
+  // range had been reserved *for* was refused by its own reservation. Every possible gate was
+  // blocked, so the only way to run one would have been to skip the allocation - i.e. to bypass the
+  // discipline entirely, which is worse than not having it.
+  //
+  // `claim` is what closes it: an overlap is allowed exactly when every overlapping allocation was
+  // recorded by this same claim, so a gate may run on the range it reserved and on no other. The
+  // string has to match the `--spent-by` used at allocation time, which is deliberate - a typo
+  // fails closed, and the operator sees the two strings side by side in the message below.
+  if (claim !== undefined && overlapping.every((allocation) => allocation.spentBy === claim)) {
+    return;
+  }
+
+  const own = claim === undefined ?
+    ' (no --claim was given, so no allocation can be recognized as this run\'s own)' :
+    ` (this run claims '${claim}', which matches none of them)`;
+  throw new Error(
+    `group range ${from}-${to} overlaps ${overlapping.length} range(s) the ladder already records ` +
+    `as spent: ${overlapping.map(describeAllocation).join('; ')}${own}. ` +
+    'Allocate a fresh, disjoint sub-range (§3.8) - re-running a gate on its own seeds is not a gate.');
 }
 
 function describeAllocation(allocation: SeedBlockAllocation): string {
@@ -125,12 +159,32 @@ export function nextFreeRange(
 /**
  * Reads Unit B's ladder if it exists. **Unit A never writes it** - `rating/ladder.ts` owns the
  * persistence and `docs/data/ladder.json` is Unit D's to seed (§8). This reads the one field the
- * gate needs and tolerates the file being absent, which it is until Unit B lands.
+ * gate needs and tolerates the file being absent, which it was until Unit B landed.
+ *
+ * **Both shapes are accepted, and that is a bug fix rather than generosity** (Unit D, 31 Jul 2026).
+ * This function was written against a bare `{allocations}` file because Unit B's `ladder.ts` did not
+ * exist yet, and the ladder Unit B then shipped nests it: `{header, strata, ledger, timing}`. So
+ * `parsed.allocations` was `undefined` on every real ladder, this returned an empty list, and
+ * {@link assertBlockAvailable} read that as "no ledger" - which it handles by warning and letting
+ * the run proceed. The net effect was that **the seed-block discipline of §3.8 never once refused
+ * anything**, while printing a warning that looked like a missing file rather than a defect.
+ *
+ * Two things worth taking from it. The first is that the specs did not catch it: P7 and P8 assert
+ * the refusal against a `LadderLedger` built in memory, so they exercised every path except the one
+ * that reads the file that actually exists. The second is that this is the failure mode the whole
+ * bullet is about - nothing crashed, the output stayed plausible, and the guard was off.
  */
 export function loadLedger(filePath: string): LadderLedger | undefined {
   if (!fs.existsSync(filePath)) {
     return undefined;
   }
-  const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8')) as Partial<LadderLedger>;
-  return {allocations: parsed.allocations ?? []};
+  const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8')) as
+    Partial<LadderLedger> & {ledger?: Partial<LadderLedger>};
+  const allocations = parsed.ledger?.allocations ?? parsed.allocations;
+  if (allocations === undefined) {
+    // Present but carrying no ledger at all: report absence rather than an empty ledger, so the
+    // caller's warning says the true thing.
+    return undefined;
+  }
+  return {allocations};
 }

@@ -219,14 +219,35 @@ export type ClusterDesign = {
   /** `rows / groups`. Equal to the permutation count in a single balanced run. */
   meanClusterSize: number;
   /**
-   * `Var_cluster-robust / Var_binomial`. **Not floored at 1** (§3.1): a blocked design legitimately
-   * produces `deff < 1`, and flooring it without evidence hides that. Criterion P2's coverage at
-   * ICC = 0 is what decides whether flooring is needed; see `stats.ts`.
+   * `Var_cluster-robust / Var_binomial`, **as estimated** - deliberately not floored, so that a
+   * genuine `deff < 1` stays visible in the artifact. Two of the six committed corpora report one
+   * (`greedy-1ply@1` at 2p and 3p), which is Appendix prediction 1 being refuted, and a floored
+   * field would have hidden it.
+   *
+   * This is the number to *read*. It is not the number the interval is computed on - see
+   * {@link appliedDesignEffect}.
    */
   designEffect: number;
-  /** `(deff - 1) / (m̄ - 1)`, the intra-cluster correlation implied by the design effect. */
+  /**
+   * `max(1, designEffect)`: the estimated design effect **floored at 1**, which is what
+   * {@link effectiveN} and every test's null variance actually use (§3.1).
+   *
+   * §3.1 left flooring open and named criterion P2's coverage at ICC = 0 as what would settle it.
+   * It settled it: `deff` comes out below 1 on 17-34% of replications at ICC = 0 purely from
+   * estimation noise, and letting those narrow the interval costs coverage. Flooring lifted mean
+   * coverage from 0.9482 to 0.9503 and cut the under-covering cells from 5 to 3, for 0.1% more
+   * width - measured on the same replications, so the comparison is like-for-like
+   * (`docs/data/rating_validation.json` → `p2.proportion`, columns `primary` and `floored`).
+   * The further step of also replacing `z` with a `t` multiplier on `groups - 1` df removed
+   * under-coverage entirely but overshot to 0.963 at 50 groups, trading one error for the other,
+   * and is not shipped.
+   *
+   * So this is a **measured decision, not a precaution**, which is the distinction §3.1 asked for.
+   */
+  appliedDesignEffect: number;
+  /** `(deff - 1) / (m̄ - 1)`, the intra-cluster correlation implied by the *estimated* design effect. */
   icc: number;
-  /** `rows / deff`. The sample size the interval is actually computed on. */
+  /** `rows / appliedDesignEffect`. The sample size the interval is actually computed on. */
   effectiveN: number;
   /**
    * Present only when the design effect could **not** be estimated from the data and a stated
@@ -472,7 +493,7 @@ export type LadderLedger = {
 };
 
 /** The blocks of §3.8. Decided now because seed discipline cannot be retrofitted. */
-export type SeedBlockName = 'development' | 'gate' | 'regression';
+export type SeedBlockName = 'development' | 'gate' | 'regression' | 'harness';
 
 export const SEED_BLOCKS: Readonly<Record<SeedBlockName, {from: number; to: number; use: string}>> = {
   /** Tuning, debugging, smoke runs, anything iterated on. Bullets 1-3's published runs live here. */
@@ -481,6 +502,25 @@ export const SEED_BLOCKS: Readonly<Record<SeedBlockName, {from: number; to: numb
   gate: {from: 2_000, to: 5_999, use: 'promotion gates only, one disjoint sub-range per gate'},
   /** Bullet 5's fixed reference games. Never used for a strength estimate. */
   regression: {from: 6_000, to: 6_999, use: "bullet 5's fixed reference games; never a strength estimate"},
+  /**
+   * The harness's own self-tests - runs that measure the *runner*, not an agent's strength.
+   *
+   * **Added by Unit D, and the reason is a finding.** §3.8's allocation was written as three blocks
+   * covering 0-6,999, and the retroactive check against what had already been spent found that
+   * Milestone 2 bullet 1's validation battery does not fit it: `matchValidationCli.ts` uses
+   * 5,000-5,019 (R2) inside `gate`, 6,000-6,029 (R3) inside `regression`, and 7,000-7,039 (R6),
+   * 8,000-8,999 (R7) and 9,000-9,009 (R8) **past the end of the allocation entirely**. Those are
+   * `random-legal` self-play runs that certified nothing, so no published claim is affected - but
+   * a future gate allocated over 5,000-5,019 would have been reusing seeds without knowing it, and
+   * three of the five ranges could not be recorded as spent at all.
+   *
+   * Rather than move `gate` or `regression` - which would rewrite the meaning of an allocation the
+   * plan document and the SRS both name - this block is added at the top and the two colliding
+   * sub-ranges are recorded in the ledger as spent. The lesson is the one §3.8 already argues, one
+   * bullet earlier than expected: an allocation is only real once something refuses to run outside
+   * it.
+   */
+  harness: {from: 7_000, to: 9_999, use: "the harness's own self-tests; never an agent's strength estimate"},
 };
 
 export type {CorpusHeader};

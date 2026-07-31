@@ -1,0 +1,595 @@
+{
+  "header": {
+    "ladderVersion": "1",
+    "analysisSeed": 41000003,
+    "bootstrapReplicates": 2000,
+    "priorSigma": 4,
+    "anchor": "random-legal@1",
+    "lineage": [
+      "random-legal@1",
+      "greedy-1ply@1"
+    ],
+    "inputs": [
+      {
+        "path": "agent/docs/data/rating_corpus_2p.json",
+        "sha256": "75bb302fc355cf329b090cb6483b112a14f62fae5b7eb4d8731bc1f73a890c03",
+        "location": "",
+        "runId": "2p_greedy-1ply@1_vs_random-legal@1_g1000-1499",
+        "harnessVersion": "1",
+        "players": 2,
+        "lineup": [
+          "greedy-1ply@1",
+          "random-legal@1"
+        ],
+        "startGroup": 1000,
+        "groups": 500,
+        "games": 1000,
+        "balancedGroups": 500,
+        "excludedGroups": 0,
+        "excludedGames": 0,
+        "engineCommit": "868714d72a434ab68fe08e5570ebc6863859ae15",
+        "seedDerivationVersion": 1
+      },
+      {
+        "path": "agent/docs/data/rating_corpus_3p.json",
+        "sha256": "733bee47c52b458d3c2fe3c75117ab3f6bc29ca26d73d92bff7c9979f5a4ba50",
+        "location": "",
+        "runId": "3p_greedy-1ply@1_vs_greedy-1ply@1_vs_random-legal@1_g1500-1599",
+        "harnessVersion": "1",
+        "players": 3,
+        "lineup": [
+          "greedy-1ply@1",
+          "greedy-1ply@1",
+          "random-legal@1"
+        ],
+        "startGroup": 1500,
+        "groups": 100,
+        "games": 600,
+        "balancedGroups": 100,
+        "excludedGroups": 0,
+        "excludedGames": 0,
+        "engineCommit": "868714d72a434ab68fe08e5570ebc6863859ae15",
+        "seedDerivationVersion": 1
+      },
+      {
+        "path": "agent/docs/data/rating_corpus_4p.json",
+        "sha256": "731bbdd3cc1bcc0ac21d4ec8991b544f0b018ae508e33f688b90b185e9faef0a",
+        "location": "",
+        "runId": "4p_greedy-1ply@1_vs_greedy-1ply@1_vs_random-legal@1_vs_random-legal@1_g1600-1624",
+        "harnessVersion": "1",
+        "players": 4,
+        "lineup": [
+          "greedy-1ply@1",
+          "greedy-1ply@1",
+          "random-legal@1",
+          "random-legal@1"
+        ],
+        "startGroup": 1600,
+        "groups": 25,
+        "games": 100,
+        "balancedGroups": 25,
+        "excludedGroups": 0,
+        "excludedGames": 0,
+        "engineCommit": "868714d72a434ab68fe08e5570ebc6863859ae15",
+        "seedDerivationVersion": 1
+      }
+    ],
+    "pooledProvenance": {
+      "engineCommit": "868714d72a434ab68fe08e5570ebc6863859ae15",
+      "harnessVersion": "1",
+      "seedDerivationVersion": 1
+    },
+    "createdAt": "2026-07-31T21:31:09.248Z",
+    "nodeVersion": "v22.23.1"
+  },
+  "strata": [
+    {
+      "players": 2,
+      "pool": {
+        "players": 2,
+        "model": "bradley-terry",
+        "priorSigma": 4,
+        "games": 1000,
+        "groups": 500,
+        "selfMatchGamesExcluded": 0,
+        "converged": true,
+        "effectiveParameters": 0.9974004709182137,
+        "bootstrap": {
+          "replicates": 2000,
+          "usable": 2000
+        },
+        "components": [
+          {
+            "index": 0,
+            "anchor": "random-legal@1",
+            "usesPreferredAnchor": true,
+            "identities": [
+              "greedy-1ply@1",
+              "random-legal@1"
+            ],
+            "ratings": [
+              {
+                "identity": "greedy-1ply@1",
+                "elo": 764.2272438749901,
+                "ci95": {
+                  "low": 682.2389045309609,
+                  "high": 862.1231396283699
+                },
+                "shrinkage": 0.0025995290817862893,
+                "games": 1000
+              },
+              {
+                "identity": "random-legal@1",
+                "elo": 0,
+                "ci95": {
+                  "low": 0,
+                  "high": 0
+                },
+                "shrinkage": 0,
+                "games": 1000
+              }
+            ]
+          }
+        ],
+        "connected": true,
+        "separations": []
+      },
+      "entries": [
+        {
+          "players": 2,
+          "identity": "greedy-1ply@1",
+          "games": 1000,
+          "anchor": {
+            "reference": "random-legal@1",
+            "elo": 764.2272438749901,
+            "ci95": {
+              "low": 682.2389045309609,
+              "high": 862.1231396283699
+            }
+          },
+          "predecessor": {
+            "reference": "random-legal@1",
+            "elo": 764.2272438749901,
+            "ci95": {
+              "low": 682.2389045309609,
+              "high": 862.1231396283699
+            }
+          },
+          "predecessorHeadToHead": {
+            "challenger": "greedy-1ply@1",
+            "incumbent": "random-legal@1",
+            "players": 2,
+            "games": 1000,
+            "groups": 500,
+            "winRate": {
+              "estimable": true,
+              "successes": 988,
+              "trials": 1000,
+              "rate": 0.988,
+              "design": {
+                "rows": 1000,
+                "groups": 500,
+                "meanClusterSize": 2,
+                "designEffect": 0.9898339188498513,
+                "appliedDesignEffect": 1,
+                "icc": -0.01016608115014872,
+                "effectiveN": 1000
+              },
+              "ci95": {
+                "low": 0.9791427314363097,
+                "high": 0.9931223522230928
+              },
+              "bootstrapCi95": {
+                "low": 0.981,
+                "high": 0.994
+              }
+            },
+            "test": {
+              "hypothesis": "greedy-1ply@1 beats random-legal@1 at 2p more often than 50.0%",
+              "threshold": 0.5,
+              "observed": 0.988,
+              "z": 30.863829963243383,
+              "pValue": 1.8270705860248048e-209,
+              "alpha": 0.05,
+              "rejected": true,
+              "design": {
+                "rows": 1000,
+                "groups": 500,
+                "meanClusterSize": 2,
+                "designEffect": 0.9898339188498513,
+                "appliedDesignEffect": 1,
+                "icc": -0.01016608115014872,
+                "effectiveN": 1000
+              }
+            }
+          },
+          "shrinkage": 0.0025995290817862893
+        },
+        {
+          "players": 2,
+          "identity": "random-legal@1",
+          "games": 1000,
+          "anchor": {
+            "reference": "random-legal@1",
+            "elo": 0,
+            "ci95": {
+              "low": 0,
+              "high": 0
+            }
+          },
+          "predecessor": {
+            "estimable": false,
+            "reason": "random-legal@1 is the head of the promotion chain, so it has no predecessor to be rated against (it is the anchor the chain is measured from - §3.4)"
+          },
+          "predecessorHeadToHead": {
+            "estimable": false,
+            "reason": "random-legal@1 is the head of the promotion chain, so it has no predecessor to be rated against (it is the anchor the chain is measured from - §3.4)"
+          },
+          "shrinkage": 0
+        }
+      ]
+    },
+    {
+      "players": 3,
+      "pool": {
+        "players": 3,
+        "model": "plackett-luce",
+        "priorSigma": 4,
+        "games": 600,
+        "groups": 100,
+        "selfMatchGamesExcluded": 0,
+        "converged": true,
+        "effectiveParameters": 0.9988189850280955,
+        "bootstrap": {
+          "replicates": 2000,
+          "usable": 2000
+        },
+        "components": [
+          {
+            "index": 0,
+            "anchor": "random-legal@1",
+            "usesPreferredAnchor": true,
+            "identities": [
+              "greedy-1ply@1",
+              "random-legal@1"
+            ],
+            "ratings": [
+              {
+                "identity": "greedy-1ply@1",
+                "elo": 603.4554930195678,
+                "ci95": {
+                  "low": 537.657694941001,
+                  "high": 685.2938596985346
+                },
+                "shrinkage": 0.0011810149722175645,
+                "games": 600
+              },
+              {
+                "identity": "random-legal@1",
+                "elo": 0,
+                "ci95": {
+                  "low": 0,
+                  "high": 0
+                },
+                "shrinkage": 0,
+                "games": 600
+              }
+            ]
+          }
+        ],
+        "connected": true,
+        "separations": []
+      },
+      "entries": [
+        {
+          "players": 3,
+          "identity": "greedy-1ply@1",
+          "games": 600,
+          "anchor": {
+            "reference": "random-legal@1",
+            "elo": 603.4554930195678,
+            "ci95": {
+              "low": 537.657694941001,
+              "high": 685.2938596985346
+            }
+          },
+          "predecessor": {
+            "reference": "random-legal@1",
+            "elo": 603.4554930195678,
+            "ci95": {
+              "low": 537.657694941001,
+              "high": 685.2938596985346
+            }
+          },
+          "predecessorHeadToHead": {
+            "challenger": "greedy-1ply@1",
+            "incumbent": "random-legal@1",
+            "players": 3,
+            "games": 600,
+            "groups": 100,
+            "winRate": {
+              "estimable": true,
+              "successes": 597,
+              "trials": 600,
+              "rate": 0.995,
+              "design": {
+                "rows": 600,
+                "groups": 100,
+                "meanClusterSize": 6,
+                "designEffect": 0.9847215877366635,
+                "appliedDesignEffect": 1,
+                "icc": -0.0030556824526672965,
+                "effectiveN": 600
+              },
+              "ci95": {
+                "low": 0.9854037935427657,
+                "high": 0.9982981223549456
+              },
+              "bootstrapCi95": {
+                "low": 0.9883333333333333,
+                "high": 1
+              }
+            },
+            "test": {
+              "hypothesis": "greedy-1ply@1 beats random-legal@1 at 3p more often than 66.7%",
+              "threshold": 0.6666666666666666,
+              "observed": 0.995,
+              "z": 17.060700454553444,
+              "pValue": 1.4552217628474994e-65,
+              "alpha": 0.05,
+              "rejected": true,
+              "design": {
+                "rows": 600,
+                "groups": 100,
+                "meanClusterSize": 6,
+                "designEffect": 0.9847215877366635,
+                "appliedDesignEffect": 1,
+                "icc": -0.0030556824526672965,
+                "effectiveN": 600
+              }
+            }
+          },
+          "shrinkage": 0.0011810149722175645
+        },
+        {
+          "players": 3,
+          "identity": "random-legal@1",
+          "games": 600,
+          "anchor": {
+            "reference": "random-legal@1",
+            "elo": 0,
+            "ci95": {
+              "low": 0,
+              "high": 0
+            }
+          },
+          "predecessor": {
+            "estimable": false,
+            "reason": "random-legal@1 is the head of the promotion chain, so it has no predecessor to be rated against (it is the anchor the chain is measured from - §3.4)"
+          },
+          "predecessorHeadToHead": {
+            "estimable": false,
+            "reason": "random-legal@1 is the head of the promotion chain, so it has no predecessor to be rated against (it is the anchor the chain is measured from - §3.4)"
+          },
+          "shrinkage": 0
+        }
+      ]
+    },
+    {
+      "players": 4,
+      "pool": {
+        "players": 4,
+        "model": "plackett-luce",
+        "priorSigma": 4,
+        "games": 100,
+        "groups": 25,
+        "selfMatchGamesExcluded": 0,
+        "converged": true,
+        "effectiveParameters": 0.9959889962349159,
+        "bootstrap": {
+          "replicates": 2000,
+          "usable": 2000
+        },
+        "components": [
+          {
+            "index": 0,
+            "anchor": "random-legal@1",
+            "usesPreferredAnchor": true,
+            "identities": [
+              "greedy-1ply@1",
+              "random-legal@1"
+            ],
+            "ratings": [
+              {
+                "identity": "greedy-1ply@1",
+                "elo": 622.6120128447195,
+                "ci95": {
+                  "low": 498.7593087382302,
+                  "high": 790.6685107301408
+                },
+                "shrinkage": 0.004011003765175936,
+                "games": 100
+              },
+              {
+                "identity": "random-legal@1",
+                "elo": 0,
+                "ci95": {
+                  "low": 0,
+                  "high": 0
+                },
+                "shrinkage": 0,
+                "games": 100
+              }
+            ]
+          }
+        ],
+        "connected": true,
+        "separations": []
+      },
+      "entries": [
+        {
+          "players": 4,
+          "identity": "greedy-1ply@1",
+          "games": 100,
+          "anchor": {
+            "reference": "random-legal@1",
+            "elo": 622.6120128447195,
+            "ci95": {
+              "low": 498.7593087382302,
+              "high": 790.6685107301408
+            }
+          },
+          "predecessor": {
+            "reference": "random-legal@1",
+            "elo": 622.6120128447195,
+            "ci95": {
+              "low": 498.7593087382302,
+              "high": 790.6685107301408
+            }
+          },
+          "predecessorHeadToHead": {
+            "challenger": "greedy-1ply@1",
+            "incumbent": "random-legal@1",
+            "players": 4,
+            "games": 100,
+            "groups": 25,
+            "winRate": {
+              "estimable": true,
+              "successes": 99,
+              "trials": 100,
+              "rate": 0.99,
+              "design": {
+                "rows": 100,
+                "groups": 25,
+                "meanClusterSize": 4,
+                "designEffect": 1.0101010101010095,
+                "appliedDesignEffect": 1.0101010101010095,
+                "icc": 0.0033670033670031665,
+                "effectiveN": 99.00000000000006
+              },
+              "ci95": {
+                "low": 0.945148868818966,
+                "high": 0.998244982798645
+              },
+              "bootstrapCi95": {
+                "low": 0.97,
+                "high": 1
+              }
+            },
+            "test": {
+              "hypothesis": "greedy-1ply@1 beats random-legal@1 at 4p more often than 50.0%",
+              "threshold": 0.5,
+              "observed": 0.99,
+              "z": 9.750876883644878,
+              "pValue": 9.144083574209921e-23,
+              "alpha": 0.05,
+              "rejected": true,
+              "design": {
+                "rows": 100,
+                "groups": 25,
+                "meanClusterSize": 4,
+                "designEffect": 1.0101010101010095,
+                "appliedDesignEffect": 1.0101010101010095,
+                "icc": 0.0033670033670031665,
+                "effectiveN": 99.00000000000006
+              }
+            }
+          },
+          "shrinkage": 0.004011003765175936
+        },
+        {
+          "players": 4,
+          "identity": "random-legal@1",
+          "games": 100,
+          "anchor": {
+            "reference": "random-legal@1",
+            "elo": 0,
+            "ci95": {
+              "low": 0,
+              "high": 0
+            }
+          },
+          "predecessor": {
+            "estimable": false,
+            "reason": "random-legal@1 is the head of the promotion chain, so it has no predecessor to be rated against (it is the anchor the chain is measured from - §3.4)"
+          },
+          "predecessorHeadToHead": {
+            "estimable": false,
+            "reason": "random-legal@1 is the head of the promotion chain, so it has no predecessor to be rated against (it is the anchor the chain is measured from - §3.4)"
+          },
+          "shrinkage": 0
+        }
+      ]
+    }
+  ],
+  "ledger": {
+    "allocations": [
+      {
+        "block": "development",
+        "from": 0,
+        "to": 499,
+        "spentBy": "M2b1 match-runner validation, 2p/3p/4p random-legal self-play (R1, R4, R5)",
+        "recordedAt": "2026-07-28"
+      },
+      {
+        "block": "development",
+        "from": 1000,
+        "to": 1499,
+        "spentBy": "M2b3 rating corpus 2p: greedy-1ply@1 vs random-legal@1",
+        "recordedAt": "2026-07-30"
+      },
+      {
+        "block": "development",
+        "from": 1500,
+        "to": 1599,
+        "spentBy": "M2b3 rating corpus 3p: greedy-1ply@1 x2 vs random-legal@1",
+        "recordedAt": "2026-07-30"
+      },
+      {
+        "block": "development",
+        "from": 1600,
+        "to": 1624,
+        "spentBy": "M2b3 rating corpus 4p: greedy-1ply@1 x2 vs random-legal@1 x2",
+        "recordedAt": "2026-07-30"
+      },
+      {
+        "block": "gate",
+        "from": 5000,
+        "to": 5019,
+        "spentBy": "M2b1 criterion R2 (reproducibility) - predates the allocation; a development run, certified nothing",
+        "recordedAt": "2026-07-28"
+      },
+      {
+        "block": "harness",
+        "from": 7000,
+        "to": 7039,
+        "spentBy": "M2b1 criterion R6 (pooled vs single-process)",
+        "recordedAt": "2026-07-28"
+      },
+      {
+        "block": "harness",
+        "from": 8000,
+        "to": 8999,
+        "spentBy": "M2b1 criterion R7 (throughput) - UNTESTED, host was swapping",
+        "recordedAt": "2026-07-28"
+      },
+      {
+        "block": "harness",
+        "from": 9000,
+        "to": 9009,
+        "spentBy": "M2b1 criterion R8 (absorbed legality accounting)",
+        "recordedAt": "2026-07-28"
+      },
+      {
+        "block": "regression",
+        "from": 6000,
+        "to": 6029,
+        "spentBy": "M2b1 criterion R3 (history fidelity) - predates the allocation; a development run, certified nothing",
+        "recordedAt": "2026-07-28"
+      }
+    ]
+  },
+  "timing": {
+    "wallClockMs": 838
+  }
+}

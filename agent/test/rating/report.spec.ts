@@ -1,4 +1,7 @@
 import {expect} from 'chai';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
 import {buildObservationSet} from '../../src/rating/observations';
 import {
   buildRatingReport,
@@ -9,6 +12,7 @@ import {
   assertBlockAvailable,
   assertWithinBlock,
   blockFor,
+  loadLedger,
   nextFreeRange,
   rangeOf,
 } from '../../src/rating/seedBlocks';
@@ -185,7 +189,10 @@ describe('the rating report (§3.4, §3.7, §3.8)', function() {
       expect(blockFor(1_999)).to.equal('development');
       expect(blockFor(2_000)).to.equal('gate');
       expect(blockFor(6_500)).to.equal('regression');
-      expect(blockFor(9_000), 'past the end of the allocation').to.equal(undefined);
+      // 7,000-9,999 is the `harness` block, added by Unit D once the retroactive ledger seeding
+      // found bullet 1's validation battery already spending 7,000-9,009 outside every block.
+      expect(blockFor(9_000)).to.equal('harness');
+      expect(blockFor(10_000), 'past the end of the allocation').to.equal(undefined);
     });
 
     it('refuses a range that leaves its block', () => {
@@ -199,6 +206,30 @@ describe('the rating report (§3.4, §3.7, §3.8)', function() {
       expect(() => assertBlockAvailable('gate', 2_400, 2_600, ledger, () => undefined))
         .to.throw(/M3 promotion gate/);
       expect(() => assertBlockAvailable('gate', 2_500, 2_999, ledger, () => undefined)).to.not.throw();
+    });
+
+    it('lets a gate run on the range it reserved, and on nobody else\'s', () => {
+      // The end-to-end defect: §3.8 says reserve the range *before* the run, which put the gate's
+      // own reservation in the ledger and made every possible gate refuse itself. A matching claim
+      // is what distinguishes "my reservation" from "someone else's range".
+      expect(() => assertBlockAvailable('gate', 2_000, 2_499, ledger, () => undefined, 'M3 promotion gate'))
+        .to.not.throw();
+      expect(() => assertBlockAvailable('gate', 2_000, 2_499, ledger, () => undefined, 'M4 promotion gate'))
+        .to.throw(/which matches none of them/);
+      expect(() => assertBlockAvailable('gate', 2_000, 2_499, ledger, () => undefined))
+        .to.throw(/no --claim was given/);
+    });
+
+    it('refuses a claim that only partly covers the ranges it overlaps', () => {
+      const two: LadderLedger = {
+        allocations: [
+          ...ledger.allocations,
+          {block: 'gate', from: 2_500, to: 2_999, spentBy: 'M4 promotion gate', recordedAt: '2026-09-01'},
+        ],
+      };
+      // Spanning both reservations with one of the two claims is not "my range".
+      expect(() => assertBlockAvailable('gate', 2_400, 2_600, two, () => undefined, 'M3 promotion gate'))
+        .to.throw(/already records as spent/);
     });
 
     it('warns loudly rather than blocking when no ladder exists yet', () => {
@@ -216,6 +247,64 @@ describe('the rating report (§3.4, §3.7, §3.8)', function() {
 
     it('describes a run\'s occupied range from its start and size', () => {
       expect(rangeOf(1_000, 500)).to.deep.equal({from: 1_000, to: 1_499});
+    });
+
+    /**
+     * The regression guard for the defect that made every check above vacuous in production
+     * (Unit D, 31 Jul 2026). The checks in this block all pass a `LadderLedger` built in memory, so
+     * they exercised every path except reading the file that actually exists - and `loadLedger` was
+     * written against a bare `{allocations}` shape while Unit B's ladder nests it under `ledger`. On
+     * every real ladder it returned an empty list, `assertBlockAvailable` read that as "no ladder
+     * yet", and the discipline warned instead of refusing.
+     */
+    describe('loadLedger, against the shape the ladder actually has', () => {
+      const spent = [{block: 'gate' as const, from: 2_000, to: 2_099, spentBy: 'a gate', recordedAt: '2026-08-01'}];
+
+      function writeTemp(contents: unknown): string {
+        const file = path.join(os.tmpdir(), `ladder-${Date.now()}-${Math.random().toString(36).slice(2)}.json`);
+        fs.writeFileSync(file, JSON.stringify(contents));
+        return file;
+      }
+
+      it('reads the nested ledger a committed ladder carries', () => {
+        const file = writeTemp({header: {}, strata: [], ledger: {allocations: spent}, timing: {}});
+        try {
+          expect(loadLedger(file)?.allocations).to.deep.equal(spent);
+        } finally {
+          fs.unlinkSync(file);
+        }
+      });
+
+      it('still reads a bare {allocations} file', () => {
+        const file = writeTemp({allocations: spent});
+        try {
+          expect(loadLedger(file)?.allocations).to.deep.equal(spent);
+        } finally {
+          fs.unlinkSync(file);
+        }
+      });
+
+      it('reports absence rather than an empty ledger when the file carries none', () => {
+        const file = writeTemp({header: {}, strata: []});
+        try {
+          expect(loadLedger(file), 'an empty ledger and a missing one warn differently').to.equal(undefined);
+        } finally {
+          fs.unlinkSync(file);
+        }
+      });
+
+      it('end to end: the committed ladder makes a spent range refuse', function() {
+        const committed = path.join(__dirname, '..', '..', 'docs', 'data', 'ladder.json');
+        if (!fs.existsSync(committed)) {
+          this.skip();
+        }
+        const ledgerOnDisk = loadLedger(committed);
+        expect(ledgerOnDisk, 'the committed ladder carries a ledger').to.not.equal(undefined);
+        expect(ledgerOnDisk?.allocations.length, 'and it is not empty').to.be.greaterThan(0);
+        // Groups 1000-1499 are the 2p rating corpus, recorded as spent by Unit D.
+        expect(() => assertBlockAvailable('development', 1_000, 1_499, ledgerOnDisk, () => undefined))
+          .to.throw(/already records as spent/);
+      });
     });
   });
 

@@ -20,7 +20,7 @@ import {
   thresholdTest,
   wilsonInterval,
 } from './stats';
-import {DEFAULT_ANALYSIS_SEED, Interval, isUnestimable} from './types';
+import {DEFAULT_ANALYSIS_SEED, DEFAULT_BOOTSTRAP_REPLICATES, Interval, isUnestimable} from './types';
 
 /**
  * The calibration study (Milestone 2, bullet 3, Unit C; agent/docs/Milestone2_Bullet3_Prompts.md
@@ -128,7 +128,7 @@ import {DEFAULT_ANALYSIS_SEED, Interval, isUnestimable} from './types';
  * the cost of estimating the design effect and is the part that *is* attributable to this pipeline.
  *
  * **The power calculator is accurate except at the smallest sample it is asked for.** Empirical power
- * matches `powerAt` to under 1.7 pp at every §2.5 row from n = 158 up, and overstates by **2.3 pp** at
+ * matches `powerAt` to under 1.7 pp at every §2.5 row from n = 158 up, and overstates by **2.4 pp** at
  * n = 70 (the 65%-detection row), where a normal approximation has the least to work with. Treat
  * `requiredGames` as a floor at that scale.
  *
@@ -294,16 +294,23 @@ export type ProportionCoverageCell = {
      */
     degenerate: number;
   };
-  /** **The shipped estimator**: effective-n Wilson with the design effect left unfloored (§3.1). */
+  /**
+   * **The shipped estimator**: effective-n Wilson on the design effect **floored at 1**.
+   *
+   * The floor is here because this grid put it here. The first run of this study shipped the
+   * unfloored interval as `primary` (§3.1 left the question open and named this measurement as what
+   * would settle it); the `unfloored` column below is that estimator, retained so the decision stays
+   * auditable rather than becoming a line in a changelog.
+   */
   primary: CoverageResult;
   /**
-   * The same interval with the design effect floored at 1. §3.1 leaves flooring open and names P2's
-   * coverage at ICC = 0 as the measurement that decides it, so both are computed on the *same*
-   * replications and the difference is the evidence.
+   * **The retired candidate**: the same interval with the design effect left unfloored, as shipped
+   * before 31 Jul 2026. Computed on the *same* replications as `primary`, so the difference between
+   * the two columns is the entire evidence for the flooring decision and not two separate studies.
    */
-  floored: CoverageResult;
+  unfloored: CoverageResult;
   /**
-   * **A candidate fix, not the shipped estimator**: the design effect floored at 1 *and* the normal
+   * **A candidate fix, considered and rejected**: the design effect floored at 1 *and* the normal
    * multiplier replaced by `t` on `groups - 1` degrees of freedom.
    *
    * The reasoning it tests: the shipped interval plugs an *estimated* design effect into a formula
@@ -314,9 +321,11 @@ export type ProportionCoverageCell = {
    * uses exactly this multiplier for exactly this reason, so the pipeline is internally inconsistent
    * about it rather than being deliberately different.
    *
-   * Computed here so that "the interval under-covers at 50 groups" arrives at Unit D with a measured
-   * remedy attached rather than as a problem statement. **`rating/stats.ts` is Unit A's file and is
-   * not modified by this unit** (§8).
+   * Computed here so that "the interval under-covers at 50 groups" arrived at Unit D with a measured
+   * remedy attached rather than as a problem statement. Unit D took the floor and left the `t`
+   * multiplier: it removes under-coverage but overshoots to 0.963 at 50 groups, which trades one
+   * error for the other rather than fixing anything. Kept as a column because "we tried it and it
+   * over-corrected" is worth more than the absence of a column.
    */
   flooredWithT: CoverageResult;
   /** No cluster correction at all - the negative control. Its under-coverage is the justification. */
@@ -340,7 +349,7 @@ export type ProportionCoverageGrid = {
 };
 
 export type VariantComparison = {
-  variant: 'primary' | 'floored' | 'flooredWithT' | 'unclustered';
+  variant: 'primary' | 'unfloored' | 'flooredWithT' | 'unclustered';
   what: string;
   /** Over all 96 cells. */
   meanCoverage: number;
@@ -481,9 +490,9 @@ export function proportionCoverageGrid(options: GridOptions = {}): ProportionCov
 }
 
 const VARIANT_DESCRIPTIONS: Readonly<Record<VariantComparison['variant'], string>> = {
-  primary: 'the shipped estimator: effective-n Wilson, design effect unfloored, z = 1.96',
-  floored: 'design effect floored at 1 (§3.1\'s open question), z = 1.96',
-  flooredWithT: 'design effect floored at 1 and z replaced by t on groups - 1 df - a candidate fix, not shipped',
+  primary: 'the shipped estimator: effective-n Wilson, design effect floored at 1, z = 1.96',
+  unfloored: 'design effect left unfloored - what shipped before 31 Jul 2026, retired by this grid',
+  flooredWithT: 'floored and z replaced by t on groups - 1 df - considered, over-corrects, not shipped',
   unclustered: 'no cluster correction at all - the negative control',
 };
 
@@ -527,7 +536,7 @@ export function proportionCoverageCell(scenario: {
   const random = createAgentRandom(seed);
 
   const primary = tally();
-  const floored = tally();
+  const unfloored = tally();
   const flooredWithT = tally();
   const unclustered = tally();
   // One `t` quantile per cell, not per replication: the group count is fixed by the scenario, and
@@ -565,10 +574,12 @@ export function proportionCoverageCell(scenario: {
     if (estimate.design.note !== undefined) {
       degenerate++;
     }
-    const flooredN = estimate.design.rows / Math.max(1, estimate.design.designEffect);
+    // `estimate.ci95` already carries the floor (`design.appliedDesignEffect`); the unfloored
+    // interval has to be rebuilt here, which is the right way round now that the floor ships.
+    const unflooredN = estimate.design.rows / estimate.design.designEffect;
     record(primary, estimate.ci95, scenario.rate);
-    record(floored, wilsonInterval(estimate.rate, flooredN), scenario.rate);
-    record(flooredWithT, wilsonScoreInterval(estimate.rate, flooredN, tMultiplier), scenario.rate);
+    record(unfloored, wilsonInterval(estimate.rate, unflooredN), scenario.rate);
+    record(flooredWithT, wilsonScoreInterval(estimate.rate, estimate.design.effectiveN, tMultiplier), scenario.rate);
     record(unclustered, wilsonInterval(estimate.rate, estimate.design.rows), scenario.rate);
   }
 
@@ -590,7 +601,7 @@ export function proportionCoverageCell(scenario: {
       degenerate,
     },
     primary: resultOf(primary, estimable, band),
-    floored: resultOf(floored, estimable, band),
+    unfloored: resultOf(unfloored, estimable, band),
     flooredWithT: resultOf(flooredWithT, estimable, band),
     unclustered: resultOf(unclustered, estimable, band),
   };
@@ -812,10 +823,25 @@ export type BootstrapCoverageCell = {
   analysisSeed: number;
   replications: number;
   bootstrapReplicates: number;
+  /** Replications on which the **bootstrap** produced an interval. `primary`'s denominator. */
   estimable: number;
+  /** Replications on which **Wilson** produced an interval. `wilson`'s denominator, and usually all of them. */
+  wilsonEstimable: number;
+  /** Replications on which both did, which is the only population `meanDisagreement` can be computed over. */
+  bothEstimable: number;
   unestimableReasons: Record<string, number>;
-  /** The percentile cluster bootstrap - `bootstrap.ts`'s shipped function. */
+  /** The cluster bootstrap as shipped: bias-corrected quantiles, boundary samples refused. */
   primary: CoverageResult;
+  /**
+   * The **plain percentile** interval on the *same* resamples - the alternative to `primary`.
+   *
+   * This column decided the question and then un-decided it. At the 200 resamples this grid first
+   * ran at, plain beat bias-corrected (0.9418 against 0.9380 below p = 0.99) and the module shipped
+   * plain; at the shipped 2,000 the order reverses (0.9497 against 0.9523, and 5 under-covering
+   * cells against none). Keep both columns and keep the grid at the shipped resample count - the
+   * first reading was a measurement of the study, not of the estimator.
+   */
+  percentile: CoverageResult;
   /** The effective-n Wilson interval on the *same* replications, for a like-for-like comparison. */
   wilson: CoverageResult;
   /** Mean P4b disagreement (worst bound) between the two, per replication. */
@@ -845,7 +871,7 @@ export function bootstrapCoverageGrid(options: GridOptions & {bootstrapReplicate
 } {
   const replications = options.replications ?? REQUIRED_REPLICATIONS;
   const analysisSeed = options.analysisSeed ?? DEFAULT_ANALYSIS_SEED;
-  const bootstrapReplicates = options.bootstrapReplicates ?? 200;
+  const bootstrapReplicates = options.bootstrapReplicates ?? DEFAULT_BOOTSTRAP_REPLICATES;
   const band = coverageBand(replications);
   const groups = 50;
 
@@ -867,9 +893,12 @@ export function bootstrapCoverageGrid(options: GridOptions & {bootstrapReplicate
     const seed = cellSeed(analysisSeed, label);
     const random = createAgentRandom(seed);
     const primary = tally();
+    const percentile = tally();
     const wilson = tally();
     const unestimableReasons: Record<string, number> = {};
     let estimable = 0;
+    let wilsonEstimable = 0;
+    let bothEstimable = 0;
     let disagreement = 0;
 
     for (let replication = 0; replication < replications; replication++) {
@@ -883,18 +912,33 @@ export function bootstrapCoverageGrid(options: GridOptions & {bootstrapReplicate
       });
       const resampled = bootstrapProportion(sample.clusters, {replicates: bootstrapReplicates, random});
       const estimate = proportionEstimate(sample.clusters);
-      if (isUnestimable(resampled) || isUnestimable(estimate)) {
-        const reason = isUnestimable(resampled) ? resampled.reason : (estimate as {reason: string}).reason;
-        const key = shortReason(reason);
+
+      // **Separate denominators, deliberately.** The bootstrap now refuses at the boundary
+      // (rating/bootstrap.ts) and Wilson does not, so scoring both columns only on the replications
+      // where *both* succeeded would make the Wilson column at p = 0.99 a figure conditional on the
+      // ~63% of samples that contained a failure - and that column's whole job is to be comparable
+      // to the analytic anchor, which is unconditional. Each column carries its own count.
+      if (isUnestimable(estimate)) {
+        const key = shortReason(estimate.reason);
+        unestimableReasons[key] = (unestimableReasons[key] ?? 0) + 1;
+      } else {
+        wilsonEstimable++;
+        record(wilson, estimate.ci95, scenario.rate);
+      }
+      if (isUnestimable(resampled)) {
+        const key = shortReason(resampled.reason);
         unestimableReasons[key] = (unestimableReasons[key] ?? 0) + 1;
         continue;
       }
       estimable++;
       record(primary, resampled.ci95, scenario.rate);
-      record(wilson, estimate.ci95, scenario.rate);
-      disagreement += Math.max(
-        Math.abs(resampled.ci95.low - estimate.ci95.low),
-        Math.abs(resampled.ci95.high - estimate.ci95.high));
+      record(percentile, resampled.percentileCi95, scenario.rate);
+      if (!isUnestimable(estimate)) {
+        bothEstimable++;
+        disagreement += Math.max(
+          Math.abs(resampled.ci95.low - estimate.ci95.low),
+          Math.abs(resampled.ci95.high - estimate.ci95.high));
+      }
     }
 
     return {
@@ -908,17 +952,23 @@ export function bootstrapCoverageGrid(options: GridOptions & {bootstrapReplicate
       replications,
       bootstrapReplicates,
       estimable,
+      wilsonEstimable,
+      bothEstimable,
       unestimableReasons,
       primary: resultOf(primary, estimable, band),
-      wilson: resultOf(wilson, estimable, band),
-      meanDisagreement: estimable === 0 ? 0 : disagreement / estimable,
+      percentile: resultOf(percentile, estimable, band),
+      wilson: resultOf(wilson, wilsonEstimable, band),
+      meanDisagreement: bothEstimable === 0 ? 0 : disagreement / bothEstimable,
     };
   });
 
   return {
-    what: 'P2: the percentile cluster bootstrap\'s own coverage, on a reduced grid (G = 50, B = 200) ' +
-      'for the cost reason in the function doc. The Wilson column is computed on the same replications, ' +
-      'so the two columns are a like-for-like comparison rather than two separate studies.',
+    what: `P2: the cluster bootstrap's own coverage, on a reduced grid (G = 50, B = ${bootstrapReplicates}). ` +
+      'The Wilson column is computed on the same simulated samples, so the two are a like-for-like ' +
+      'comparison rather than two separate studies - but each carries its own estimable count, because ' +
+      'the bootstrap refuses at the boundary and Wilson does not. Read `estimable` beside every ' +
+      'coverage figure here: at p = 0.99 the bootstrap declines on roughly a third of samples, and ' +
+      'that refusal is the finding, not a gap in the grid.',
     band,
     cells,
     summary: summarize(cells),

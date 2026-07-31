@@ -76,6 +76,7 @@ import {
   proportionEstimate,
   requiredGames,
   requiredGroups,
+  SMALL_SAMPLE_FLOOR,
 } from '../rating/stats';
 import {
   DEFAULT_ANALYSIS_SEED,
@@ -159,7 +160,24 @@ const COMMON_FLAGS: Readonly<Record<string, FlagKind>> = {
 // Formatting
 // ---------------------------------------------------------------------------------------------
 
-export function formatRate(rate: number): string {
+export /**
+ * The small-sample caveat, printed rather than left in a doc comment.
+ *
+ * Criterion P3 measured the calculator against the shipped test at the sample sizes the calculator
+ * itself prescribes: agreement to under 1.7 pp from n = 158 up, and a 2.4 pp overstatement at
+ * n = 70. The cause is the normal approximation meeting a discrete binomial, and it costs power
+ * rather than size. A reader planning a 35-group run is exactly the reader who will not go looking
+ * for that, so the number carries its own caveat (`stats.ts`'s {@link SMALL_SAMPLE_FLOOR}).
+ */
+function warnSmallSample(games: number): void {
+  if (games <= SMALL_SAMPLE_FLOOR) {
+    console.log(`[rate] caution: at ${games} games this is a normal approximation at a scale where ` +
+      'the binomial is too discrete for it. Measured (P3): it overstates power by 2.4 pp at n = 70 ' +
+      'and by under 1.7 pp from n = 158 up. Treat the figure as a floor.');
+  }
+}
+
+function formatRate(rate: number): string {
   return `${(rate * 100).toFixed(2)}%`;
 }
 
@@ -183,8 +201,13 @@ export function formatEstimate(estimate: ProportionEstimate | Unestimable): stri
     `${formatInterval(estimate.ci95)}${bootstrap}`;
 }
 
-export function formatDesignEffect(design: {designEffect: number; icc: number; groups: number; meanClusterSize: number; note?: string}): string {
-  return `deff ${design.designEffect.toFixed(4)}, ICC ${design.icc.toFixed(4)} ` +
+export function formatDesignEffect(design: {designEffect: number; appliedDesignEffect: number; icc: number; groups: number; meanClusterSize: number; note?: string}): string {
+  // The estimate is what gets printed; the floor is called out only when it bit, because a reader
+  // who sees `deff 0.9898 (applied 1.0000)` learns something and a reader who sees
+  // `deff 1.2518 (applied 1.2518)` on every other line learns to skip the parenthesis.
+  const floored = design.appliedDesignEffect > design.designEffect ?
+    ` (applied ${design.appliedDesignEffect.toFixed(4)} - floored at 1, §3.1)` : '';
+  return `deff ${design.designEffect.toFixed(4)}${floored}, ICC ${design.icc.toFixed(4)} ` +
     `(${design.groups} groups x ${design.meanClusterSize.toFixed(2)})${design.note === undefined ? '' : ` [${design.note}]`}`;
 }
 
@@ -330,12 +353,16 @@ function commandPower(argv: ReadonlyArray<string>): void {
       `[rate] detecting ${formatRate(detect)} needs ${needed} games ` +
       `= ${requiredGroups(needed, permutations)} pairing groups at ${permutations} permutations/group` :
       `[rate] ${needed.reason}`);
+    if (typeof needed === 'number') {
+      warnSmallSample(needed);
+    }
   }
   if (typeof games === 'number') {
     const detectable = minimumDetectableRate(games, inputs);
     console.log(typeof detectable === 'number' ?
       `[rate] ${games} games can detect ${formatRate(detectable)} and nothing finer` :
       `[rate] ${detectable.reason}`);
+    warnSmallSample(games);
   }
   if (detect === undefined && games === undefined) {
     console.log('[rate] the pre-registered tables of §2.5:');
@@ -380,6 +407,7 @@ function commandGate(argv: ReadonlyArray<string>): void {
     '--block': 'string',
     '--start-group': 'number',
     '--ladder': 'string',
+    '--claim': 'string',
   });
   const paths = requirePaths(parsed, 'gate');
   const challenger = stringFlag(parsed, '--challenger');
@@ -408,7 +436,11 @@ function commandGate(argv: ReadonlyArray<string>): void {
   const observed = groupIndices.length === 0 ?
     rangeOf(numberFlag(parsed, '--start-group', SEED_BLOCKS[block].from), 1) :
     {from: Math.min(...groupIndices), to: Math.max(...groupIndices)};
-  assertBlockAvailable(block, observed.from, observed.to, ledger);
+  // The claim must match the `--spent-by` this range was allocated under, or the ledger refuses it
+  // as somebody else's range (§3.8, and the end-to-end defect recorded in `seedBlocks.ts`).
+  const claimFlag = parsed.values.get('--claim');
+  assertBlockAvailable(block, observed.from, observed.to, ledger, console.warn,
+    typeof claimFlag === 'string' ? claimFlag : undefined);
 
   const result = headToHead(set, challenger, incumbent, players, {threshold, bootstrap});
   if (isUnestimable(result)) {

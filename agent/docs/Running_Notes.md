@@ -1102,3 +1102,82 @@ greenery); testing it properly needs board geometry the match record does not ca
 **Host caveat, again.** The machine swapped throughout (4.5 GB of 6.1 GB; macOS resized the swap file
 mid-run) and **no throughput claim is made anywhere in the deliverable**. The 12.6x above is an
 order-of-magnitude observation, not a measurement.
+
+## 2026-07-31 — The rating pipeline: three guards that had never refused anything (Milestone 2, bullet 3)
+
+Full deliverable: [docs/Rating_Pipeline.md](Rating_Pipeline.md). Six of nine pre-committed criteria
+met; P2 and P3 not met and the reasons are the useful part. The findings worth not rediscovering:
+
+**A statistics module cannot be validated by looking at its output.** Every defect below ran without
+error and produced a plausible number. The percentile bootstrap covered **60–64%** at p = 0.99 —
+`0.99^100 = 36.6%` of samples contain no failure, every resample of an all-success sample is
+all-success, and the interval is `[1, 1]` stated with confidence. `1 − 0.366 = 0.634` is the measured
+coverage to three decimals. That is the regime `greedy-1ply@1` occupies. It now returns unestimable,
+and the consequence is published rather than hidden: **above ~99% there is no cross-check on the
+primary interval**. The refusal fires on real data — `random-legal@1` won 0 of 100 games from one 4p
+seat.
+
+**The analytic anchor is what made P2's verdict readable, and it is the mitigation that paid.** Exact
+Wilson coverage at p = 0.99, n = 100 is **92.06%** by enumeration over the binomial pmf — no
+estimator, no generator. The pre-committed band [94.0%, 96.0%] is **unattainable by any interval** in
+four of the sixteen anchor cells. Against that column the pipeline sits within −1.1 to +1.7 pp, and
+over the 72 cells at p ≤ 0.9 it means 0.9503. So P2 stands as not met (the criterion was
+mis-specified, and is recorded as such rather than rewritten to fit), but the estimator is calibrated
+wherever arithmetic allows. The *other* §3.9 mitigation, two cluster mechanisms, paid much less:
+they differ by 0.20–2.23% in total variation.
+
+**A study that measures a configuration nobody ships can decide a question the wrong way, and it did.**
+Unit B measured bias correction worth +2 pp on a Bradley-Terry rating gap (mis-placed, not too narrow
+— widths agreed to 1%). Testing whether it transfers to the proportion bootstrap, on the coverage
+grid **as it then ran, at 200 resamples**, said no: 0.9418 plain against 0.9380 corrected below
+p = 0.99. So the module shipped the plain interval. Re-running the same grid at the **shipped 2,000**
+reverses it — **0.9497 plain with 5 under-covering cells against 0.9523 corrected with none** — and
+the correction ships after all. The first answer was the study's own under-resampling, which is
+*exactly* the effect Unit B had already written down one level lower ("a 2.5% quantile from 200 draws
+is the fifth order statistic"), reappearing where it was being used to make a decision rather than
+report one. **Run grids at shipped settings.** Both columns stay in the artifact.
+
+**§3.1's flooring question has an answer: floor it, and report the estimate unfloored.** `deff` lands
+below 1 on 17–34% of replications at ICC = 0 from noise alone. Flooring lifts mean coverage
+0.9486 → 0.9502 and cuts under-covering cells 5 → 3 (at p ≤ 0.9) for 0.1% more width. Adding a `t`
+multiplier on top removes under-coverage but overshoots to 0.963 at 50 groups — one error traded for
+the other, not shipped. **The floor has a price**: at 4p `deff = 0.78`, the pairing genuinely removed
+22% of the variance, and the floor declines to spend it. That is the largest term in P4b's 4p
+disagreement.
+
+**Two guards had specs, passed them, and had never once refused a real run.** `loadLedger` was
+written against a bare `{allocations}` file while the ladder nests it under `ledger`, so on every real
+ladder it returned an empty list and the seed-block discipline **warned instead of refusing, since it
+was written**. The specs missed it because they all pass a ledger built in memory — every path except
+the one that reads the file that exists. Then, once it worked, the workflow turned out to be
+impossible: §3.8 requires reserving a gate's range *before* the run, and that reservation refused the
+gate it was made for. Every possible gate was blocked, so the only way to run one was to skip the
+allocation. Both found by *using* the CLI. `--claim` closes the second.
+
+**Appendix prediction 1 refuted, in sign.** The greedy-vs-random win-rate design effect is 0.990 /
+0.985 / 1.010 at 2p/3p/4p against a predicted 1.1–1.5, with slightly negative ICC. **A directed agent
+makes the deal matter less, not more** — the pairing buys more variance reduction against a real
+agent than against random play, which is good news for every sample size from M3 on.
+
+**Prediction 2 refuted diagnosably.** Fitted 764 Elo, not ~837 — it tracks its own corpus's 988/1,000
+to 2 Elo where §2.4's figure came from bullet 2's 992/1,000 on a different seed block. The interval
+came out *narrower* than predicted, which the prediction said would mean a broken bootstrap; it does
+not — three independent routes (fitted percentile 190, win-rate bootstrap 193, Wilson-through-Elo
+194) agree, and the residual 10 Elo is the bias correction. Check the escape clause before dismissing
+it.
+
+**P9's two numbers, for M3's methodology.** Optional stopping every 50 groups to 1,000 games turns a
+4.87% test into **16.47%** (×3.38). Best-of-8 selection on a reused block inflates the reported win
+rate by **+2.22 pp** — but replaying the *same seeds* with fresh agent randomness recovers to
++0.01 pp. So the inflation is winner's curse on the games, not a variant × seed interaction: **never
+report the selection games** buys nearly all of it, and **never reuse a seed** buys the rest.
+
+**Commit the rows, not the summary.** `baselines_validation.json` carries summaries only, so bullet
+2's 99.2% headline cannot be re-analysed by anything, including this pipeline. This bullet's own
+corpus gives 98.80% [97.91%, 99.31%] on a different seed block — a second sample, not a correction,
+and the only reason a comparison is possible at all is that this bullet committed per-game rows.
+
+**Seed-block housekeeping.** Bullet 1's validation battery had already spent 5,000–5,019 inside the
+`gate` block, 6,000–6,029 inside `regression`, and 7,000–9,009 **past the end of the whole
+allocation**. A fourth block (`harness`, 7,000–9,999) was added rather than moving `gate` or
+`regression`, and all nine ranges are now in the ledger.

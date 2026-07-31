@@ -52,7 +52,7 @@ import {
   sizeGrid,
 } from '../rating/calibration';
 import {defaultRatingOutputDir} from '../rating/report';
-import {DEFAULT_ANALYSIS_SEED} from '../rating/types';
+import {DEFAULT_ANALYSIS_SEED, DEFAULT_BOOTSTRAP_REPLICATES} from '../rating/types';
 
 type PhaseName = 'p2' | 'p3' | 'p9';
 
@@ -294,7 +294,11 @@ function main(): void {
   let replications = REQUIRED_REPLICATIONS;
   let stoppingReplications: number | undefined;
   let reuseReplications: number | undefined;
-  let bootstrapReplicates = 200;
+  // The **shipped** resample count, not a cheaper one. The grid first ran at 200 for cost, which
+  // made its bootstrap column a measurement of a configuration nobody uses - and Unit B had already
+  // measured that 200 resamples covers 88-90% where 600 covers 94.5%, because a 2.5% quantile from
+  // 200 draws is the fifth order statistic. The whole grid takes 35 s either way.
+  let bootstrapReplicates = DEFAULT_BOOTSTRAP_REPLICATES;
   let analysisSeed = DEFAULT_ANALYSIS_SEED;
 
   for (let i = 0; i < argv.length; i++) {
