@@ -245,6 +245,32 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'entries in `RATING_TIMING_FIELDS`, so P8\'s reproducibility comparison strips it explicitly.',
   },
   {
+    file: 'src/rating/ladder.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      'The ladder\'s own `timing.wallClockMs` (Milestone 2 bullet 3, Unit B): a `started` stamp and the ' +
+      'difference, on an analysis that reads committed artifacts and plays no games. Identical in kind ' +
+      'to `src/rating/report.ts`\'s entry above, and covered by the same mechanism: it is one of the ' +
+      'three entries in `LADDER_TIMING_FIELDS`, which `stripLadderTimingFields` removes before two ' +
+      'builds of one ladder are required to be identical. Nothing here can reach a game - this module ' +
+      'never creates one - and its only randomness is the cluster bootstrap the rating fits refit on, ' +
+      'which draws from `createAgentRandom(analysisSeed)` (§2.6, hazard H11).',
+  },
+  {
+    file: 'src/rating/ladder.ts',
+    rule: 'new-date',
+    occurrences: 3,
+    reason:
+      'Two provenance stamps, both written once and never read back. `LadderHeader.createdAt` (twice: ' +
+      '`buildLadder` and `emptyLadder`) is identical in kind to `corpus.ts`\'s and `report.ts`\'s ' +
+      '`createdAt` above and is stripped by `LADDER_TIMING_FIELDS`. `SeedBlockAllocation.recordedAt` ' +
+      'is the date a seed-block sub-range was recorded as spent (§3.8) - it is *data*, deliberately ' +
+      'not stripped, because "recorded before the run" is the entire content of the commitment the ' +
+      'ledger makes; the CLI\'s `--recorded-at` overrides it so a retroactive entry can carry the ' +
+      'true date rather than today\'s. Neither reaches a decision, a fingerprint or a seed.',
+  },
+  {
     file: 'src/runner/baselinesValidationCli.ts',
     rule: 'new-date',
     occurrences: 1,

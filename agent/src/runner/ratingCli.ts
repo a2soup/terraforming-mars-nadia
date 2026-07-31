@@ -16,6 +16,15 @@
  *     npm run rate -- gate --challenger greedy-1ply@1 --incumbent random-legal@1 \
  *       --preregistered-games 1000 --block gate --start-group 2000 docs/data/rating_corpus_2p.json
  *
+ *   The ratings (Unit B), on the Elo scale with random-legal@1 anchored at 0:
+ *     npm run rate -- elo docs/data/rating_corpus_2p.json
+ *
+ *   The ladder: build it, read it, allocate a gate's seeds, or re-derive it from its own inputs:
+ *     npm run ladder -- build docs/data/rating_corpus_2p.json docs/data/rating_corpus_3p.json --out ladder.json
+ *     npm run ladder -- show --ladder docs/data/ladder.json
+ *     npm run ladder -- allocate --block gate --groups 500 --spent-by m3-promotion --out ladder.json
+ *     npm run ladder -- verify --ladder docs/data/ladder.json
+ *
  * **The gate is a win rate, never a rating** (§3.4). Every acceptance criterion in the SRS is a
  * rate with a threshold - AC-2, AC-3, AC-5, AC-7 - and not one of them is stated as an Elo. A pool
  * rating borrows strength across the whole comparison graph, so a new agent's rating can move
@@ -31,6 +40,27 @@
  */
 import * as path from 'path';
 import {analysisRandom} from '../rating/bootstrap';
+import {
+  DEFAULT_PRIOR_SIGMA,
+  EloBounds,
+  PoolRating,
+  describePool,
+  eloFromWinRate,
+} from '../rating/bradleyTerry';
+import {
+  AllocationRequest,
+  DEFAULT_LINEAGE,
+  Ladder,
+  LadderEntry,
+  RelativeRating,
+  allocate,
+  buildLadder,
+  emptyLadder,
+  loadLadder,
+  rateStratum,
+  rederiveLadder,
+  saveLadder,
+} from '../rating/ladder';
 import {buildObservationSet, clustersOf, stratify} from '../rating/observations';
 import {
   buildRatingReport,
@@ -423,9 +453,340 @@ function commandGate(argv: ReadonlyArray<string>): void {
   }
 }
 
-/** Where `ladder.json` lives by default. Unit B owns the file; this only reads it. */
+/** Where `ladder.json` lives by default. */
 function defaultLadderDir(): string {
   return path.dirname(resolveRatingOutputPath('ladder.json'));
+}
+
+function defaultLadderPath(): string {
+  return path.join(defaultLadderDir(), 'ladder.json');
+}
+
+// ---------------------------------------------------------------------------------------------
+// Unit B: the ratings and the ladder (§8 - a new region of this dispatch table, not a second CLI)
+// ---------------------------------------------------------------------------------------------
+
+const RATING_FLAGS: Readonly<Record<string, FlagKind>> = {
+  ...COMMON_FLAGS,
+  '--prior-sigma': 'number',
+  '--players': 'number',
+};
+
+function formatBounds(bounds: EloBounds): string {
+  // An unbounded end prints as the word, never as a number and never as `Infinity` (H3, P5). The
+  // whole failure this guards against is a reader seeing a plausible figure where the data has
+  // nothing to say.
+  const low = bounds.low === null ? 'unbounded' : bounds.low.toFixed(0);
+  const high = bounds.high === null ? 'unbounded' : bounds.high.toFixed(0);
+  return `[${low}, ${high}]`;
+}
+
+function printPool(pool: PoolRating): void {
+  console.log(`[rate] ${pool.players}p ${pool.model}: ${pool.games} games in ${pool.groups} pairing groups, ` +
+    `prior sigma ${pool.priorSigma} logits (${(pool.priorSigma * 400 / Math.LN10).toFixed(0)} Elo)`);
+  if (pool.selfMatchGamesExcluded > 0) {
+    console.log(`[rate]   excluded ${pool.selfMatchGamesExcluded} self-match game(s): a lineup of one identity is ` +
+      '50/50 by symmetry and carries no information about relative strength (§3.6)');
+  }
+  if (!pool.converged) {
+    console.warn('[rate]   WARNING: the fit did not converge; treat every number below as provisional');
+  }
+  if (!pool.connected) {
+    console.warn(`[rate]   WARNING: the comparison graph has ${pool.components.length} components. There is no ` +
+      'single scale across them - each table below is anchored separately and the numbers in one ' +
+      'may not be compared with the numbers in another (§3.4).');
+  }
+  for (const component of pool.components) {
+    if (pool.components.length > 1) {
+      console.log(`[rate]   component ${component.index}: ${component.identities.join(', ')}`);
+    }
+    if (!component.usesPreferredAnchor) {
+      console.log(`[rate]   anchored at ${component.anchor} (random-legal@1 is not in this component)`);
+    }
+    for (const rating of component.ratings) {
+      console.log(`  ${rating.identity.padEnd(20)} ${rating.elo.toFixed(0).padStart(6)} Elo  95% ` +
+        `${formatBounds(rating.ci95)}  shrinkage ${(rating.shrinkage * 100).toFixed(1)}%  ` +
+        `${rating.games} games`);
+      if (rating.ci95.unbounded !== undefined) {
+        console.log(`  ${' '.repeat(20)} ${rating.ci95.unbounded.reason}`);
+      }
+    }
+  }
+  console.log(`[rate]   ${pool.effectiveParameters.toFixed(2)} of ${
+    pool.components.reduce((total, component) => total + component.identities.length, 0)
+  } parameters are pinned by data rather than by the prior`);
+  if (pool.bootstrap === undefined) {
+    console.log('[rate]   no bootstrap was run, so no interval exists. §3.3 takes rating intervals from the ' +
+      'cluster bootstrap and deliberately not from the Hessian: the near-separated regime this pool ' +
+      'occupies is where the asymptotic normal approximation is worst.');
+  } else {
+    console.log(`[rate]   ${pool.bootstrap.usable}/${pool.bootstrap.replicates} bootstrap resamples usable`);
+  }
+}
+
+/**
+ * The ratings for a pool (§3.3), on the Elo scale with `random-legal@1` at 0.
+ *
+ * **With two agents this is the win rate in different units** (§2.4, §3.4) and carries no additional
+ * information - the command says so in its own output, next to the number, because the temptation to
+ * read a rating as independent evidence is exactly what §3.4 is written against. The rating earns
+ * its keep only as the pool grows.
+ */
+function commandElo(argv: ReadonlyArray<string>): void {
+  const parsed = parseFlags(argv, RATING_FLAGS);
+  const paths = requirePaths(parsed, 'elo');
+  const analysisSeed = numberFlag(parsed, '--analysis-seed', DEFAULT_ANALYSIS_SEED);
+  const replicates = numberFlag(parsed, '--bootstrap-replicates', DEFAULT_BOOTSTRAP_REPLICATES);
+  const priorSigma = numberFlag(parsed, '--prior-sigma', DEFAULT_PRIOR_SIGMA);
+  const random = parsed.values.get('--no-bootstrap') === true ? undefined : analysisRandom(analysisSeed);
+
+  const set = buildObservationSet([...paths].sort());
+  const wanted = parsed.values.get('--players');
+  const playerCounts = typeof wanted === 'number' ?
+    set.playerCounts.filter((players) => players === wanted) :
+    set.playerCounts;
+
+  console.log(`[rate] analysis seed ${analysisSeed}, ${random === undefined ? 0 : replicates} bootstrap replicates, ` +
+    `Engine pin ${set.sources[0].engineCommit.slice(0, 9)}`);
+
+  for (const players of playerCounts) {
+    console.log('');
+    const fit = rateStratum(stratify(set, players), players, {priorSigma, replicates, random});
+    const pool = describePool(fit);
+    printPool(pool);
+
+    // **The note §3.4 requires, printed next to the number rather than left to the write-up.** With
+    // two identities *at 2p* a pool rating adds nothing: it is the head-to-head win rate through
+    // `-400 log10(1/p - 1)` and back. Printing the win-rate-derived figure beside the fitted one
+    // makes that checkable rather than assertable - they agree to within the cluster correction and
+    // the prior, and if they ever did not, one of the two would be wrong.
+    //
+    // **The `players === 2` guard is load-bearing and was added after the note fired at 3p.** There
+    // the identity-level win rate is not a two-agent quantity at all: `greedy-1ply@1` holds two of
+    // three seats in this bullet's 3p corpus, so its 99.5% "win rate against random-legal@1" is
+    // mostly seat arithmetic (hazard H2) and maps to 920 Elo against a fitted 603. The two numbers
+    // are not estimates of the same thing, and printing them side by side under the word
+    // "monotonically transformed" would invite exactly the reading §3.4 exists to prevent.
+    if (players === 2 && fit.identities.length === 2 && pool.components.length === 1) {
+      const {anchor} = pool.components[0];
+      const subject = fit.identities.find((identity) => identity !== anchor) as string;
+      const observed = headToHead(set, subject, anchor, players);
+      const implied = isUnestimable(observed) || isUnestimable(observed.winRate) ?
+        null :
+        eloFromWinRate(observed.winRate.rate);
+      console.log(`[rate]   NOTE: with two identities the Elo *is* the head-to-head win rate, monotonically ` +
+        `transformed, and carries no additional information (§2.4, §3.4).${implied === null ? '' :
+          ` ${subject}'s raw win rate against ${anchor} maps to ${implied.toFixed(0)} Elo.`} The fitted ` +
+        'figure differs from it only by the cluster correction and the prior. A rating earns its ' +
+        'keep as the pool grows, and a promotion is never argued from one.');
+    }
+  }
+}
+
+function formatRelative(rating: RelativeRating | Unestimable): string {
+  return isUnestimable(rating) ?
+    `unestimable (${rating.reason})` :
+    `${rating.elo.toFixed(0)} Elo vs ${rating.reference}, 95% ${formatBounds(rating.ci95)}`;
+}
+
+function printLadder(ladder: Ladder): void {
+  console.log(`[ladder] version ${ladder.header.ladderVersion}, anchor ${ladder.header.anchor}, ` +
+    `prior sigma ${ladder.header.priorSigma}, analysis seed ${ladder.header.analysisSeed}`);
+  console.log(`[ladder] promotion chain: ${ladder.header.lineage.join(' -> ')}`);
+  for (const input of ladder.header.inputs) {
+    console.log(`[ladder]   ${input.path} ${input.players}p ${input.runId} ` +
+      `groups ${input.startGroup}-${input.startGroup + input.groups - 1} sha256 ${input.sha256.slice(0, 12)}`);
+  }
+  for (const stratum of ladder.strata) {
+    console.log('');
+    printPool(stratum.pool);
+    for (const entry of stratum.entries) {
+      printEntry(entry);
+    }
+  }
+  console.log('');
+  console.log(`[ladder] seed-block ledger: ${ladder.ledger.allocations.length} allocation(s) (§3.8)`);
+  for (const allocation of ladder.ledger.allocations) {
+    console.log(`[ladder]   ${allocation.block.padEnd(12)} ${String(allocation.from).padStart(5)}-` +
+      `${String(allocation.to).padEnd(5)} spent by '${allocation.spentBy}' on ${allocation.recordedAt}` +
+      `${allocation.preregisteredGames === undefined ? '' : `, N = ${allocation.preregisteredGames} pre-registered`}`);
+  }
+}
+
+function printEntry(entry: LadderEntry): void {
+  console.log(`  ${entry.identity.padEnd(20)} anchor ${formatRelative(entry.anchor)}`);
+  console.log(`  ${' '.repeat(20)} predecessor ${formatRelative(entry.predecessor)}`);
+  // Printed last and deliberately: this is the number a promotion is decided on. Every acceptance
+  // criterion in the SRS is a rate with a threshold, and none is stated as an Elo (§3.4).
+  const gate = entry.predecessorHeadToHead;
+  console.log(`  ${' '.repeat(20)} GATE STATISTIC (a win rate, never the Elo - §3.4): ${
+    isUnestimable(gate) ? `unestimable (${gate.reason})` : formatEstimate(gate.winRate)}`);
+  // The threshold is printed with the rate because at 3p+ it is *not* 0.5: an identity holding two
+  // of three seats takes first place two thirds of the time at equal strength (hazard H2), and a
+  // rate quoted without its null invites exactly that misreading.
+  if (!isUnestimable(gate) && !isUnestimable(gate.test)) {
+    console.log(`  ${' '.repeat(20)} vs a null of ${formatRate(gate.test.threshold)} ` +
+      `(seats held / players), p = ${gate.test.pValue.toExponential(2)}, ` +
+      `${gate.test.rejected ? 'REJECTS the null' : 'does not reject'}`);
+  }
+}
+
+function commandLadder(argv: ReadonlyArray<string>): void {
+  const [action, ...rest] = argv;
+  const known = action === undefined ? '' : action;
+  switch (known) {
+  case 'build':
+    return ladderBuild(rest);
+  case 'show':
+    return ladderShow(rest);
+  case 'allocate':
+    return ladderAllocate(rest);
+  case 'verify':
+    return ladderVerify(rest);
+  default:
+    throw new Error(
+      `ladder needs an action: build | show | allocate | verify (got '${known}').\n` +
+      '  build     fit every player count in the named artifacts and write the ladder\n' +
+      '  show      print a committed ladder\n' +
+      "  allocate  record a seed-block sub-range as spent, *before* the run spends it (§3.8)\n" +
+      '  verify    reload the recorded inputs, refit, and check the committed numbers come back');
+  }
+}
+
+const LADDER_FLAGS: Readonly<Record<string, FlagKind>> = {
+  ...RATING_FLAGS,
+  '--out': 'string',
+  '--ladder': 'string',
+  '--lineage': 'string',
+};
+
+function ladderBuild(argv: ReadonlyArray<string>): void {
+  const parsed = parseFlags(argv, LADDER_FLAGS);
+  const paths = requirePaths(parsed, 'ladder build');
+  const ladderPath = stringFlag(parsed, '--ladder', defaultLadderPath());
+  const existing = loadLadder(ladderPath);
+  const lineageFlag = parsed.values.get('--lineage');
+
+  // The ledger is carried forward, never regenerated. A rebuild that dropped it would silently
+  // un-spend every range a previous gate had claimed, which is the one way an append-only record
+  // stops being one (§3.8).
+  const ladder = buildLadder(paths, {
+    analysisSeed: numberFlag(parsed, '--analysis-seed', DEFAULT_ANALYSIS_SEED),
+    bootstrapReplicates: parsed.values.get('--no-bootstrap') === true ?
+      0 :
+      numberFlag(parsed, '--bootstrap-replicates', DEFAULT_BOOTSTRAP_REPLICATES),
+    priorSigma: numberFlag(parsed, '--prior-sigma', DEFAULT_PRIOR_SIGMA),
+    lineage: typeof lineageFlag === 'string' ?
+      lineageFlag.split(',').map((identity) => identity.trim()).filter((identity) => identity.length > 0) :
+      existing?.header.lineage ?? DEFAULT_LINEAGE,
+    ledger: existing?.ledger,
+  });
+
+  printLadder(ladder);
+  const out = parsed.values.get('--out');
+  if (typeof out === 'string') {
+    const resolved = resolveRatingOutputPath(out);
+    saveLadder(resolved, ladder);
+    console.log(`[ladder] wrote ${resolved}`);
+  } else {
+    console.log('[ladder] not written: pass --out ladder.json to persist it');
+  }
+}
+
+function ladderShow(argv: ReadonlyArray<string>): void {
+  const parsed = parseFlags(argv, {'--ladder': 'string'});
+  const ladderPath = stringFlag(parsed, '--ladder', defaultLadderPath());
+  const ladder = loadLadder(ladderPath);
+  if (ladder === undefined) {
+    throw new Error(`no ladder at ${ladderPath}. Build one with: npm run ladder -- build <artifacts...> --out ladder.json`);
+  }
+  printLadder(ladder);
+}
+
+/**
+ * Records a seed-block sub-range as spent (§3.8, hazard H7).
+ *
+ * **Run this before the games, not after.** The ledger's whole value is that it is written first: a
+ * range recorded afterwards records what happened, which is a log, and what §3.8 needs is a
+ * commitment. `seedBlocks.ts`'s `assertBlockAvailable` - which the gate calls - is what turns that
+ * commitment into a refusal.
+ */
+function ladderAllocate(argv: ReadonlyArray<string>): void {
+  const parsed = parseFlags(argv, {
+    '--block': 'string',
+    '--groups': 'number',
+    '--spent-by': 'string',
+    '--from': 'number',
+    '--preregistered-games': 'number',
+    '--recorded-at': 'string',
+    '--ladder': 'string',
+    '--out': 'string',
+  });
+  const ladderPath = stringFlag(parsed, '--ladder', defaultLadderPath());
+  const ladder = loadLadder(ladderPath) ?? emptyLadder();
+  const block = stringFlag(parsed, '--block') as SeedBlockName;
+  if (SEED_BLOCKS[block] === undefined) {
+    throw new Error(`--block must be one of ${Object.keys(SEED_BLOCKS).join(', ')}, got '${String(block)}'`);
+  }
+  const from = parsed.values.get('--from');
+  const preregistered = parsed.values.get('--preregistered-games');
+  const recordedAt = parsed.values.get('--recorded-at');
+
+  const request: AllocationRequest = {
+    block,
+    groups: numberFlag(parsed, '--groups', 0),
+    spentBy: stringFlag(parsed, '--spent-by'),
+    ...(typeof from === 'number' ? {from} : {}),
+    ...(typeof preregistered === 'number' ? {preregisteredGames: preregistered} : {}),
+    ...(typeof recordedAt === 'string' ? {recordedAt} : {}),
+  };
+  const updated = allocate(ladder, request);
+  const allocation = updated.ledger.allocations[updated.ledger.allocations.length - 1];
+
+  console.log(`[ladder] allocated groups ${allocation.from}-${allocation.to} in the '${allocation.block}' block ` +
+    `to '${allocation.spentBy}' on ${allocation.recordedAt}` +
+    `${allocation.preregisteredGames === undefined ? '' : `, N = ${allocation.preregisteredGames} pre-registered`}`);
+  if (allocation.preregisteredGames === undefined && block === 'gate') {
+    console.warn('[ladder] WARNING: a gate allocation with no --preregistered-games has no committed N, so its ' +
+      'p-value is not protected against optional stopping (criterion P9 measures that at a predicted ' +
+      '15-30% false-positive rate against a nominal 5%).');
+  }
+
+  const out = stringFlag(parsed, '--out', ladderPath);
+  saveLadder(resolveRatingOutputPath(out), updated);
+  console.log(`[ladder] wrote ${resolveRatingOutputPath(out)}`);
+}
+
+/**
+ * Re-derives a committed ladder from its own recorded inputs (§8, Unit B).
+ *
+ * **This is the property that makes the ladder an audit trail rather than a cache.** A ladder that
+ * cannot reproduce its own ratings from its own recorded artifacts is a set of numbers whose
+ * provenance has drifted - the failure a months-long accumulating record is most prone to, and the
+ * one nobody notices, because a stale number looks exactly like a fresh one.
+ */
+function ladderVerify(argv: ReadonlyArray<string>): void {
+  const parsed = parseFlags(argv, {'--ladder': 'string'});
+  const ladderPath = stringFlag(parsed, '--ladder', defaultLadderPath());
+  const ladder = loadLadder(ladderPath);
+  if (ladder === undefined) {
+    throw new Error(`no ladder at ${ladderPath}`);
+  }
+
+  const result = rederiveLadder(ladder);
+  for (const problem of result.inputProblems) {
+    console.error(`[ladder]   INPUT: ${problem}`);
+  }
+  for (const difference of result.differences) {
+    console.error(`[ladder]   DIFFERS: ${difference}`);
+  }
+  if (result.matches) {
+    console.log(`[ladder] VERIFIED: ${ladderPath} re-derives to identical ratings from its ` +
+      `${ladder.header.inputs.length} recorded input(s), all hashes matching.`);
+    return;
+  }
+  console.error('[ladder] NOT VERIFIED: this ladder does not re-derive from its own recorded inputs.');
+  process.exitCode = 1;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -458,6 +819,16 @@ export const RATING_SUBCOMMANDS: Record<string, RatingSubcommand> = {
   gate: {
     describe: 'the promotion gate: a pre-registered one-sided head-to-head test (criterion P8)',
     run: commandGate,
+  },
+  // Unit B's region of the table (§8). Both are thin shells over `rating/bradleyTerry.ts`,
+  // `rating/plackettLuce.ts` and `rating/ladder.ts`, which own the computation.
+  elo: {
+    describe: 'ratings on the Elo scale, anchored at random-legal@1, with separation handled (§3.3)',
+    run: commandElo,
+  },
+  ladder: {
+    describe: 'build | show | allocate | verify - the append-only record and its seed-block ledger',
+    run: commandLadder,
   },
 };
 
