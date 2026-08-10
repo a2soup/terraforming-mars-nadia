@@ -1,0 +1,195 @@
+{
+  "header": {
+    "engineCommit": "868714d72a434ab68fe08e5570ebc6863859ae15",
+    "agentCommit": "555a661d9ecc1c19c36574561432aeade30b2de0",
+    "nodeVersion": "v22.23.1",
+    "agentVersion": "0.0.1",
+    "seedDerivationVersion": 1,
+    "env": {},
+    "createdAt": "2026-08-10T17:49:58.140Z"
+  },
+  "source": {
+    "repository": "https://github.com/RuneDK93/terraforming-mars-dataset",
+    "path": "prelude/corps.txt",
+    "blobSha": "0f4dfa22a4ab764215a8edcaa68e6ab1f22780bb",
+    "repoCommit": "462e6894f81b26b6b72641c8e747fe1773c7bf81",
+    "repoCommitDate": "2025-03-10T08:09:21Z",
+    "license": "MIT (c) 2024 Rune Dodensig Kjaersgaard",
+    "vendoredAs": "agent/docs/data/runedk93_prelude_corps.txt",
+    "corpus": "1,616 three-player base + Prelude games, Board Game Arena season 19, top-25 rated players"
+  },
+  "columns": {
+    "participations": "Games in which some player held this corporation (3 per game across the table).",
+    "wins": "Of those, games that player finished first. Sums to the game count: one winner per game.",
+    "winRatePct": "wins / participations, as published upstream. Chance is 33.33%, not 50% - this is a 3-player corpus.",
+    "wap": "Mean (actual - Elo-expected) finishing score in pairwise wins per game, on ~[-2, +2]. Skill-adjusted, but NOT a win rate despite what SRS §1.5 and Plan Appendix A.1 call it."
+  },
+  "baseline": {
+    "players": 3,
+    "chanceWinRate": 0.3333333333333333
+  },
+  "entries": [
+    {
+      "rank": 1,
+      "datasetName": "CrediCor",
+      "participations": 340,
+      "wins": 139,
+      "winRatePct": 40.88,
+      "wap": 0.034,
+      "cardName": "CrediCor"
+    },
+    {
+      "rank": 2,
+      "datasetName": "InterplanetaryCinematics",
+      "participations": 239,
+      "wins": 96,
+      "winRatePct": 40.17,
+      "wap": 0.097,
+      "cardName": "Interplanetary Cinematics"
+    },
+    {
+      "rank": 3,
+      "datasetName": "TharsisRepublic",
+      "participations": 395,
+      "wins": 158,
+      "winRatePct": 40,
+      "wap": 0.148,
+      "cardName": "Tharsis Republic"
+    },
+    {
+      "rank": 4,
+      "datasetName": "CheungShingMars",
+      "participations": 322,
+      "wins": 124,
+      "winRatePct": 38.51,
+      "wap": 0.071,
+      "cardName": "Cheung Shing MARS"
+    },
+    {
+      "rank": 5,
+      "datasetName": "Ecoline",
+      "participations": 290,
+      "wins": 108,
+      "winRatePct": 37.24,
+      "wap": 0.022,
+      "cardName": "Ecoline"
+    },
+    {
+      "rank": 6,
+      "datasetName": "Vitor",
+      "participations": 325,
+      "wins": 120,
+      "winRatePct": 36.92,
+      "wap": 0.071,
+      "cardName": "Vitor"
+    },
+    {
+      "rank": 7,
+      "datasetName": "SaturnSystems",
+      "participations": 347,
+      "wins": 127,
+      "winRatePct": 36.6,
+      "wap": 0.085,
+      "cardName": "Saturn Systems"
+    },
+    {
+      "rank": 8,
+      "datasetName": "PointLuna",
+      "participations": 397,
+      "wins": 144,
+      "winRatePct": 36.27,
+      "wap": 0.005,
+      "cardName": "Point Luna"
+    },
+    {
+      "rank": 9,
+      "datasetName": "MiningGuild",
+      "participations": 301,
+      "wins": 98,
+      "winRatePct": 32.56,
+      "wap": 0.022,
+      "cardName": "Mining Guild"
+    },
+    {
+      "rank": 10,
+      "datasetName": "ValleyTrust",
+      "participations": 365,
+      "wins": 117,
+      "winRatePct": 32.05,
+      "wap": -0.023,
+      "cardName": "Valley Trust"
+    },
+    {
+      "rank": 11,
+      "datasetName": "Teractor",
+      "participations": 308,
+      "wins": 98,
+      "winRatePct": 31.82,
+      "wap": -0.017,
+      "cardName": "Teractor"
+    },
+    {
+      "rank": 12,
+      "datasetName": "Inventrix",
+      "participations": 247,
+      "wins": 70,
+      "winRatePct": 28.34,
+      "wap": -0.104,
+      "cardName": "Inventrix"
+    },
+    {
+      "rank": 13,
+      "datasetName": "ThorGate",
+      "participations": 115,
+      "wins": 31,
+      "winRatePct": 26.96,
+      "wap": -0.087,
+      "cardName": "ThorGate"
+    },
+    {
+      "rank": 14,
+      "datasetName": "PhoboLog",
+      "participations": 287,
+      "wins": 75,
+      "winRatePct": 26.13,
+      "wap": -0.137,
+      "cardName": "PhoboLog"
+    },
+    {
+      "rank": 15,
+      "datasetName": "RobinsonIndustries",
+      "participations": 199,
+      "wins": 45,
+      "winRatePct": 22.61,
+      "wap": -0.18,
+      "cardName": "Robinson Industries"
+    },
+    {
+      "rank": 16,
+      "datasetName": "Helion",
+      "participations": 211,
+      "wins": 39,
+      "winRatePct": 18.48,
+      "wap": -0.174,
+      "cardName": "Helion"
+    },
+    {
+      "rank": 17,
+      "datasetName": "UnitedNationsMarsInitiative",
+      "participations": 160,
+      "wins": 27,
+      "winRatePct": 16.88,
+      "wap": -0.137,
+      "cardName": "United Nations Mars Initiative"
+    }
+  ],
+  "unmatched": {
+    "inDatasetOnly": [],
+    "inEngineOnly": []
+  },
+  "checks": {
+    "impliedGames": 1616,
+    "totalWins": 1616,
+    "statedGames": 1616
+  }
+}

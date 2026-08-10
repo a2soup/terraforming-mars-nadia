@@ -1181,3 +1181,140 @@ and the only reason a comparison is possible at all is that this bullet committe
 `gate` block, 6,000–6,029 inside `regression`, and 7,000–9,009 **past the end of the whole
 allocation**. A fourth block (`harness`, 7,000–9,999) was added rather than moving `gate` or
 `regression`, and all nine ranges are now in the ledger.
+
+## 2026-08-10 — AC-8 withdrawn: cutting bullet 4 from a pipeline to an afternoon (scope revision, SRS v1.7 / Plan v1.8)
+
+Re-examined Milestone 2 bullet 4 before starting it, and cut it. **AC-8 is withdrawn**; the expert
+dataset's role shrinks from "calibrate and benchmark the Agent" to "one weak opening prior over 17
+corporations." SRS → v1.7, Implementation Plan → v1.8, both with revision-history entries.
+
+**What the arithmetic looked like.** Bullet 4 as written wanted a ~200-card BGA↔engine card-set
+reconciliation, a formal distributional report (winning score, TR at game end, generations-to-finish,
+per-card win rates), and a dedicated 3-player calibration corpus to compare against — the most
+expensive single item in Milestone 2. What it bought was AC-8, whose own text in the criteria table
+read "a smell test only — never a skill threshold, a target to imitate, or a constraint." **There is
+no result it could have returned that would have changed anything.** Not "unlikely to fail" —
+*could not* fail, by construction, because it had no threshold. That is the whole argument.
+
+**Cut:** AC-8; the card-set reconciliation; the distributional report; the 3-player calibration game
+generation; and Milestone 3's reciprocal check (comparing the tuned agent's own card/corp win-rate
+profile against expert play — the same smell test pointed the other way, needing the same
+reconciliation).
+
+**Kept:** the per-corporation win rates as a weak opening-book prior. 17 in-scope corporations
+(10 base, 2 Corporate Era, 5 Prelude — `docs/data/card_census.json`; Beginner Corporation is out of
+configuration), matched by name, committed with raw rate, WAP, and sample size. A corporation the
+two sources don't agree on gets **no prior** rather than a coerced near-match. Milestone 3's opening
+book is the only consumer; prelude and initial-card selection now get no dataset prior at all.
+
+**FR-DATA-2..5 were deliberately not relaxed.** They govern less surface now, which is the safe
+direction. FR-DATA-1 is narrowed to the corporation ingestion.
+
+**Two things the cut makes worse, recorded rather than glossed.** Neither reverses the decision, but
+both are now live in the risk register and both were previously "mitigated" partly by work that no
+longer exists:
+
+- **The 204-card un-audited declarative tail lost its independent cross-check.** Bullet 7's risk row
+  named the BGA reconciliation as a *second, independent* check on exactly that tail — a
+  transcription error in a `behavior` block (production 2 where the card prints 1) would have shown
+  up as a card-level disagreement. That check is gone; the tail now rests on indirect test/play
+  coverage alone, which catches crashes and structural errors but not a silently-wrong amount. **If
+  an M3 card valuation looks wrong for no reason, read the card's `behavior` block before debugging
+  the evaluator.**
+- **There is now no external referent at all between M2 and the first AC-4 benchmark at M5.** Every
+  strength claim in M3 and M4 is relative to the project's own frozen baselines. This was already
+  nearly true (AC-8 was weak and couldn't fail), but it's now true without qualification — so the
+  plan's advice moved to *run the first AC-4 benchmark as early in M5 as its exit criterion allows*,
+  since it's the first outside opinion the project gets and a gap found at M5 is far cheaper than one
+  found at M7.
+
+**The eight Engine-vs-print divergences lost a consumer.** They were routed into the FR-DATA-1
+reconciliation as known Engine-specific rules; all eight are project cards, and the surviving prior
+is corporations-only, so they don't touch it. Their remaining consumers are the bullet-5 regression
+seed set and the M3 evaluator (which fits to Engine value by CON-1, correct for this project). The
+SRS §2.6 annotation was amended in place to say so.
+
+**Doc-surgery note.** Deliverables dated before today — `Rating_Pipeline.md`, `Baselines.md`,
+`Match_Runner.md`, and the Milestone-2 prompt documents — still describe bullet 4 in its pre-cut form
+and reference AC-8. Left as written: they are dated records of what was true when they were
+adjudicated, and rewriting them would erase the fact that the project believed something different
+on 31 Jul. The two source-of-truth documents win; `agent/CLAUDE.md` §6 now says this explicitly.
+
+**Filename gotcha, while here.** Both source docs are still named `..._v1.2.md` and are now at v1.7
+and v1.8. The filenames are frozen (every cross-reference in `docs/` points at them). Read the
+version out of the document header, never the filename.
+
+## 2026-08-10 — The corporation prior: WAP is not a win rate (Milestone 2, bullet 4)
+
+Built the reduced bullet 4 the same afternoon it was cut. 17 corporations, one table, no pipeline.
+Deliverable: [Corporation_Prior.md](Corporation_Prior.md). SRS -> v1.8, Plan -> v1.9 (FR-DATA-1
+discharged, plus two corrections below).
+
+**Reconciliation was a non-event, which is the result.** All 17 in-scope corporations matched their
+dataset names exactly — the differences are whitespace and capitalisation (`CheungShingMars` ->
+`Cheung Shing MARS`), no near-matches and no judgement calls. Nothing unmatched in either direction.
+Beginner Corporation is `unreachable-in-config` in the census and correctly absent upstream. FR-DATA-1's
+"flag, don't coerce" branch therefore never fires on the real table, so the spec drives it with a
+synthetic misspelled row: a requirement checked only by "there weren't any" is not checked.
+
+**Two arithmetic identities are the only checks that were ever going to catch anything.** Participations
+sum to 4,848 = 3 x 1,616, and wins sum to 1,616. Both hold exactly. They know nothing about this project
+or about the name matching, and between them they would catch a truncated download, a duplicated row,
+or an upstream table regenerated against a different corpus — which is the actual exposure of a hand
+transcription. The wins identity does a second job: one winner per game means the published "Win Rate"
+is a *first-place* rate, not a top-two rate, which is not stated anywhere upstream.
+
+### Finding 1: WAP is not a win rate, and both source documents said it was
+
+Both the SRS and the Plan described WAP as "a skill-adjusted win rate that partially controls for
+player strength." Skill-adjusted, yes. A win rate, no. From `helper_functions.py::corp_ranking`:
+
+```
+actual      = [2, 1, 0] by finishing position
+expected[i] = sum over opponents j of 1 / (1 + 10 ** -((elo_i - elo_j) / 400))
+WAP         = mean over that corporation's games of (actual - expected)
+```
+
+It is a **mean Elo-performance residual in pairwise wins per game**, on ~[-2, +2] and centred near
+zero. Not a probability. Anyone implementing "prefer the WAP column" from the documents alone would
+plausibly have tried to blend it with a rate or clamp it to [0, 1]. Corrected in place in both docs.
+**The lesson is the cheap one: nobody had opened the file.** Two documents carried the same wrong
+description through eight revisions because it was plausible and never executed against.
+
+### Finding 2: the skill adjustment moves the corporation the raw rate ranks first
+
+Spearman between raw rate and WAP is 0.92, so at a glance the column looks redundant. It is not:
+**CrediCor is 1st by raw rate and 6th by WAP**, the largest shift in the table, and Tharsis Republic
+takes the top WAP slot. That is exactly FR-DATA-3's confounding, visible: strong players pick CrediCor,
+the raw rate credits the corporation, and the Elo residual takes it back. An opening book built on the
+raw rate would be partly fitting the BGA player pool's *preferences* rather than the corporations.
+
+### Finding 3: a 3-player prior is about to prime a 2-player-primary agent
+
+Nothing in either document had flagged this and it is the caveat most likely to bite. The corpus is
+3p; the project's primary setting is 2p. Corporation strength is not player-count invariant — engine
+corps gain from 3p's longer games and weaker denial, and Tharsis Republic's city income scales
+directly with the number of opponents building cities, so its top-WAP placing is partly an artefact of
+the count it was measured at. There is no 2p expert corpus to substitute. Kept because the prior is
+weak and short-lived, not because the bias is small. **Also: chance is 33.3%, not 50%** — reading
+40.88% as a losing rate would invert the entire prior, and it is the single easiest way to misuse
+this file.
+
+### What M3 gets, and what it deliberately does not
+
+**8 of 17 rows have a 95% interval excluding chance.** The middle nine span -5.0 to +3.9 pp with
+intervals that all contain 1/3 — ranking those against each other is reading sampling error. So
+`corporationPriorRows()` ships a Wilson interval and a `separatedFromChance` flag per row, and applies
+**no weight at all**: how weakly to weight a starting bias is M3's decision about its own opening book,
+and burying one in the data layer would hide it at the point where it matters.
+
+**No CLI, deliberately.** Every other bullet shipped one; this is one static table, and a `--verify`
+nobody runs is worse than none. The spec is the standing check — it re-derives the artifact from the
+vendored source and compares, so hand-editing the JSON fails a test. The vendored copy is byte-identical
+to upstream (`git hash-object` matches the GitHub blob SHA `0f4dfa22`), which the spec also asserts, so
+the transcription is auditable offline and forever.
+
+**Gotcha for whoever moves the Engine pin:** the in-scope corporation list comes from
+`docs/data/card_census.json`, so a pin change that adds or removes a reachable corporation makes the
+reconciliation spec fail — correctly. That failure is the census reporting a real change, not a broken
+test, and the fix is to re-check the new corporation against the dataset rather than to relax the spec.

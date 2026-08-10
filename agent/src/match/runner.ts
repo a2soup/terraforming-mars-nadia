@@ -37,8 +37,10 @@ import {
  * them (SRS FR-13; Milestone 2 bullet 1, Unit A).
  *
  * **Every number this project will ever quote about playing strength comes out of here** - M3's
- * tuned weights, M4's significance test, the AC-7 promotion gate, the AC-3/AC-5 evidence, the AC-8
- * calibration. `agent/CLAUDE.md` §9 says it outright: measure everything through this harness. So
+ * tuned weights, M4's significance test, the AC-7 promotion gate, the AC-3/AC-5 evidence. (AC-8's
+ * distributional calibration was on that list until it was withdrawn on 10 Aug 2026 - SRS v1.7 -
+ * which removes a consumer and changes nothing here.) `agent/CLAUDE.md` §9 says it outright:
+ * measure everything through this harness. So
  * the two places a defensible-looking local choice would produce a systematically wrong number are
  * settled elsewhere and imported here rather than decided in this loop - the seat balancing in
  * `pairing.ts` (§4.1) and the ranking in `ranking.ts` (§4.2).
