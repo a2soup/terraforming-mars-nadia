@@ -1181,3 +1181,65 @@ and the only reason a comparison is possible at all is that this bullet committe
 `gate` block, 6,000–6,029 inside `regression`, and 7,000–9,009 **past the end of the whole
 allocation**. A fourth block (`harness`, 7,000–9,999) was added rather than moving `gate` or
 `regression`, and all nine ranges are now in the ledger.
+
+## 2026-08-10 — AC-8 withdrawn: cutting bullet 4 from a pipeline to an afternoon (scope revision, SRS v1.7 / Plan v1.8)
+
+Re-examined Milestone 2 bullet 4 before starting it, and cut it. **AC-8 is withdrawn**; the expert
+dataset's role shrinks from "calibrate and benchmark the Agent" to "one weak opening prior over 17
+corporations." SRS → v1.7, Implementation Plan → v1.8, both with revision-history entries.
+
+**What the arithmetic looked like.** Bullet 4 as written wanted a ~200-card BGA↔engine card-set
+reconciliation, a formal distributional report (winning score, TR at game end, generations-to-finish,
+per-card win rates), and a dedicated 3-player calibration corpus to compare against — the most
+expensive single item in Milestone 2. What it bought was AC-8, whose own text in the criteria table
+read "a smell test only — never a skill threshold, a target to imitate, or a constraint." **There is
+no result it could have returned that would have changed anything.** Not "unlikely to fail" —
+*could not* fail, by construction, because it had no threshold. That is the whole argument.
+
+**Cut:** AC-8; the card-set reconciliation; the distributional report; the 3-player calibration game
+generation; and Milestone 3's reciprocal check (comparing the tuned agent's own card/corp win-rate
+profile against expert play — the same smell test pointed the other way, needing the same
+reconciliation).
+
+**Kept:** the per-corporation win rates as a weak opening-book prior. 17 in-scope corporations
+(10 base, 2 Corporate Era, 5 Prelude — `docs/data/card_census.json`; Beginner Corporation is out of
+configuration), matched by name, committed with raw rate, WAP, and sample size. A corporation the
+two sources don't agree on gets **no prior** rather than a coerced near-match. Milestone 3's opening
+book is the only consumer; prelude and initial-card selection now get no dataset prior at all.
+
+**FR-DATA-2..5 were deliberately not relaxed.** They govern less surface now, which is the safe
+direction. FR-DATA-1 is narrowed to the corporation ingestion.
+
+**Two things the cut makes worse, recorded rather than glossed.** Neither reverses the decision, but
+both are now live in the risk register and both were previously "mitigated" partly by work that no
+longer exists:
+
+- **The 204-card un-audited declarative tail lost its independent cross-check.** Bullet 7's risk row
+  named the BGA reconciliation as a *second, independent* check on exactly that tail — a
+  transcription error in a `behavior` block (production 2 where the card prints 1) would have shown
+  up as a card-level disagreement. That check is gone; the tail now rests on indirect test/play
+  coverage alone, which catches crashes and structural errors but not a silently-wrong amount. **If
+  an M3 card valuation looks wrong for no reason, read the card's `behavior` block before debugging
+  the evaluator.**
+- **There is now no external referent at all between M2 and the first AC-4 benchmark at M5.** Every
+  strength claim in M3 and M4 is relative to the project's own frozen baselines. This was already
+  nearly true (AC-8 was weak and couldn't fail), but it's now true without qualification — so the
+  plan's advice moved to *run the first AC-4 benchmark as early in M5 as its exit criterion allows*,
+  since it's the first outside opinion the project gets and a gap found at M5 is far cheaper than one
+  found at M7.
+
+**The eight Engine-vs-print divergences lost a consumer.** They were routed into the FR-DATA-1
+reconciliation as known Engine-specific rules; all eight are project cards, and the surviving prior
+is corporations-only, so they don't touch it. Their remaining consumers are the bullet-5 regression
+seed set and the M3 evaluator (which fits to Engine value by CON-1, correct for this project). The
+SRS §2.6 annotation was amended in place to say so.
+
+**Doc-surgery note.** Deliverables dated before today — `Rating_Pipeline.md`, `Baselines.md`,
+`Match_Runner.md`, and the Milestone-2 prompt documents — still describe bullet 4 in its pre-cut form
+and reference AC-8. Left as written: they are dated records of what was true when they were
+adjudicated, and rewriting them would erase the fact that the project believed something different
+on 31 Jul. The two source-of-truth documents win; `agent/CLAUDE.md` §6 now says this explicitly.
+
+**Filename gotcha, while here.** Both source docs are still named `..._v1.2.md` and are now at v1.7
+and v1.8. The filenames are frozen (every cross-reference in `docs/` points at them). Read the
+version out of the document header, never the filename.

@@ -69,9 +69,9 @@ describe('match runner', function() {
         expect(outcome.placement).to.be.within(1, 2);
         expect(outcome.terraformRating).to.be.at.least(20);
         expect(outcome.vpBreakdown.total).to.equal(outcome.victoryPoints);
-        expect(outcome.corporations, 'bullet 4 needs the corporation per seat').to.have.length(1);
+        expect(outcome.corporations, "bullet 4's opening prior needs the corporation per seat").to.have.length(1);
         expect(outcome.projectCards.length, 'and the cards played').to.be.greaterThan(0);
-        expect(outcome.victoryPointsByGeneration.length, 'the per-generation VP curve M3 and AC-8 want')
+        expect(outcome.victoryPointsByGeneration.length, 'the per-generation VP curve M3 wants')
           .to.be.greaterThan(1);
       }
       expect(record.seats.filter((seat) => seat.outcome?.isWinner === true).length).to.be.at.least(1);

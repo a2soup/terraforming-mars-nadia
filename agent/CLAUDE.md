@@ -3,8 +3,12 @@
 This file orients a Claude Code session working on the **Nadia AI agent**. It is generated
 from the two source-of-truth documents and should be kept consistent with them:
 
-- SRS: [docs/Terraforming_Mars_AI_SRS_v1.2.md](docs/Terraforming_Mars_AI_SRS_v1.2.md)
-- Implementation Plan: [docs/Terraforming_Mars_AI_Implementation_Plan_v1.2.md](docs/Terraforming_Mars_AI_Implementation_Plan_v1.2.md)
+- SRS: [docs/Terraforming_Mars_AI_SRS_v1.2.md](docs/Terraforming_Mars_AI_SRS_v1.2.md) — **currently v1.7**
+- Implementation Plan: [docs/Terraforming_Mars_AI_Implementation_Plan_v1.2.md](docs/Terraforming_Mars_AI_Implementation_Plan_v1.2.md) — **currently v1.8**
+
+> The `v1.2` in both **filenames is frozen and stale** — the live version is in each document's
+> header and revision history. Don't infer a version from a filename, and don't rename the files
+> (every cross-reference in `docs/` points at these paths).
 
 If anything here conflicts with those documents, **the documents win** — update this file to match.
 
@@ -149,7 +153,7 @@ attempted only on a foundation that already works.
 | # | Milestone | Exit criterion (short) |
 | --- | --- | --- |
 | **1** | Engine harness + legal random player | 1,000 full legal games, 0 illegal moves / 0 crashes; move-for-move reproducible under fixed seeds; **simulator-speed spike** done |
-| 2 | Match harness, baselines, ratings, expert-distribution report | Sound win-rates/ratings for any two agents; baselines reproducible |
+| 2 | Match harness, baselines, ratings, corporation opening prior | Sound win-rates/ratings for any two agents; baselines reproducible |
 | 3 | Heuristic evaluation function | Beats baselines decisively (≥80% vs greedy, ≥90% vs random) |
 | 4 | Look-ahead search under uncertainty (determinized / ISMCTS + belief model) | Beats pure-heuristic with significance **and** hits a justified sims-per-decision target |
 | 5 | Strong non-RL agent, hardened + live-play adapter | Completes unattended online games; sets the reference strength RL must beat |
@@ -277,14 +281,41 @@ Five things worth knowing before touching this area:
   on argument, not measurement: over 1,000 games seat 0 won 52.6% with a 95% CI of [49.5%, 55.7%].
   Random-legal play is the weakest possible instrument for a tempo advantage. **Re-measure at M3.**
 
-**Next up: Milestone 2 bullets 4–5** — the expert-distribution report (FR-DATA-1) and the regression
-seed set. Two things Milestone 1 built to feed them: the determinism fingerprint corpus and the
-card-coverage census (`agent/docs/data/card_census.json`), plus the eight catalogued Engine-vs-print
-divergences ([docs/Card_Coverage_Audit.md](docs/Card_Coverage_Audit.md)) the reconciliation must
-treat as known Engine-specific rules. Bullet 5 inherits seed block `R` (6,000–6,999), of which
-6,000–6,029 is already recorded as spent. **One lesson from bullet 3 that bullet 4 should act on:
-commit the per-game rows, not the summary** — `baselines_validation.json` carries summaries only, so
-bullet 2's headline 99.2% cannot be re-analysed by anything, including the rating pipeline.
+**Next up: Milestone 2 bullets 4–5** — the corporation opening prior (FR-DATA-1) and the regression
+seed set.
+
+**Bullet 4 was cut down on 10 Aug 2026 (SRS v1.7 / Plan v1.8) and is now an afternoon, not a
+work item.** It was "build the expert-distribution report"; it is now "transcribe the RuneDK93
+per-corporation win rates, match the 17 in-scope corporation names against the engine's identifiers
+by hand, and commit the table." **AC-8 is withdrawn**, and with it the full ~200-card BGA↔engine
+card-set reconciliation, the formal distributional report (winning score / TR / generations), the
+per-card win-rate profile comparison, and the 3-player calibration corpus that would have been
+generated to compare against. The reasoning is in both revision-history entries: AC-8's own text
+made it a smell test that could not fail the project, and a criterion that cannot fail cannot
+justify being the most expensive work in its milestone. **If bullet 4 starts growing a pipeline, it
+has been misread.** Milestone 3's opening book is the table's only consumer; prelude and
+initial-card selection get no dataset prior at all.
+
+Two consequences worth carrying, both of which make the project's evidence base *thinner*, not
+cleaner:
+- **The eight Engine-vs-print divergences** ([docs/Card_Coverage_Audit.md](docs/Card_Coverage_Audit.md))
+  no longer feed a reconciliation — all eight are project cards, and the surviving prior is
+  corporations only. Their one downstream consumer is now the bullet-5 regression seed set, plus the
+  M3 evaluator, which fits to Engine value by CON-1.
+- **The un-audited 204-card declarative tail lost its independent cross-check.** The reconciliation
+  was named in the risk register as the second check on that tail; it is gone, so the tail rests on
+  indirect test/play coverage alone. If an M3 card valuation looks wrong for no reason, read that
+  card's `behavior` block before debugging the evaluator.
+
+Bullet 5 inherits seed block `R` (6,000–6,999), of which 6,000–6,029 is already recorded as spent.
+**One lesson from bullet 3 that bullet 5 should act on: commit the per-game rows, not the summary** —
+`baselines_validation.json` carries summaries only, so bullet 2's headline 99.2% cannot be
+re-analysed by anything, including the rating pipeline.
+
+Note that deliverables written before 10 Aug 2026 — [docs/Rating_Pipeline.md](docs/Rating_Pipeline.md),
+[docs/Baselines.md](docs/Baselines.md), [docs/Match_Runner.md](docs/Match_Runner.md) and the
+Milestone-2 prompt documents — describe bullet 4 in its pre-cut form and reference AC-8. They are
+dated records and were deliberately left as written; the two source-of-truth documents win.
 
 ---
 
@@ -459,26 +490,36 @@ confidence intervals.
 - **Guardrails:** AC-2 (≥65% vs the project's own tuned heuristic), AC-7 (each promoted version
   beats the previous with significance).
 - **Supporting evidence:** AC-3 (≥90% vs random, ≥80% vs greedy one-ply), AC-5 (3–4p placement
-  well above 1/N), AC-8 (distributional calibration vs the expert dataset — a **smell test only**).
+  well above 1/N).
+- **AC-8 (distributional calibration vs the expert dataset) was withdrawn on 10 Aug 2026** (SRS
+  v1.7). It was a smell test with no threshold, so it could not fail the project, yet it required
+  the most expensive work in Milestone 2 to run at all. **The ID is retired, not reused** — there
+  are seven acceptance criteria. No acceptance criterion now refers to the expert dataset.
 
 ---
 
 ## 8. Expert data: the one rule
 
 The RuneDK93 top-25 BGA expert dataset (aggregate statistics, **not** move logs) and the TAG
-prior-art paper are calibration/benchmark resources only. **The data measures the Agent and seeds
-weak priors; it never defines correct play, and the Agent is always free to beat it** (SRS
-FR-DATA-1..5, Plan §7.1 / Appendix A).
+prior-art paper are weak-prior resources only. **The data seeds weak priors; it never defines
+correct play, and the Agent is always free to beat it** (SRS FR-DATA-1..5, Plan §7.1 / Appendix A).
 
-- **Do:** seed a *weak* opening-selection prior; sanity-check the Agent's card/corp win-rate profile
-  isn't wildly inconsistent with expert play.
+**Scope, as of 10 Aug 2026 (SRS v1.7 / Plan v1.8):** the project ingests the **per-corporation win
+rates and nothing else**. The per-card table and the score/TR/generation summaries are not ingested;
+the distributional comparison they fed was withdrawn with AC-8. The guardrails below are *unchanged
+in force* — they now govern a smaller surface, which is the safe direction.
+
+- **Do:** seed a *weak* opening prior over corporation selection, from the committed table.
 - **Don't:** set evaluation weights equal to observed win rates; treat the data as an oracle, hard
   constraint, or a target to imitate; let imitation be the final objective; narrow strategy to the
-  expert metagame.
+  expert metagame. **Don't rebuild the card-set reconciliation or the distributional report** —
+  both were cut deliberately.
 - Observed win rates are **confounded** (skill + draw luck + game length mixed with card strength) —
-  weak, overridable hints only; prefer the skill-adjusted (WAP) column. Tune evaluation weights to
-  **harness win rate**, never to the dataset. A BGA↔engine card-set/rules reconciliation is required
-  before any quantitative comparison.
+  weak, overridable hints only; prefer the skill-adjusted (WAP) column and keep the sample size
+  beside each entry. Tune evaluation weights to **harness win rate**, never to the dataset.
+- Reconciliation is now **17 corporation names matched by hand** (`docs/data/card_census.json` is
+  the authoritative in-scope list). A corporation the two sources don't agree on gets **no prior** —
+  flag it, never coerce it onto a near-match.
 
 ---
 

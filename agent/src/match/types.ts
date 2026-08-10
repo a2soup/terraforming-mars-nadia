@@ -19,7 +19,7 @@ import {AgentIdentity} from '../agents/registry';
  * | Consumer | What it reads |
  * | --- | --- |
  * | Bullet 3 (FR-14 ratings) | per-seat `placement`, `isWinner`, `marginToNext`, agent identity per seat |
- * | Bullet 4 (FR-DATA-1, AC-8) | `victoryPoints`, `terraformRating`, `generation`, `corporations`, `projectCards`, `preludes`, `claimedMilestones`, `fundedAwards` |
+ * | Bullet 4 (FR-DATA-1) | `corporations` - the opening prior's only harness-side reader. **Narrowed on 10 Aug 2026** (SRS v1.7): bullet 4 was the expert-distribution report and read `victoryPoints`, `terraformRating`, `generation`, `projectCards`, `preludes`, `claimedMilestones`, `fundedAwards` too. AC-8 was withdrawn and that report cut; those fields stay because M3 and the rows below want them, not for this consumer. |
  * | M3 (evaluation tuning) | the above plus `victoryPointsByGeneration` and `vpBreakdown` |
  * | AC-5 (3p/4p competence) | `placement` at 3p/4p - a boolean "won" cannot tell second from third |
  * | AC-7 / FR-15 (promotion gate) | agent **name and version** per seat, `provenance.engineCommit`, the seeds |
@@ -138,14 +138,14 @@ export type MatchSeatOutcome = {
   victoryPoints: number;
   /** `player.megaCredits` - the Engine's tiebreak, recorded so a tie can be audited, not just trusted. */
   megaCredits: number;
-  /** Bullet 4 (AC-8) reports TR at game end as part of the expert-distribution comparison. */
+  /** TR at game end - the single most reliable predictor of the win, and an M3 tuning target. */
   terraformRating: number;
   /** M3 tunes against the VP components, not just the total. */
   vpBreakdown: MatchVpBreakdown;
   /**
    * The per-generation VP curve the Engine already maintains (`IPlayer.victoryPointsByGeneration`).
-   * Free at `Phase.END`, and exactly the shape AC-8's calibration and M3's tuning want - a scoring
-   * *tempo*, not just a final score.
+   * Free at `Phase.END`, and exactly the shape M3's tuning wants - a scoring *tempo*, not just a
+   * final score.
    */
   victoryPointsByGeneration: ReadonlyArray<number>;
   /**
@@ -222,7 +222,7 @@ export type MatchLegalityCounters = {
 
 /** How much history to record (§4.4). Costs are per game, measured by Unit B. */
 export type HistoryTier =
-  /** The game record only (~1 KB/game). Ratings, AC-8, bulk runs. */
+  /** The game record only (~1 KB/game). Ratings, bulk runs. */
   | 'summary'
   /** + the move-trace hash chain from `determinism/replay.ts` (~100 B/game). Regression seeds, divergence localization. */
   | 'trace'
@@ -276,7 +276,7 @@ export type MatchGameRecord = {
   completed: boolean;
   /** Present only when `completed` is false. */
   failure?: {errorClass: string; message: string};
-  /** Generations to finish - a bullet 4 / AC-8 headline number, and a sanity signal on any run. */
+  /** Generations to finish - a sanity signal on any run, and an M3 tempo signal. */
   generation: number;
   /** Decision points the responders resolved. */
   decisions: number;
