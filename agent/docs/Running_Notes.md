@@ -1318,3 +1318,83 @@ the transcription is auditable offline and forever.
 `docs/data/card_census.json`, so a pin change that adds or removes a reachable corporation makes the
 reconciliation spec fail — correctly. That failure is the census reporting a real change, not a broken
 test, and the fix is to re-check the new corporation against the dataset rather than to relax the spec.
+
+## 2026-08-10 — L1 reference positions: what the fixtures found that the plan didn't predict (Milestone 2, bullet 5, Unit B)
+
+Thirteen L1 fixtures under `agent/test/regression/fixtures/` — one per named card in
+`Milestone2_Bullet5_Prompts.md` Unit B: the five escalating divergences, the three non-escalating,
+the two untested effects, and the three `undecided` items. 27 tests, 86 ms, no CLI and no corpus.
+Every fixture carries §3.4's three-part comment (Engine number, printed number, register row, and
+the sentence that changing it toward the print is a change of meaning rather than a fix), because a
+fixture asserting "Immigrant City is playable at M€ production −4" reads as a bug report to anyone
+who has not read the audit.
+
+**H12 was a non-issue and cost two minutes, not thirty.** `import {testGame} from
+'../../../../tests/TestGame'` resolves from an agent spec under `cd agent && npm test` with no
+`tsconfig` change and no path alias — `agent/package.json`'s test script already loads
+`../tests/testing/setup.ts`, and tsx resolves the relative hop out of `agent/` unaided. Unit A can
+skip its §1 smoke spec; these thirteen fixtures are the proof.
+
+**Prediction 8 missed: the X3 prelude fizzle *is* buildable minimally.** The appendix expected it to
+need "a specific prelude in a specific hand at a specific M€" and to be recorded as *untested*. It
+needs an empty hand and one `playCard` call: `PlayProjectCard` finds nothing playable, calls back
+with `undefined`, and `PreludesExpansion.fizzle` grants the 15 M€. Better, both of the audit's paths
+fit in one fixture — Eccentric Sponsor passes the selection gate and fizzles from inside
+`bespokePlay`, Ecology Experts is refused by its own `canPlay` at the gate — and it is the *pair*
+that pins the audit's actual finding (two routes, one grant, no legality difference for Nadia), which
+either half alone would not.
+
+### Three things about Hackers that the source documents get subtly wrong
+
+**`stealing: true` is a logging flag, not a transfer.** `Production.add` passes it only to
+`logUnitDelta` to select the phrasing. Plan §7.2 and the bullet-5 brief both describe Hackers'
+effect as a "steal of 2 M€ production"; nothing is transferred. The actor's +2 comes from the
+declarative `behavior` block and is paid whether or not a target is ever found. A fixture written to
+assert a transfer would have asserted something the Engine does not do — the two halves are
+independent and are asserted separately.
+
+**Hackers has no fizzle branch, and cannot have one.** The `behavior` block resolves before
+`bespokePlay`'s deferred attack, so the actor's M€ production when `DecreaseAnyProduction` runs is
+never below −3 — exactly two steps above the −5 floor. The actor therefore always satisfies
+`canHaveProductionReduced(MEGACREDITS, 2)` and is always a legal target. Against a table where every
+opponent is floored, the Engine offers the actor a mandatory `SelectPlayer` containing only
+themselves: −1 energy production, −1 VP, 3 M€, and net zero M€ production, with no way to decline.
+"The attack found no target" is unreachable for this card, which is a different fact from Energy
+Tapping's superficially similar forced self-target.
+
+**Both seats are offered when both qualify**, so Hackers' target choice is a real decision the
+enumerator sees, not an auto-resolve — worth knowing at M3, where a points-now chooser will read
+self-targeting as identical in current VP.
+
+### Fixture-authoring gotchas, recorded so Unit C and M3 don't rediscover them
+
+- **`formatMessage` renders players by colour, not by name.** `testGame` builds
+  `TestPlayer.RED.newPlayer({name: 'player2'})` and the option title comes out `Remove 5 plants from
+  red`. Option-set assertions (Virus, Hired Raiders, Sabotage) match the leading text and pin the
+  skip/none titles exactly, rather than pinning a name that has nothing to do with the divergence.
+- **`RemoveAnyPlants` appends the caster's own option *after* the skip, but returns `undefined` when
+  only the skip exists** — the `length === 1` early return happens before the self option is added.
+  So Virus's plant branch needs an opponent holding plants before the caster's own plants matter at
+  all, and `slice(0, -1)` eats the self option only in that case.
+- **`maxOutOceans(player)` hands the player nine oceans' placement bonuses** — 2 steel, 9 plants, TR
+  20 → 29. The steel turns Aquifer Pumping's 8 M€ into a `payment` decision instead of an auto-pay,
+  which is what made the first draft of the X5 fixture assert 8 M€ against a payment that had not
+  resolved yet.
+- **Aquifer Pumping is the X5 member worth pinning, not the Asteroid standard project.** Four of the
+  five maxed-parameter no-ops are in scope (Water Import From Europa is Venus), and three of those —
+  the Aquifer and Asteroid standard projects and Convert Heat — already have Engine specs that *act*
+  at the maximum and assert the no-op end to end. Aquifer Pumping's own spec asserts only that
+  `canAct` stays true at maxed oceans ("Can act if can pay even after oceans are maxed") — it never
+  acts, so **what the 8 M€ buys at that point is asserted nowhere in the Engine suite.** It is the
+  one of the four where a regression would be silent.
+
+### The fixtures were made to fail on purpose, once each
+
+Per the shared preamble: a check that has never refused anything is indistinguishable from one that
+works. Each fixture was re-run with its key assertion replaced by the **printed** number — or, for
+the two untested effects (Hackers, City), by a silent value regression — in a scratch copy that was
+then deleted. All thirteen went red; none was vacuously true. Immigrant City and the prelude fizzle
+failed two tests each because their printed reading moves both of their assertions.
+
+This is not a substitute for Unit D. It shows each fixture discriminates between the Engine number
+and the printed one; whether the *suite* notices a mutation somewhere else entirely is D's question.
