@@ -1,4 +1,7 @@
+import {IGame} from '@/server/IGame';
 import {EmbeddedDriverOptions} from '../driver/embeddedDriver';
+import {EmbeddedResponder} from '../driver/responder';
+import {GameResult} from '../driver/gameResult';
 
 /**
  * A fully-specified game to replay: which Engine seed builds it, which agent seed drives the
@@ -65,6 +68,22 @@ export type ReplayFingerprint = {
   diagnostics?: ReplayDiagnostics;
 };
 
+/**
+ * Builds the responder that will drive one replay. **Added by Milestone 2, bullet 5, Unit A**
+ * (§3.9 of agent/docs/Milestone2_Bullet5_Prompts.md) and strictly additive: with no factory,
+ * `replay()` builds `randomLegalAgent(createAgentRandom(config.agentSeed))` exactly as it always
+ * did, and `test/regression/replayAgent.spec.ts` asserts the committed 300 fingerprints still
+ * verify byte for byte after the change.
+ *
+ * **Why it takes the `game` and not only the `config`.** The regression suite's L2 layer replays
+ * *match* games, where each seat is a separately-seeded agent and the responder is a router
+ * dispatching on `decision.player.id`. A router cannot be built without the player ids, and the
+ * ids exist only once the game does. A factory of `(config) => responder` would have forced the
+ * caller to reconstruct `engine/gameFactory.ts`'s colour order by hand - which is how a router
+ * silently seats the wrong agent.
+ */
+export type ReplayAgentFactory = (context: {config: ReplayConfig; game: IGame}) => EmbeddedResponder;
+
 export type ReplayOptions = {
   /**
    * Also populates `diagnostics` on the returned fingerprint (the raw `stableState` string and
@@ -78,4 +97,20 @@ export type ReplayOptions = {
    * supplies `onFallback`, both fire.
    */
   driverOptions?: EmbeddedDriverOptions;
+  /**
+   * Who plays. Defaults to the random-legal agent seeded from `config.agentSeed` - the only
+   * behaviour that existed before Milestone 2 bullet 5. See {@link ReplayAgentFactory}.
+   */
+  agent?: ReplayAgentFactory;
+  /**
+   * Called once, with the finished game, immediately before the fingerprint is built - i.e. while
+   * the game is still live and every end-of-game number is still readable off it.
+   *
+   * The regression suite's L2 entries commit *semantic* fields (placement, VP breakdown,
+   * corporations, ...) beside the hashes, precisely because "the trace differs but every VP
+   * component is identical" and "greenery VP moved by 2" are different events (§3.3). Reading them
+   * needs the `IGame`, which `replay()` otherwise drops on the floor; a second run to fetch them
+   * would double the suite's cost against a budget (§3.8) the whole design is sized to.
+   */
+  onGameEnd?: (game: IGame, result: GameResult) => void;
 };

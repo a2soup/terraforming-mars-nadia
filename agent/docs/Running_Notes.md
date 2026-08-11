@@ -1318,3 +1318,62 @@ the transcription is auditable offline and forever.
 `docs/data/card_census.json`, so a pin change that adds or removes a reachable corporation makes the
 reconciliation spec fail — correctly. That failure is the census reporting a real change, not a broken
 test, and the fix is to re-check the new corporation against the dataset rather than to relax the spec.
+
+## 2026-08-11 — Regression suite core: what the plan did not predict (Milestone 2, bullet 5, Unit A)
+
+Unit A of bullet 5 — the record format, the corpus, the runner/CLI, the rebaseline ledger, and §3.9's
+additive change to `determinism/replay.ts`. Five things the plan document did not predict, in
+descending order of how much time they will cost whoever hits them next.
+
+**1. This host cannot time anything, and it took four contradictory measurements to notice.** The
+same call — `verifyCorpus` over the committed 300 determinism fingerprints, under `tsx` — measured
+**11 s, 102 s, 114 s and 124 s** across one session. `sysctl vm.swapusage` says why: 4.6 GB of 5.1 GB
+swap in use, 64 MB of free RAM on an 8 GB machine. This is bullet 1's hazard H10 recurring verbatim
+(*"the single-process baseline swung 4.3× within one session on an identical spec"*), and the 11 s
+reading came from inside a mocha spec, which is the reading most likely to be quoted. **Criterion S6
+cannot be adjudicated from this session** — Unit C must time the suite on an idle host, on the
+compiled build, and check swap first. The runner's module doc records the spread rather than a
+figure, deliberately: a single plausible number here would have been worse than none.
+
+**2. `replay()`'s `decisions` and `MatchGameRecord.decisions` are different counts, and the gap is
+exactly the responder-throw population.** `match/runner.ts`'s router increments *before* calling the
+agent; `replay.ts`'s `withMoveTrace` records *after* the responder returns. So a game the match
+runner scores at 300 decisions is 295 to the regression suite, and the difference is
+`fallbacksAfterThrow` — the ~5.7-per-game benign throw population AC-1 measured. This surfaced as a
+*failing* cross-check spec, which is the good outcome; `corpus.spec.ts` now asserts the identity
+`record.decisions − played.decisions === record.fallbacksAfterThrow` rather than equality, so the
+relationship is pinned instead of being rediscovered as a defect. It is the same property
+`agent/CLAUDE.md` §6 already records about `moveTraceHash`, showing up in a second place.
+
+**3. "First divergent decision" (§3.1) is not free, and needed a schema field the plan did not
+name.** Localizing a divergence requires the *old* trace; a re-run produces only the new one, and the
+committed final hash says "this game changed" and nothing more. Committing the full trace is 69.7
+KB/game (§2.7) and the wrong thing to commit. So an entry carries the rolling hash sampled every 25
+decisions — ~12 hashes, under 800 bytes — which brackets the first divergence to a 25-decision
+window that `--explain` then prints from a diagnostics re-run. The checkpoints are **not compared**:
+the chain is rolling, so anything they could detect has already moved `moveTraceHash`, and comparing
+them would turn one honest mismatch row into twelve.
+
+**4. `coverage` and `why` cannot be verified fields, and `[]` had to stop meaning two things.**
+Coverage is derived from a `moves`-tier survey at generation time; recomputing it on every verify
+would mean paying 69.7 KB/game and the instrumentation cost against a five-minute budget. So both are
+provenance, excluded from the diff. That leaves the trap: an entry that measured nothing and an entry
+that used no standard projects both serialize as `[]`. `RegressionEntryCoverage.source` is
+`'moves-tier' | 'not-derived'` for that reason — bullet 3's hazard H9 (an unestimable quantity
+printed as `NaN`) one layer down.
+
+**5. H12 is settled and cost ten minutes, not thirty.** `import {testGame} from
+'../../../tests/TestGame'` works from `agent/test/regression/*.spec.ts` with **no `tsconfig` change
+and no path alias** — `agent/package.json`'s test script already requires `../tests/testing/setup.ts`,
+and `tsx` resolves the relative path out of `agent/` without consulting `agent/tsconfig.json`'s
+`include`. `@/common/...` resolves in agent specs too. From `fixtures/` it is one more `..`:
+`'../../../../tests/TestGame'`. `test/regression/testGameImport.spec.ts` is kept as the thing that
+fails first and legibly if a toolchain change ever breaks that import for all of Unit B's fixtures at
+once.
+
+**Also worth knowing.** Parameterizing `replay()` left all 300 committed fingerprints unmoved
+(falsifiable prediction 7 holds). The smoke corpus spends R-block groups **6,090–6,099**, allocated in
+`ladder.json` before any game was played — that narrows §3.7's 6,030–6,099 gap to 6,030–6,089 and
+does not touch C's 6,100–6,499 or the 6,500–6,999 reserved for M3–M6 sections. And a *frozen* section
+that moves gets a distinct message in the CLI output pointing at §3.1's shared-infrastructure rule,
+because "greedy-1ply@1 moved" is the one red line most likely to be met with a rebaseline.

@@ -324,6 +324,51 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'and matchCli.ts\'s above: console output on a long run, reaching no file, no fingerprint and no decision.',
   },
   {
+    file: 'src/regression/runner.ts',
+    rule: 'date-now',
+    occurrences: 11,
+    reason:
+      'The regression suite\'s own elapsed figures (Milestone 2 bullet 5, Unit A): a `started` stamp and a ' +
+      '`durationMs` for each of L1, L2, the determinism-corpus line and the whole run, plus the smoke-corpus ' +
+      'build. Same category as `match/runner.ts`\'s entry above - reported, never read back. A pinned game is ' +
+      'built from its identity alone: `match/pairing.ts` derives the engine seed and every per-slot agent seed ' +
+      'from the R-block group index (§2.6), so no seed, decision or game state can derive from the clock even in ' +
+      'principle. **Structurally, these cannot reach a committed record at all**: a `RegressionRunResult` is ' +
+      'console output, and the only things written to disk are `RegressionCorpus` (identity, fingerprints, ' +
+      'semantics, coverage, why - no timing field exists on it) and the ledger. That is a stronger statement than ' +
+      '`MATCH_TIMING_FIELDS` makes for the match runner, and it is why there is no `stripTimingFields` analogue ' +
+      'here: there is nothing to strip.\n\n' +
+      'The count is high because criterion S6 pre-commits a budget (<= 5 min compiled, <= 20 min under `tsx`) and ' +
+      'the suite has to be able to say whether it held, per layer - a suite that cannot report its own cost is one ' +
+      'that gets cut for the wrong reason. Note what that reporting is *not*: Unit A measured the same ' +
+      'determinism-corpus verify at 11 s, 102 s, 114 s and 124 s in one session on a host with 4.6 GB of 5.1 GB ' +
+      'swap in use, so none of these figures is a performance claim (hazard H10, and this host swaps - see the ' +
+      '2026-08-11 Running_Notes entry).',
+  },
+  {
+    file: 'src/regression/runner.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      '`RegressionSection.recordedAt`: the date a section of pinned games was generated, stamped once by ' +
+      '`buildSmokeCorpus`. Provenance, in the same kind as `corpus.ts`\'s `createdAt` at the top of this list, ' +
+      'with one difference worth stating - it is *data* rather than a header field, because §3.6 makes "generated ' +
+      'once, at promotion, and frozen" the defining property of a section, and a section that cannot say when it ' +
+      'was frozen cannot support that claim. It is never compared: `compareEntry` reads only the fingerprint and ' +
+      'semantic groups, and a rebaseline carries the existing value forward rather than restamping it.',
+  },
+  {
+    file: 'src/regression/ledger.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      '`RebaselineEntry.recordedAt`: when a pinned layer was regenerated (§3.5). Deliberately not stripped and ' +
+      'deliberately data, for the same reason `ladder.ts`\'s `SeedBlockAllocation.recordedAt` is - the whole value ' +
+      'of an append-only ledger is that its rows are dated, and `RebaselineRequest.recordedAt` overrides it so a ' +
+      'spec can assert on a fixed value and a retroactive entry can carry its true date. It reaches no game: this ' +
+      'module creates none, and the rebaseline path derives every seed it replays from the corpus identities.',
+  },
+  {
     file: 'src/runner/matchValidationCli.ts',
     rule: 'new-date',
     occurrences: 1,
