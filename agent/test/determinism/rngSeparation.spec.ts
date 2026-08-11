@@ -369,6 +369,34 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'module creates none, and the rebaseline path derives every seed it replays from the corpus identities.',
   },
   {
+    file: 'src/regression/mutations.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      '`ControlResult.wallClockMs`: how long one negative control took (Milestone 2 bullet 5, Unit D) - a ' +
+      '`started` stamp and the subtraction that closes it. Same category as `src/regression/runner.ts`\'s entry ' +
+      'above, and structurally further from a game than any of them: **this module plays nothing**. It edits a ' +
+      'file in a scratch `git worktree`, spawns a child process, reads a JSON line back and reverts. Every game ' +
+      'in a control run is played by that child, from a corpus identity whose engine and per-slot agent seeds ' +
+      '`match/pairing.ts` derives from an R-block group index (§2.6), so no seed, decision or game state can ' +
+      'derive from this clock read even in principle.\n\n' +
+      'The figures are recorded rather than merely printed, and are therefore worth being explicit about: they ' +
+      'are **not** performance figures and the record says so in `ControlsRecord.hostNote`, which carries the ' +
+      '`sysctl vm.swapusage` reading taken at write time. The host held 4.1-4.2 GB of 5.1 GB swap throughout, and ' +
+      'the same eleven controls ranged from 53 s to 400 s - which is the point of keeping the number beside the ' +
+      'swap reading rather than dropping it (hazard H6, and Unit A\'s finding 1 in Running_Notes).',
+  },
+  {
+    file: 'src/regression/mutations.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      '`ControlsRecord.recordedAt`: when the negative-control record was written. Provenance, in the same kind as ' +
+      '`corpus.ts`\'s `createdAt` at the top of this list. It is never compared and cannot be: the record is read ' +
+      'by `controls.spec.ts`, which checks the rows against the register (ids, classes, pre-registered ' +
+      'predictions) and never looks at a date, and nothing replays from it.',
+  },
+  {
     file: 'src/runner/matchValidationCli.ts',
     rule: 'new-date',
     occurrences: 1,

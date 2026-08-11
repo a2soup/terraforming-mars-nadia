@@ -711,6 +711,29 @@ export type ControlRun = {
   results: ReadonlyArray<ControlResult>;
 };
 
+/**
+ * Criterion S7, which is not a control run and is recorded here anyway.
+ *
+ * S7 says the rebaseline must be *"verified through the CLI, on the real committed artifact - not
+ * against an in-memory ledger (bullet 3's specs passed that way while the guard was off)"*. So it is
+ * an operator transcript rather than a computed artifact, and this is its structured summary: one
+ * row per step, each with what was attempted and what the CLI did. `handAuthored` is `true` to say
+ * so plainly - everything else in this file is measured, and a reader is entitled to know which.
+ */
+export type LedgerExerciseStep = {
+  step: string;
+  outcome: string;
+  /** `refused` | `accepted` | `finding` - the last being a step whose outcome was a defect. */
+  verdict: 'refused' | 'accepted' | 'finding';
+};
+
+export type LedgerExercise = {
+  handAuthored: true;
+  /** Where the transcript came from, so it can be reproduced. */
+  method: string;
+  steps: ReadonlyArray<LedgerExerciseStep>;
+};
+
 export type ControlsRecord = {
   recordedAt: string;
   enginePin: string;
@@ -718,6 +741,8 @@ export type ControlsRecord = {
   /** The `sysctl vm.swapusage` reading, because no timing here is a performance figure (hazard H6). */
   hostNote: string;
   runs: ReadonlyArray<ControlRun>;
+  /** Criterion S7's evidence. See {@link LedgerExercise}. */
+  ledgerExercise?: LedgerExercise;
 };
 
 export const CONTROLS_FILE = 'regression_controls.json';
