@@ -204,6 +204,34 @@ describe('the L2 corpus format and its diff (§3.3)', function() {
       const later: RegressionCorpus = {...corpus, header: {...corpus.header, createdAt: new Date().toISOString()}};
       expect(digestCorpus(later)).to.equal(digestCorpus(corpus));
     });
+
+    // The bug this pins shipped, and the thing that caught it was a *merge* - i.e. the most
+    // ordinary event in the repository. `digestCorpus` hashed the header minus `createdAt`, so it
+    // moved on every subsequent commit via `agentCommit`, and a rebaseline that moved nothing
+    // recorded `corpusDigestBefore !== corpusDigestAfter` - the exact misleading signal the two
+    // ledger digest fields exist to prevent. `createdAt` alone was never the whole rule.
+    it('digests content and not any provenance field, including the agent commit', () => {
+      const churned: RegressionCorpus = {...corpus, header: {
+        ...corpus.header,
+        agentCommit: '0'.repeat(40),
+        nodeVersion: 'v99.0.0',
+        agentVersion: '99.99.99',
+        createdAt: new Date().toISOString(),
+      }};
+      expect(digestCorpus(churned), 'provenance churn is not a content change').to.equal(digestCorpus(corpus));
+    });
+
+    // Without this the assertion above is satisfied by a `digestCorpus` that returns a constant.
+    it('still moves when the content moves', () => {
+      const moved: RegressionCorpus = {...corpus, sections: corpus.sections.map((section, index) => index > 0 ? section : {
+        ...section,
+        entries: section.entries.map((entry, entryIndex) => entryIndex > 0 ? entry : {
+          ...entry,
+          fingerprints: {...entry.fingerprints, moveTraceHash: '0'.repeat(64)},
+        }),
+      })};
+      expect(digestCorpus(moved)).to.not.equal(digestCorpus(corpus));
+    });
   });
 
   // -------------------------------------------------------------------------------------------

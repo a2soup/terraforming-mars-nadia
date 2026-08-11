@@ -1457,3 +1457,51 @@ once.
 does not touch C's 6,100–6,499 or the 6,500–6,999 reserved for M3–M6 sections. And a *frozen* section
 that moves gets a distinct message in the CLI output pointing at §3.1's shared-infrastructure rule,
 because "greedy-1ply@1 moved" is the one red line most likely to be met with a rebaseline.
+
+## 2026-08-11 — Merging Units A and B: the digest that moved on every commit (Milestone 2, bullet 5)
+
+Merged Unit A (the suite core) and Unit B (the thirteen L1 fixtures) onto the bullet-5 branch. Both
+branched cleanly off the plan commit; the only conflict was this file, where both units appended an
+entry, and both were kept. Two test failures on the merged tree, and the interesting one is a real
+defect that **neither unit's own green suite could have caught**.
+
+**`digestCorpus` hashed the corpus header, so the ledger's content digest moved on every commit.**
+Unit A's S7 spec asserts that a rebaseline which moves nothing records
+`corpusDigestBefore === corpusDigestAfter`. It passed on Unit A's branch and failed the moment the
+merge advanced HEAD. Cause: the digest covered `header.agentCommit`, which is repo HEAD at write
+time. So a rebaseline with `entriesMoved: 0` and `fieldsMoved: {}` still reported the artifact as
+changed — the precise misleading signal the two digest fields exist to prevent.
+
+The function's doc comment already contained the right rule and stopped one field short: it excluded
+`createdAt` because it "moves on every write and would make two identical corpora look different in
+the chain". `agentCommit` moves on every *commit*, `nodeVersion` on a Node upgrade, `agentVersion` on
+a bump. None is content. **This is `determinism/corpus.ts`'s documented trap reached from a new
+direction** — that file carries a long comment about never digesting repo HEAD, because doing so once
+made every committed corpus unverifiable on the next docs-only commit. Unit A read it and applied it
+correctly to `assertCorpusComparable`, directly above; the digest, written separately, did not
+inherit it.
+
+**Fix: digest `{suiteVersion, sections}` and drop the header entirely.** That needs no
+exception list to maintain, so a field added to `CorpusHeader` later cannot reintroduce this. It
+costs nothing, because the only header fields carrying meaning — `engineCommit`,
+`seedDerivationVersion`, `env` — are the exact three `assertHeaderCompatible` **rejects on**, so a
+corpus differing in any of them is refused before a digest is ever taken. No artifact needed
+regenerating; `regression_smoke.json`'s recorded `agentCommit` is provenance and stays as written.
+
+Two guards added, and the second is the one that matters: provenance churn (`agentCommit`,
+`nodeVersion`, `agentVersion`, `createdAt` all replaced) must not move the digest, **and** a doctored
+`moveTraceHash` must still move it. Without the second, a `digestCorpus` returning a constant passes
+the first.
+
+**The lesson is about when a check is exercised, not about the digest.** Unit A's specs were
+thorough and its ledger refusals were all driven through the CLI on real files, which is what bullet
+3's post-mortem asked for. It still shipped a defect whose trigger is "somebody commits something" —
+because within a single session HEAD never moves, so every run of that spec saw the one HEAD value
+that made it pass. **A spec whose subject includes repo state has a hidden fixture: the commit you
+happen to be on.** Worth a look wherever else provenance is compared rather than recorded.
+
+**The second failure was the host, not the merge.** `bench harness / benchEnvironment` exceeded its
+2 s timeout in the full run and passes in 148 ms alone; neither unit touches `agent/src/bench/`. The
+host had 4.7 GB of 6.1 GB swap in use. That is Unit A's own finding 1 recurring, and it is now the
+second session in a row to lose time to it — **S6 still cannot be adjudicated on this machine**, and
+a 2 s timeout on a spec that shells out to `git` is fragile independently of that.

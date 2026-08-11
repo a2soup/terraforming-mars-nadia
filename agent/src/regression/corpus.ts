@@ -596,13 +596,32 @@ export function assertCorpusComparable(corpus: RegressionCorpus, current: Corpus
 }
 
 /**
- * A stable digest of the corpus's *content* - the ledger's `corpusDigest` (§3.5). Excludes the
- * header's `createdAt`, which moves on every write and would make two identical corpora look
- * different in the chain.
+ * A stable digest of the corpus's *content* - the ledger's `corpusDigest` (§3.5).
+ *
+ * **The header is excluded entirely, and that is a fix rather than a shortcut.** This function
+ * originally hashed the header minus `createdAt`, on the stated reasoning that `createdAt` "moves
+ * on every write and would make two identical corpora look different in the chain". The reasoning
+ * is right and it does not stop at `createdAt`: `agentCommit` moves on **every subsequent commit**,
+ * `nodeVersion` on a Node upgrade, `agentVersion` on a version bump. None of them is content. The
+ * effect was that a rebaseline which moved nothing - `entriesMoved: 0`, `fieldsMoved: {}` - still
+ * recorded `corpusDigestBefore !== corpusDigestAfter`, which is precisely the misleading signal
+ * {@link RebaselineEntry}'s two digest fields exist to prevent. It was caught by the merge of Units
+ * A and B moving HEAD, i.e. by the most ordinary event there is.
+ *
+ * This is `determinism/corpus.ts`'s documented trap one layer up - *"do not replace this with the
+ * repo's HEAD … it made every committed corpus unverifiable on the next commit, including
+ * docs-only ones"* - reached through the digest instead of through the header comparison.
+ * {@link assertCorpusComparable} directly above got it right; this did not.
+ *
+ * Dropping the header costs nothing, because the only header fields that carry meaning
+ * (`engineCommit`, `seedDerivationVersion`, `env`) are the exact three `assertHeaderCompatible`
+ * **rejects on** - so a corpus that differs in any of them is refused before a digest is ever
+ * taken, and the remaining four are provenance by that type's own definition. Hashing content
+ * alone needs no list of exceptions to maintain, which is why a later field added to
+ * `CorpusHeader` cannot reintroduce this.
  */
 export function digestCorpus(corpus: RegressionCorpus): string {
-  const {createdAt: _createdAt, ...header} = corpus.header;
-  return createHash('sha256').update(JSON.stringify({header, suiteVersion: corpus.suiteVersion, sections: corpus.sections})).digest('hex');
+  return createHash('sha256').update(JSON.stringify({suiteVersion: corpus.suiteVersion, sections: corpus.sections})).digest('hex');
 }
 
 /** Every entry in the corpus, in order, flattened across sections. */
