@@ -377,6 +377,38 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'Identical in kind to determinism/corpus.ts\'s `createdAt` above: it lands in the artifact header, is never ' +
       'compared, and never reaches a decision or a fingerprint.',
   },
+  {
+    file: 'src/regression/select.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      'The `moves`-tier survey\'s own `Survey.durationMs` (Milestone 2 bullet 5, Unit C): a `started` stamp and ' +
+      'the difference. Same category as `match/runner.ts`\'s entry above - reported, never read back - and it ' +
+      'reaches nothing committed, because **the survey artifact is not committed at all**: it is throwaway compute ' +
+      'written to the gitignored `agent/runs/` (§3.7 step 1). Every game it plays is built by `playMatchGame` from ' +
+      'a `MatchGameConfig` whose engine and per-slot agent seeds `match/pairing.ts` derives from the R-block group ' +
+      'index alone (§2.6), so no seed, decision or game state can derive from the clock.\n\n' +
+      'One consequence of the *selection* is worth being explicit about, because it is the one place a clock read ' +
+      'in this file influences a committed artifact. The covering search costs games by their surveyed ' +
+      '`durationMs` (§3.7: "a 20-second game buys the same coverage as a 1.4-second one"), so **which** games are ' +
+      'pinned depends on wall clock measured on whatever host ran the survey. That is a choice about the corpus, ' +
+      'not a property of any game in it: once selected, an entry is replayed from its identity, and its ' +
+      'fingerprints and semantics are functions of the seeds and the Engine pin and of nothing else. A survey re-run ' +
+      'on a different host would select a different, equally valid corpus - it would not change what any pinned ' +
+      'game does, which is why the corpus is regenerable only through the §3.5 rebaseline ledger rather than ' +
+      'silently.',
+  },
+  {
+    file: 'src/regression/select.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      '`RegressionSection.recordedAt` again, stamped by `buildCorpusFromSelection` where ' +
+      '`regression/runner.ts`\'s entry above stamps it for the smoke corpus. Same field, same kind, same ' +
+      'argument: provenance data rather than a header field, because §3.6 makes "generated once, at promotion, and ' +
+      'frozen" the defining property of a section and a section that cannot say when it was frozen cannot support ' +
+      'that claim. Never compared - `compareEntry` reads only the fingerprint and semantic groups.',
+  },
 ];
 
 type Violation = {file: string; line: number; rule: string; text: string};
