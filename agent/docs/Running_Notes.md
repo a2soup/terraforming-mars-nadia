@@ -1586,3 +1586,88 @@ is a one-line change whenever an owner is available. (b) The compiled build need
 `npx tsc-alias -p agent/tsconfig.json` after `npx tsc --build agent/tsconfig.json`, or every `@/`
 import fails at require time. That is what `npm run build:server` does for `src/`; no agent-side
 document said so.
+
+## 2026-08-11 — Negative controls: what the suite does not catch (Milestone 2, bullet 5, Unit D)
+
+Eleven mutations — criterion S1's eight classes, pre-registered with their predicted channels in
+their own commit before any was run, plus three this unit added while looking deliberately for
+something nothing catches. Each applied in a throwaway `git worktree`, run through the whole suite,
+and reverted; nothing under `src/` was modified in the repository. Every mutation was run twice: once
+against Unit A's 10-game smoke corpus and once against **Unit C's committed 33-game corpus**, because
+the difference between those two columns is the only direct measurement in this bullet of what
+selection buys.
+
+**Nine of eleven landed on their pre-registered channels in each run. The no-op control fired nothing
+in both** (falsifiable prediction 3 holds, so the rest of the record stands). Six findings follow, in
+descending order of how much they should change what somebody does.
+
+**1. The rebaseline ledger cannot detect an edit to its own last entry — which is the only entry
+anyone would edit.** Found by using the CLI, which is what S7 asks for and is how bullet 3's two dead
+guards were found. `verifyLedgerChain` compares each entry's `previousDigest` against the digest of
+the entry *before* it, so nothing chains to the final entry. Probed directly: on a two-entry ledger,
+editing entry 0 is caught and editing entry 1 is **not**; on a one-entry ledger — the state this
+project is in — nothing is caught at all. Worse, a subsequent legitimate `--rebaseline` then chains
+to the tampered entry's digest, making the chain self-consistent and the tamper permanent. The guard
+is not switched off, unlike bullet 3's; it runs, and it is one entry short. **A `ledgerHeadDigest` on
+the ledger object itself, rewritten on every append, closes it.** `ledger.ts` is Unit A's file, so
+this is reported rather than fixed.
+
+**2. `--explain` says "the trace moved" when the trace did not move.** The branch is gated on
+`semantics.length === 0` alone, so an entry whose only moved field is `stableStateHash` is described
+to the operator as having "taken a different route to an identical outcome" — the opposite of what
+happened. This is not cosmetic: that sentence tells a reader to look for an ordering change rather
+than a value change, and finding 3 is exactly the case where it fires. `regressionCli.ts` is Unit A's.
+
+**3. A card-effect change can move `stableStateHash` and nothing else — no trace, no semantic
+field.** M1 changed `Mine`'s `behavior` production from 1 steel to 2. On the 10-game corpus the two
+entries that noticed it moved **`fingerprints.stableStateHash` alone**: every decision byte-identical
+(the two entries resolve 294 and 255 of them), every VP component, placement, corporation and card
+list unchanged. So the field carrying the whole
+detection is the one inherited from the determinism corpus, not the semantic block §3.3 argued for —
+and `--explain` has nothing to localize, because localization brackets a *trace* divergence. On Unit
+C's 33-game corpus the same mutation did move the trace and eleven semantic fields, so this is a
+property of *which games are pinned*, not of the mutation. **Do not prune `stableStateHash` from the
+compared fields on the argument that the semantic fields subsume it. They do not.**
+
+**4. The 33-game corpus closed two gaps the 10-game corpus had, and one gap survived both.** M2
+(Hackers' `bespokePlay`) moved **zero** pinned entries at 10 games and 3 of 15 random-legal entries
+at 33 — the smaller corpus never reached the card, and only L1's direct assertion and the 300-game
+determinism corpus caught it. That is §3.2's *"a seed cannot assert a card"*, measured rather than
+argued. M5 (the `match/ranking.ts` megacredit tiebreak) was pre-registered as **uncaught** and was
+uncaught at 10 games; at 33 it fired on one greedy 3p entry that has a genuine VP tie, moving
+`placement` and `isWinner` with **no fingerprint field at all**. A wrong prediction, and the good
+kind. **M3 survived both**: reducing `MAX_INTERIOR_AMOUNTS` from 6 to 3 — a candidate-set reduction,
+which bullet 2 names explicitly as making `greedy-1ply@1` a *new version rather than an improvement*
+— fired nothing across all 43 pinned games and both baselines. It is a standing gap, not a
+sample-size artefact.
+
+**5. L3's localization is capped by the checkpoint interval, and it named the right decision in
+neither case where "right" was checkable.** For M1 and M2 the bracketed 25-decision window did not
+contain the mutated card, in either corpus. The reason is structural rather than a bug: the first
+*divergence* is not the first *play of the mutated card* — it is the first decision whose offered set
+or chosen response changed as a consequence, which can be dozens of decisions later. And three of the
+four agent-side mutations bracketed to `(-1, 24]`, i.e. "somewhere in the first 25 decisions", which
+is where the opening deal and the first generation's buys are packed. **`--explain` reliably answers
+"roughly where" and does not answer "what caused it".** Quote it as the former.
+
+**6. The fallback blind spot is real but narrower than the sentence suggests.** M11 reordered the
+FR-9 conservative fallback's `or`-branch search, so the decisions it changes are precisely the ones
+`moveTraceHash` has no step for. The trace moved anyway — a fallback that changes the game state
+changes the `pendingSignature` folded into every *later* recorded step — and L3 bracketed to
+`(24, 49]` on the smoke corpus and `(49, 74]` on Unit C's, i.e. **to the first recorded decision
+after the fallback, never to the fallback itself**. So the blind spot is not "such a divergence is
+invisible"; it is "such a divergence is visible and is attributed to the wrong decision".
+
+**Also worth knowing.** `verifyCorpus` counts one mismatch **per field per config**, not per config,
+so a determinism line reading "1,722 mismatches" over 300 configs is ~287 configs moving on six
+fields each — do not read those numbers as config counts. M10 (reversing the *order* of the space
+candidate set, with the set unchanged) fired on `l2:greedy-1ply@1` and **nothing else**, 18 of 18
+entries against 0 of 15 random-legal ones, in both runs: that channel did not exist before this
+bullet, so this is §2.1's gap made concrete. M6 (attributing city-adjacency VP to the greenery
+component, every total unchanged) moved 32 of 33 entries on semantic fields with **zero** fingerprint
+fields and left all 300 determinism configs clean — §3.3's decision to commit the fields rather than
+a hash of them, paying for itself in one row. M9 (Anti-Gravity Technology, played 0 times in 1,500
+games) was uncaught by every channel in both runs, as designed. And the harness runs the *committed*
+version of itself inside the scratch worktree, which is worth knowing before wondering why an edit
+had no effect. No duration in this session's record is a performance figure: the host held 4.1–4.2 GB
+of 5.1 GB swap throughout, and the same eleven rows ranged from 53 s to 400 s.
