@@ -4,6 +4,9 @@ import {ensureHeadlessEngine} from '../../src/engine/headlessEngine';
 import {buildMatchConfigs} from '../../src/match/pairing';
 import {playMatchGame} from '../../src/match/runner';
 import {MatchHistoryInstrument, MemoryMovesSink} from '../../src/match/history';
+import {allEntries, assertCorpusValid, entryKey, loadRegressionCorpus} from '../../src/regression/corpus';
+import {dataPath} from '../../src/regression/runner';
+import {L2GameEntry} from '../../src/regression/types';
 import {
   CoverageObserver,
   crossCheckStandardProjects,
@@ -12,10 +15,12 @@ import {
   standardProjectsFromMoves,
 } from '../../src/regression/fingerprint';
 import {
+  CoverageRecordRow,
   DEFAULT_SURVEY,
   FROZEN_BASELINES,
   L2_GROUP_RANGE,
   NAMED_CARDS,
+  loadCoverageRecord,
   REQUIRED_CELLS,
   SurveyGameRow,
   SurveyStratum,
@@ -46,6 +51,8 @@ import {
  */
 describe('Unit C: seed selection (§3.7)', function() {
   this.timeout(600_000);
+
+  const entryKeyOf = (entry: L2GameEntry) => entryKey(entry.identity);
 
   before(() => {
     ensureHeadlessEngine();
@@ -273,6 +280,72 @@ describe('Unit C: seed selection (§3.7)', function() {
       // deliberately, at the moment it is frozen - that is what makes "a shared-infrastructure change
       // that moves a frozen baseline is a regression, not a rebaseline" enforceable.
       expect([...FROZEN_BASELINES].sort()).to.deep.equal(['greedy-1ply@1', 'random-legal@1']);
+    });
+  });
+
+  // -------------------------------------------------------------------------------------------
+  // The committed artifacts
+  // -------------------------------------------------------------------------------------------
+
+  describe('the committed corpus and coverage record', () => {
+    /**
+     * Reads the files in the repository, not values built in memory. Bullet 3's two dead guards both
+     * passed specs that never opened the file that actually exists, and §3.7's whole output is two
+     * committed artifacts - so the checks that matter are the ones a future session can run on a
+     * fresh checkout without a survey (which is gitignored throwaway compute, by design).
+     */
+    const corpus = loadRegressionCorpus(dataPath('regression_suite.json'));
+    const record = loadCoverageRecord(dataPath('regression_coverage.json'));
+
+    it('is structurally valid, and every group is inside the allocation (S9)', () => {
+      assertCorpusValid(corpus);
+      const groups = allEntries(corpus).map((entry) => entry.identity.groupIndex);
+      expect(Math.min(...groups)).to.be.at.least(L2_GROUP_RANGE.from);
+      expect(Math.max(...groups)).to.be.at.most(L2_GROUP_RANGE.to);
+      // Disjoint from the range M2b1's criterion R3 already spent (§2.6).
+      expect(groups.every((group) => group < 6_000 || group > 6_029)).is.true;
+    });
+
+    it('pins both frozen baselines at 2p and 3p with a 4p smoke (S5)', () => {
+      const cells = new Map<string, number>();
+      for (const entry of allEntries(corpus)) {
+        const key = `${entry.identity.agent}/${entry.identity.players}p`;
+        cells.set(key, (cells.get(key) ?? 0) + 1);
+      }
+      for (const cell of REQUIRED_CELLS) {
+        expect(cells.get(`${cell.agent}/${cell.players}p`) ?? 0, `${cell.agent} at ${cell.players}p`)
+          .to.be.at.least(cell.minimum);
+      }
+      expect(corpus.sections.every((section) => section.frozen), 'both sections are frozen baselines').is.true;
+    });
+
+    it('carries a why on every entry, and coverage derived from the survey (§3.3)', () => {
+      for (const entry of allEntries(corpus)) {
+        expect(entry.why.trim(), entryKeyOf(entry)).to.not.equal('');
+        expect(entry.coverage.source, entryKeyOf(entry)).to.equal('moves-tier');
+        expect(entry.fingerprints.traceCheckpoints.length, `${entryKeyOf(entry)} needs checkpoints for --explain`)
+          .to.be.greaterThan(0);
+      }
+    });
+
+    it('exercises all ten §2.3 named cards, or records each one as a hole with its reason (S3)', () => {
+      for (const name of NAMED_CARDS) {
+        const row = record.rows.find((candidate) => candidate.kind === 'card' && candidate.name === name);
+        expect(row, `${name} must appear in the coverage record`).is.not.undefined;
+        if ((row as CoverageRecordRow).pinnedGames === 0) {
+          // Not a failure - S3 allows "individually recorded as unreachable by the baselines with the
+          // reason". It is a failure to be silent about it.
+          expect((row as CoverageRecordRow).hole, `${name} is uncovered and must say why`).is.not.undefined;
+        }
+      }
+    });
+
+    it('never reports a total without the hole list beside it (S3)', () => {
+      expect(record.totals.length).to.be.greaterThan(0);
+      expect(record.holes).to.deep.equal(record.rows.filter((row) => row.pinnedGames === 0));
+      for (const hole of record.holes) {
+        expect(hole.hole, `${hole.kind}/${hole.name}`).is.oneOf(['not-reached-by-baselines', 'lost-to-budget-trim']);
+      }
     });
   });
 
