@@ -172,6 +172,35 @@ describe('the rebaseline ledger (§3.5, criterion S7)', function() {
     expect(broken.stderr).to.match(/CHAIN BROKEN/);
   });
 
+  // Found by Unit D (criterion S7) by editing a ledger as an operator would, and the test above is
+  // the reason it survived review: it edits entry 0 of two, which the per-entry chain does catch.
+  // Nothing chained to the *last* entry, so on this project's one-entry ledger nothing was pinned
+  // at all - and the next legitimate rebaseline would have chained onto the edited digest, making
+  // the edit permanently self-consistent.
+  it('refuses an edit to its own last entry - the row nothing chains to', () => {
+    const tampered = path.join(scratch, 'tampered-head.json');
+    const ledger = loadRebaselineLedger(ledgerPath) as RebaselineLedger;
+    fs.writeFileSync(tampered, JSON.stringify({
+      ...ledger,
+      entries: [ledger.entries[0], {...ledger.entries[1], claim: 'a claim nobody ever made'}],
+    }, null, 2));
+
+    const broken = cli('--ledger', tampered, '--show-ledger');
+    expect(broken.status, 'an edited last row must be refused too').to.not.equal(0);
+    expect(broken.stderr).to.match(/CHAIN BROKEN/);
+    expect(broken.stderr, 'and the message must name the head, not blame an earlier row').to.match(/most recent row/);
+  });
+
+  it('refuses a ledger carrying no headDigest at all, rather than computing one', () => {
+    const headless = path.join(scratch, 'headless.json');
+    const {headDigest: _headDigest, ...withoutHead} = loadRebaselineLedger(ledgerPath) as RebaselineLedger;
+    fs.writeFileSync(headless, JSON.stringify(withoutHead, null, 2));
+
+    const result = cli('--ledger', headless, '--show-ledger');
+    expect(result.status, 'filling in the head from the rows would manufacture the agreement it checks').to.not.equal(0);
+    expect(result.stderr).to.match(/no headDigest/);
+  });
+
   it('refuses to append to a ledger whose chain is already broken', () => {
     const tampered = path.join(scratch, 'tampered.json');
     const result = cli('--rebaseline', '--corpus', corpusPath, '--ledger', tampered,

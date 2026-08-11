@@ -92,7 +92,35 @@ export type RebaselineLedger = {
   ledgerVersion: string;
   /** Append-only, oldest first. */
   entries: ReadonlyArray<RebaselineEntry>;
+  /**
+   * `digestEntry` of the **last** entry, or {@link LEDGER_GENESIS_DIGEST} when there are none.
+   *
+   * **Without this the chain does not cover its own head** (found by Unit D, criterion S7, by
+   * editing a ledger as an operator would). Each entry's `previousDigest` pins the entry *before*
+   * it, so with `n` entries the chain constrains the first `n-1` and nothing pins the last. On a
+   * two-entry ledger, editing entry 0 is caught and editing entry 1 is not; on the one-entry ledger
+   * this project has, **nothing** is caught. Worse than a missed tamper: the next legitimate
+   * rebaseline chains onto the edited row's digest, and the edit becomes permanently self-consistent.
+   *
+   * Recomputed on every write by {@link saveRebaselineLedger} so it cannot drift from `entries`,
+   * and compared on every load by {@link verifyLedgerChain}.
+   */
+  headDigest: string;
 };
+
+/**
+ * A ledger read from a file that carried no `headDigest` at all. Deliberately not a valid sha256
+ * hex string, so it can never coincide with a real head, and deliberately not silently filled in
+ * with the computed value - a missing head digest means the file predates the check or was
+ * hand-written, and {@link verifyLedgerChain} must say so rather than manufacture agreement.
+ */
+export const LEDGER_HEAD_ABSENT = 'absent';
+
+/** The digest the ledger's `headDigest` must equal: its last entry's, or genesis when empty. */
+export function headDigestOf(ledger: Pick<RebaselineLedger, 'entries'>): string {
+  const last = ledger.entries[ledger.entries.length - 1];
+  return last === undefined ? LEDGER_GENESIS_DIGEST : digestEntry(last);
+}
 
 /** Thrown by every refusal in this module. */
 export class RebaselineError extends Error {}
@@ -137,7 +165,7 @@ function sortedFields(fields: Readonly<Record<string, number>>): ReadonlyArray<[
 }
 
 export function emptyLedger(): RebaselineLedger {
-  return {ledgerVersion: REBASELINE_LEDGER_VERSION, entries: []};
+  return {ledgerVersion: REBASELINE_LEDGER_VERSION, entries: [], headDigest: LEDGER_GENESIS_DIGEST};
 }
 
 /**
@@ -159,12 +187,24 @@ export function loadRebaselineLedger(filePath: string): RebaselineLedger | undef
       'treat it as an empty one - a ledger that silently reads as empty is a ledger that refuses ' +
       'nothing (the defect recorded in rating/seedBlocks.ts).');
   }
-  return {ledgerVersion: parsed.ledgerVersion ?? REBASELINE_LEDGER_VERSION, entries: parsed.entries};
+  return {
+    ledgerVersion: parsed.ledgerVersion ?? REBASELINE_LEDGER_VERSION,
+    entries: parsed.entries,
+    // Never defaulted to the computed value: see LEDGER_HEAD_ABSENT.
+    headDigest: parsed.headDigest ?? LEDGER_HEAD_ABSENT,
+  };
 }
 
+/**
+ * Writes the ledger with its `headDigest` **recomputed from `entries`**, never copied from the
+ * object handed in. A caller that assembled a ledger by hand cannot write a head that disagrees
+ * with its own rows, so the only way to produce a mismatch is to edit the file afterwards - which
+ * is exactly the event {@link verifyLedgerChain} exists to catch.
+ */
 export function saveRebaselineLedger(filePath: string, ledger: RebaselineLedger): void {
   fs.mkdirSync(path.dirname(filePath), {recursive: true});
-  fs.writeFileSync(filePath, JSON.stringify(ledger, null, 2) + '\n');
+  const written: RebaselineLedger = {...ledger, headDigest: headDigestOf(ledger)};
+  fs.writeFileSync(filePath, JSON.stringify(written, null, 2) + '\n');
 }
 
 /**
@@ -183,6 +223,19 @@ export function verifyLedgerChain(ledger: RebaselineLedger): ReadonlyArray<strin
     }
     expected = digestEntry(entry);
   });
+
+  // The head. The loop above pins every entry to the one before it, which leaves the *last* entry
+  // pinned by nothing - see RebaselineLedger.headDigest for why that is the whole ledger on a
+  // one-row file. `expected` is now digestEntry(last entry), or genesis if there were none.
+  if (ledger.headDigest === LEDGER_HEAD_ABSENT) {
+    problems.push(
+      'the ledger carries no headDigest, so its most recent entry is pinned by nothing and an edit ' +
+      'to that entry would be undetectable. Written before the head check existed, or hand-written.');
+  } else if (ledger.headDigest !== expected) {
+    problems.push(
+      `the ledger's headDigest is ${ledger.headDigest.slice(0, 12)} but its last entry digests to ` +
+      `${expected.slice(0, 12)} - the most recent row has been edited`);
+  }
   return problems;
 }
 
@@ -233,7 +286,8 @@ export function appendRebaseline(
     corpusDigestAfter: request.corpusDigestAfter,
   };
 
-  return {ledger: {ledgerVersion: existing.ledgerVersion, entries: [...existing.entries, entry]}, entry};
+  const entries = [...existing.entries, entry];
+  return {ledger: {ledgerVersion: existing.ledgerVersion, entries, headDigest: digestEntry(entry)}, entry};
 }
 
 /** One line per entry, for the CLI. The two computed numbers lead, because they are the finding. */

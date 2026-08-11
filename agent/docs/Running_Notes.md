@@ -1671,3 +1671,54 @@ games) was uncaught by every channel in both runs, as designed. And the harness 
 version of itself inside the scratch worktree, which is worth knowing before wondering why an edit
 had no effect. No duration in this session's record is a performance figure: the host held 4.1–4.2 GB
 of 5.1 GB swap throughout, and the same eleven rows ranged from 53 s to 400 s.
+
+## 2026-08-11 — Fixing Unit D's two findings: a chain that did not cover its head (Milestone 2, bullet 5)
+
+Merged Units C and D and fixed the two defects Unit D reported in Unit A's files. Unit D was right
+to report rather than fix them — they are outside its ownership (plan §8) — and right on both
+diagnoses. What is worth recording is that **both defects have the same shape as the `digestCorpus`
+one fixed two commits earlier**: a check that is correct about the thing it looks at, and silent
+about the thing next to it.
+
+**The ledger chain did not cover its own head.** `verifyLedgerChain` walks the entries comparing
+each `previousDigest` against the digest of the entry before it. With `n` entries that constrains the
+first `n−1`; the last is pinned by nothing. On a two-entry ledger, editing entry 0 is caught and
+editing entry 1 is not — and this project's ledger has **one** entry, so nothing was pinned at all.
+The tamper is not merely missed: the next legitimate rebaseline chains onto the edited row's digest
+and the edit becomes permanently self-consistent, which is the failure an audit trail exists to
+prevent. Closed with a `headDigest` on the ledger object, recomputed from `entries` on every write
+so it cannot drift, and compared on every load.
+
+**Note what the existing spec did.** It edits entry 0 of a two-entry ledger and asserts the refusal —
+a real test, passing, of the half of the property that worked. The half that did not work was the
+half the project actually depends on. Unit D found it by *editing the file as an operator would*,
+which is the third time in this bullet that using a guard has beaten specifying it.
+
+**A missing `headDigest` is refused, not computed.** `loadRebaselineLedger` maps an absent field to
+a sentinel rather than filling it in from the rows, because computing it would manufacture the
+agreement the check is supposed to test — the same mistake as reading a ledger-shaped file as an
+empty ledger (`rating/seedBlocks.ts`).
+
+**`--explain` inverted its headline sentence on the one mutation class most likely to reach it.**
+The branch announcing "the trace moved and no semantic field did — the game took a different route to
+an identical outcome" was gated on `semantics.length === 0` alone. When the moved fingerprint field
+is `stableStateHash` and `moveTraceHash` is untouched, the truth is the exact opposite: the **same**
+route to a **different** state. Unit D's M1 (a card's `behavior` production value) moves
+`stableStateHash` and nothing else, so this is not a corner case — it is the reading an operator gets
+for a card-value regression, and it sends them hunting for an ordering change that is not there.
+
+The fix splits the branch on whether `moveTraceHash` actually moved, and the new message says the
+actionable half: the same moves now produce different values, so look at a card, a cost or a
+parameter rather than at the agent. **Worth keeping in view at M3** — that is the mutation class L3
+handles worst, and Unit D separately measured that its localization named the right decision in
+neither case where "right" was checkable, because the first divergence is not the first play of the
+mutated card.
+
+**Both fixes were verified to fail without them**, by stashing the source change and re-running: two
+red for the ledger, one red for `--explain` (the trace-moved branch stays green, which is what makes
+the pair a discriminating test rather than a smoke test).
+
+**Unit D's standing gaps are unchanged by any of this** and are the more important output. M3 (a
+candidate-set reduction — the change bullet 2 names as making `greedy-1ply@1` a new version) fired
+nothing across all 43 pinned games; M2 (Hackers) moved zero pinned entries and was caught only by
+L1's direct assertion, which is §3.2's "a seed cannot assert a card" measured rather than argued.

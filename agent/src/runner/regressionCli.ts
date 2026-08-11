@@ -317,10 +317,23 @@ function runExplain(args: ParsedArgs): void {
   const fingerprints = explanation.diffs.filter((diff) => diff.group === 'fingerprint');
   const semantics = explanation.diffs.filter((diff) => diff.group === 'semantics');
   console.log(`[regression]   ${fingerprints.length} fingerprint field(s) and ${semantics.length} semantic field(s) moved.`);
-  if (semantics.length === 0) {
+  // Two different events hide behind "no semantic field moved", and until Unit D ran the controls
+  // this branch called both of them the first one. The discriminator is whether `moveTraceHash`
+  // is among the moved fields - not whether *some* fingerprint field moved. Unit D's M1 (a card's
+  // `behavior` production value) moves `stableStateHash` **alone**, so the old gate reported "a
+  // different route to an identical outcome" for the one case that is its exact opposite: the
+  // same route, to a different state.
+  const traceMoved = fingerprints.some((diff) => diff.path === 'fingerprints.moveTraceHash');
+  if (semantics.length === 0 && traceMoved) {
     console.log('[regression]   **The trace moved and no semantic field did.** The game took a different route to ' +
       'an identical outcome: every VP component, placement, corporation and card list is unchanged. That is a ' +
       'different event from a scoring change and usually points at ordering rather than value (§3.3).');
+  } else if (semantics.length === 0) {
+    console.log('[regression]   **The decision sequence is unchanged and the end state is not.** Every decision was ' +
+      'identical - `moveTraceHash` did not move - yet the game finished in a different state. So this is not ' +
+      'ordering: the same moves now produce different values, which points at a card, a cost or a parameter ' +
+      'rather than at the agent. No semantic field caught it, so the change is below the record schema (§3.3) - ' +
+      'read the fingerprint rows below for which one moved.');
   }
   for (const diff of explanation.diffs) {
     console.log(`[regression]     ${diff.group.padEnd(11)} ${diff.path}: ${short(diff.expected)} -> ${short(diff.actual)}`);
