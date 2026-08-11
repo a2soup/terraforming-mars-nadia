@@ -1505,3 +1505,84 @@ happen to be on.** Worth a look wherever else provenance is compared rather than
 host had 4.7 GB of 6.1 GB swap in use. That is Unit A's own finding 1 recurring, and it is now the
 second session in a row to lose time to it — **S6 still cannot be adjudicated on this machine**, and
 a 2 s timeout on a spec that shells out to `git` is fragile independently of that.
+
+## 2026-08-11 — Seed selection and the reference-game corpus: five things the plan did not predict (Milestone 2, bullet 5, Unit C)
+
+Unit C of bullet 5 — the `moves`-tier survey, the covering search, and the two committed artifacts
+(`docs/data/regression_suite.json`, `docs/data/regression_coverage.json`). 950 survey games over
+R-block groups 6,100–6,399, 33 pinned. Five findings, in descending order of how much time they will
+cost whoever hits them next.
+
+**1. `card_play_coverage.json` says Sell Patents was played 0 times in 1,500 games. It is played in
+essentially every random-legal game.** K4's `PlayObserver` wraps
+`StandardProjectCard.payAndExecute`, and Sell Patents never calls it: `Game.getStandardProjects()`
+filters it out of the standard-project menu (`Game.ts:1637`, *"sell patents is not displayed as a
+card"*) and `Player.getActions()` offers `sellPatents.action(this)` instead, whose callback calls
+`projectPlayed` directly. So the card was filed as `reachable-by-other-route` with zero observations,
+and the zero was read as a fact about reachability rather than about the instrument. **The unique
+chokepoint for all six standard projects is `projectPlayed`** — `payAndExecute` calls it too — and
+that is what `regression/fingerprint.ts` wraps. This does not invalidate any other K4 number: every
+other section reaches `playCard`/`playCorporationCard`/`actionUsed`, which are unique. It is worth
+re-running the sweep at M3 with the corrected chokepoint if anything ever depends on that row.
+
+**2. §2.4's "greedy play reaches further" is wrong, and it is wrong in the direction that matters.**
+Measured over the survey, per game at 2p: `random-legal@1` plays **31.5** distinct cards and takes
+**5.8** card actions; `greedy-1ply@1` plays **19.1** and takes **2.9**. At 3p it is 36.4/6.3 against
+23.1/3.7. Greedy also *ends games sooner* (15.5 generations at 2p against 23.2), which compounds:
+maximizing current victory points buys fewer cards, plays fewer of them, and reaches the endgame
+before the delayed-value engine ever runs. And it costs **~75×** more per game (2,372 ms against
+32 ms under `tsx`). So `random-legal@1` is both the broader and the vastly cheaper covering
+instrument, which is the opposite of what §3.7 assumed when it said the covering search "should run
+over `greedy-1ply@1` … not only for realism".
+
+The consequence is structural, not cosmetic. A covering search that maximizes coverage per second
+will pin **almost nothing but cheap random-legal games** — a corpus that covers the card pool
+beautifully and would not notice `greedy-1ply@1` changing at all, which is precisely the gap §2.1
+says this bullet exists to close. `REQUIRED_CELLS` is the answer: 18 of the 33 pinned games are
+`greedy-1ply@1`, seeded before the covering step and never trimmed. Left to the search alone the
+corpus was 29 games with **5** greedy entries, all of them forced.
+
+**3. Prediction 5 holds per agent and fails for the corpus, and only the split reporting shows
+both.** Card actions are *not* worse covered than card plays in the pinned corpus — 38 of 38 against
+274 of 275 — because random-legal reaches every one of them. Within `greedy-1ply@1` the prediction is
+exactly right: half the card actions per game. Getting this out required making `card:X` and
+`action:X` **separate coverage targets**; scored in one keyspace, a card counts as covered because it
+was played once and never used, and the prediction cannot be adjudicated at all. Note that
+`isIActionCard` is structurally true of Sell Patents, Convert Plants and Convert Heat as well, and
+those get no `action:` target — for them the action *is* the use, and a second target produced a
+phantom `action/standardProjects 0/1` hole on the first run.
+
+**4. The `moves` tier cannot derive card actions, so §3.7's "record per game … card actions used" is
+under-specified in the same way §3.2 found "pinned in the M2 regression seed set" was.** A blue
+card's action is taken through `Player.playActionCard()`, which is a bare `SelectCard`; the recorded
+`decisionType` is the top-level `'or'`, and `{type: 'card', cards: ['Search For Life']}` is a card
+action, a discard, a sale or a selection depending only on which decision was open. Standard projects
+*are* derivable (five of six — `SelectStandardProjectToPlay` responds `{type: 'projectCard'}`, and
+Sell Patents is the sixth for finding 1's reason), so the survey still runs at `moves` tier and the
+derivation is kept as an **independent cross-check** on those five: **0 disagreements over 950
+games**, 0 stray observations. That cross-check is the only thing that would have caught the observer
+wrapping the wrong method. Incidentally it re-measures §2.7's move-list cost at **70,625 B/game**
+against the recorded 69.7 KB — generated and discarded, never written.
+
+**5. `tsx` understates *this* workload by 1.4×, not 3.5×.** Whole-suite, same host, back to back:
+**36.3 s / 36.5 s compiled** and **46.3 s / 50.6 s under `tsx`**. Per line: the determinism corpus
+6.0 s compiled against 10.2 s (1.7×), L2's 33 games 27 s against 37 s (1.4×), and L1 identical at
+~3.2 s in both because `runL1` spawns mocha under `tsx` either way. The ~3.5× figure comes from the
+speed spike's clone/deserialize micro-benchmarks and does not transfer to whole-game play, where
+Engine work the JIT warms up dominates. **Criterion S6 is met with room** — 36.5 s against a 300 s
+compiled budget and 50.6 s against 1,200 s under `tsx` — and nothing was cut to meet it. The host was
+not swapping this session (2.7 GB of 4.1 GB, 1.4 GB free), unlike Units A and B's; `sysctl
+vm.swapusage` was checked before every figure quoted here.
+
+**One thing the plan predicted exactly.** Anti-Gravity Technology is the corpus's only hole, and it
+is a hole because no game in a 950-game survey by either baseline played it — the same zero K4
+measured over 1,500. Prediction 4's other half ("3–8 reachable cards uncovered") is wrong: it is one.
+
+**Two smaller notes.** (a) Unit C needed a CLI and `agent/package.json` is Unit A's alone (§8, *"if C
+or D needs a script, it asks A"*), and Unit A had already merged. The selection CLI therefore lives
+in `src/regression/select.ts` itself and is invoked as `npx tsx src/regression/select.ts <command>`,
+following `match/pool.ts` and `determinism/sweep.ts`; adding `"regression:select"` to `package.json`
+is a one-line change whenever an owner is available. (b) The compiled build needs
+`npx tsc-alias -p agent/tsconfig.json` after `npx tsc --build agent/tsconfig.json`, or every `@/`
+import fails at require time. That is what `npm run build:server` does for `src/`; no agent-side
+document said so.
