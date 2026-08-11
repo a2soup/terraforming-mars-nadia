@@ -166,19 +166,30 @@ describe('the negative-control register (criterion S1)', () => {
       this.skip();
     }
     const record = loadControlsRecord(recordPath);
-    expect(record.results.map((result) => result.id)).to.deep.equal(MUTATIONS.map((mutation) => mutation.id));
-    for (const result of record.results) {
-      const mutation = mutationById(result.id);
-      expect(result.class, `${result.id} class`).to.equal(mutation.class);
-      expect(result.predictedChannels, `${result.id} prediction`).to.deep.equal(mutation.prediction.channels);
+    expect(record.runs.length, 'the record carries no runs').to.be.greaterThan(0);
+
+    for (const run of record.runs) {
+      expect(run.results.map((result) => result.id), `${run.corpusFile}: rows`)
+        .to.deep.equal(MUTATIONS.map((mutation) => mutation.id));
+      for (const result of run.results) {
+        const mutation = mutationById(result.id);
+        expect(result.class, `${run.corpusFile} ${result.id} class`).to.equal(mutation.class);
+        // The committed prediction and the register's prediction must still agree. If they diverge,
+        // somebody edited a prediction after seeing a result, which is the one edit that would make
+        // this whole unit worthless.
+        expect(result.predictedChannels, `${run.corpusFile} ${result.id} prediction`)
+          .to.deep.equal(mutation.prediction.channels);
+      }
+      // Prediction 3, as a standing assertion rather than a sentence in a document: if the
+      // comment-only change ever fires anything, the suite is non-deterministic and every other row
+      // here is void.
+      const noOp = run.results.find((result) => result.class === 'no-op-control');
+      expect(noOp?.firedChannels, `${run.corpusFile}: the no-op control fired - every result is void`)
+        .to.deep.equal([]);
+      // The baseline is what makes the others legible: an unmutated scratch worktree that does not
+      // reproduce its own artifacts would make every "caught" row unattributable.
+      expect(channelsFired(run.baseline), `${run.corpusFile}: the unmutated baseline moved something`)
+        .to.deep.equal([]);
     }
-    // Prediction 3, as a standing assertion rather than a sentence in a document: if the comment-only
-    // change ever fires anything, the suite is non-deterministic and every other row here is void.
-    const noOp = record.results.find((result) => result.class === 'no-op-control');
-    expect(noOp?.firedChannels, 'the no-op control fired a channel - every result in this bullet is void')
-      .to.deep.equal([]);
-    // The baseline is the row that makes the others legible: an unmutated scratch worktree that does
-    // not reproduce its own artifacts would make every "caught" row unattributable.
-    expect(channelsFired(record.baseline), 'the unmutated baseline moved something').to.deep.equal([]);
   });
 });

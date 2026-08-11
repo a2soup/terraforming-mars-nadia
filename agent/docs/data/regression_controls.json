@@ -1,0 +1,2229 @@
+{
+  "recordedAt": "2026-08-11T15:14:08.615Z",
+  "enginePin": "868714d72a434ab68fe08e5570ebc6863859ae15",
+  "agentCommit": "6c1d97e6bf4a637d5b8737d51bf63fcda137a328",
+  "hostNote": "vm.swapusage: total = 5120.00M  used = 4178.69M  free = 941.31M  (encrypted)",
+  "runs": [
+    {
+      "corpusFile": "regression_smoke.json",
+      "corpusRole": "Unit A's smoke corpus - selected to exercise the record format, not coverage",
+      "corpusEntries": 10,
+      "baseline": {
+        "l1": {
+          "status": "ok",
+          "fixtures": 27,
+          "failures": []
+        },
+        "determinism": {
+          "status": "ok",
+          "configsChecked": 300,
+          "mismatches": 0
+        },
+        "sections": [
+          {
+            "key": "random-legal@1",
+            "frozen": true,
+            "entriesChecked": 6,
+            "entriesMoved": 0,
+            "fieldsMoved": {}
+          },
+          {
+            "key": "greedy-1ply@1",
+            "frozen": true,
+            "entriesChecked": 4,
+            "entriesMoved": 0,
+            "fieldsMoved": {}
+          }
+        ],
+        "movedEntries": [],
+        "durationMs": 156041
+      },
+      "results": [
+        {
+          "id": "M1",
+          "class": "card-effect-amount",
+          "preRegistered": true,
+          "file": "src/server/cards/base/Mine.ts",
+          "what": "Mine grants 2 steel production instead of 1.",
+          "standsFor": "A declarative `behavior` value on a card changing - the single most likely silent effect of a pin move, and the 204-card declarative tail lost its independent cross-check when AC-8 was withdrawn (`agent/CLAUDE.md` \u00a76).",
+          "predictedChannels": [
+            "determinism",
+            "l2:random-legal@1",
+            "l2:greedy-1ply@1"
+          ],
+          "predictionNote": "Mine is a 4 M\u20ac building card with no requirement, so it is played across the 300 determinism configs and across a 10-game corpus. No L1 fixture asserts Mine - it is not a divergent card - so L1 should stay silent, which is the correct behaviour and not a gap.",
+          "firedChannels": [
+            "determinism",
+            "l2:random-legal@1",
+            "l2:greedy-1ply@1"
+          ],
+          "caught": true,
+          "verdict": "as-predicted",
+          "observation": {
+            "l1": {
+              "status": "ok",
+              "fixtures": 27,
+              "failures": []
+            },
+            "determinism": {
+              "status": "failed",
+              "configsChecked": 300,
+              "mismatches": 165
+            },
+            "sections": [
+              {
+                "key": "random-legal@1",
+                "frozen": true,
+                "entriesChecked": 6,
+                "entriesMoved": 1,
+                "fieldsMoved": {
+                  "fingerprints.stableStateHash": 1
+                }
+              },
+              {
+                "key": "greedy-1ply@1",
+                "frozen": true,
+                "entriesChecked": 4,
+                "entriesMoved": 1,
+                "fieldsMoved": {
+                  "fingerprints.stableStateHash": 1
+                }
+              }
+            ],
+            "movedEntries": [
+              {
+                "key": "random-legal@1/3p/g6094/p3",
+                "why": "Format smoke at 3p: a non-zero permutation index, so the seating recorded on the entry is checked against the pairing schedule rather than assumed to be the identity.",
+                "fingerprintFields": [
+                  "fingerprints.stableStateHash"
+                ],
+                "semanticFields": []
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6093/p1",
+                "why": "The mixed lineup with the slots swapped between seats, so an agent-seed schedule that travels with the seat rather than the slot is visible as a divergence.",
+                "fingerprintFields": [
+                  "fingerprints.stableStateHash"
+                ],
+                "semanticFields": []
+              }
+            ],
+            "durationMs": 179169,
+            "explain": {
+              "key": "random-legal@1/3p/g6094/p3",
+              "traceMoved": false,
+              "windowHead": []
+            }
+          },
+          "l3": "no-trace-move",
+          "wallClockMs": 191492
+        },
+        {
+          "id": "M2",
+          "class": "bespoke-play",
+          "preRegistered": true,
+          "file": "src/server/cards/base/Hackers.ts",
+          "what": "Hackers' bespokePlay steals 1 M\u20ac production instead of 2.",
+          "standsFor": "Imperative card logic changing - the exact effect the Engine's own `Hackers.spec.ts` never asserts, and one of the two \u00a72.3 names whose stated need is to catch a *silent* value regression.",
+          "predictedChannels": [
+            "l1",
+            "determinism",
+            "l2:random-legal@1"
+          ],
+          "predictionNote": "L1 must fire: `fixtures/hackers.spec.ts` asserts the steal of 2 directly, and it is the only instrument in the project that does. `greedy-1ply@1` should stay silent - Hackers is -1 VP, and a points-now chooser never plays it - which if observed is the sharpest available demonstration that a seed cannot assert a card (\u00a73.2).",
+          "firedChannels": [
+            "l1",
+            "determinism"
+          ],
+          "caught": true,
+          "verdict": "caught-less",
+          "observation": {
+            "l1": {
+              "status": "failed",
+              "fixtures": 27,
+              "failures": [
+                "L1 / Hackers - the bespokePlay M\u20ac production attack, which no Engine test asserts takes 2 M\u20ac production from the chosen target while paying the card cost to the actor",
+                "L1 / Hackers - the bespokePlay M\u20ac production attack, which no Engine test asserts always has a legal target - the actor themselves - so it can never fizzle"
+              ]
+            },
+            "determinism": {
+              "status": "failed",
+              "configsChecked": 300,
+              "mismatches": 136
+            },
+            "sections": [
+              {
+                "key": "random-legal@1",
+                "frozen": true,
+                "entriesChecked": 6,
+                "entriesMoved": 0,
+                "fieldsMoved": {}
+              },
+              {
+                "key": "greedy-1ply@1",
+                "frozen": true,
+                "entriesChecked": 4,
+                "entriesMoved": 0,
+                "fieldsMoved": {}
+              }
+            ],
+            "movedEntries": [],
+            "durationMs": 166475
+          },
+          "l3": "no-trace-move",
+          "wallClockMs": 180745
+        },
+        {
+          "id": "M3",
+          "class": "candidate-set-reduction",
+          "preRegistered": true,
+          "file": "agent/src/core/candidates/simple.ts",
+          "what": "An `amount` candidate set carries 3 interior values instead of 6.",
+          "standsFor": "A candidate-set reduction - named in bullet 2 as one of the changes that makes `greedy-1ply@1` a **new version rather than an improvement**, and exactly the kind of edit that reads as harmless tuning in a diff.",
+          "predictedChannels": [
+            "l2:greedy-1ply@1"
+          ],
+          "predictionNote": "Only `greedy-1ply@1` reads `core/candidates/`; the random-legal agent samples through `core/enumerator/` and cannot see this. Fires only if some `amount` decision in the four greedy games has a span above 4, which is not guaranteed at 10 games - a miss here is a coverage gap, not a suite defect.",
+          "firedChannels": [],
+          "caught": false,
+          "verdict": "caught-less",
+          "observation": {
+            "l1": {
+              "status": "ok",
+              "fixtures": 27,
+              "failures": []
+            },
+            "determinism": {
+              "status": "ok",
+              "configsChecked": 300,
+              "mismatches": 0
+            },
+            "sections": [
+              {
+                "key": "random-legal@1",
+                "frozen": true,
+                "entriesChecked": 6,
+                "entriesMoved": 0,
+                "fieldsMoved": {}
+              },
+              {
+                "key": "greedy-1ply@1",
+                "frozen": true,
+                "entriesChecked": 4,
+                "entriesMoved": 0,
+                "fieldsMoved": {}
+              }
+            ],
+            "movedEntries": [],
+            "durationMs": 156779
+          },
+          "l3": "n/a",
+          "wallClockMs": 168179
+        },
+        {
+          "id": "M4",
+          "class": "enumerator-ordering",
+          "preRegistered": true,
+          "file": "agent/src/core/enumerator/simple.ts",
+          "what": "The space enumerator samples from the offered list reversed - the same legal set, a different element.",
+          "standsFor": "An ordering change that preserves the legal set. The loudest class in the list, and the control that proves the quiet rows below are quiet for a reason rather than because nothing is wired up.",
+          "predictedChannels": [
+            "determinism",
+            "l2:random-legal@1",
+            "l2:greedy-1ply@1"
+          ],
+          "predictionNote": "Every random-legal game places tiles, so all 300 determinism configs and both random-legal pinned groups should move. `greedy-1ply@1` should move too, but through a narrower path: its unforkable opening and its ~2% fallback both route through the random-legal agent (bullet 2).",
+          "firedChannels": [
+            "determinism",
+            "l2:random-legal@1",
+            "l2:greedy-1ply@1"
+          ],
+          "caught": true,
+          "verdict": "as-predicted",
+          "observation": {
+            "l1": {
+              "status": "ok",
+              "fixtures": 27,
+              "failures": []
+            },
+            "determinism": {
+              "status": "failed",
+              "configsChecked": 300,
+              "mismatches": 1722
+            },
+            "sections": [
+              {
+                "key": "random-legal@1",
+                "frozen": true,
+                "entriesChecked": 6,
+                "entriesMoved": 6,
+                "fieldsMoved": {
+                  "fingerprints.moveTraceHash": 6,
+                  "fingerprints.stableStateHash": 6,
+                  "fingerprints.resultHash": 6,
+                  "fingerprints.decisions": 6,
+                  "fingerprints.fallbacks": 6,
+                  "fingerprints.generation": 6,
+                  "semantics.seats[].victoryPoints": 6,
+                  "semantics.seats[].megaCredits": 6,
+                  "semantics.seats[].terraformRating": 6,
+                  "semantics.seats[].vpBreakdown.terraformRating": 6,
+                  "semantics.seats[].vpBreakdown.milestones": 5,
+                  "semantics.seats[].vpBreakdown.greenery": 6,
+                  "semantics.seats[].vpBreakdown.city": 6,
+                  "semantics.seats[].vpBreakdown.cards": 6,
+                  "semantics.seats[].vpBreakdown.total": 6,
+                  "semantics.seats[].projectCards.length": 6,
+                  "semantics.seats[].vpBreakdown.awards": 4,
+                  "semantics.seats[].projectCards[]": 1,
+                  "semantics.claimedMilestones[].milestone": 3,
+                  "semantics.claimedMilestones[].seat": 3,
+                  "semantics.fundedAwards[].seat": 4,
+                  "semantics.seats[].placement": 3,
+                  "semantics.seats[].isWinner": 3,
+                  "semantics.claimedMilestones.length": 2,
+                  "semantics.fundedAwards[].award": 3
+                }
+              },
+              {
+                "key": "greedy-1ply@1",
+                "frozen": true,
+                "entriesChecked": 4,
+                "entriesMoved": 4,
+                "fieldsMoved": {
+                  "fingerprints.moveTraceHash": 4,
+                  "fingerprints.stableStateHash": 4,
+                  "fingerprints.resultHash": 4,
+                  "fingerprints.decisions": 4,
+                  "fingerprints.generation": 3,
+                  "semantics.seats[].victoryPoints": 4,
+                  "semantics.seats[].megaCredits": 4,
+                  "semantics.seats[].vpBreakdown.milestones": 1,
+                  "semantics.seats[].vpBreakdown.greenery": 4,
+                  "semantics.seats[].vpBreakdown.city": 4,
+                  "semantics.seats[].vpBreakdown.cards": 3,
+                  "semantics.seats[].vpBreakdown.total": 4,
+                  "semantics.seats[].projectCards.length": 4,
+                  "semantics.seats[].projectCards[]": 2,
+                  "semantics.claimedMilestones[].milestone": 1,
+                  "semantics.claimedMilestones[].seat": 1,
+                  "semantics.seats[].terraformRating": 3,
+                  "semantics.seats[].vpBreakdown.terraformRating": 3,
+                  "semantics.seats[].vpBreakdown.awards": 2
+                }
+              }
+            ],
+            "movedEntries": [
+              {
+                "key": "random-legal@1/2p/g6090/p0",
+                "why": "Format smoke: the cheapest possible entry - 2p self-play, identity permutation. If anything in the record schema is wrong, it is wrong here first.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards[1]",
+                  "semantics.seats[1].projectCards[2]",
+                  "semantics.seats[1].projectCards[3]",
+                  "semantics.seats[1].projectCards[4]",
+                  "semantics.seats[1].projectCards[5]",
+                  "semantics.seats[1].projectCards[6]",
+                  "semantics.seats[1].projectCards[7]",
+                  "semantics.seats[1].projectCards[8]",
+                  "semantics.seats[1].projectCards[9]",
+                  "semantics.seats[1].projectCards[10]",
+                  "semantics.seats[1].projectCards[11]",
+                  "semantics.claimedMilestones[0].milestone",
+                  "semantics.claimedMilestones[1].milestone",
+                  "semantics.claimedMilestones[1].seat",
+                  "semantics.claimedMilestones[2].milestone",
+                  "semantics.fundedAwards[2].seat"
+                ]
+              },
+              {
+                "key": "random-legal@1/2p/g6090/p1",
+                "why": "Format smoke: the same group in the mirrored seating, so a permutation index that is ignored produces two identical entries and is caught by the duplicate-key check.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].placement",
+                  "semantics.seats[0].isWinner",
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].placement",
+                  "semantics.seats[1].isWinner",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.claimedMilestones.length",
+                  "semantics.fundedAwards[0].award",
+                  "semantics.fundedAwards[0].seat",
+                  "semantics.fundedAwards[2].award"
+                ]
+              },
+              {
+                "key": "random-legal@1/2p/g6091/p0",
+                "why": "Format smoke: a second group, so a fingerprint that is constant across groups (a seed that never reaches the Engine) is visible.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.claimedMilestones[2].milestone",
+                  "semantics.fundedAwards[2].seat"
+                ]
+              },
+              {
+                "key": "random-legal@1/2p/g6091/p1",
+                "why": "Format smoke: the second group mirrored, completing one balanced pairing group in the pinned set.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.claimedMilestones[0].milestone",
+                  "semantics.claimedMilestones[1].milestone",
+                  "semantics.claimedMilestones[2].seat",
+                  "semantics.fundedAwards[2].award"
+                ]
+              },
+              {
+                "key": "random-legal@1/3p/g6094/p0",
+                "why": "Format smoke at 3p: three seats, so a per-seat semantics array that is hard-coded to two entries fails here rather than in Unit C.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].placement",
+                  "semantics.seats[0].isWinner",
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.seats[2].placement",
+                  "semantics.seats[2].isWinner",
+                  "semantics.seats[2].victoryPoints",
+                  "semantics.seats[2].megaCredits",
+                  "semantics.seats[2].terraformRating",
+                  "semantics.seats[2].vpBreakdown.terraformRating",
+                  "semantics.seats[2].vpBreakdown.milestones",
+                  "semantics.seats[2].vpBreakdown.awards",
+                  "semantics.seats[2].vpBreakdown.greenery",
+                  "semantics.seats[2].vpBreakdown.city",
+                  "semantics.seats[2].vpBreakdown.cards",
+                  "semantics.seats[2].vpBreakdown.total",
+                  "semantics.seats[2].projectCards.length",
+                  "semantics.claimedMilestones[0].seat",
+                  "semantics.claimedMilestones[1].seat",
+                  "semantics.fundedAwards[0].award",
+                  "semantics.fundedAwards[1].award",
+                  "semantics.fundedAwards[2].award"
+                ]
+              },
+              {
+                "key": "random-legal@1/3p/g6094/p3",
+                "why": "Format smoke at 3p: a non-zero permutation index, so the seating recorded on the entry is checked against the pairing schedule rather than assumed to be the identity.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].placement",
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].placement",
+                  "semantics.seats[1].isWinner",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.seats[2].placement",
+                  "semantics.seats[2].isWinner",
+                  "semantics.seats[2].victoryPoints",
+                  "semantics.seats[2].megaCredits",
+                  "semantics.seats[2].terraformRating",
+                  "semantics.seats[2].vpBreakdown.terraformRating",
+                  "semantics.seats[2].vpBreakdown.milestones",
+                  "semantics.seats[2].vpBreakdown.awards",
+                  "semantics.seats[2].vpBreakdown.greenery",
+                  "semantics.seats[2].vpBreakdown.city",
+                  "semantics.seats[2].vpBreakdown.cards",
+                  "semantics.seats[2].vpBreakdown.total",
+                  "semantics.seats[2].projectCards.length",
+                  "semantics.claimedMilestones.length",
+                  "semantics.fundedAwards[1].seat"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6092/p0",
+                "why": "The gap \u00a72.1 names: greedy-1ply@1 has never had a fixed-seed standing check of any kind. This is the first, and it exercises the fork service and the whole-game observer through the replay path.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards[3]",
+                  "semantics.seats[1].projectCards[4]",
+                  "semantics.seats[1].projectCards[5]",
+                  "semantics.seats[1].projectCards[6]",
+                  "semantics.seats[1].projectCards[7]",
+                  "semantics.claimedMilestones[1].milestone",
+                  "semantics.claimedMilestones[1].seat",
+                  "semantics.claimedMilestones[2].milestone"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6092/p1",
+                "why": "greedy-1ply@1 self-play, mirrored seating - the pair a shared-infrastructure change (M3 candidate enumeration) would move together.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards[9]",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6093/p0",
+                "why": "A mixed lineup filed under the greedy-1ply@1 section: proves identity.agent names the section this game is pinned *for*, not every seat at the table.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6093/p1",
+                "why": "The mixed lineup with the slots swapped between seats, so an agent-seed schedule that travels with the seat rather than the slot is visible as a divergence.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length"
+                ]
+              }
+            ],
+            "durationMs": 140871,
+            "explain": {
+              "key": "random-legal@1/2p/g6090/p0",
+              "traceMoved": true,
+              "lastAgreedDecision": -1,
+              "firstDisagreedDecision": 24,
+              "windowSize": 25,
+              "windowHead": [
+                "#0 p-red:initialCards,p-green:initialCards|p-red|initialCards|{\"responses\":[{\"cards\":[\"Mining Guild\"],\"type\":\"card\"},{\"cards\":[\"Business Empire\",\"Power Generation\"],\"type\":\"card\"},{\"cards\":[\"Nitrophilic Moss\",\"Quantum Extra",
+                "#1 p-green:initialCards|p-green|initialCards|{\"responses\":[{\"cards\":[\"Vitor\"],\"type\":\"card\"},{\"cards\":[\"Donation\",\"Metals Company\"],\"type\":\"card\"},{\"cards\":[\"Moss\",\"Heat Trappers\",\"GHG Producing Bacteria\"],\"type\":\"card\"}],\"",
+                "#2 p-red:card|p-red|card|{\"cards\":[\"Power Generation\"],\"type\":\"card\"}",
+                "#3 p-red:card|p-red|card|{\"cards\":[\"Business Empire\"],\"type\":\"card\"}",
+                "#4 p-green:card|p-green|card|{\"cards\":[\"Donation\"],\"type\":\"card\"}",
+                "#5 p-green:card|p-green|card|{\"cards\":[\"Metals Company\"],\"type\":\"card\"}"
+              ]
+            }
+          },
+          "l3": "n/a",
+          "wallClockMs": 154159
+        },
+        {
+          "id": "M5",
+          "class": "ranking-tiebreak",
+          "preRegistered": true,
+          "file": "agent/src/match/ranking.ts",
+          "what": "The winner rule drops its megacredit tiebreak, so seats tied on VP tie outright.",
+          "standsFor": "`match/ranking.ts` is the only implementation of the game's real winner rule in this repository (`GameEnd.vue` is the other, and it is client-side). A change here silently restates who won.",
+          "predictedChannels": [],
+          "predictionNote": "Predicted **uncaught**. No fingerprint reads `rankGame` - `resultHash` hashes `computeResult`, which ranks on VP alone - so this can only surface as a `placement`/`isWinner` diff in an entry whose game actually has a VP tie between two seats. At 10 pinned games that is unlikely. This row is expected to be a gap, and the honest statement of it is that the suite covers the ranking only where a tie happens to occur.",
+          "firedChannels": [],
+          "caught": false,
+          "verdict": "as-predicted",
+          "observation": {
+            "l1": {
+              "status": "ok",
+              "fixtures": 27,
+              "failures": []
+            },
+            "determinism": {
+              "status": "ok",
+              "configsChecked": 300,
+              "mismatches": 0
+            },
+            "sections": [
+              {
+                "key": "random-legal@1",
+                "frozen": true,
+                "entriesChecked": 6,
+                "entriesMoved": 0,
+                "fieldsMoved": {}
+              },
+              {
+                "key": "greedy-1ply@1",
+                "frozen": true,
+                "entriesChecked": 4,
+                "entriesMoved": 0,
+                "fieldsMoved": {}
+              }
+            ],
+            "movedEntries": [],
+            "durationMs": 136992
+          },
+          "l3": "n/a",
+          "wallClockMs": 148917
+        },
+        {
+          "id": "M6",
+          "class": "vp-breakdown-component",
+          "preRegistered": true,
+          "file": "src/server/game/calculateVictoryPoints.ts",
+          "what": "City-adjacency victory points are attributed to the greenery component instead of the city component. **Every total is unchanged.**",
+          "standsFor": "A VP-breakdown component moving without the total moving - the case \u00a73.3 committed the semantic fields for, and the one a corpus of hashes cannot see by construction.",
+          "predictedChannels": [
+            "l2:random-legal@1",
+            "l2:greedy-1ply@1"
+          ],
+          "predictionNote": "The determinism corpus must stay silent, and that is the finding rather than a shortcoming: `stableState` is the *serialized* game and the breakdown is computed, `resultHash` carries VP totals only, and every total here is identical. So the four hashes cannot move and only `semantics.seats[].vpBreakdown.{city,greenery}` can. If this row comes back with semantic fields moved and zero fingerprint fields moved, \u00a73.3 has paid for itself in one line.",
+          "firedChannels": [
+            "l2:random-legal@1",
+            "l2:greedy-1ply@1"
+          ],
+          "caught": true,
+          "verdict": "as-predicted",
+          "observation": {
+            "l1": {
+              "status": "ok",
+              "fixtures": 27,
+              "failures": []
+            },
+            "determinism": {
+              "status": "ok",
+              "configsChecked": 300,
+              "mismatches": 0
+            },
+            "sections": [
+              {
+                "key": "random-legal@1",
+                "frozen": true,
+                "entriesChecked": 6,
+                "entriesMoved": 6,
+                "fieldsMoved": {
+                  "semantics.seats[].vpBreakdown.greenery": 6,
+                  "semantics.seats[].vpBreakdown.city": 6
+                }
+              },
+              {
+                "key": "greedy-1ply@1",
+                "frozen": true,
+                "entriesChecked": 4,
+                "entriesMoved": 4,
+                "fieldsMoved": {
+                  "semantics.seats[].vpBreakdown.greenery": 4,
+                  "semantics.seats[].vpBreakdown.city": 4
+                }
+              }
+            ],
+            "movedEntries": [
+              {
+                "key": "random-legal@1/2p/g6090/p0",
+                "why": "Format smoke: the cheapest possible entry - 2p self-play, identity permutation. If anything in the record schema is wrong, it is wrong here first.",
+                "fingerprintFields": [],
+                "semanticFields": [
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city"
+                ]
+              },
+              {
+                "key": "random-legal@1/2p/g6090/p1",
+                "why": "Format smoke: the same group in the mirrored seating, so a permutation index that is ignored produces two identical entries and is caught by the duplicate-key check.",
+                "fingerprintFields": [],
+                "semanticFields": [
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city"
+                ]
+              },
+              {
+                "key": "random-legal@1/2p/g6091/p0",
+                "why": "Format smoke: a second group, so a fingerprint that is constant across groups (a seed that never reaches the Engine) is visible.",
+                "fingerprintFields": [],
+                "semanticFields": [
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city"
+                ]
+              },
+              {
+                "key": "random-legal@1/2p/g6091/p1",
+                "why": "Format smoke: the second group mirrored, completing one balanced pairing group in the pinned set.",
+                "fingerprintFields": [],
+                "semanticFields": [
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city"
+                ]
+              },
+              {
+                "key": "random-legal@1/3p/g6094/p0",
+                "why": "Format smoke at 3p: three seats, so a per-seat semantics array that is hard-coded to two entries fails here rather than in Unit C.",
+                "fingerprintFields": [],
+                "semanticFields": [
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[2].vpBreakdown.greenery",
+                  "semantics.seats[2].vpBreakdown.city"
+                ]
+              },
+              {
+                "key": "random-legal@1/3p/g6094/p3",
+                "why": "Format smoke at 3p: a non-zero permutation index, so the seating recorded on the entry is checked against the pairing schedule rather than assumed to be the identity.",
+                "fingerprintFields": [],
+                "semanticFields": [
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[2].vpBreakdown.greenery",
+                  "semantics.seats[2].vpBreakdown.city"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6092/p0",
+                "why": "The gap \u00a72.1 names: greedy-1ply@1 has never had a fixed-seed standing check of any kind. This is the first, and it exercises the fork service and the whole-game observer through the replay path.",
+                "fingerprintFields": [],
+                "semanticFields": [
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6092/p1",
+                "why": "greedy-1ply@1 self-play, mirrored seating - the pair a shared-infrastructure change (M3 candidate enumeration) would move together.",
+                "fingerprintFields": [],
+                "semanticFields": [
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6093/p0",
+                "why": "A mixed lineup filed under the greedy-1ply@1 section: proves identity.agent names the section this game is pinned *for*, not every seat at the table.",
+                "fingerprintFields": [],
+                "semanticFields": [
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6093/p1",
+                "why": "The mixed lineup with the slots swapped between seats, so an agent-seed schedule that travels with the seat rather than the slot is visible as a divergence.",
+                "fingerprintFields": [],
+                "semanticFields": [
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city"
+                ]
+              }
+            ],
+            "durationMs": 162095,
+            "explain": {
+              "key": "random-legal@1/2p/g6090/p0",
+              "traceMoved": false,
+              "windowHead": []
+            }
+          },
+          "l3": "n/a",
+          "wallClockMs": 174618
+        },
+        {
+          "id": "M7",
+          "class": "seed-schedule-stride",
+          "preRegistered": true,
+          "file": "agent/src/match/pairing.ts",
+          "what": "Lineup slots are spaced 151 apart in the agent-seed schedule instead of 149, so every slot above 0 gets a different seed.",
+          "standsFor": "The seed schedule changing under a committed corpus - which would silently redefine what every pinned identity means while leaving the identities themselves looking correct.",
+          "predictedChannels": [
+            "l2:random-legal@1",
+            "l2:greedy-1ply@1"
+          ],
+          "predictionNote": "The determinism corpus derives its own seeds (`500,000 + 977k`) and never touches `match/pairing.ts`, so it cannot see this - which is precisely why L2 pins group indices and derives seeds rather than writing them down (\u00a72.6, hazard H5). Slot 0 is unmoved (`149 x 0 === 151 x 0`), so any entry whose game is decided by seat 0 alone could in principle survive; none is expected to.",
+          "firedChannels": [
+            "l2:random-legal@1",
+            "l2:greedy-1ply@1"
+          ],
+          "caught": true,
+          "verdict": "as-predicted",
+          "observation": {
+            "l1": {
+              "status": "ok",
+              "fixtures": 27,
+              "failures": []
+            },
+            "determinism": {
+              "status": "ok",
+              "configsChecked": 300,
+              "mismatches": 0
+            },
+            "sections": [
+              {
+                "key": "random-legal@1",
+                "frozen": true,
+                "entriesChecked": 6,
+                "entriesMoved": 6,
+                "fieldsMoved": {
+                  "fingerprints.moveTraceHash": 6,
+                  "fingerprints.stableStateHash": 6,
+                  "fingerprints.resultHash": 6,
+                  "fingerprints.decisions": 6,
+                  "fingerprints.fallbacks": 5,
+                  "fingerprints.generation": 5,
+                  "semantics.seats[].placement": 2,
+                  "semantics.seats[].isWinner": 2,
+                  "semantics.seats[].victoryPoints": 6,
+                  "semantics.seats[].megaCredits": 6,
+                  "semantics.seats[].terraformRating": 6,
+                  "semantics.seats[].vpBreakdown.terraformRating": 6,
+                  "semantics.seats[].vpBreakdown.awards": 4,
+                  "semantics.seats[].vpBreakdown.greenery": 6,
+                  "semantics.seats[].vpBreakdown.city": 6,
+                  "semantics.seats[].vpBreakdown.cards": 6,
+                  "semantics.seats[].vpBreakdown.total": 6,
+                  "semantics.seats[].projectCards.length": 6,
+                  "semantics.seats[].preludes[]": 6,
+                  "semantics.claimedMilestones[].milestone": 3,
+                  "semantics.claimedMilestones[].seat": 3,
+                  "semantics.fundedAwards[].award": 6,
+                  "semantics.fundedAwards[].seat": 5,
+                  "semantics.seats[].vpBreakdown.milestones": 4,
+                  "semantics.claimedMilestones.length": 2,
+                  "semantics.seats[].corporations[]": 2,
+                  "semantics.seats[].projectCards[]": 1
+                }
+              },
+              {
+                "key": "greedy-1ply@1",
+                "frozen": true,
+                "entriesChecked": 4,
+                "entriesMoved": 4,
+                "fieldsMoved": {
+                  "fingerprints.moveTraceHash": 4,
+                  "fingerprints.stableStateHash": 4,
+                  "fingerprints.resultHash": 4,
+                  "fingerprints.decisions": 4,
+                  "fingerprints.generation": 3,
+                  "semantics.seats[].placement": 2,
+                  "semantics.seats[].isWinner": 2,
+                  "semantics.seats[].victoryPoints": 4,
+                  "semantics.seats[].megaCredits": 4,
+                  "semantics.seats[].terraformRating": 4,
+                  "semantics.seats[].vpBreakdown.terraformRating": 4,
+                  "semantics.seats[].vpBreakdown.milestones": 2,
+                  "semantics.seats[].vpBreakdown.greenery": 4,
+                  "semantics.seats[].vpBreakdown.city": 4,
+                  "semantics.seats[].vpBreakdown.cards": 4,
+                  "semantics.seats[].vpBreakdown.total": 4,
+                  "semantics.seats[].projectCards.length": 4,
+                  "semantics.seats[].vpBreakdown.awards": 3,
+                  "semantics.seats[].preludes.length": 1,
+                  "semantics.seats[].projectCards[]": 1,
+                  "semantics.claimedMilestones.length": 2,
+                  "semantics.fundedAwards[].award": 4,
+                  "semantics.fundedAwards[].seat": 3,
+                  "semantics.seats[].preludes[]": 3,
+                  "fingerprints.fallbacks": 2,
+                  "semantics.seats[].corporations[]": 2
+                }
+              }
+            ],
+            "movedEntries": [
+              {
+                "key": "random-legal@1/2p/g6090/p0",
+                "why": "Format smoke: the cheapest possible entry - 2p self-play, identity permutation. If anything in the record schema is wrong, it is wrong here first.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].placement",
+                  "semantics.seats[0].isWinner",
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].placement",
+                  "semantics.seats[1].isWinner",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].preludes[0]",
+                  "semantics.seats[1].preludes[1]",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.claimedMilestones[0].milestone",
+                  "semantics.claimedMilestones[0].seat",
+                  "semantics.claimedMilestones[1].milestone",
+                  "semantics.claimedMilestones[2].seat",
+                  "semantics.fundedAwards[0].award",
+                  "semantics.fundedAwards[1].award",
+                  "semantics.fundedAwards[2].seat"
+                ]
+              },
+              {
+                "key": "random-legal@1/2p/g6090/p1",
+                "why": "Format smoke: the same group in the mirrored seating, so a permutation index that is ignored produces two identical entries and is caught by the duplicate-key check.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].preludes[0]",
+                  "semantics.seats[0].preludes[1]",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.claimedMilestones.length",
+                  "semantics.fundedAwards[1].award"
+                ]
+              },
+              {
+                "key": "random-legal@1/2p/g6091/p0",
+                "why": "Format smoke: a second group, so a fingerprint that is constant across groups (a seed that never reaches the Engine) is visible.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].placement",
+                  "semantics.seats[0].isWinner",
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].placement",
+                  "semantics.seats[1].isWinner",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].corporations[0]",
+                  "semantics.seats[1].preludes[1]",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.claimedMilestones[0].milestone",
+                  "semantics.claimedMilestones[0].seat",
+                  "semantics.claimedMilestones[1].milestone",
+                  "semantics.claimedMilestones[2].milestone",
+                  "semantics.fundedAwards[1].seat",
+                  "semantics.fundedAwards[2].award"
+                ]
+              },
+              {
+                "key": "random-legal@1/2p/g6091/p1",
+                "why": "Format smoke: the second group mirrored, completing one balanced pairing group in the pinned set.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].corporations[0]",
+                  "semantics.seats[0].preludes[1]",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.claimedMilestones[0].milestone",
+                  "semantics.claimedMilestones[2].seat",
+                  "semantics.fundedAwards[2].award",
+                  "semantics.fundedAwards[2].seat"
+                ]
+              },
+              {
+                "key": "random-legal@1/3p/g6094/p0",
+                "why": "Format smoke at 3p: three seats, so a per-seat semantics array that is hard-coded to two entries fails here rather than in Unit C.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards[5]",
+                  "semantics.seats[0].projectCards[7]",
+                  "semantics.seats[0].projectCards[8]",
+                  "semantics.seats[0].projectCards[9]",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].preludes[0]",
+                  "semantics.seats[1].preludes[1]",
+                  "semantics.seats[1].projectCards[0]",
+                  "semantics.seats[1].projectCards[1]",
+                  "semantics.seats[1].projectCards[2]",
+                  "semantics.seats[1].projectCards[3]",
+                  "semantics.seats[1].projectCards[4]",
+                  "semantics.seats[1].projectCards[5]",
+                  "semantics.seats[1].projectCards[6]",
+                  "semantics.seats[1].projectCards[7]",
+                  "semantics.seats[1].projectCards[8]",
+                  "semantics.seats[2].victoryPoints",
+                  "semantics.seats[2].megaCredits",
+                  "semantics.seats[2].terraformRating",
+                  "semantics.seats[2].vpBreakdown.terraformRating",
+                  "semantics.seats[2].vpBreakdown.greenery",
+                  "semantics.seats[2].vpBreakdown.city",
+                  "semantics.seats[2].vpBreakdown.cards",
+                  "semantics.seats[2].vpBreakdown.total",
+                  "semantics.seats[2].projectCards.length",
+                  "semantics.fundedAwards[0].award",
+                  "semantics.fundedAwards[0].seat",
+                  "semantics.fundedAwards[1].award",
+                  "semantics.fundedAwards[1].seat",
+                  "semantics.fundedAwards[2].award",
+                  "semantics.fundedAwards[2].seat"
+                ]
+              },
+              {
+                "key": "random-legal@1/3p/g6094/p3",
+                "why": "Format smoke at 3p: a non-zero permutation index, so the seating recorded on the entry is checked against the pairing schedule rather than assumed to be the identity.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].preludes[0]",
+                  "semantics.seats[0].preludes[1]",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.seats[2].megaCredits",
+                  "semantics.seats[2].vpBreakdown.awards",
+                  "semantics.seats[2].vpBreakdown.greenery",
+                  "semantics.seats[2].vpBreakdown.city",
+                  "semantics.seats[2].vpBreakdown.cards",
+                  "semantics.seats[2].projectCards.length",
+                  "semantics.claimedMilestones.length",
+                  "semantics.fundedAwards[0].award",
+                  "semantics.fundedAwards[0].seat",
+                  "semantics.fundedAwards[1].award",
+                  "semantics.fundedAwards[2].award",
+                  "semantics.fundedAwards[2].seat"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6092/p0",
+                "why": "The gap \u00a72.1 names: greedy-1ply@1 has never had a fixed-seed standing check of any kind. This is the first, and it exercises the fork service and the whole-game observer through the replay path.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].placement",
+                  "semantics.seats[0].isWinner",
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].placement",
+                  "semantics.seats[1].isWinner",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].preludes.length",
+                  "semantics.seats[1].projectCards[0]",
+                  "semantics.seats[1].projectCards[1]",
+                  "semantics.seats[1].projectCards[2]",
+                  "semantics.seats[1].projectCards[3]",
+                  "semantics.seats[1].projectCards[4]",
+                  "semantics.seats[1].projectCards[5]",
+                  "semantics.seats[1].projectCards[6]",
+                  "semantics.seats[1].projectCards[7]",
+                  "semantics.claimedMilestones.length",
+                  "semantics.fundedAwards[2].award",
+                  "semantics.fundedAwards[2].seat"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6092/p1",
+                "why": "greedy-1ply@1 self-play, mirrored seating - the pair a shared-infrastructure change (M3 candidate enumeration) would move together.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].placement",
+                  "semantics.seats[0].isWinner",
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].preludes[0]",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].placement",
+                  "semantics.seats[1].isWinner",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.claimedMilestones.length",
+                  "semantics.fundedAwards[1].award",
+                  "semantics.fundedAwards[1].seat",
+                  "semantics.fundedAwards[2].award"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6093/p0",
+                "why": "A mixed lineup filed under the greedy-1ply@1 section: proves identity.agent names the section this game is pinned *for*, not every seat at the table.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].corporations[0]",
+                  "semantics.seats[1].preludes[0]",
+                  "semantics.seats[1].preludes[1]",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.fundedAwards[2].award"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6093/p1",
+                "why": "The mixed lineup with the slots swapped between seats, so an agent-seed schedule that travels with the seat rather than the slot is visible as a divergence.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].corporations[0]",
+                  "semantics.seats[0].preludes[0]",
+                  "semantics.seats[0].preludes[1]",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.fundedAwards[0].award",
+                  "semantics.fundedAwards[0].seat",
+                  "semantics.fundedAwards[1].award",
+                  "semantics.fundedAwards[2].award"
+                ]
+              }
+            ],
+            "durationMs": 152498,
+            "explain": {
+              "key": "random-legal@1/2p/g6090/p0",
+              "traceMoved": true,
+              "lastAgreedDecision": -1,
+              "firstDisagreedDecision": 24,
+              "windowSize": 25,
+              "windowHead": [
+                "#0 p-red:initialCards,p-green:initialCards|p-red|initialCards|{\"responses\":[{\"cards\":[\"Mining Guild\"],\"type\":\"card\"},{\"cards\":[\"Business Empire\",\"Power Generation\"],\"type\":\"card\"},{\"cards\":[\"Nitrophilic Moss\",\"Quantum Extra",
+                "#1 p-green:initialCards|p-green|initialCards|{\"responses\":[{\"cards\":[\"Vitor\"],\"type\":\"card\"},{\"cards\":[\"Metals Company\",\"Self-Sufficient Settlement\"],\"type\":\"card\"},{\"cards\":[\"GHG Producing Bacteria\",\"Mine\",\"Solar Power\",\"B",
+                "#2 p-red:card|p-red|card|{\"cards\":[\"Power Generation\"],\"type\":\"card\"}",
+                "#3 p-red:card|p-red|card|{\"cards\":[\"Business Empire\"],\"type\":\"card\"}",
+                "#4 p-green:card|p-green|card|{\"cards\":[\"Metals Company\"],\"type\":\"card\"}",
+                "#5 p-green:card|p-green|card|{\"cards\":[\"Self-Sufficient Settlement\"],\"type\":\"card\"}"
+              ]
+            }
+          },
+          "l3": "n/a",
+          "wallClockMs": 165246
+        },
+        {
+          "id": "M8",
+          "class": "no-op-control",
+          "preRegistered": true,
+          "file": "src/server/cards/base/Mine.ts",
+          "what": "A comment is added to the same file M1 mutates. Nothing else changes.",
+          "standsFor": "Nothing. This is the control on the controls, and it is deliberately in M1's file so that \"M1 fired\" and \"editing that file fires\" are distinguishable.",
+          "predictedChannels": [],
+          "predictionNote": "**Nothing may fire. A single moved channel here is a blocking failure and voids every other result in this bullet** (criterion S1, falsifiable prediction 3): it would mean the suite is non-deterministic, and a non-deterministic suite cannot distinguish a real regression from itself.",
+          "firedChannels": [],
+          "caught": false,
+          "verdict": "as-predicted",
+          "observation": {
+            "l1": {
+              "status": "ok",
+              "fixtures": 27,
+              "failures": []
+            },
+            "determinism": {
+              "status": "ok",
+              "configsChecked": 300,
+              "mismatches": 0
+            },
+            "sections": [
+              {
+                "key": "random-legal@1",
+                "frozen": true,
+                "entriesChecked": 6,
+                "entriesMoved": 0,
+                "fieldsMoved": {}
+              },
+              {
+                "key": "greedy-1ply@1",
+                "frozen": true,
+                "entriesChecked": 4,
+                "entriesMoved": 0,
+                "fieldsMoved": {}
+              }
+            ],
+            "movedEntries": [],
+            "durationMs": 153740
+          },
+          "l3": "n/a",
+          "wallClockMs": 165788
+        },
+        {
+          "id": "M9",
+          "class": "unreached-card-effect",
+          "preRegistered": false,
+          "file": "src/server/cards/base/AntiGravityTechnology.ts",
+          "what": "Anti-Gravity Technology discounts cards by 3 M\u20ac instead of 2.",
+          "standsFor": "A card-effect change on a line the corpus does not reach. Chosen on measured evidence rather than guessed: `card_play_coverage.json` records Anti-Gravity Technology played **0 times in 1,500 games** (\u00a72.4), because it requires 7 science tags.",
+          "predictedChannels": [],
+          "predictionNote": "Predicted **uncaught by every channel**, and deliberately so - this is falsifiable prediction 2 (\"at least one will be a card-effect change on a line the corpus does not reach\") built as an experiment rather than waited for. A suite cannot catch a change to code it never executes, and the honest response is the hole list (S3), not a hand-built game that reaches it (hazard H11).",
+          "firedChannels": [],
+          "caught": false,
+          "verdict": "as-predicted",
+          "observation": {
+            "l1": {
+              "status": "ok",
+              "fixtures": 27,
+              "failures": []
+            },
+            "determinism": {
+              "status": "ok",
+              "configsChecked": 300,
+              "mismatches": 0
+            },
+            "sections": [
+              {
+                "key": "random-legal@1",
+                "frozen": true,
+                "entriesChecked": 6,
+                "entriesMoved": 0,
+                "fieldsMoved": {}
+              },
+              {
+                "key": "greedy-1ply@1",
+                "frozen": true,
+                "entriesChecked": 4,
+                "entriesMoved": 0,
+                "fieldsMoved": {}
+              }
+            ],
+            "movedEntries": [],
+            "durationMs": 119763
+          },
+          "l3": "n/a",
+          "wallClockMs": 133598
+        },
+        {
+          "id": "M10",
+          "class": "candidate-ordering",
+          "preRegistered": false,
+          "file": "agent/src/core/candidates/simple.ts",
+          "what": "The space candidate set is generated in reverse order. The set is identical; only its order changes.",
+          "standsFor": "\u00a72.1's gap, made concrete. `greedy-1ply@1` tie-breaks 75.9% of its scored decisions at a median spread of 0 VP (bullet 2), so a pure reordering of a candidate list changes which move it plays. Nothing but a pinned `greedy-1ply@1` game can see it.",
+          "predictedChannels": [
+            "l2:greedy-1ply@1"
+          ],
+          "predictionNote": "Exactly one channel, and it is the one that did not exist before this bullet. The determinism corpus is `random-legal@1`-only by construction (`replay.ts:140` hard-coded it), L1 is agent-independent, and the random-legal agent never reads `core/candidates/`. If this row comes back caught by one channel, that channel is the whole answer to \"what did bullet 5 add that bullets 1-4 did not have\".",
+          "firedChannels": [
+            "l2:greedy-1ply@1"
+          ],
+          "caught": true,
+          "verdict": "as-predicted",
+          "observation": {
+            "l1": {
+              "status": "ok",
+              "fixtures": 27,
+              "failures": []
+            },
+            "determinism": {
+              "status": "ok",
+              "configsChecked": 300,
+              "mismatches": 0
+            },
+            "sections": [
+              {
+                "key": "random-legal@1",
+                "frozen": true,
+                "entriesChecked": 6,
+                "entriesMoved": 0,
+                "fieldsMoved": {}
+              },
+              {
+                "key": "greedy-1ply@1",
+                "frozen": true,
+                "entriesChecked": 4,
+                "entriesMoved": 4,
+                "fieldsMoved": {
+                  "fingerprints.moveTraceHash": 4,
+                  "fingerprints.stableStateHash": 4,
+                  "fingerprints.resultHash": 4,
+                  "fingerprints.decisions": 4,
+                  "fingerprints.generation": 3,
+                  "semantics.seats[].placement": 1,
+                  "semantics.seats[].isWinner": 1,
+                  "semantics.seats[].victoryPoints": 4,
+                  "semantics.seats[].megaCredits": 4,
+                  "semantics.seats[].terraformRating": 4,
+                  "semantics.seats[].vpBreakdown.terraformRating": 4,
+                  "semantics.seats[].vpBreakdown.milestones": 2,
+                  "semantics.seats[].vpBreakdown.awards": 3,
+                  "semantics.seats[].vpBreakdown.city": 4,
+                  "semantics.seats[].vpBreakdown.cards": 4,
+                  "semantics.seats[].vpBreakdown.total": 4,
+                  "semantics.seats[].projectCards.length": 4,
+                  "semantics.seats[].vpBreakdown.greenery": 4,
+                  "semantics.claimedMilestones[].seat": 2,
+                  "semantics.fundedAwards[].seat": 1,
+                  "fingerprints.fallbacks": 1,
+                  "semantics.claimedMilestones[].milestone": 1
+                }
+              }
+            ],
+            "movedEntries": [
+              {
+                "key": "greedy-1ply@1/2p/g6092/p0",
+                "why": "The gap \u00a72.1 names: greedy-1ply@1 has never had a fixed-seed standing check of any kind. This is the first, and it exercises the fork service and the whole-game observer through the replay path.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].placement",
+                  "semantics.seats[0].isWinner",
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].placement",
+                  "semantics.seats[1].isWinner",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.claimedMilestones[0].seat",
+                  "semantics.claimedMilestones[1].seat",
+                  "semantics.claimedMilestones[2].seat",
+                  "semantics.fundedAwards[2].seat"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6092/p1",
+                "why": "greedy-1ply@1 self-play, mirrored seating - the pair a shared-infrastructure change (M3 candidate enumeration) would move together.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6093/p0",
+                "why": "A mixed lineup filed under the greedy-1ply@1 section: proves identity.agent names the section this game is pinned *for*, not every seat at the table.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.claimedMilestones[1].milestone",
+                  "semantics.claimedMilestones[1].seat",
+                  "semantics.claimedMilestones[2].milestone"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6093/p1",
+                "why": "The mixed lineup with the slots swapped between seats, so an agent-seed schedule that travels with the seat rather than the slot is visible as a divergence.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length"
+                ]
+              }
+            ],
+            "durationMs": 152554,
+            "explain": {
+              "key": "greedy-1ply@1/2p/g6092/p0",
+              "traceMoved": true,
+              "lastAgreedDecision": -1,
+              "firstDisagreedDecision": 24,
+              "windowSize": 25,
+              "windowHead": [
+                "#0 p-red:initialCards,p-green:initialCards|p-red|initialCards|{\"responses\":[{\"cards\":[\"Valley Trust\"],\"type\":\"card\"},{\"cards\":[\"Acquired Space Agency\",\"Galilean Mining\"],\"type\":\"card\"},{\"cards\":[\"Mineral Deposit\",\"Undergrou",
+                "#1 p-green:initialCards|p-green|initialCards|{\"responses\":[{\"cards\":[\"PhoboLog\"],\"type\":\"card\"},{\"cards\":[\"Mohole\",\"Supply Drop\"],\"type\":\"card\"},{\"cards\":[\"Fish\",\"Virus\",\"Energy Tapping\",\"Hired Raiders\"],\"type\":\"card\"}],\"ty",
+                "#2 p-red:card|p-red|card|{\"cards\":[\"Galilean Mining\"],\"type\":\"card\"}",
+                "#3 p-red:card|p-red|card|{\"cards\":[\"Acquired Space Agency\"],\"type\":\"card\"}",
+                "#4 p-green:card|p-green|card|{\"cards\":[\"Mohole\"],\"type\":\"card\"}",
+                "#5 p-green:card|p-green|card|{\"cards\":[\"Supply Drop\"],\"type\":\"card\"}"
+              ]
+            }
+          },
+          "l3": "n/a",
+          "wallClockMs": 183208
+        },
+        {
+          "id": "M11",
+          "class": "fallback-branch-order",
+          "preRegistered": false,
+          "file": "agent/src/driver/embeddedDriver.ts",
+          "what": "The FR-9 conservative fallback tries an 'or' decision's eligible branches last-first instead of first-first, so a fallback-resolved decision resolves differently.",
+          "standsFor": "The one blind spot the record documents rather than hides: *`moveTraceHash` has no step for a decision the responder threw on* (`agent/CLAUDE.md` \u00a76, and `RegressionFingerprints`' own doc), because `replay()` records **after** the responder returns. A divergence confined to fallback-resolved decisions is invisible to the trace hash.",
+          "predictedChannels": [
+            "determinism",
+            "l2:random-legal@1",
+            "l2:greedy-1ply@1"
+          ],
+          "predictionNote": "The interesting question is not *whether* this is caught but *which field* catches it. The blind spot is real but narrower than the sentence suggests: a fallback that changes the game state changes the `pendingSignature` folded into every **later** recorded step, so the trace hash moves anyway - just not at the decision that caused it. The prediction is that `moveTraceHash` moves and L3 localizes to the wrong place, i.e. to the first *recorded* decision after the fallback rather than to the fallback. The pinned entries carry 0-6 fallbacks each, so there are live targets.",
+          "firedChannels": [
+            "determinism",
+            "l2:random-legal@1",
+            "l2:greedy-1ply@1"
+          ],
+          "caught": true,
+          "verdict": "as-predicted",
+          "observation": {
+            "l1": {
+              "status": "ok",
+              "fixtures": 27,
+              "failures": []
+            },
+            "determinism": {
+              "status": "failed",
+              "configsChecked": 300,
+              "mismatches": 1646
+            },
+            "sections": [
+              {
+                "key": "random-legal@1",
+                "frozen": true,
+                "entriesChecked": 6,
+                "entriesMoved": 5,
+                "fieldsMoved": {
+                  "fingerprints.moveTraceHash": 5,
+                  "fingerprints.stableStateHash": 5,
+                  "fingerprints.resultHash": 5,
+                  "fingerprints.fallbacks": 5,
+                  "fingerprints.generation": 4,
+                  "semantics.seats[].victoryPoints": 5,
+                  "semantics.seats[].megaCredits": 5,
+                  "semantics.seats[].terraformRating": 5,
+                  "semantics.seats[].vpBreakdown.terraformRating": 5,
+                  "semantics.seats[].vpBreakdown.milestones": 4,
+                  "semantics.seats[].vpBreakdown.city": 5,
+                  "semantics.seats[].vpBreakdown.total": 5,
+                  "semantics.seats[].projectCards.length": 5,
+                  "semantics.seats[].vpBreakdown.awards": 5,
+                  "semantics.seats[].vpBreakdown.greenery": 4,
+                  "semantics.seats[].vpBreakdown.cards": 5,
+                  "semantics.seats[].projectCards[]": 1,
+                  "semantics.claimedMilestones[].milestone": 2,
+                  "semantics.claimedMilestones[].seat": 3,
+                  "fingerprints.decisions": 4,
+                  "semantics.fundedAwards[].award": 1,
+                  "semantics.fundedAwards[].seat": 1,
+                  "semantics.seats[].placement": 2,
+                  "semantics.seats[].isWinner": 2,
+                  "semantics.claimedMilestones.length": 1
+                }
+              },
+              {
+                "key": "greedy-1ply@1",
+                "frozen": true,
+                "entriesChecked": 4,
+                "entriesMoved": 2,
+                "fieldsMoved": {
+                  "fingerprints.moveTraceHash": 2,
+                  "fingerprints.stableStateHash": 2,
+                  "fingerprints.resultHash": 2,
+                  "fingerprints.decisions": 2,
+                  "fingerprints.fallbacks": 2,
+                  "fingerprints.generation": 2,
+                  "semantics.seats[].victoryPoints": 2,
+                  "semantics.seats[].megaCredits": 2,
+                  "semantics.seats[].terraformRating": 2,
+                  "semantics.seats[].vpBreakdown.terraformRating": 2,
+                  "semantics.seats[].vpBreakdown.greenery": 2,
+                  "semantics.seats[].vpBreakdown.city": 2,
+                  "semantics.seats[].vpBreakdown.cards": 2,
+                  "semantics.seats[].vpBreakdown.total": 2,
+                  "semantics.seats[].projectCards.length": 2,
+                  "semantics.seats[].vpBreakdown.milestones": 1,
+                  "semantics.seats[].vpBreakdown.awards": 1,
+                  "semantics.seats[].projectCards[]": 1,
+                  "semantics.claimedMilestones[].milestone": 1,
+                  "semantics.claimedMilestones[].seat": 1
+                }
+              }
+            ],
+            "movedEntries": [
+              {
+                "key": "random-legal@1/2p/g6090/p0",
+                "why": "Format smoke: the cheapest possible entry - 2p self-play, identity permutation. If anything in the record schema is wrong, it is wrong here first.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards[1]",
+                  "semantics.seats[1].projectCards[2]",
+                  "semantics.seats[1].projectCards[3]",
+                  "semantics.seats[1].projectCards[4]",
+                  "semantics.seats[1].projectCards[5]",
+                  "semantics.seats[1].projectCards[6]",
+                  "semantics.seats[1].projectCards[7]",
+                  "semantics.seats[1].projectCards[8]",
+                  "semantics.seats[1].projectCards[9]",
+                  "semantics.seats[1].projectCards[10]",
+                  "semantics.seats[1].projectCards[11]",
+                  "semantics.claimedMilestones[0].milestone",
+                  "semantics.claimedMilestones[0].seat",
+                  "semantics.claimedMilestones[1].milestone",
+                  "semantics.claimedMilestones[1].seat",
+                  "semantics.claimedMilestones[2].milestone",
+                  "semantics.claimedMilestones[2].seat"
+                ]
+              },
+              {
+                "key": "random-legal@1/2p/g6091/p0",
+                "why": "Format smoke: a second group, so a fingerprint that is constant across groups (a seed that never reaches the Engine) is visible.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.claimedMilestones[0].milestone",
+                  "semantics.claimedMilestones[0].seat",
+                  "semantics.claimedMilestones[1].milestone",
+                  "semantics.claimedMilestones[1].seat",
+                  "semantics.claimedMilestones[2].seat",
+                  "semantics.fundedAwards[2].award",
+                  "semantics.fundedAwards[2].seat"
+                ]
+              },
+              {
+                "key": "random-legal@1/2p/g6091/p1",
+                "why": "Format smoke: the second group mirrored, completing one balanced pairing group in the pinned set.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].placement",
+                  "semantics.seats[0].isWinner",
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.awards",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].placement",
+                  "semantics.seats[1].isWinner",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length"
+                ]
+              },
+              {
+                "key": "random-legal@1/3p/g6094/p0",
+                "why": "Format smoke at 3p: three seats, so a per-seat semantics array that is hard-coded to two entries fails here rather than in Unit C.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].placement",
+                  "semantics.seats[1].isWinner",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.seats[2].placement",
+                  "semantics.seats[2].isWinner",
+                  "semantics.seats[2].victoryPoints",
+                  "semantics.seats[2].megaCredits",
+                  "semantics.seats[2].vpBreakdown.milestones",
+                  "semantics.seats[2].vpBreakdown.awards",
+                  "semantics.seats[2].vpBreakdown.city",
+                  "semantics.seats[2].vpBreakdown.cards",
+                  "semantics.seats[2].vpBreakdown.total",
+                  "semantics.seats[2].projectCards.length",
+                  "semantics.claimedMilestones[1].seat"
+                ]
+              },
+              {
+                "key": "random-legal@1/3p/g6094/p3",
+                "why": "Format smoke at 3p: a non-zero permutation index, so the seating recorded on the entry is checked against the pairing schedule rather than assumed to be the identity.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].terraformRating",
+                  "semantics.seats[1].vpBreakdown.terraformRating",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].projectCards.length",
+                  "semantics.seats[2].victoryPoints",
+                  "semantics.seats[2].megaCredits",
+                  "semantics.seats[2].vpBreakdown.greenery",
+                  "semantics.seats[2].vpBreakdown.city",
+                  "semantics.seats[2].vpBreakdown.cards",
+                  "semantics.seats[2].vpBreakdown.total",
+                  "semantics.seats[2].projectCards.length",
+                  "semantics.claimedMilestones.length"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6093/p0",
+                "why": "A mixed lineup filed under the greedy-1ply@1 section: proves identity.agent names the section this game is pinned *for*, not every seat at the table.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.city",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards.length"
+                ]
+              },
+              {
+                "key": "greedy-1ply@1/2p/g6093/p1",
+                "why": "The mixed lineup with the slots swapped between seats, so an agent-seed schedule that travels with the seat rather than the slot is visible as a divergence.",
+                "fingerprintFields": [
+                  "fingerprints.moveTraceHash",
+                  "fingerprints.stableStateHash",
+                  "fingerprints.resultHash",
+                  "fingerprints.decisions",
+                  "fingerprints.fallbacks",
+                  "fingerprints.generation"
+                ],
+                "semanticFields": [
+                  "semantics.seats[0].victoryPoints",
+                  "semantics.seats[0].megaCredits",
+                  "semantics.seats[0].terraformRating",
+                  "semantics.seats[0].vpBreakdown.terraformRating",
+                  "semantics.seats[0].vpBreakdown.milestones",
+                  "semantics.seats[0].vpBreakdown.greenery",
+                  "semantics.seats[0].vpBreakdown.cards",
+                  "semantics.seats[0].vpBreakdown.total",
+                  "semantics.seats[0].projectCards.length",
+                  "semantics.seats[1].victoryPoints",
+                  "semantics.seats[1].megaCredits",
+                  "semantics.seats[1].vpBreakdown.milestones",
+                  "semantics.seats[1].vpBreakdown.awards",
+                  "semantics.seats[1].vpBreakdown.greenery",
+                  "semantics.seats[1].vpBreakdown.city",
+                  "semantics.seats[1].vpBreakdown.cards",
+                  "semantics.seats[1].vpBreakdown.total",
+                  "semantics.seats[1].projectCards[0]",
+                  "semantics.seats[1].projectCards[1]",
+                  "semantics.seats[1].projectCards[2]",
+                  "semantics.seats[1].projectCards[4]",
+                  "semantics.seats[1].projectCards[5]",
+                  "semantics.seats[1].projectCards[7]",
+                  "semantics.seats[1].projectCards[8]",
+                  "semantics.seats[1].projectCards[9]",
+                  "semantics.claimedMilestones[1].milestone",
+                  "semantics.claimedMilestones[1].seat",
+                  "semantics.claimedMilestones[2].milestone"
+                ]
+              }
+            ],
+            "durationMs": 177911,
+            "explain": {
+              "key": "random-legal@1/2p/g6090/p0",
+              "traceMoved": true,
+              "lastAgreedDecision": 24,
+              "firstDisagreedDecision": 49,
+              "windowSize": 25,
+              "windowHead": [
+                "#25 p-green:or|p-green|or|{\"index\":4,\"response\":{\"type\":\"option\"},\"type\":\"or\"}",
+                "#26 p-red:or|p-red|or|{\"index\":2,\"response\":{\"card\":\"Greenery\",\"payment\":{\"auroraiData\":0,\"floaters\":0,\"graphene\":0,\"heat\":0,\"kuiperAsteroids\":0,\"lunaArchivesScience\":0,\"megacredits\":23,\"microbes\":0,\"plants\":0,\"seeds\":0,\"spi",
+                "#27 p-red:space|p-red|space|{\"spaceId\":\"58\",\"type\":\"space\"}",
+                "#28 p-red:or|p-red|or|{\"index\":2,\"response\":{\"card\":\"Asteroid:SP\",\"payment\":{\"auroraiData\":0,\"floaters\":0,\"graphene\":0,\"heat\":0,\"kuiperAsteroids\":0,\"lunaArchivesScience\":0,\"megacredits\":14,\"microbes\":0,\"plants\":0,\"seeds\":0,\"",
+                "#29 p-red:or|p-red|or|{\"index\":1,\"response\":{\"index\":2,\"response\":{\"type\":\"option\"},\"type\":\"or\"},\"type\":\"or\"}",
+                "#30 p-red:or|p-red|or|{\"index\":2,\"response\":{\"type\":\"option\"},\"type\":\"or\"}"
+              ]
+            }
+          },
+          "l3": "n/a",
+          "wallClockMs": 188310
+        }
+      ]
+    }
+  ]
+}

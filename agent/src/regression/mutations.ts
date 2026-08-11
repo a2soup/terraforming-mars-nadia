@@ -390,9 +390,9 @@ export function assertTreeClean(root: string, context: string): void {
  * destroyed per session without anybody thinking twice about the cost, which is what keeps the
  * "never mutate in place" rule cheap enough to actually follow.
  */
-export function createScratchWorktree(root: string, target: string): void {
+export function createScratchWorktree(root: string, target: string, ref: string = 'HEAD'): void {
   removeScratchWorktree(root, target);
-  execFileSync('git', ['worktree', 'add', '--detach', target, 'HEAD'], {cwd: root, stdio: 'pipe'});
+  execFileSync('git', ['worktree', 'add', '--detach', target, ref], {cwd: root, stdio: 'pipe'});
   const modules = path.join(root, 'node_modules');
   const linked = fs.existsSync(modules) ? fs.realpathSync(modules) : path.join(root, 'node_modules');
   fs.symlinkSync(linked, path.join(target, 'node_modules'));
@@ -447,6 +447,12 @@ export type L3Observation = {
   lastAgreedDecision?: number;
   firstDisagreedDecision?: number;
   windowSize?: number;
+  /**
+   * Did the bracketed window contain the mutation's {@link Mutation.l3Marker}? Absent when the
+   * mutation has no name a move trace can carry - which is every agent-side row, and scoring those
+   * as misses would manufacture a gap that does not exist.
+   */
+  markerInWindow?: boolean;
   /** The first few decisions in the bracketed window, truncated - what a reader is handed. */
   windowHead: ReadonlyArray<string>;
   note?: string;
@@ -461,7 +467,7 @@ const OBSERVATION_MARKER = '##CONTROL-OBSERVATION##';
  * trace is in memory, rather than being carried back to the parent as a few hundred kilobytes of
  * step strings.
  */
-export async function observe(corpusFile: string): Promise<SuiteObservation> {
+export async function observe(corpusFile: string, marker?: string): Promise<SuiteObservation> {
   const corpusPath = dataPath(corpusFile);
   const corpus = loadRegressionCorpus(corpusPath);
   const result = await runSuite({layers: ['l1', 'l2'], corpus});
@@ -474,6 +480,22 @@ export async function observe(corpusFile: string): Promise<SuiteObservation> {
     semanticFields: diff.diffs.filter((field) => field.group === 'semantics').map((field) => field.path),
     ...(diff.failure === undefined ? {} : {failure: `${diff.failure.errorClass}: ${diff.failure.message.split('\n')[0]}`}),
   })));
+
+  /**
+   * The entry L3 is asked to localize, and it is deliberately **not** simply the first moved one.
+   *
+   * L3's localization brackets a divergence in the *move trace*, so an entry that moved without its
+   * trace moving has nothing to localize - and the first control run found that this is not a corner
+   * case: M1 changed a card's steel production, and the first moved random-legal entry diverged on
+   * `stableStateHash` alone, its 295 decisions byte-identical. Scoring L3 against that entry would
+   * have recorded "no trace move" for a mutation whose *other* entries the trace caught perfectly
+   * well, i.e. would have manufactured a gap out of an entry-selection accident.
+   *
+   * So: the first entry whose trace moved, falling back to the first moved entry when none did -
+   * because "nothing here can be localized" is a real answer and must not be silently skipped.
+   */
+  const localizable = movedEntries.find((entry) => entry.fingerprintFields.includes('fingerprints.moveTraceHash')) ??
+    movedEntries[0];
 
   const observation: SuiteObservation = {
     l1: {
@@ -495,23 +517,28 @@ export async function observe(corpusFile: string): Promise<SuiteObservation> {
     })),
     movedEntries,
     durationMs: result.durationMs,
-    ...(movedEntries.length === 0 ? {} : {explain: explainFirstMoved(corpus, movedEntries[0].key)}),
+    ...(localizable === undefined ? {} : {explain: explainFirstMoved(corpus, localizable.key, marker)}),
   };
   return observation;
 }
 
-function explainFirstMoved(corpus: Parameters<typeof explainEntry>[0], key: string): L3Observation {
+function explainFirstMoved(corpus: Parameters<typeof explainEntry>[0], key: string, marker?: string): L3Observation {
   const explanation = silencingRoutineLogs(() => explainEntry(corpus, key));
   const located = explanation.firstDivergence;
+  const window = located?.window ?? [];
   return {
     key,
     traceMoved: explanation.diffs.some((diff) => diff.path === 'fingerprints.moveTraceHash'),
     ...(located === undefined ? {} : {
       lastAgreedDecision: located.lastAgreedDecision,
       ...(located.firstDisagreedDecision === undefined ? {} : {firstDisagreedDecision: located.firstDisagreedDecision}),
-      windowSize: located.window.length,
+      windowSize: window.length,
     }),
-    windowHead: (located?.window ?? []).slice(0, 6).map((step) => `#${step.index} ${step.stepInput.slice(0, 220)}`),
+    // Searched over the **whole** window, not over the truncated head recorded beside it: a
+    // `pendingSignature` prefix is long enough to push a card name past any sane display cut, and
+    // scoring the localization against what happens to fit on screen would be scoring the formatter.
+    ...(marker === undefined ? {} : {markerInWindow: window.some((step) => step.stepInput.includes(marker))}),
+    windowHead: window.slice(0, 6).map((step) => `#${step.index} ${step.stepInput.slice(0, 300)}`),
     ...(explanation.localizationNote === undefined ? {} : {note: explanation.localizationNote}),
   };
 }
@@ -569,7 +596,7 @@ export function runControl(mutation: Mutation, options: RunControlOptions): Cont
   const original = applyMutation(scratch, mutation);
   let observation: SuiteObservation;
   try {
-    observation = observeInScratch(scratch, corpusFile);
+    observation = observeInScratch(scratch, corpusFile, mutation.l3Marker);
   } finally {
     revertMutation(scratch, mutation, original);
   }
@@ -626,7 +653,7 @@ function scoreL3(mutation: Mutation, observation: SuiteObservation): ControlResu
   if (explain === undefined || !explain.traceMoved) {
     return 'no-trace-move';
   }
-  return explain.windowHead.some((step) => step.includes(mutation.l3Marker as string)) ? 'named-it' : 'missed-it';
+  return explain.markerInWindow === true ? 'named-it' : 'missed-it';
 }
 
 /**
@@ -637,11 +664,12 @@ function scoreL3(mutation: Mutation, observation: SuiteObservation): ControlResu
  * observation is found by its marker rather than by parsing the stream - the same technique
  * `runner.ts` uses to find mocha's JSON report among the specs' own output, and for the same reason.
  */
-function observeInScratch(scratch: string, corpusFile: string): SuiteObservation {
+function observeInScratch(scratch: string, corpusFile: string, marker?: string): SuiteObservation {
   const result = spawnSync(process.execPath, [
     path.join(scratch, 'node_modules', 'tsx', 'dist', 'cli.mjs'),
     path.join(scratch, 'agent', 'src', 'regression', 'mutations.ts'),
     'observe', '--corpus-file', corpusFile,
+    ...(marker === undefined ? [] : ['--marker', marker]),
   ], {cwd: path.join(scratch, 'agent'), encoding: 'utf8', maxBuffer: 256 * 1024 * 1024});
 
   const line = (result.stdout ?? '').split('\n').find((candidate) => candidate.startsWith(OBSERVATION_MARKER));
@@ -658,24 +686,74 @@ function observeInScratch(scratch: string, corpusFile: string): SuiteObservation
 // The committed record
 // ---------------------------------------------------------------------------------------------
 
-export type ControlsRecord = {
-  recordedAt: string;
-  enginePin: string;
-  agentCommit: string;
-  /** Which corpus the controls were run against. Unit A's smoke corpus, or Unit C's. */
+/**
+ * One full pass of the register against one corpus.
+ *
+ * **The record carries a run per corpus rather than one run, and the reason is the finding.** The
+ * same eleven mutations were put through Unit A's 10-game smoke corpus (selected to exercise the
+ * *format*) and Unit C's 33-game corpus (selected to exercise *coverage*), and the difference
+ * between the two `firedChannels` columns is the only direct measurement anywhere in this bullet of
+ * **what selection buys**. A gap that closes between the two rows closed because the corpus reached
+ * further; a gap that survives both is a gap in the instrument rather than in the sample, and those
+ * are different rows in the deliverable's gap table with different responses.
+ *
+ * Collapsing the two into "the controls were run" would delete exactly that distinction, which is
+ * the same mistake §3.3 refuses when it commits the fields instead of a hash of the fields.
+ */
+export type ControlRun = {
+  /** `regression_smoke.json` (Unit A) or `regression_suite.json` (Unit C). */
   corpusFile: string;
+  /** What the corpus was selected for - the thing that makes the two runs comparable at all. */
+  corpusRole: string;
   corpusEntries: number;
-  /** The `sysctl vm.swapusage` reading, because no timing here is a performance figure (hazard H6). */
-  hostNote: string;
+  /** The unmutated run. If this is not clean, no row taken from it is attributable. */
   baseline: SuiteObservation;
   results: ReadonlyArray<ControlResult>;
 };
 
+export type ControlsRecord = {
+  recordedAt: string;
+  enginePin: string;
+  agentCommit: string;
+  /** The `sysctl vm.swapusage` reading, because no timing here is a performance figure (hazard H6). */
+  hostNote: string;
+  runs: ReadonlyArray<ControlRun>;
+};
+
 export const CONTROLS_FILE = 'regression_controls.json';
 
+/**
+ * Writes the record, replacing any run already present for the same corpus rather than appending a
+ * second one - so re-running a corpus updates its row instead of quietly leaving two answers to the
+ * same question in the file, which is the shape of artifact nobody can act on.
+ */
 export function saveControlsRecord(filePath: string, record: ControlsRecord): void {
   fs.mkdirSync(path.dirname(filePath), {recursive: true});
   fs.writeFileSync(filePath, JSON.stringify(record, null, 2) + '\n');
+}
+
+/**
+ * Folds a run into the record: a run for a corpus not yet present is appended, and one for a corpus
+ * already present has its **rows merged by mutation id**, newest winning, then re-sorted into
+ * {@link MUTATIONS} order.
+ *
+ * Row-level rather than run-level merging exists because `--only` is how a single row gets re-run,
+ * and the naive "replace the run" would silently drop the ten rows that were not re-run - leaving a
+ * record that reads as a complete pass and is not one. That is the same class of error as a mutation
+ * whose anchor stopped matching: the artifact looks like evidence.
+ */
+export function mergeRun(existing: ControlsRecord | undefined, base: Omit<ControlsRecord, 'runs'>, run: ControlRun): ControlsRecord {
+  const previous = (existing?.runs ?? []).find((candidate) => candidate.corpusFile === run.corpusFile);
+  const others = (existing?.runs ?? []).filter((candidate) => candidate.corpusFile !== run.corpusFile);
+
+  const byId = new Map((previous?.results ?? []).map((result) => [result.id, result]));
+  for (const result of run.results) {
+    byId.set(result.id, result);
+  }
+  const order = MUTATIONS.map((mutation) => mutation.id);
+  const results = [...byId.values()].sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+
+  return {...base, runs: [...others, {...run, results}]};
 }
 
 export function loadControlsRecord(filePath: string): ControlsRecord {
@@ -705,7 +783,10 @@ async function main(argv: ReadonlyArray<string>): Promise<void> {
   const mode = argv[0] ?? 'list';
   let only: ReadonlyArray<string> | undefined;
   let corpusFile = SMOKE_CORPUS_FILE;
+  let corpusRole = 'Unit A\'s smoke corpus - selected to exercise the record format, not coverage';
   let out = dataPath(CONTROLS_FILE);
+  let worktreeRef = 'HEAD';
+  let marker: string | undefined;
 
   for (let i = 1; i < argv.length; i++) {
     switch (argv[i]) {
@@ -714,6 +795,19 @@ async function main(argv: ReadonlyArray<string>): Promise<void> {
       break;
     case '--corpus-file':
       corpusFile = argv[++i] ?? SMOKE_CORPUS_FILE;
+      break;
+    case '--corpus-role':
+      corpusRole = argv[++i] ?? corpusRole;
+      break;
+    case '--worktree-ref':
+      // The scratch worktree is checked out at this ref instead of HEAD. Unit D's final controls run
+      // against **Unit C's** committed corpus (§ Unit D preamble), which lives on C's branch: this
+      // lets the run reach it without merging another unit's work into D's, which §8 does not give
+      // D the standing to do.
+      worktreeRef = argv[++i] ?? worktreeRef;
+      break;
+    case '--marker':
+      marker = argv[++i];
       break;
     case '--out':
       out = argv[++i] ?? out;
@@ -724,7 +818,7 @@ async function main(argv: ReadonlyArray<string>): Promise<void> {
   }
 
   if (mode === 'observe') {
-    const observation = await observe(corpusFile);
+    const observation = await observe(corpusFile, marker);
     console.log(`${OBSERVATION_MARKER}${JSON.stringify(observation)}`);
     return;
   }
@@ -747,8 +841,8 @@ async function main(argv: ReadonlyArray<string>): Promise<void> {
   const scratch = path.join(path.dirname(root), `${path.basename(root)}-mutation-scratch`);
   const selected = only === undefined ? MUTATIONS : only.map(mutationById);
 
-  console.log(`[controls] scratch worktree: ${scratch}`);
-  createScratchWorktree(root, scratch);
+  console.log(`[controls] scratch worktree: ${scratch} (at ${worktreeRef}, corpus ${corpusFile})`);
+  createScratchWorktree(root, scratch, worktreeRef);
   try {
     assertTreeClean(scratch, 'before the baseline');
     console.log('[controls] baseline (no mutation applied) ...');
@@ -770,18 +864,27 @@ async function main(argv: ReadonlyArray<string>): Promise<void> {
         `${(result.wallClockMs / 1_000).toFixed(1)}s)`);
     }
 
-    const record: ControlsRecord = {
-      recordedAt: new Date().toISOString(),
-      enginePin: '868714d72a434ab68fe08e5570ebc6863859ae15',
-      agentCommit: execFileSync('git', ['rev-parse', 'HEAD'], {cwd: root, encoding: 'utf8'}).trim(),
-      corpusFile,
-      corpusEntries: baseline.sections.reduce((count, section) => count + section.entriesChecked, 0),
-      hostNote: execFileSync('sysctl', ['vm.swapusage'], {encoding: 'utf8'}).trim(),
-      baseline,
-      results,
-    };
+    const record = mergeRun(
+      fs.existsSync(out) ? loadControlsRecord(out) : undefined,
+      {
+        recordedAt: new Date().toISOString(),
+        enginePin: '868714d72a434ab68fe08e5570ebc6863859ae15',
+        agentCommit: execFileSync('git', ['rev-parse', 'HEAD'], {cwd: root, encoding: 'utf8'}).trim(),
+        // Recorded on every run because Unit A measured the same call at 11 s and at 124 s in one
+        // session on this host, and criterion S6 is not adjudicable from a machine in that state
+        // (hazard H6). No duration in this file is a performance figure.
+        hostNote: execFileSync('sysctl', ['vm.swapusage'], {encoding: 'utf8'}).trim(),
+      },
+      {
+        corpusFile,
+        corpusRole,
+        corpusEntries: baseline.sections.reduce((count, section) => count + section.entriesChecked, 0),
+        baseline,
+        results,
+      });
     saveControlsRecord(out, record);
-    console.log(`[controls] wrote ${results.length} row(s) to ${out}`);
+    console.log(`[controls] wrote ${results.length} row(s) for ${corpusFile} to ${out} ` +
+      `(${record.runs.length} run(s) in the record)`);
   } finally {
     removeScratchWorktree(root, scratch);
   }
