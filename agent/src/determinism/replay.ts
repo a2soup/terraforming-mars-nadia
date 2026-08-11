@@ -8,7 +8,7 @@ import {createAgentRandom} from '../core/rng';
 import {EmbeddedDecisionPoint} from '../driver/decisionPoint';
 import {EmbeddedResponder} from '../driver/responder';
 import {runGame} from '../driver/embeddedDriver';
-import {ReplayConfig, ReplayFingerprint, ReplayOptions, TraceStep} from './types';
+import {ReplayAgentFactory, ReplayConfig, ReplayFingerprint, ReplayOptions, TraceStep} from './types';
 
 /**
  * The determinism harness (Milestone 1, bullet 6, sub-task A): replays a fully-specified
@@ -129,15 +129,32 @@ function withMoveTrace(inner: EmbeddedResponder, trace: MoveTrace): EmbeddedResp
 }
 
 /**
+ * The agent `replay()` uses when the caller names none: the random-legal agent seeded from the
+ * config's agent seed. **This was the hard-coded body of `replay()` until Milestone 2 bullet 5**
+ * (§2.1: `determinism/replay.ts:140` hard-coded it, which is why `greedy-1ply@1` - one of the two
+ * frozen yardsticks every AC-3 claim is stated against - had no fixed-seed standing check of any
+ * kind). Exported so the parameterization's guard spec can assert the default is *this* function
+ * and not merely something that behaves like it today.
+ */
+export const defaultReplayAgent: ReplayAgentFactory = ({config}) =>
+  randomLegalAgent(createAgentRandom(config.agentSeed));
+
+/**
  * Replays `config` once: creates the game from its engine seed, drives it to completion with
  * the random-legal agent seeded from its agent seed, and returns a {@link ReplayFingerprint}.
  * Two replays of the same config, in the same or a different process, are expected to produce
  * identical fingerprints (SRS CON-5/NFR-5) - that expectation is what sub-tasks B and C sweep
  * and stress-test; this function only knows how to produce one fingerprint.
+ *
+ * **`options.agent` and `options.onGameEnd` were added by Milestone 2 bullet 5, Unit A** (§3.9),
+ * and the addition is required to be invisible: with neither supplied this function does what it
+ * did before, down to the object it builds, and `test/regression/replayAgent.spec.ts` re-verifies
+ * all 300 committed fingerprints to prove it. If they move, the change was not additive and that
+ * is the first thing the regression suite ever caught (falsifiable prediction 7).
  */
 export function replay(config: ReplayConfig, options: ReplayOptions = {}): ReplayFingerprint {
   const game = createGame({players: config.players, seed: config.engineSeed});
-  const agent = randomLegalAgent(createAgentRandom(config.agentSeed));
+  const agent = (options.agent ?? defaultReplayAgent)({config, game});
 
   const captureDiagnostics = options.diagnostics === true;
   const trace = new MoveTrace(captureDiagnostics);
@@ -151,6 +168,10 @@ export function replay(config: ReplayConfig, options: ReplayOptions = {}): Repla
       callerOnFallback?.(event);
     },
   });
+
+  // Before the fingerprint, while the game is still live and every end-of-game number is still
+  // readable off it (see ReplayOptions.onGameEnd). A no-op unless a caller asked.
+  options.onGameEnd?.(game, result);
 
   const fingerprint: ReplayFingerprint = {
     config,

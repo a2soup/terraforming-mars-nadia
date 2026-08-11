@@ -586,6 +586,20 @@
         "to": 6029,
         "spentBy": "M2b1 criterion R3 (history fidelity) - predates the allocation; a development run, certified nothing",
         "recordedAt": "2026-07-28"
+      },
+      {
+        "block": "regression",
+        "from": 6090,
+        "to": 6099,
+        "spentBy": "M2b5 Unit A smoke corpus",
+        "recordedAt": "2026-08-11"
+      },
+      {
+        "block": "regression",
+        "from": 6100,
+        "to": 6499,
+        "spentBy": "M2b5 L2 reference games",
+        "recordedAt": "2026-08-11"
       }
     ]
   },

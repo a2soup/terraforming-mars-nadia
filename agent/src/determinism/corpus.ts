@@ -26,7 +26,7 @@ const SEED_DERIVATION_VERSION = 1;
  * against the current HEAD, and `--verify` threw `CorpusHeaderMismatchError` before it compared a
  * single fingerprint. See Determinism_Verification.md, "Defects this write-up fixed".
  */
-const ENGINE_PIN = '868714d72a434ab68fe08e5570ebc6863859ae15';
+export const ENGINE_PIN = '868714d72a434ab68fe08e5570ebc6863859ae15';
 
 export type CorpusEnvironment = {
   GAME_CACHE: string | undefined;

@@ -1318,3 +1318,456 @@ the transcription is auditable offline and forever.
 `docs/data/card_census.json`, so a pin change that adds or removes a reachable corporation makes the
 reconciliation spec fail — correctly. That failure is the census reporting a real change, not a broken
 test, and the fix is to re-check the new corporation against the dataset rather than to relax the spec.
+
+## 2026-08-10 — L1 reference positions: what the fixtures found that the plan didn't predict (Milestone 2, bullet 5, Unit B)
+
+Thirteen L1 fixtures under `agent/test/regression/fixtures/` — one per named card in
+`Milestone2_Bullet5_Prompts.md` Unit B: the five escalating divergences, the three non-escalating,
+the two untested effects, and the three `undecided` items. 27 tests, 86 ms, no CLI and no corpus.
+Every fixture carries §3.4's three-part comment (Engine number, printed number, register row, and
+the sentence that changing it toward the print is a change of meaning rather than a fix), because a
+fixture asserting "Immigrant City is playable at M€ production −4" reads as a bug report to anyone
+who has not read the audit.
+
+**H12 was a non-issue and cost two minutes, not thirty.** `import {testGame} from
+'../../../../tests/TestGame'` resolves from an agent spec under `cd agent && npm test` with no
+`tsconfig` change and no path alias — `agent/package.json`'s test script already loads
+`../tests/testing/setup.ts`, and tsx resolves the relative hop out of `agent/` unaided. Unit A can
+skip its §1 smoke spec; these thirteen fixtures are the proof.
+
+**Prediction 8 missed: the X3 prelude fizzle *is* buildable minimally.** The appendix expected it to
+need "a specific prelude in a specific hand at a specific M€" and to be recorded as *untested*. It
+needs an empty hand and one `playCard` call: `PlayProjectCard` finds nothing playable, calls back
+with `undefined`, and `PreludesExpansion.fizzle` grants the 15 M€. Better, both of the audit's paths
+fit in one fixture — Eccentric Sponsor passes the selection gate and fizzles from inside
+`bespokePlay`, Ecology Experts is refused by its own `canPlay` at the gate — and it is the *pair*
+that pins the audit's actual finding (two routes, one grant, no legality difference for Nadia), which
+either half alone would not.
+
+### Three things about Hackers that the source documents get subtly wrong
+
+**`stealing: true` is a logging flag, not a transfer.** `Production.add` passes it only to
+`logUnitDelta` to select the phrasing. Plan §7.2 and the bullet-5 brief both describe Hackers'
+effect as a "steal of 2 M€ production"; nothing is transferred. The actor's +2 comes from the
+declarative `behavior` block and is paid whether or not a target is ever found. A fixture written to
+assert a transfer would have asserted something the Engine does not do — the two halves are
+independent and are asserted separately.
+
+**Hackers has no fizzle branch, and cannot have one.** The `behavior` block resolves before
+`bespokePlay`'s deferred attack, so the actor's M€ production when `DecreaseAnyProduction` runs is
+never below −3 — exactly two steps above the −5 floor. The actor therefore always satisfies
+`canHaveProductionReduced(MEGACREDITS, 2)` and is always a legal target. Against a table where every
+opponent is floored, the Engine offers the actor a mandatory `SelectPlayer` containing only
+themselves: −1 energy production, −1 VP, 3 M€, and net zero M€ production, with no way to decline.
+"The attack found no target" is unreachable for this card, which is a different fact from Energy
+Tapping's superficially similar forced self-target.
+
+**Both seats are offered when both qualify**, so Hackers' target choice is a real decision the
+enumerator sees, not an auto-resolve — worth knowing at M3, where a points-now chooser will read
+self-targeting as identical in current VP.
+
+### Fixture-authoring gotchas, recorded so Unit C and M3 don't rediscover them
+
+- **`formatMessage` renders players by colour, not by name.** `testGame` builds
+  `TestPlayer.RED.newPlayer({name: 'player2'})` and the option title comes out `Remove 5 plants from
+  red`. Option-set assertions (Virus, Hired Raiders, Sabotage) match the leading text and pin the
+  skip/none titles exactly, rather than pinning a name that has nothing to do with the divergence.
+- **`RemoveAnyPlants` appends the caster's own option *after* the skip, but returns `undefined` when
+  only the skip exists** — the `length === 1` early return happens before the self option is added.
+  So Virus's plant branch needs an opponent holding plants before the caster's own plants matter at
+  all, and `slice(0, -1)` eats the self option only in that case.
+- **`maxOutOceans(player)` hands the player nine oceans' placement bonuses** — 2 steel, 9 plants, TR
+  20 → 29. The steel turns Aquifer Pumping's 8 M€ into a `payment` decision instead of an auto-pay,
+  which is what made the first draft of the X5 fixture assert 8 M€ against a payment that had not
+  resolved yet.
+- **Aquifer Pumping is the X5 member worth pinning, not the Asteroid standard project.** Four of the
+  five maxed-parameter no-ops are in scope (Water Import From Europa is Venus), and three of those —
+  the Aquifer and Asteroid standard projects and Convert Heat — already have Engine specs that *act*
+  at the maximum and assert the no-op end to end. Aquifer Pumping's own spec asserts only that
+  `canAct` stays true at maxed oceans ("Can act if can pay even after oceans are maxed") — it never
+  acts, so **what the 8 M€ buys at that point is asserted nowhere in the Engine suite.** It is the
+  one of the four where a regression would be silent.
+
+### The fixtures were made to fail on purpose, once each
+
+Per the shared preamble: a check that has never refused anything is indistinguishable from one that
+works. Each fixture was re-run with its key assertion replaced by the **printed** number — or, for
+the two untested effects (Hackers, City), by a silent value regression — in a scratch copy that was
+then deleted. All thirteen went red; none was vacuously true. Immigrant City and the prelude fizzle
+failed two tests each because their printed reading moves both of their assertions.
+
+This is not a substitute for Unit D. It shows each fixture discriminates between the Engine number
+and the printed one; whether the *suite* notices a mutation somewhere else entirely is D's question.
+
+## 2026-08-11 — Regression suite core: what the plan did not predict (Milestone 2, bullet 5, Unit A)
+
+Unit A of bullet 5 — the record format, the corpus, the runner/CLI, the rebaseline ledger, and §3.9's
+additive change to `determinism/replay.ts`. Five things the plan document did not predict, in
+descending order of how much time they will cost whoever hits them next.
+
+**1. This host cannot time anything, and it took four contradictory measurements to notice.** The
+same call — `verifyCorpus` over the committed 300 determinism fingerprints, under `tsx` — measured
+**11 s, 102 s, 114 s and 124 s** across one session. `sysctl vm.swapusage` says why: 4.6 GB of 5.1 GB
+swap in use, 64 MB of free RAM on an 8 GB machine. This is bullet 1's hazard H10 recurring verbatim
+(*"the single-process baseline swung 4.3× within one session on an identical spec"*), and the 11 s
+reading came from inside a mocha spec, which is the reading most likely to be quoted. **Criterion S6
+cannot be adjudicated from this session** — Unit C must time the suite on an idle host, on the
+compiled build, and check swap first. The runner's module doc records the spread rather than a
+figure, deliberately: a single plausible number here would have been worse than none.
+
+**2. `replay()`'s `decisions` and `MatchGameRecord.decisions` are different counts, and the gap is
+exactly the responder-throw population.** `match/runner.ts`'s router increments *before* calling the
+agent; `replay.ts`'s `withMoveTrace` records *after* the responder returns. So a game the match
+runner scores at 300 decisions is 295 to the regression suite, and the difference is
+`fallbacksAfterThrow` — the ~5.7-per-game benign throw population AC-1 measured. This surfaced as a
+*failing* cross-check spec, which is the good outcome; `corpus.spec.ts` now asserts the identity
+`record.decisions − played.decisions === record.fallbacksAfterThrow` rather than equality, so the
+relationship is pinned instead of being rediscovered as a defect. It is the same property
+`agent/CLAUDE.md` §6 already records about `moveTraceHash`, showing up in a second place.
+
+**3. "First divergent decision" (§3.1) is not free, and needed a schema field the plan did not
+name.** Localizing a divergence requires the *old* trace; a re-run produces only the new one, and the
+committed final hash says "this game changed" and nothing more. Committing the full trace is 69.7
+KB/game (§2.7) and the wrong thing to commit. So an entry carries the rolling hash sampled every 25
+decisions — ~12 hashes, under 800 bytes — which brackets the first divergence to a 25-decision
+window that `--explain` then prints from a diagnostics re-run. The checkpoints are **not compared**:
+the chain is rolling, so anything they could detect has already moved `moveTraceHash`, and comparing
+them would turn one honest mismatch row into twelve.
+
+**4. `coverage` and `why` cannot be verified fields, and `[]` had to stop meaning two things.**
+Coverage is derived from a `moves`-tier survey at generation time; recomputing it on every verify
+would mean paying 69.7 KB/game and the instrumentation cost against a five-minute budget. So both are
+provenance, excluded from the diff. That leaves the trap: an entry that measured nothing and an entry
+that used no standard projects both serialize as `[]`. `RegressionEntryCoverage.source` is
+`'moves-tier' | 'not-derived'` for that reason — bullet 3's hazard H9 (an unestimable quantity
+printed as `NaN`) one layer down.
+
+**5. H12 is settled and cost ten minutes, not thirty.** `import {testGame} from
+'../../../tests/TestGame'` works from `agent/test/regression/*.spec.ts` with **no `tsconfig` change
+and no path alias** — `agent/package.json`'s test script already requires `../tests/testing/setup.ts`,
+and `tsx` resolves the relative path out of `agent/` without consulting `agent/tsconfig.json`'s
+`include`. `@/common/...` resolves in agent specs too. From `fixtures/` it is one more `..`:
+`'../../../../tests/TestGame'`. `test/regression/testGameImport.spec.ts` is kept as the thing that
+fails first and legibly if a toolchain change ever breaks that import for all of Unit B's fixtures at
+once.
+
+**Also worth knowing.** Parameterizing `replay()` left all 300 committed fingerprints unmoved
+(falsifiable prediction 7 holds). The smoke corpus spends R-block groups **6,090–6,099**, allocated in
+`ladder.json` before any game was played — that narrows §3.7's 6,030–6,099 gap to 6,030–6,089 and
+does not touch C's 6,100–6,499 or the 6,500–6,999 reserved for M3–M6 sections. And a *frozen* section
+that moves gets a distinct message in the CLI output pointing at §3.1's shared-infrastructure rule,
+because "greedy-1ply@1 moved" is the one red line most likely to be met with a rebaseline.
+
+## 2026-08-11 — Merging Units A and B: the digest that moved on every commit (Milestone 2, bullet 5)
+
+Merged Unit A (the suite core) and Unit B (the thirteen L1 fixtures) onto the bullet-5 branch. Both
+branched cleanly off the plan commit; the only conflict was this file, where both units appended an
+entry, and both were kept. Two test failures on the merged tree, and the interesting one is a real
+defect that **neither unit's own green suite could have caught**.
+
+**`digestCorpus` hashed the corpus header, so the ledger's content digest moved on every commit.**
+Unit A's S7 spec asserts that a rebaseline which moves nothing records
+`corpusDigestBefore === corpusDigestAfter`. It passed on Unit A's branch and failed the moment the
+merge advanced HEAD. Cause: the digest covered `header.agentCommit`, which is repo HEAD at write
+time. So a rebaseline with `entriesMoved: 0` and `fieldsMoved: {}` still reported the artifact as
+changed — the precise misleading signal the two digest fields exist to prevent.
+
+The function's doc comment already contained the right rule and stopped one field short: it excluded
+`createdAt` because it "moves on every write and would make two identical corpora look different in
+the chain". `agentCommit` moves on every *commit*, `nodeVersion` on a Node upgrade, `agentVersion` on
+a bump. None is content. **This is `determinism/corpus.ts`'s documented trap reached from a new
+direction** — that file carries a long comment about never digesting repo HEAD, because doing so once
+made every committed corpus unverifiable on the next docs-only commit. Unit A read it and applied it
+correctly to `assertCorpusComparable`, directly above; the digest, written separately, did not
+inherit it.
+
+**Fix: digest `{suiteVersion, sections}` and drop the header entirely.** That needs no
+exception list to maintain, so a field added to `CorpusHeader` later cannot reintroduce this. It
+costs nothing, because the only header fields carrying meaning — `engineCommit`,
+`seedDerivationVersion`, `env` — are the exact three `assertHeaderCompatible` **rejects on**, so a
+corpus differing in any of them is refused before a digest is ever taken. No artifact needed
+regenerating; `regression_smoke.json`'s recorded `agentCommit` is provenance and stays as written.
+
+Two guards added, and the second is the one that matters: provenance churn (`agentCommit`,
+`nodeVersion`, `agentVersion`, `createdAt` all replaced) must not move the digest, **and** a doctored
+`moveTraceHash` must still move it. Without the second, a `digestCorpus` returning a constant passes
+the first.
+
+**The lesson is about when a check is exercised, not about the digest.** Unit A's specs were
+thorough and its ledger refusals were all driven through the CLI on real files, which is what bullet
+3's post-mortem asked for. It still shipped a defect whose trigger is "somebody commits something" —
+because within a single session HEAD never moves, so every run of that spec saw the one HEAD value
+that made it pass. **A spec whose subject includes repo state has a hidden fixture: the commit you
+happen to be on.** Worth a look wherever else provenance is compared rather than recorded.
+
+**The second failure was the host, not the merge.** `bench harness / benchEnvironment` exceeded its
+2 s timeout in the full run and passes in 148 ms alone; neither unit touches `agent/src/bench/`. The
+host had 4.7 GB of 6.1 GB swap in use. That is Unit A's own finding 1 recurring, and it is now the
+second session in a row to lose time to it — **S6 still cannot be adjudicated on this machine**, and
+a 2 s timeout on a spec that shells out to `git` is fragile independently of that.
+
+## 2026-08-11 — Seed selection and the reference-game corpus: five things the plan did not predict (Milestone 2, bullet 5, Unit C)
+
+Unit C of bullet 5 — the `moves`-tier survey, the covering search, and the two committed artifacts
+(`docs/data/regression_suite.json`, `docs/data/regression_coverage.json`). 950 survey games over
+R-block groups 6,100–6,399, 33 pinned. Five findings, in descending order of how much time they will
+cost whoever hits them next.
+
+**1. `card_play_coverage.json` says Sell Patents was played 0 times in 1,500 games. It is played in
+essentially every random-legal game.** K4's `PlayObserver` wraps
+`StandardProjectCard.payAndExecute`, and Sell Patents never calls it: `Game.getStandardProjects()`
+filters it out of the standard-project menu (`Game.ts:1637`, *"sell patents is not displayed as a
+card"*) and `Player.getActions()` offers `sellPatents.action(this)` instead, whose callback calls
+`projectPlayed` directly. So the card was filed as `reachable-by-other-route` with zero observations,
+and the zero was read as a fact about reachability rather than about the instrument. **The unique
+chokepoint for all six standard projects is `projectPlayed`** — `payAndExecute` calls it too — and
+that is what `regression/fingerprint.ts` wraps. This does not invalidate any other K4 number: every
+other section reaches `playCard`/`playCorporationCard`/`actionUsed`, which are unique. It is worth
+re-running the sweep at M3 with the corrected chokepoint if anything ever depends on that row.
+
+**2. §2.4's "greedy play reaches further" is wrong, and it is wrong in the direction that matters.**
+Measured over the survey, per game at 2p: `random-legal@1` plays **31.5** distinct cards and takes
+**5.8** card actions; `greedy-1ply@1` plays **19.1** and takes **2.9**. At 3p it is 36.4/6.3 against
+23.1/3.7. Greedy also *ends games sooner* (15.5 generations at 2p against 23.2), which compounds:
+maximizing current victory points buys fewer cards, plays fewer of them, and reaches the endgame
+before the delayed-value engine ever runs. And it costs **~75×** more per game (2,372 ms against
+32 ms under `tsx`). So `random-legal@1` is both the broader and the vastly cheaper covering
+instrument, which is the opposite of what §3.7 assumed when it said the covering search "should run
+over `greedy-1ply@1` … not only for realism".
+
+The consequence is structural, not cosmetic. A covering search that maximizes coverage per second
+will pin **almost nothing but cheap random-legal games** — a corpus that covers the card pool
+beautifully and would not notice `greedy-1ply@1` changing at all, which is precisely the gap §2.1
+says this bullet exists to close. `REQUIRED_CELLS` is the answer: 18 of the 33 pinned games are
+`greedy-1ply@1`, seeded before the covering step and never trimmed. Left to the search alone the
+corpus was 29 games with **5** greedy entries, all of them forced.
+
+**3. Prediction 5 holds per agent and fails for the corpus, and only the split reporting shows
+both.** Card actions are *not* worse covered than card plays in the pinned corpus — 38 of 38 against
+274 of 275 — because random-legal reaches every one of them. Within `greedy-1ply@1` the prediction is
+exactly right: half the card actions per game. Getting this out required making `card:X` and
+`action:X` **separate coverage targets**; scored in one keyspace, a card counts as covered because it
+was played once and never used, and the prediction cannot be adjudicated at all. Note that
+`isIActionCard` is structurally true of Sell Patents, Convert Plants and Convert Heat as well, and
+those get no `action:` target — for them the action *is* the use, and a second target produced a
+phantom `action/standardProjects 0/1` hole on the first run.
+
+**4. The `moves` tier cannot derive card actions, so §3.7's "record per game … card actions used" is
+under-specified in the same way §3.2 found "pinned in the M2 regression seed set" was.** A blue
+card's action is taken through `Player.playActionCard()`, which is a bare `SelectCard`; the recorded
+`decisionType` is the top-level `'or'`, and `{type: 'card', cards: ['Search For Life']}` is a card
+action, a discard, a sale or a selection depending only on which decision was open. Standard projects
+*are* derivable (five of six — `SelectStandardProjectToPlay` responds `{type: 'projectCard'}`, and
+Sell Patents is the sixth for finding 1's reason), so the survey still runs at `moves` tier and the
+derivation is kept as an **independent cross-check** on those five: **0 disagreements over 950
+games**, 0 stray observations. That cross-check is the only thing that would have caught the observer
+wrapping the wrong method. Incidentally it re-measures §2.7's move-list cost at **70,625 B/game**
+against the recorded 69.7 KB — generated and discarded, never written.
+
+**5. `tsx` understates *this* workload by 1.4×, not 3.5×.** Whole-suite, same host, back to back:
+**36.3 s / 36.5 s compiled** and **46.3 s / 50.6 s under `tsx`**. Per line: the determinism corpus
+6.0 s compiled against 10.2 s (1.7×), L2's 33 games 27 s against 37 s (1.4×), and L1 identical at
+~3.2 s in both because `runL1` spawns mocha under `tsx` either way. The ~3.5× figure comes from the
+speed spike's clone/deserialize micro-benchmarks and does not transfer to whole-game play, where
+Engine work the JIT warms up dominates. **Criterion S6 is met with room** — 36.5 s against a 300 s
+compiled budget and 50.6 s against 1,200 s under `tsx` — and nothing was cut to meet it. The host was
+not swapping this session (2.7 GB of 4.1 GB, 1.4 GB free), unlike Units A and B's; `sysctl
+vm.swapusage` was checked before every figure quoted here.
+
+**One thing the plan predicted exactly.** Anti-Gravity Technology is the corpus's only hole, and it
+is a hole because no game in a 950-game survey by either baseline played it — the same zero K4
+measured over 1,500. Prediction 4's other half ("3–8 reachable cards uncovered") is wrong: it is one.
+
+**Two smaller notes.** (a) Unit C needed a CLI and `agent/package.json` is Unit A's alone (§8, *"if C
+or D needs a script, it asks A"*), and Unit A had already merged. The selection CLI therefore lives
+in `src/regression/select.ts` itself and is invoked as `npx tsx src/regression/select.ts <command>`,
+following `match/pool.ts` and `determinism/sweep.ts`; adding `"regression:select"` to `package.json`
+is a one-line change whenever an owner is available. (b) The compiled build needs
+`npx tsc-alias -p agent/tsconfig.json` after `npx tsc --build agent/tsconfig.json`, or every `@/`
+import fails at require time. That is what `npm run build:server` does for `src/`; no agent-side
+document said so.
+
+## 2026-08-11 — Negative controls: what the suite does not catch (Milestone 2, bullet 5, Unit D)
+
+Eleven mutations — criterion S1's eight classes, pre-registered with their predicted channels in
+their own commit before any was run, plus three this unit added while looking deliberately for
+something nothing catches. Each applied in a throwaway `git worktree`, run through the whole suite,
+and reverted; nothing under `src/` was modified in the repository. Every mutation was run twice: once
+against Unit A's 10-game smoke corpus and once against **Unit C's committed 33-game corpus**, because
+the difference between those two columns is the only direct measurement in this bullet of what
+selection buys.
+
+**Nine of eleven landed on their pre-registered channels in each run. The no-op control fired nothing
+in both** (falsifiable prediction 3 holds, so the rest of the record stands). Six findings follow, in
+descending order of how much they should change what somebody does.
+
+**1. The rebaseline ledger cannot detect an edit to its own last entry — which is the only entry
+anyone would edit.** Found by using the CLI, which is what S7 asks for and is how bullet 3's two dead
+guards were found. `verifyLedgerChain` compares each entry's `previousDigest` against the digest of
+the entry *before* it, so nothing chains to the final entry. Probed directly: on a two-entry ledger,
+editing entry 0 is caught and editing entry 1 is **not**; on a one-entry ledger — the state this
+project is in — nothing is caught at all. Worse, a subsequent legitimate `--rebaseline` then chains
+to the tampered entry's digest, making the chain self-consistent and the tamper permanent. The guard
+is not switched off, unlike bullet 3's; it runs, and it is one entry short. **A `ledgerHeadDigest` on
+the ledger object itself, rewritten on every append, closes it.** `ledger.ts` is Unit A's file, so
+this is reported rather than fixed.
+
+**2. `--explain` says "the trace moved" when the trace did not move.** The branch is gated on
+`semantics.length === 0` alone, so an entry whose only moved field is `stableStateHash` is described
+to the operator as having "taken a different route to an identical outcome" — the opposite of what
+happened. This is not cosmetic: that sentence tells a reader to look for an ordering change rather
+than a value change, and finding 3 is exactly the case where it fires. `regressionCli.ts` is Unit A's.
+
+**3. A card-effect change can move `stableStateHash` and nothing else — no trace, no semantic
+field.** M1 changed `Mine`'s `behavior` production from 1 steel to 2. On the 10-game corpus the two
+entries that noticed it moved **`fingerprints.stableStateHash` alone**: every decision byte-identical
+(the two entries resolve 294 and 255 of them), every VP component, placement, corporation and card
+list unchanged. So the field carrying the whole
+detection is the one inherited from the determinism corpus, not the semantic block §3.3 argued for —
+and `--explain` has nothing to localize, because localization brackets a *trace* divergence. On Unit
+C's 33-game corpus the same mutation did move the trace and eleven semantic fields, so this is a
+property of *which games are pinned*, not of the mutation. **Do not prune `stableStateHash` from the
+compared fields on the argument that the semantic fields subsume it. They do not.**
+
+**4. The 33-game corpus closed two gaps the 10-game corpus had, and one gap survived both.** M2
+(Hackers' `bespokePlay`) moved **zero** pinned entries at 10 games and 3 of 15 random-legal entries
+at 33 — the smaller corpus never reached the card, and only L1's direct assertion and the 300-game
+determinism corpus caught it. That is §3.2's *"a seed cannot assert a card"*, measured rather than
+argued. M5 (the `match/ranking.ts` megacredit tiebreak) was pre-registered as **uncaught** and was
+uncaught at 10 games; at 33 it fired on one greedy 3p entry that has a genuine VP tie, moving
+`placement` and `isWinner` with **no fingerprint field at all**. A wrong prediction, and the good
+kind. **M3 survived both**: reducing `MAX_INTERIOR_AMOUNTS` from 6 to 3 — a candidate-set reduction,
+which bullet 2 names explicitly as making `greedy-1ply@1` a *new version rather than an improvement*
+— fired nothing across all 43 pinned games and both baselines. It is a standing gap, not a
+sample-size artefact.
+
+**5. L3's localization is capped by the checkpoint interval, and it named the right decision in
+neither case where "right" was checkable.** For M1 and M2 the bracketed 25-decision window did not
+contain the mutated card, in either corpus. The reason is structural rather than a bug: the first
+*divergence* is not the first *play of the mutated card* — it is the first decision whose offered set
+or chosen response changed as a consequence, which can be dozens of decisions later. And three of the
+four agent-side mutations bracketed to `(-1, 24]`, i.e. "somewhere in the first 25 decisions", which
+is where the opening deal and the first generation's buys are packed. **`--explain` reliably answers
+"roughly where" and does not answer "what caused it".** Quote it as the former.
+
+**6. The fallback blind spot is real but narrower than the sentence suggests.** M11 reordered the
+FR-9 conservative fallback's `or`-branch search, so the decisions it changes are precisely the ones
+`moveTraceHash` has no step for. The trace moved anyway — a fallback that changes the game state
+changes the `pendingSignature` folded into every *later* recorded step — and L3 bracketed to
+`(24, 49]` on the smoke corpus and `(49, 74]` on Unit C's, i.e. **to the first recorded decision
+after the fallback, never to the fallback itself**. So the blind spot is not "such a divergence is
+invisible"; it is "such a divergence is visible and is attributed to the wrong decision".
+
+**Also worth knowing.** `verifyCorpus` counts one mismatch **per field per config**, not per config,
+so a determinism line reading "1,722 mismatches" over 300 configs is ~287 configs moving on six
+fields each — do not read those numbers as config counts. M10 (reversing the *order* of the space
+candidate set, with the set unchanged) fired on `l2:greedy-1ply@1` and **nothing else**, 18 of 18
+entries against 0 of 15 random-legal ones, in both runs: that channel did not exist before this
+bullet, so this is §2.1's gap made concrete. M6 (attributing city-adjacency VP to the greenery
+component, every total unchanged) moved 32 of 33 entries on semantic fields with **zero** fingerprint
+fields and left all 300 determinism configs clean — §3.3's decision to commit the fields rather than
+a hash of them, paying for itself in one row. M9 (Anti-Gravity Technology, played 0 times in 1,500
+games) was uncaught by every channel in both runs, as designed. And the harness runs the *committed*
+version of itself inside the scratch worktree, which is worth knowing before wondering why an edit
+had no effect. No duration in this session's record is a performance figure: the host held 4.1–4.2 GB
+of 5.1 GB swap throughout, and the same eleven rows ranged from 53 s to 400 s.
+
+## 2026-08-11 — Fixing Unit D's two findings: a chain that did not cover its head (Milestone 2, bullet 5)
+
+Merged Units C and D and fixed the two defects Unit D reported in Unit A's files. Unit D was right
+to report rather than fix them — they are outside its ownership (plan §8) — and right on both
+diagnoses. What is worth recording is that **both defects have the same shape as the `digestCorpus`
+one fixed two commits earlier**: a check that is correct about the thing it looks at, and silent
+about the thing next to it.
+
+**The ledger chain did not cover its own head.** `verifyLedgerChain` walks the entries comparing
+each `previousDigest` against the digest of the entry before it. With `n` entries that constrains the
+first `n−1`; the last is pinned by nothing. On a two-entry ledger, editing entry 0 is caught and
+editing entry 1 is not — and this project's ledger has **one** entry, so nothing was pinned at all.
+The tamper is not merely missed: the next legitimate rebaseline chains onto the edited row's digest
+and the edit becomes permanently self-consistent, which is the failure an audit trail exists to
+prevent. Closed with a `headDigest` on the ledger object, recomputed from `entries` on every write
+so it cannot drift, and compared on every load.
+
+**Note what the existing spec did.** It edits entry 0 of a two-entry ledger and asserts the refusal —
+a real test, passing, of the half of the property that worked. The half that did not work was the
+half the project actually depends on. Unit D found it by *editing the file as an operator would*,
+which is the third time in this bullet that using a guard has beaten specifying it.
+
+**A missing `headDigest` is refused, not computed.** `loadRebaselineLedger` maps an absent field to
+a sentinel rather than filling it in from the rows, because computing it would manufacture the
+agreement the check is supposed to test — the same mistake as reading a ledger-shaped file as an
+empty ledger (`rating/seedBlocks.ts`).
+
+**`--explain` inverted its headline sentence on the one mutation class most likely to reach it.**
+The branch announcing "the trace moved and no semantic field did — the game took a different route to
+an identical outcome" was gated on `semantics.length === 0` alone. When the moved fingerprint field
+is `stableStateHash` and `moveTraceHash` is untouched, the truth is the exact opposite: the **same**
+route to a **different** state. Unit D's M1 (a card's `behavior` production value) moves
+`stableStateHash` and nothing else, so this is not a corner case — it is the reading an operator gets
+for a card-value regression, and it sends them hunting for an ordering change that is not there.
+
+The fix splits the branch on whether `moveTraceHash` actually moved, and the new message says the
+actionable half: the same moves now produce different values, so look at a card, a cost or a
+parameter rather than at the agent. **Worth keeping in view at M3** — that is the mutation class L3
+handles worst, and Unit D separately measured that its localization named the right decision in
+neither case where "right" was checkable, because the first divergence is not the first play of the
+mutated card.
+
+**Both fixes were verified to fail without them**, by stashing the source change and re-running: two
+red for the ledger, one red for `--explain` (the trace-moved branch stays green, which is what makes
+the pair a discriminating test rather than a smoke test).
+
+**Unit D's standing gaps are unchanged by any of this** and are the more important output. M3 (a
+candidate-set reduction — the change bullet 2 names as making `greedy-1ply@1` a new version) fired
+nothing across all 43 pinned games; M2 (Hackers) moved zero pinned entries and was caught only by
+L1's direct assertion, which is §3.2's "a seed cannot assert a card" measured rather than argued.
+
+## 2026-08-11 — Adjudicating bullet 5: nine met, three gaps, and why those are the same sentence (Milestone 2, bullet 5, Unit E)
+
+Unit E: adjudicating S1–S9, writing [Regression_Suite.md](Regression_Suite.md), and closing Milestone
+2 in both source documents (SRS → v1.9, Plan → v1.10). Four things worth recording that are not in
+the deliverable.
+
+**All nine criteria met, and that sentence is misleading on its own.** Bullet 3 set the house
+precedent that a criterion which cannot be met stands as not met; this bullet met everything, which
+would normally be a warning sign about how the criteria were written. The reason it is not: **S1 is
+satisfied by *recording* what the suite misses, not by the suite missing nothing.** Its pass
+condition is eight pre-registered classes, results on both corpora, gaps written down, and the no-op
+control silent — all of which held while three real gaps were found. A criteria set that could only
+be met by a perfect artifact would have produced a worse document. Quote "nine of nine" only with the
+gap table attached, which is why §1 of the deliverable puts the instrument boundary first and §5
+comes before the findings.
+
+**I re-measured rather than transcribing.** Every number in the deliverable that I could verify, I
+did: two fresh-process runs under `tsx` (44.0 s, 48.5 s) and one compiled (35.4 s) after building
+with the `tsc-alias` step Unit C found, against Unit C's 36.3/36.5 s — swap checked before each
+(2.6 GB of 4.1 GB, 1.5 GB free). Coverage totals re-derived from the artifact rather than read from
+Unit C's summary: 323 targets, 322 pinned, and the group sums reconcile to Unit C's "274 of 275
+cards, 38 of 38 actions". S5's player-count split and S3's ten named cards were recounted from
+`regression_suite.json` and `regression_coverage.json` directly. This is the cheap half of
+adjudication and it is the half that would have caught a transcription error.
+
+**S4 has a nuance worth stating before someone reads it as a defect.** Eleven of the thirteen L1
+fixtures carry §3.4's "changing this toward the print is a change of meaning, not a fix" sentence.
+The two that do not are Hackers and City — the untested-*effect* cards, where Engine and print
+**agree**. There is no printed number to be tempted toward, and both headers say so explicitly and
+say that a future failure there is a real regression in one of them. The sentence is required where
+the two disagree, not everywhere.
+
+**The correction to three source-document statements is now made in four places, and one of them is
+this repository's own history.** SRS §2.6's annotation and the Plan's two risk rows said the
+divergent cards and the untested effects were discharged by being "pinned in the M2 regression seed
+set". They are not; a whole-game hash cannot separate a card's value changing from an enumerator
+reordering. All three are amended in place to name the actual mechanism (a direct assertion plus a
+pinned corpus proving reachability), and each amendment says what the old mechanism was and why it
+was insufficient — because a correction that erases the previous belief teaches nobody anything, and
+because the evidence for the insufficiency is a measurement (Hackers moved zero pinned entries at 10
+games) rather than an argument. The plan document itself is left as written: it is a dated record,
+and §3.2 of it is where the correction was first reasoned out.
+
+**What Milestone 3 should read first**, in order: the gap table (§5 of the deliverable), because a
+promotion gate that reads a green suite as "the baseline is unchanged" is reading something the suite
+did not check; then the covering-instrument finding, because any L2 section for a stronger agent
+needs its games **forced in** rather than found by a search; then §3.6's inheritance rules, because
+the M3 agent inherits all of L1 and none of L2.

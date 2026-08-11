@@ -14,6 +14,7 @@
     "baselines": "tsx src/runner/baselinesValidationCli.ts",
     "rate": "tsx src/runner/ratingCli.ts",
     "rate:validate": "tsx src/runner/ratingValidationCli.ts",
+    "regression": "tsx src/runner/regressionCli.ts",
     "ladder": "tsx src/runner/ratingCli.ts ladder",
     "match:pool": "tsx src/match/pool.ts",
     "determinism:sweep": "tsx src/determinism/sweep.ts",

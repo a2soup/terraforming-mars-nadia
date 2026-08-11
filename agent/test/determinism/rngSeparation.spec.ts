@@ -324,6 +324,79 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'and matchCli.ts\'s above: console output on a long run, reaching no file, no fingerprint and no decision.',
   },
   {
+    file: 'src/regression/runner.ts',
+    rule: 'date-now',
+    occurrences: 11,
+    reason:
+      'The regression suite\'s own elapsed figures (Milestone 2 bullet 5, Unit A): a `started` stamp and a ' +
+      '`durationMs` for each of L1, L2, the determinism-corpus line and the whole run, plus the smoke-corpus ' +
+      'build. Same category as `match/runner.ts`\'s entry above - reported, never read back. A pinned game is ' +
+      'built from its identity alone: `match/pairing.ts` derives the engine seed and every per-slot agent seed ' +
+      'from the R-block group index (§2.6), so no seed, decision or game state can derive from the clock even in ' +
+      'principle. **Structurally, these cannot reach a committed record at all**: a `RegressionRunResult` is ' +
+      'console output, and the only things written to disk are `RegressionCorpus` (identity, fingerprints, ' +
+      'semantics, coverage, why - no timing field exists on it) and the ledger. That is a stronger statement than ' +
+      '`MATCH_TIMING_FIELDS` makes for the match runner, and it is why there is no `stripTimingFields` analogue ' +
+      'here: there is nothing to strip.\n\n' +
+      'The count is high because criterion S6 pre-commits a budget (<= 5 min compiled, <= 20 min under `tsx`) and ' +
+      'the suite has to be able to say whether it held, per layer - a suite that cannot report its own cost is one ' +
+      'that gets cut for the wrong reason. Note what that reporting is *not*: Unit A measured the same ' +
+      'determinism-corpus verify at 11 s, 102 s, 114 s and 124 s in one session on a host with 4.6 GB of 5.1 GB ' +
+      'swap in use, so none of these figures is a performance claim (hazard H10, and this host swaps - see the ' +
+      '2026-08-11 Running_Notes entry).',
+  },
+  {
+    file: 'src/regression/runner.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      '`RegressionSection.recordedAt`: the date a section of pinned games was generated, stamped once by ' +
+      '`buildSmokeCorpus`. Provenance, in the same kind as `corpus.ts`\'s `createdAt` at the top of this list, ' +
+      'with one difference worth stating - it is *data* rather than a header field, because §3.6 makes "generated ' +
+      'once, at promotion, and frozen" the defining property of a section, and a section that cannot say when it ' +
+      'was frozen cannot support that claim. It is never compared: `compareEntry` reads only the fingerprint and ' +
+      'semantic groups, and a rebaseline carries the existing value forward rather than restamping it.',
+  },
+  {
+    file: 'src/regression/ledger.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      '`RebaselineEntry.recordedAt`: when a pinned layer was regenerated (§3.5). Deliberately not stripped and ' +
+      'deliberately data, for the same reason `ladder.ts`\'s `SeedBlockAllocation.recordedAt` is - the whole value ' +
+      'of an append-only ledger is that its rows are dated, and `RebaselineRequest.recordedAt` overrides it so a ' +
+      'spec can assert on a fixed value and a retroactive entry can carry its true date. It reaches no game: this ' +
+      'module creates none, and the rebaseline path derives every seed it replays from the corpus identities.',
+  },
+  {
+    file: 'src/regression/mutations.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      '`ControlResult.wallClockMs`: how long one negative control took (Milestone 2 bullet 5, Unit D) - a ' +
+      '`started` stamp and the subtraction that closes it. Same category as `src/regression/runner.ts`\'s entry ' +
+      'above, and structurally further from a game than any of them: **this module plays nothing**. It edits a ' +
+      'file in a scratch `git worktree`, spawns a child process, reads a JSON line back and reverts. Every game ' +
+      'in a control run is played by that child, from a corpus identity whose engine and per-slot agent seeds ' +
+      '`match/pairing.ts` derives from an R-block group index (§2.6), so no seed, decision or game state can ' +
+      'derive from this clock read even in principle.\n\n' +
+      'The figures are recorded rather than merely printed, and are therefore worth being explicit about: they ' +
+      'are **not** performance figures and the record says so in `ControlsRecord.hostNote`, which carries the ' +
+      '`sysctl vm.swapusage` reading taken at write time. The host held 4.1-4.2 GB of 5.1 GB swap throughout, and ' +
+      'the same eleven controls ranged from 53 s to 400 s - which is the point of keeping the number beside the ' +
+      'swap reading rather than dropping it (hazard H6, and Unit A\'s finding 1 in Running_Notes).',
+  },
+  {
+    file: 'src/regression/mutations.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      '`ControlsRecord.recordedAt`: when the negative-control record was written. Provenance, in the same kind as ' +
+      '`corpus.ts`\'s `createdAt` at the top of this list. It is never compared and cannot be: the record is read ' +
+      'by `controls.spec.ts`, which checks the rows against the register (ids, classes, pre-registered ' +
+      'predictions) and never looks at a date, and nothing replays from it.',
+  },
+  {
     file: 'src/runner/matchValidationCli.ts',
     rule: 'new-date',
     occurrences: 1,
@@ -331,6 +404,38 @@ const ALLOWLIST: ReadonlyArray<AllowlistEntry> = [
       'The validation artifact\'s `generatedAt` provenance stamp, written once when the battery is assembled. ' +
       'Identical in kind to determinism/corpus.ts\'s `createdAt` above: it lands in the artifact header, is never ' +
       'compared, and never reaches a decision or a fingerprint.',
+  },
+  {
+    file: 'src/regression/select.ts',
+    rule: 'date-now',
+    occurrences: 2,
+    reason:
+      'The `moves`-tier survey\'s own `Survey.durationMs` (Milestone 2 bullet 5, Unit C): a `started` stamp and ' +
+      'the difference. Same category as `match/runner.ts`\'s entry above - reported, never read back - and it ' +
+      'reaches nothing committed, because **the survey artifact is not committed at all**: it is throwaway compute ' +
+      'written to the gitignored `agent/runs/` (§3.7 step 1). Every game it plays is built by `playMatchGame` from ' +
+      'a `MatchGameConfig` whose engine and per-slot agent seeds `match/pairing.ts` derives from the R-block group ' +
+      'index alone (§2.6), so no seed, decision or game state can derive from the clock.\n\n' +
+      'One consequence of the *selection* is worth being explicit about, because it is the one place a clock read ' +
+      'in this file influences a committed artifact. The covering search costs games by their surveyed ' +
+      '`durationMs` (§3.7: "a 20-second game buys the same coverage as a 1.4-second one"), so **which** games are ' +
+      'pinned depends on wall clock measured on whatever host ran the survey. That is a choice about the corpus, ' +
+      'not a property of any game in it: once selected, an entry is replayed from its identity, and its ' +
+      'fingerprints and semantics are functions of the seeds and the Engine pin and of nothing else. A survey re-run ' +
+      'on a different host would select a different, equally valid corpus - it would not change what any pinned ' +
+      'game does, which is why the corpus is regenerable only through the §3.5 rebaseline ledger rather than ' +
+      'silently.',
+  },
+  {
+    file: 'src/regression/select.ts',
+    rule: 'new-date',
+    occurrences: 1,
+    reason:
+      '`RegressionSection.recordedAt` again, stamped by `buildCorpusFromSelection` where ' +
+      '`regression/runner.ts`\'s entry above stamps it for the smoke corpus. Same field, same kind, same ' +
+      'argument: provenance data rather than a header field, because §3.6 makes "generated once, at promotion, and ' +
+      'frozen" the defining property of a section and a section that cannot say when it was frozen cannot support ' +
+      'that claim. Never compared - `compareEntry` reads only the fingerprint and semantic groups.',
   },
 ];
 
