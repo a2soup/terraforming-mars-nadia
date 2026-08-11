@@ -1722,3 +1722,52 @@ the pair a discriminating test rather than a smoke test).
 candidate-set reduction — the change bullet 2 names as making `greedy-1ply@1` a new version) fired
 nothing across all 43 pinned games; M2 (Hackers) moved zero pinned entries and was caught only by
 L1's direct assertion, which is §3.2's "a seed cannot assert a card" measured rather than argued.
+
+## 2026-08-11 — Adjudicating bullet 5: nine met, three gaps, and why those are the same sentence (Milestone 2, bullet 5, Unit E)
+
+Unit E: adjudicating S1–S9, writing [Regression_Suite.md](Regression_Suite.md), and closing Milestone
+2 in both source documents (SRS → v1.9, Plan → v1.10). Four things worth recording that are not in
+the deliverable.
+
+**All nine criteria met, and that sentence is misleading on its own.** Bullet 3 set the house
+precedent that a criterion which cannot be met stands as not met; this bullet met everything, which
+would normally be a warning sign about how the criteria were written. The reason it is not: **S1 is
+satisfied by *recording* what the suite misses, not by the suite missing nothing.** Its pass
+condition is eight pre-registered classes, results on both corpora, gaps written down, and the no-op
+control silent — all of which held while three real gaps were found. A criteria set that could only
+be met by a perfect artifact would have produced a worse document. Quote "nine of nine" only with the
+gap table attached, which is why §1 of the deliverable puts the instrument boundary first and §5
+comes before the findings.
+
+**I re-measured rather than transcribing.** Every number in the deliverable that I could verify, I
+did: two fresh-process runs under `tsx` (44.0 s, 48.5 s) and one compiled (35.4 s) after building
+with the `tsc-alias` step Unit C found, against Unit C's 36.3/36.5 s — swap checked before each
+(2.6 GB of 4.1 GB, 1.5 GB free). Coverage totals re-derived from the artifact rather than read from
+Unit C's summary: 323 targets, 322 pinned, and the group sums reconcile to Unit C's "274 of 275
+cards, 38 of 38 actions". S5's player-count split and S3's ten named cards were recounted from
+`regression_suite.json` and `regression_coverage.json` directly. This is the cheap half of
+adjudication and it is the half that would have caught a transcription error.
+
+**S4 has a nuance worth stating before someone reads it as a defect.** Eleven of the thirteen L1
+fixtures carry §3.4's "changing this toward the print is a change of meaning, not a fix" sentence.
+The two that do not are Hackers and City — the untested-*effect* cards, where Engine and print
+**agree**. There is no printed number to be tempted toward, and both headers say so explicitly and
+say that a future failure there is a real regression in one of them. The sentence is required where
+the two disagree, not everywhere.
+
+**The correction to three source-document statements is now made in four places, and one of them is
+this repository's own history.** SRS §2.6's annotation and the Plan's two risk rows said the
+divergent cards and the untested effects were discharged by being "pinned in the M2 regression seed
+set". They are not; a whole-game hash cannot separate a card's value changing from an enumerator
+reordering. All three are amended in place to name the actual mechanism (a direct assertion plus a
+pinned corpus proving reachability), and each amendment says what the old mechanism was and why it
+was insufficient — because a correction that erases the previous belief teaches nobody anything, and
+because the evidence for the insufficiency is a measurement (Hackers moved zero pinned entries at 10
+games) rather than an argument. The plan document itself is left as written: it is a dated record,
+and §3.2 of it is where the correction was first reasoned out.
+
+**What Milestone 3 should read first**, in order: the gap table (§5 of the deliverable), because a
+promotion gate that reads a green suite as "the baseline is unchanged" is reading something the suite
+did not check; then the covering-instrument finding, because any L2 section for a stronger agent
+needs its games **forced in** rather than found by a search; then §3.6's inheritance rules, because
+the M3 agent inherits all of L1 and none of L2.

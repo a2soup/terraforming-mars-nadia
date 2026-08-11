@@ -3,8 +3,8 @@
 This file orients a Claude Code session working on the **Nadia AI agent**. It is generated
 from the two source-of-truth documents and should be kept consistent with them:
 
-- SRS: [docs/Terraforming_Mars_AI_SRS_v1.2.md](docs/Terraforming_Mars_AI_SRS_v1.2.md) — **currently v1.8**
-- Implementation Plan: [docs/Terraforming_Mars_AI_Implementation_Plan_v1.2.md](docs/Terraforming_Mars_AI_Implementation_Plan_v1.2.md) — **currently v1.9**
+- SRS: [docs/Terraforming_Mars_AI_SRS_v1.2.md](docs/Terraforming_Mars_AI_SRS_v1.2.md) — **currently v1.9**
+- Implementation Plan: [docs/Terraforming_Mars_AI_Implementation_Plan_v1.2.md](docs/Terraforming_Mars_AI_Implementation_Plan_v1.2.md) — **currently v1.10**
 
 > The `v1.2` in both **filenames is frozen and stale** — the live version is in each document's
 > header and revision history. Don't infer a version from a filename, and don't rename the files
@@ -64,9 +64,11 @@ contains the full Engine plus this `agent/` project.
 - **`src/`** — the Engine (`server/`, `client/`, `common/`). See root CLAUDE.md.
 - **`docs/`** — the SRS and Implementation Plan.
 
-> Status note: as of this writing `agent/` contains only this file. Nothing in Milestone 1 has been
-> built yet. The `MarsBot`/`automa` code under `src/server/automa/` is the **engine's built-in
-> solo-mode scripted opponent**, *not* this Agent — do not confuse the two.
+> Status note (11 Aug 2026): Milestones 1 and 2 are complete, and `agent/` now holds `src/`
+> (engine harness, driver, enumerator, agents, match, rating, prior, regression, …), `test/`, and
+> `docs/`. See §6 for what each bullet established and where it lives. The `MarsBot`/`automa` code
+> under `src/server/automa/` is the **engine's built-in solo-mode scripted opponent**, *not* this
+> Agent — do not confuse the two.
 
 ---
 
@@ -160,11 +162,63 @@ attempted only on a foundation that already works.
 | 6 | Reinforcement learning via self-play (Python+PyTorch, optional expert warm-start) | Learned agent beats M5 with significance; monotonic improvement |
 | 7 | Evaluation, tuning, acceptance | Primary AC (AC-1, AC-4, AC-6) met and documented |
 
-**Current status: Milestone 2 is IN PROGRESS — bullet 1 (the match runner, 28 Jul 2026), bullet 2
-(the fixed baselines, 29 Jul 2026), bullet 3 (the rating pipeline, 31 Jul 2026) and bullet 4 (the
-corporation opening prior, 10 Aug 2026) are DONE. Only bullet 5, the regression seed set, remains.**
-Milestone 1 is complete (all seven bullets; see the build record below). `.nvmrc` pinned to Node 22,
-Engine commit pinned.
+**Current status: Milestone 2 is COMPLETE — bullet 1 (the match runner, 28 Jul 2026), bullet 2
+(the fixed baselines, 29 Jul 2026), bullet 3 (the rating pipeline, 31 Jul 2026), bullet 4 (the
+corporation opening prior, 10 Aug 2026) and bullet 5 (the regression suite, 11 Aug 2026) are all
+DONE.** Milestone 1 is complete (all seven bullets; see the build record below). `.nvmrc` pinned to
+Node 22, Engine commit pinned. **Next up: Milestone 3 — the heuristic evaluation function.**
+
+### Milestone 2, bullet 5 — the regression suite (done)
+
+The standing check that keeps the runner, the ratings, the two frozen baselines and the Engine pin
+meaning the same thing at M3 as they meant when they were adjudicated. Lives in
+`agent/src/regression/` + `agent/test/regression/fixtures/` behind `npm run regression`. Full
+results: [docs/Regression_Suite.md](docs/Regression_Suite.md); the design and the criteria were
+pre-committed in [docs/Milestone2_Bullet5_Prompts.md](docs/Milestone2_Bullet5_Prompts.md) before any
+code, and the negative controls in their own commit before any was run. **All nine criteria met — and
+that is only readable alongside the gap table, because S1 is satisfied by recording what the suite
+misses rather than by its missing nothing.**
+
+Six things worth knowing before touching this area:
+
+- **The gap the bullet existed to close: `greedy-1ply@1` had no fixed-seed standing check of any
+  kind.** `determinism/replay.ts` hard-coded the random-legal agent, so the 300-fingerprint corpus
+  covered one of the two frozen yardsticks. There are now **33 pinned games** (18 greedy, 15
+  random-legal, at 2p/3p with a 4p smoke) plus 13 agent-independent L1 fixtures. **Three layers,
+  defined by what invalidates them**: L1 survives every agent change M3→M7; L2 is scoped to an agent
+  *version*, so a new agent adds a section and invalidates nothing; L3 is triage over L2.
+- **The suite is blindest to exactly the change bullet 2 called version-defining.** A candidate-set
+  reduction (`MAX_INTERIOR_AMOUNTS` 6→3) fired **nothing** — across 43 pinned games, both baselines,
+  both corpora and all 300 determinism configs — and survived the corpus growing from 10 games to 33,
+  so it is a standing gap rather than a sample-size artefact. **A promotion gate must not read a green
+  suite as "the baseline is unchanged."** Two further gaps: anything on a line the corpus never
+  reaches (Anti-Gravity Technology, 0 plays in 1,500 games *and* in a 950-game survey), and the
+  ranking's megacredit tiebreak, whose coverage rests on the single pinned game with a real VP tie.
+- **A seed cannot assert a card, and this is now measured rather than argued.** Three source-document
+  statements said the divergent cards were "pinned in the M2 regression seed set"; a hash over a
+  321-decision game reports the same event whether Decomposers over-granted or the enumerator
+  reordered two options. Hackers' `bespokePlay` mutation moved **zero** pinned entries at 10 games —
+  caught only by L1's direct assertion. Both instruments are needed; the seed proves reachability, the
+  fixture asserts the value.
+- **"Greedy play reaches further" is false, and the covering search had to be overridden.** Per game
+  at 2p, `random-legal@1` plays 31.5 distinct cards and takes 5.8 card actions against greedy's 19.1
+  and 2.9, at **1/75th the cost**. A search maximizing coverage per second pins almost nothing but
+  cheap random-legal games — a corpus that covers the card pool beautifully and would not notice
+  `greedy-1ply@1` changing at all. 18 of 33 greedy entries are **forced**; left to the search there
+  were 5.
+- **Three defects were found in this bullet's own code, all the same shape** — a check correct about
+  the thing it looks at and silent about the thing beside it. The corpus digest hashed repo HEAD (so
+  it moved on every commit); the ledger chain did not cover its own last entry (on a one-entry ledger,
+  nothing was pinned); `--explain` reported "a different route to an identical outcome" for the case
+  that is its exact opposite. All three passed their own specs; two were found by *using* the CLI.
+  **A spec whose subject includes repo or file state has a hidden fixture — the commit you happen to
+  be on.**
+- **Two numbers that are not what the documents said.** `tsx` understates *this* workload by **1.4×**,
+  not the ~3.5× recorded below (that figure is the speed spike's clone micro-benchmarks and does not
+  transfer to whole-game play): the suite runs in **35.4 s compiled** against a 300 s budget. And
+  `card_play_coverage.json` records **Sell Patents played 0 times in 1,500 games**, which is wrong —
+  K4's observer wrapped `payAndExecute`, which Sell Patents never calls. No other row is affected; the
+  unique chokepoint is `projectPlayed`.
 
 ### Milestone 2, bullet 3 — the rating pipeline (done)
 
@@ -321,23 +375,30 @@ Five things worth knowing before touching this area:
   row, or an upstream regeneration against a different corpus. The vendored file hashes to its
   upstream blob SHA and the spec re-derives the artifact from it, so hand-editing the JSON fails.
 
-**Next up: Milestone 2 bullet 5** — the regression seed set, the last item in Milestone 2.
+**Milestone 2 bullet 5 (the regression suite) closed this out on 11 Aug 2026 — see above.**
 
 Two consequences of the AC-8 cut worth carrying, both of which make the project's evidence base
 *thinner*, not cleaner:
 - **The eight Engine-vs-print divergences** ([docs/Card_Coverage_Audit.md](docs/Card_Coverage_Audit.md))
   no longer feed a reconciliation — all eight are project cards, and the surviving prior is
-  corporations only. Their one downstream consumer is now the bullet-5 regression seed set, plus the
-  M3 evaluator, which fits to Engine value by CON-1.
+  corporations only. Their one downstream consumer is now the bullet-5 regression suite, plus the
+  M3 evaluator, which fits to Engine value by CON-1. **Discharged 11 Aug 2026, and by a different
+  mechanism than this line originally named**: "pinned in the regression *seed set*" is insufficient,
+  because a hash over a whole game cannot distinguish a card's value changing from an enumerator
+  reordering. Each divergence has an **L1 fixture asserting the Engine's number directly**
+  (`agent/test/regression/fixtures/`), and the pinned corpus separately proves the line is reached —
+  both, not either. See [docs/Regression_Suite.md](docs/Regression_Suite.md) §2 and the plan's §3.2.
 - **The un-audited 204-card declarative tail lost its independent cross-check.** The reconciliation
   was named in the risk register as the second check on that tail; it is gone, so the tail rests on
   indirect test/play coverage alone. If an M3 card valuation looks wrong for no reason, read that
   card's `behavior` block before debugging the evaluator.
 
-Bullet 5 inherits seed block `R` (6,000–6,999), of which 6,000–6,029 is already recorded as spent.
-**One lesson from bullet 3 that bullet 5 should act on: commit the per-game rows, not the summary** —
-`baselines_validation.json` carries summaries only, so bullet 2's headline 99.2% cannot be
-re-analysed by anything, including the rating pipeline.
+Bullet 5 inherited seed block `R` (6,000–6,999) and spent 6,090–6,099 and 6,100–6,499 of it, both
+recorded in `docs/data/ladder.json` before any game was played; 6,000–6,029 remains spent from M2b1
+and is correctly refused. **6,500–6,999 is reserved for the per-version L2 sections M3–M6 will each
+need.** Bullet 3's lesson — *commit the per-game rows, not the summary* — was acted on and paid for
+itself: a VP-breakdown reattribution with every total preserved moved 32 of 33 entries on semantic
+fields with zero fingerprint fields, which no hash in the project would have caught.
 
 Note that deliverables written before 10 Aug 2026 — [docs/Rating_Pipeline.md](docs/Rating_Pipeline.md),
 [docs/Baselines.md](docs/Baselines.md), [docs/Match_Runner.md](docs/Match_Runner.md) and the
