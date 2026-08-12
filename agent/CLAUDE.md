@@ -4,7 +4,7 @@ This file orients a Claude Code session working on the **Nadia AI agent**. It is
 from the two source-of-truth documents and should be kept consistent with them:
 
 - SRS: [docs/Terraforming_Mars_AI_SRS_v1.2.md](docs/Terraforming_Mars_AI_SRS_v1.2.md) — **currently v1.9**
-- Implementation Plan: [docs/Terraforming_Mars_AI_Implementation_Plan_v1.2.md](docs/Terraforming_Mars_AI_Implementation_Plan_v1.2.md) — **currently v1.10**
+- Implementation Plan: [docs/Terraforming_Mars_AI_Implementation_Plan_v1.2.md](docs/Terraforming_Mars_AI_Implementation_Plan_v1.2.md) — **currently v1.11**
 
 > The `v1.2` in both **filenames is frozen and stale** — the live version is in each document's
 > header and revision history. Don't infer a version from a filename, and don't rename the files
@@ -167,6 +167,18 @@ attempted only on a foundation that already works.
 corporation opening prior, 10 Aug 2026) and bullet 5 (the regression suite, 11 Aug 2026) are all
 DONE.** Milestone 1 is complete (all seven bullets; see the build record below). `.nvmrc` pinned to
 Node 22, Engine commit pinned. **Next up: Milestone 3 — the heuristic evaluation function.**
+
+> **Read before planning any Milestone 3 work** (11 Aug 2026): a pre-implementation review of
+> everything built so far, [docs/Milestone3_Readiness_Review.md](docs/Milestone3_Readiness_Review.md),
+> and the design that follows from it,
+> [docs/Milestone3_Move_Set_Design.md](docs/Milestone3_Move_Set_Design.md). Both are reviews, not
+> sources of truth — what they changed in the Plan is in its v1.11 entry. The three things most
+> likely to be rediscovered the expensive way: **`core/candidates/` is shared with the frozen
+> `greedy-1ply@1`**, so it needs a versioned profile before M3 touches it (and the regression suite
+> is blindest to exactly that change class); **the opening is unforkable by construction**, so
+> corporation/prelude/initial-card selection must be scored statically or not at all; and
+> **`decide()` receives the live `IGame`**, so nothing but discipline stops an evaluator reading
+> hidden state that M4's determinized search and M5's live adapter cannot supply.
 
 ### Milestone 2, bullet 5 — the regression suite (done)
 
